@@ -1,6 +1,6 @@
 # Abraxas Client
 
-Phaser 4 + TypeScript + Vite 기반 모바일 세로형(720×1280) 웹 클라이언트.
+Three.js + TypeScript + Vite 기반 모바일 세로형 웹 클라이언트 (정사영 쿼터뷰 3D 마을, ADR-0005).
 
 ## 사전 요구 사항
 
@@ -38,8 +38,8 @@ npm --prefix client audit --omit=dev
 
 ## 폴더 구조
 
-- `src/scenes/` — Phaser 씬 (`BootScene`, `PreloadScene`, `VillageScene` 등)
-- `src/core/` — Phaser에 의존하지 않는 순수 TypeScript 게임 규칙 및 계산 로직
+- `src/scenes/village.ts` — Three.js 마을(카메라·맵·탭 이동·캐릭터), `src/ui/game.ts` — 진행 흐름과 HTML 오버레이
+- `src/core/` — 렌더링에 의존하지 않는 순수 TypeScript 게임 규칙 및 계산 로직
 - `src/narrative/` — inkjs 대사 및 선택지 태그 연동
 - `src/ui/` — 대사창, 선택지 버튼, 결과 카드 등 UI 구성 요소
 - `src/net/` — 서버 API 통신 및 응답 검증

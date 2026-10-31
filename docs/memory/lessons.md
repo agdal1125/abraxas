@@ -13,3 +13,7 @@
 - 클라이언트 · 대사 중 빈 곳을 누르면 타이틀로 돌아감 → `children.removeAll(true)` 뒤에도 이전 화면 버튼의 `once(pointerdown)`이 실행됨 → 화면을 그릴 때마다 token을 올리고 핸들러는 같은 token일 때만 실행 (2026-10-31)
 - 에이전트 · im-not-ai `--copy` 설치 시 `$humanize-korean` 스크립트가 `~/scripts/...`를 찾다 실패 → 스킬 안 스크립트가 저장소 루트 스크립트를 상대 경로로 부르는 shim → `~/tools/im-not-ai` 클론을 `~/.codex/skills/humanize-korean`에 Windows junction으로 연결 (2026-10-31)
 - 검증 · 로컬 화면 자동 확인은 헤드리스 Edge + CDP(Node 내장 WebSocket)로 가능. 프로필은 절대 경로 `--user-data-dir`, 클릭 전 `mouseMoved`, 클릭 간격 300ms 이상 (2026-10-31)
+- 클라이언트 · KayKit 헥스 타일이 겹쳐 보임 → 타일은 x폭 2·z 2.3의 pointy-top이라 헥스 크기 2/√3 → world 변환에 HEX=2/√3 고정 (2026-10-31)
+- 클라이언트 · KayKit 팩마다 모델 축척이 다름(medieval 집 0.93, restaurant 상자 2.0, furniture 램프 2.5) → 팩별 기본 축척(medieval 1, city 0.6, furniture 0.25, restaurant 0.12), 캐릭터 0.4배 (2026-10-31)
+- 검증 · 3D 화면은 좌표 탭 자동화가 어려움 → 개발 모드 전용 `window.__abraxas` 훅으로 상호작용을 호출하고 DOM 오버레이 버튼은 JS로 클릭. 탭 이동은 CDP `Input.dispatchTouchEvent`로 따로 확인 (2026-10-31)
+- 에셋 · Kenney 사이트 zip 링크 자동 추출은 봇 차단 우회로 막힘 → 공식 GitHub(KayKit-Game-Assets 등) 배포본을 sparse checkout (2026-10-31)
