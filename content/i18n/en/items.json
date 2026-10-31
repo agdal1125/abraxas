@@ -1,0 +1,296 @@
+{
+  "prologue_01": {
+    "situation": "You wake at the edge of an unfamiliar village. A lively square lies one way, a quiet lakeside path the other.",
+    "picks": {
+      "a": "Head to the square and take in the scene",
+      "b": "Walk by the lake and collect your thoughts"
+    }
+  },
+  "prologue_02": {
+    "situation": "Two paths lead into the village: an old stone wall and a new trail lined with pinwheels.",
+    "picks": {
+      "a": "Follow the familiar old stone wall",
+      "b": "Take the new path past the pinwheels"
+    }
+  },
+  "prologue_03": {
+    "situation": "A wooden board at the square shows a village map and pictures of today’s events.",
+    "picks": {
+      "a": "Explore the market while it is open",
+      "b": "Study the map and plan your day"
+    }
+  },
+  "lumi_01": {
+    "situation": "Lumi welcomes you to the festival tent and asks where you would like to help.",
+    "picks": {
+      "a": "Tie ribbons quietly at a table",
+      "b": "Join the group weaving flower garlands"
+    }
+  },
+  "lumi_02": {
+    "situation": "Lumi lays out two ideas for the festival’s main stage.",
+    "picks": {
+      "a": "Put on a new colorful shadow play",
+      "b": "Continue the traditional lantern play"
+    }
+  },
+  "lumi_03": {
+    "situation": "The village needs to hear when the festival starts. Lumi offers notices and a megaphone.",
+    "picks": {
+      "a": "Tell villagers in the market streets",
+      "b": "Post notices on boards and mailboxes"
+    }
+  },
+  "lumi_04": {
+    "situation": "One garland is missing from the stage. Lumi asks how to replace it.",
+    "picks": {
+      "a": "Fetch familiar ribbons from storage",
+      "b": "Weave something new from leaves and pinecones"
+    }
+  },
+  "lumi_05": {
+    "situation": "It is time to welcome festival guests. Lumi asks how you would like to greet them.",
+    "picks": {
+      "a": "Hand out welcome cards by the entrance",
+      "b": "Call out greetings from the square"
+    }
+  },
+  "lumi_06": {
+    "situation": "The musicians have two scores ready for the opening march.",
+    "picks": {
+      "a": "Start with their lively new song",
+      "b": "Start with the village’s familiar old march"
+    }
+  },
+  "interlude_1_01": {
+    "situation": "You unfold the first fragment of a map from your pocket.",
+    "picks": {
+      "a": "Read it slowly in a quiet spot",
+      "b": "Ask passersby where it might lead"
+    }
+  },
+  "interlude_1_02": {
+    "situation": "By the fountain, a villager is struggling to choose between two unfamiliar paths.",
+    "picks": {
+      "a": "Notice their worried expression first",
+      "b": "Check which path leads where"
+    }
+  },
+  "moka_01": {
+    "situation": "Moka hands you a basket of warm walnut pastries to deliver.",
+    "picks": {
+      "a": "Run to deliver them while they are warm",
+      "b": "Walk carefully to keep them intact"
+    }
+  },
+  "moka_02": {
+    "situation": "A customer comes for a cake, but the name on the receipt does not match.",
+    "picks": {
+      "a": "Check the order with them",
+      "b": "Reassure them and give them the cake"
+    }
+  },
+  "moka_03": {
+    "situation": "A tray of pastries is ready for the display. There are two ways to stack them.",
+    "picks": {
+      "a": "Stack one layer safely",
+      "b": "Try a taller three-layer display"
+    }
+  },
+  "moka_04": {
+    "situation": "After arranging the display, there is a little bread left to share.",
+    "picks": {
+      "a": "Offer it first to a tired neighbor",
+      "b": "Cut equal portions for everyone"
+    }
+  },
+  "moka_05": {
+    "situation": "Moka asks how many special festival pies to bake.",
+    "picks": {
+      "a": "Bake extra for a possible rush",
+      "b": "Bake the reserved amount to avoid waste"
+    }
+  },
+  "moka_06": {
+    "situation": "Moka asks what you think of some slightly crooked flower cookies.",
+    "picks": {
+      "a": "Point out what may have caused the tilt",
+      "b": "Praise the care and delicious aroma"
+    }
+  },
+  "interlude_2_01": {
+    "situation": "You rest on a wooden bench in the afternoon sun.",
+    "picks": {
+      "a": "Enjoy the insects singing around you",
+      "b": "Prepare your shoes and things for tomorrow"
+    }
+  },
+  "interlude_2_02": {
+    "situation": "A puzzle box under the bench has a bonus slot. A gold key might open it, but could break.",
+    "picks": {
+      "a": "Keep the key safe",
+      "b": "Risk the key for hidden treasure"
+    }
+  },
+  "echo_01": {
+    "situation": "A returned picture book has a tea stain. Echo asks what to tell the borrower.",
+    "picks": {
+      "a": "Reassure them that it is all right",
+      "b": "Include the library’s borrowing rules"
+    }
+  },
+  "echo_02": {
+    "situation": "You enter the archive to find an old festival songbook. Two rooms lie ahead.",
+    "picks": {
+      "a": "Search the familiar corner shelves",
+      "b": "Open the annex you have never visited"
+    }
+  },
+  "echo_03": {
+    "situation": "A neighbor donated a worn recipe notebook. Echo asks where to put it.",
+    "picks": {
+      "a": "File it with cookbooks by category",
+      "b": "Display it by the entrance with its story"
+    }
+  },
+  "echo_04": {
+    "situation": "Before sorting the shelves, Echo asks how the books should be arranged.",
+    "picks": {
+      "a": "Make new groups by color and theme",
+      "b": "Keep the familiar library arrangement"
+    }
+  },
+  "echo_05": {
+    "situation": "You and Echo read an old story found after sorting the shelves.",
+    "picks": {
+      "a": "Remember how the characters comforted each other",
+      "b": "Admire how the clues fit together"
+    }
+  },
+  "echo_06": {
+    "situation": "The last page of a village legend is blank. Echo asks how to display it.",
+    "picks": {
+      "a": "Preserve the book behind glass",
+      "b": "Let readers add their own endings"
+    }
+  },
+  "interlude_3_01": {
+    "situation": "Sunset colors the village roofs as you recall the day’s memory fragments.",
+    "picks": {
+      "a": "Remember the lively voices of villagers",
+      "b": "Remember the quiet breeze on a solitary walk"
+    }
+  },
+  "interlude_3_02": {
+    "situation": "By the fountain you find a clear marble sparkling in the sunset.",
+    "picks": {
+      "a": "Save it in your pocket for later",
+      "b": "Enjoy the colors it catches now"
+    }
+  },
+  "or_01": {
+    "situation": "Or heats bronze for a festival bell and asks how strong the fire should be.",
+    "picks": {
+      "a": "Use a strong fire for a clearer, farther ring",
+      "b": "Use a gentle fire to reduce the risk of cracks"
+    }
+  },
+  "or_02": {
+    "situation": "Or needs fine sand and gives you a bucket and a map of the stream.",
+    "picks": {
+      "a": "Use the map and search alone",
+      "b": "Ask the fishers and merchants on the bridge"
+    }
+  },
+  "or_03": {
+    "situation": "The clock tower gears are connected. Now choose a weight for a trial run.",
+    "picks": {
+      "a": "Use a light weight to protect the gears",
+      "b": "Use a heavy weight for a stronger chime"
+    }
+  },
+  "or_04": {
+    "situation": "Or asks how to approach a complicated gear diagram.",
+    "picks": {
+      "a": "Talk through it together",
+      "b": "Study it quietly on your own first"
+    }
+  },
+  "or_05": {
+    "situation": "There is a little time left to improve the lantern hanger on the square’s stage.",
+    "picks": {
+      "a": "Add a branch to hold more lanterns",
+      "b": "Reinforce the base for heavy lanterns"
+    }
+  },
+  "or_06": {
+    "situation": "The forge work is done and the fire has died down.",
+    "picks": {
+      "a": "Stay and enjoy the quiet warmth",
+      "b": "Bring the bell to the square and talk with everyone"
+    }
+  },
+  "festival_01": {
+    "situation": "A little festival budget remains. The villagers discuss how to spend it.",
+    "picks": {
+      "a": "Buy fireworks and treats for tonight",
+      "b": "Save it for winter roof repairs"
+    }
+  },
+  "festival_02": {
+    "situation": "Two bands have been scheduled for the same performance slot.",
+    "picks": {
+      "a": "Use the order in which requests arrived",
+      "b": "Arrange a joint performance"
+    }
+  },
+  "festival_03": {
+    "situation": "It is time to light the large lantern at the heart of the festival.",
+    "picks": {
+      "a": "Use colored glass for a new pattern",
+      "b": "Use the traditional warm amber candle"
+    }
+  },
+  "festival_04": {
+    "situation": "The last lighting puzzle has only a limited number of sparks.",
+    "picks": {
+      "a": "Light the nearby lanterns safely",
+      "b": "Aim for the farthest lantern"
+    }
+  },
+  "festival_05": {
+    "situation": "Festival lights fill the sky and laughter reaches its peak.",
+    "picks": {
+      "a": "Imagine the village’s days to come",
+      "b": "Lose yourself in the lights and music"
+    }
+  },
+  "gate_a": {
+    "situation": "The Gate of Memory asks what would fill your heart after a long day.",
+    "picks": {
+      "a": "A square alive with friends and laughter",
+      "b": "A quiet lakeside moment to yourself"
+    }
+  },
+  "gate_b": {
+    "situation": "The gate asks what guides you through a difficult decision.",
+    "picks": {
+      "a": "Care for the feelings of those involved",
+      "b": "Clear values and fair rules for everyone"
+    }
+  },
+  "gate_c": {
+    "situation": "The gate asks what excites you about the road ahead.",
+    "picks": {
+      "a": "A new view beyond an unexplored alley",
+      "b": "A familiar place that welcomes you back"
+    }
+  },
+  "gate_d": {
+    "situation": "The gate asks what moves your hand toward its handle.",
+    "picks": {
+      "a": "The possibility of something wonderful beyond it",
+      "b": "A steady step that protects what matters"
+    }
+  }
+}
