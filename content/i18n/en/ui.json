@@ -9,10 +9,10 @@
     "prompt": "Who will you visit next?"
   },
   "npc": {
-    "lumi": "Lumi",
-    "moka": "Moka",
-    "echo": "Echo",
-    "or": "Or"
+    "lumi": "A",
+    "moka": "B",
+    "echo": "C",
+    "or": "D"
   },
   "segment": {
     "interlude": "A quiet moment alone",

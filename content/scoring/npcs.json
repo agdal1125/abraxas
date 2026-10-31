@@ -3,25 +3,25 @@
   "npcs": [
     {
       "id": "lumi",
-      "name": "루미",
+      "name": "A",
       "start": { "A": 30, "B": 30, "C": 30, "D": 30, "E": 30 },
       "themeAxes": ["A", "C"]
     },
     {
       "id": "moka",
-      "name": "모카",
+      "name": "B",
       "start": { "A": 30, "B": 30, "C": -30, "D": -30, "E": 30 },
       "themeAxes": ["B", "D"]
     },
     {
       "id": "echo",
-      "name": "에코",
+      "name": "C",
       "start": { "A": -30, "B": -30, "C": 30, "D": -30, "E": -30 },
       "themeAxes": ["B", "C"]
     },
     {
       "id": "or",
-      "name": "오르",
+      "name": "D",
       "start": { "A": -30, "B": -30, "C": -30, "D": 30, "E": -30 },
       "themeAxes": ["A", "D"]
     }
