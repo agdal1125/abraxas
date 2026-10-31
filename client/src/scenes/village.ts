@@ -38,6 +38,12 @@ export class Village {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); app.append(this.renderer.domElement);
     for (const prop of map.props) this.walking.delete(key(prop));
     for (const tile of map.tiles) this.placeModel(tile.model, tile);
+    const occupied = new Set(map.tiles.map(key));
+    for (const tile of map.tiles) for (let q = -3; q <= 3; q++) for (let r = -3; r <= 3; r++) {
+      if (Math.abs(q + r) > 3) continue;
+      const water = { q: tile.q + q, r: tile.r + r }; const k = key(water);
+      if (!occupied.has(k)) { occupied.add(k); this.placeModel("medieval/hex_water", water); }
+    }
     for (const prop of map.props) this.placeModel(prop.model, prop, prop.rot, prop.scale);
     this.player.position.copy(world(this.position)); this.scene.add(this.player);
     for (const actor of map.actors) {
@@ -63,10 +69,10 @@ export class Village {
     const canvas = document.createElement("canvas"); canvas.width = text === "!" ? 128 : 512; canvas.height = 128; const ctx = canvas.getContext("2d")!;
     ctx.fillStyle = text === "!" ? "#FFD23F" : "#ffffff"; ctx.beginPath(); if (text === "!") ctx.arc(64, 64, 60, 0, Math.PI * 2); else ctx.roundRect(0, 0, 512, 128, 24); ctx.fill();
     ctx.fillStyle = "#3B2A22"; ctx.font = text === "!" ? "bold 96px sans-serif" : "bold 56px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(text, canvas.width / 2, 68);
-    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true })); sprite.scale.set(text === "!" ? .8 : 1.5, text === "!" ? .8 : .38, 1); sprite.position.y = y; return sprite;
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true })); sprite.scale.set(text === "!" ? .8 : 1.5, text === "!" ? .8 : .38, 1); sprite.position.y = y; sprite.userData.baseY = y; return sprite;
   }
   private character(id: string): THREE.Group {
-    const group = new THREE.Group(); group.scale.setScalar(.4); const color = ({ A: "#ff7a59", B: "#ffb020", C: "#8e6bff", D: "#14b8a6", player: "#fff8ec" } as Record<string, string>)[id] ?? "#a0a0a0";
+    const group = new THREE.Group(); group.scale.setScalar(id === "player" ? .55 : .5); const color = ({ A: "#ff7a59", B: "#ffb020", C: "#8e6bff", D: "#14b8a6", player: "#fff8ec" } as Record<string, string>)[id] ?? "#a0a0a0";
     const mat = new THREE.MeshStandardMaterial({ color, roughness: .65 });
     const body = new THREE.Mesh(id === "D" ? new THREE.BoxGeometry(1.05, 1, .65) : id === "C" ? new THREE.CylinderGeometry(.42, .42, 1, 16) : new THREE.SphereGeometry(.55, 16, 12), mat); body.position.y = .7; if (id === "B") body.scale.set(.8, 1.2, .8); group.add(body);
     const head = new THREE.Mesh(new THREE.SphereGeometry(id === "C" ? .55 : .48, 16, 12), mat); head.position.y = 1.55; group.add(head);
@@ -92,7 +98,7 @@ export class Village {
     const image = original.image as CanvasImageSource; const canvas = document.createElement("canvas"); canvas.width = (image as HTMLImageElement).width; canvas.height = (image as HTMLImageElement).height;
     const ctx = canvas.getContext("2d")!; ctx.filter = "saturate(1.3) hue-rotate(10deg)"; ctx.drawImage(image, 0, 0); const texture = new THREE.CanvasTexture(canvas); texture.colorSpace = original.colorSpace; texture.flipY = original.flipY; this.texture = texture; return texture;
   }
-  private resize(): void { const w = window.innerWidth, h = window.innerHeight, halfWidth = 7, halfHeight = 7 * h / w; this.camera.left = -halfWidth; this.camera.right = halfWidth; this.camera.top = halfHeight; this.camera.bottom = -halfHeight; this.camera.near = .1; this.camera.far = 100; this.camera.updateProjectionMatrix(); this.renderer.setSize(w, h); this.dirty = true; }
+  private resize(): void { const w = window.innerWidth, h = window.innerHeight, halfWidth = 3.6, halfHeight = halfWidth * h / w; this.camera.left = -halfWidth; this.camera.right = halfWidth; this.camera.top = halfHeight; this.camera.bottom = -halfHeight; this.camera.near = .1; this.camera.far = 100; this.camera.updateProjectionMatrix(); this.renderer.setSize(w, h); this.dirty = true; }
   private tap(event: PointerEvent): void {
     if (!this.enabled) return;
     const ray = new THREE.Raycaster(); ray.setFromCamera(new THREE.Vector2(event.clientX / window.innerWidth * 2 - 1, 1 - event.clientY / window.innerHeight * 2), this.camera);
@@ -106,8 +112,19 @@ export class Village {
     if (!found) return; const path: Hex[] = []; while (prev.get(key(found))) { path.unshift(found); found = prev.get(key(found))!; } this.path = path; this.afterMove = after; this.moving = true; this.dirty = true;
   }
   private tick(): void {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let markerAnimating = false;
+    for (const { marker } of this.actors.values()) {
+      if (!marker.visible) continue;
+      const projected = marker.getWorldPosition(new THREE.Vector3()).project(this.camera);
+      if (!reducedMotion && Math.abs(projected.x) < 1.2 && Math.abs(projected.y) < 1.2 && Math.abs(projected.z) <= 1) {
+        marker.position.y = marker.userData.baseY + Math.sin(performance.now() * Math.PI * 2 / 1600) * .06;
+        markerAnimating = true;
+      } else if (marker.position.y !== marker.userData.baseY) { marker.position.y = marker.userData.baseY; this.dirty = true; }
+    }
+    if (markerAnimating) this.dirty = true;
     if (this.moving) { const next = this.path[0]; if (next) { const dest = world(next), delta = dest.clone().sub(this.player.position); if (delta.length() < .09) { this.position = next; this.player.position.copy(dest); this.path.shift(); } else this.player.position.add(delta.normalize().multiplyScalar(.09)); } else { this.moving = false; const done = this.afterMove; this.afterMove = undefined; done?.(); } this.dirty = true; }
-    if (this.dirty) { this.cameraTarget.lerp(this.player.position, .15); const following = this.cameraTarget.distanceToSquared(this.player.position) > .0001; if (!following) this.cameraTarget.copy(this.player.position); this.camera.position.copy(this.cameraTarget).add(new THREE.Vector3(10, 10 * Math.tan(THREE.MathUtils.degToRad(35)) * Math.sqrt(2), 10)); this.camera.lookAt(this.cameraTarget); this.renderer.render(this.scene, this.camera); this.dirty = following; }
+    if (this.dirty) { this.cameraTarget.lerp(this.player.position, .15); const following = this.cameraTarget.distanceToSquared(this.player.position) > .0001; if (!following) this.cameraTarget.copy(this.player.position); const target = this.cameraTarget.clone().add(new THREE.Vector3(1, -Math.sqrt(2) / Math.tan(THREE.MathUtils.degToRad(35)), 1).normalize().multiplyScalar(this.camera.top * .2)); this.camera.position.copy(target).add(new THREE.Vector3(10, 10 * Math.tan(THREE.MathUtils.degToRad(35)) * Math.sqrt(2), 10)); this.camera.lookAt(target); this.renderer.render(this.scene, this.camera); this.dirty = following; }
     requestAnimationFrame(() => this.tick());
   }
 }
