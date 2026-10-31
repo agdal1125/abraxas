@@ -13,7 +13,7 @@ description: Writes the day's development log entry for Abraxas in docs/devlog a
 
 ## 2. 파일 쓰기
 
-`docs/devlog/YYYY-MM-DD.md` (한국 시간 기준 날짜). 같은 날 파일이 있으면 아래에 `## 세션 N`으로 덧붙인다.
+`docs/devlog/YYYY-MM-DD.md` (한국 시간 기준 날짜). 세션 머리에 작업한 컴퓨터(`mac` / `windows`)를 적는다. 같은 날 파일이 있으면 아래에 `## 세션 N`으로 덧붙인다.
 
 ```markdown
 # YYYY-MM-DD

@@ -34,6 +34,6 @@ description: Writes or edits Abraxas dialogue and choice scripts in ink, with me
 
 ## 검증
 
-1. `inklecate`로 JSON 컴파일, 오류 0.
+1. `inkjs` 패키지의 내장 컴파일러(`inkjs/full`의 `Compiler`)로 JSON 컴파일, 오류 0. OS별 바이너리인 inklecate는 쓰지 않는다(`.agents/rules/cross-platform.md`).
 2. `npm run content:check` (추가 예정): 문항 ID가 `items.json`과 1:1인지, 축별 문항 수(주축 8, E 6), 역균형 4/4, NPC 미관여 문항 ≥ 14를 검사.
 3. 문항 수나 가중치를 바꿨다면 `scoring-change` 스킬 절차를 따른다.

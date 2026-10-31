@@ -25,3 +25,4 @@
 - 2026-10-31 · 서버 · Go(표준 라이브러리 중심) · 보안(메모리 안전, 적은 의존성) 우선, Rust 대비 검토 비용 · ADR-0001
 - 2026-10-31 · 인프라 · Firebase Hosting + Anonymous Auth + Firestore + Cloud Run · ADR-0001
 - 2026-10-31 · 에이전트 · 규칙·스킬 원본은 `.agents/`, 공유 메모리 원본은 `docs/memory/` · ADR-0002
+- 2026-10-31 · 작업 환경 · macOS·Windows 병행 지원, 저장소 스크립트는 Node로 통일, ink 컴파일은 inkjs 내장 컴파일러 · 병행 비용이 작음 · ADR-0003

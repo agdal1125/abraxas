@@ -7,7 +7,8 @@
 - [x] 기획서 v2.0 (Claude 문서, 노션 사본)
 - [x] 기술 스택 결정 (ADR-0001)
 - [x] 에이전트 사전 세팅 (AGENTS.md, .agents/rules, .agents/skills, docs/memory)
-- [ ] 개발 환경 세팅: Node 22+, Go 1.27, inklecate, Firebase CLI, gcloud
+- [x] macOS·Windows 병행 작업 세팅 (ADR-0003)
+- [ ] 개발 환경 세팅: Node 22+, Go 1.27, agy → `npm run setup` (Firebase CLI·gcloud는 배포 단계에서)
 - [ ] Phaser 공식 스킬 설치 (`npx skills add phaserjs/phaser`)
 - [ ] 클라이언트 뼈대 (`npm create @phaserjs/game@latest`, TypeScript + Vite)
 - [ ] 서버 뼈대 (Go, `/healthz`, 토큰 검증 미들웨어)

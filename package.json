@@ -1,0 +1,13 @@
+{
+  "name": "abraxas",
+  "private": true,
+  "description": "Repo-level tooling only. Game client lives in client/, API in server/.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "setup": "node scripts/link-agent-config.mjs && node scripts/doctor.mjs",
+    "doctor": "node scripts/doctor.mjs"
+  }
+}

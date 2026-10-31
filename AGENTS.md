@@ -16,7 +16,8 @@
 4. 초대권·결과 저장은 서버만 판정한다. 클라이언트 값은 신뢰하지 않는다.
 5. 비밀값(API 키, 서비스 계정, Kakao 키)을 코드·문서·로그에 쓰지 않는다. Secret Manager와 `.env.local`(git 제외)만 쓴다.
 6. 새 외부 의존성(npm, Go 모듈)을 추가할 때는 이유를 PR 설명에 적는다. Go는 표준 라이브러리를 먼저 검토한다.
-7. 작업이 끝나면 `docs/memory/`와 `docs/devlog/`를 갱신한다 (`.agents/rules/memory-protocol.md`).
+7. macOS·Windows를 오가며 작업한다. 저장소 스크립트는 Node(`scripts/*.mjs`)로 쓰고 셸 전용 문법을 쓰지 않는다 (`.agents/rules/cross-platform.md`).
+8. 작업이 끝나면 `docs/memory/`와 `docs/devlog/`를 갱신한다 (`.agents/rules/memory-protocol.md`).
 
 ## 작업 방식
 

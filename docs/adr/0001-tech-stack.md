@@ -8,7 +8,7 @@
 | 영역 | 선택 | 버전 기준 (2026-10) |
 | --- | --- | --- |
 | 게임 클라이언트 | TypeScript (strict) + Phaser 4 + Vite | Phaser 4.x 최신 안정판 |
-| 대사·선택지 스크립트 | ink (inkjs 런타임, inklecate로 JSON 컴파일) | inkjs 최신 |
+| 대사·선택지 스크립트 | ink (inkjs 런타임 + inkjs 내장 컴파일러로 JSON 컴파일) | inkjs 2.3.x |
 | 백엔드 API | Go, 표준 라이브러리 `net/http` 중심 | Go 1.27.x |
 | 서버 실행 | Google Cloud Run (컨테이너, 0까지 축소) | — |
 | 정적 호스팅·CDN | Firebase Hosting | — |
