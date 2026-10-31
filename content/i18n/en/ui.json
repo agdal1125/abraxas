@@ -1,0 +1,43 @@
+{
+  "title": {
+    "name": "Abraxas",
+    "subtitle": "You wake up in a strange village with no memory",
+    "start": "Start",
+    "language": "한국어"
+  },
+  "hub": {
+    "prompt": "Who will you visit next?"
+  },
+  "npc": {
+    "lumi": "Lumi",
+    "moka": "Moka",
+    "echo": "Echo",
+    "or": "Or"
+  },
+  "segment": {
+    "interlude": "A quiet moment alone",
+    "festival": "Festival night",
+    "gate": "The Gate of Memory"
+  },
+  "reaction": {
+    "empathy": ["Right? I feel the same.", "Yeah, that sounds good to me."],
+    "thinking": ["Huh, I never thought of it that way...", "Hm, I can see that too."]
+  },
+  "next": "Next",
+  "result": {
+    "title": "Who you are beyond the shell",
+    "poles": {
+      "A": { "plus": "Recharged by being around people", "minus": "Recharged by time alone" },
+      "B": { "plus": "Checks the heart first", "minus": "Checks the facts first" },
+      "C": { "plus": "Drawn to new paths", "minus": "Cherishes the familiar" },
+      "D": { "plus": "Jumps in for what can be gained", "minus": "Weighs what could be lost" }
+    },
+    "modifier": {
+      "today": "Living for today",
+      "between": "Between today and tomorrow",
+      "tomorrow": "Dreaming of tomorrow"
+    },
+    "disclaimer": "This is a psychology game for fun, not a professional assessment.",
+    "restart": "Play again"
+  }
+}

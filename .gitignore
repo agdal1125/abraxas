@@ -3,6 +3,7 @@ node_modules/
 dist/
 coverage/
 server/bin/
+client/public/ink/
 
 # env & secrets
 .env
