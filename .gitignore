@@ -1,0 +1,30 @@
+# dependencies / builds
+node_modules/
+dist/
+coverage/
+server/bin/
+
+# env & secrets
+.env
+.env.*
+!.env.example
+*.pem
+*-service-account*.json
+serviceAccount*.json
+
+# firebase / gcloud local state
+.firebase/
+firebase-debug.log*
+
+# generated art waiting for review (prompts are kept)
+assets/_generated/**/*.png
+assets/_generated/**/*.webp
+
+# agent local state
+.claude/settings.local.json
+
+# os / editor
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
