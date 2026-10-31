@@ -12,7 +12,9 @@ const storageKey = "abraxas-prototype";
 export class VillageScene extends Phaser.Scene {
   private state!: Save;
   private story: Story | null = null;
+  private lastLine = "";
   private resumed = false;
+  private screenToken = 0;
   constructor() { super({ key: "VillageScene" }); }
 
   create(): void {
@@ -32,6 +34,7 @@ export class VillageScene extends Phaser.Scene {
   private get ui() { return translations(this.state.lang).ui; }
 
   private background(name: string, npc?: string): void {
+    this.screenToken++;
     this.children.removeAll(true);
     this.cameras.main.setBackgroundColor("#fff6e9");
     if (this.textures.exists(`bg_${name}`)) this.add.image(360, 640, `bg_${name}`).setDisplaySize(720, 1280);
@@ -48,6 +51,7 @@ export class VillageScene extends Phaser.Scene {
     return this.add.text(x, y, text, { fontFamily: "sans-serif", fontSize: `${size}px`, color: "#493a38", wordWrap: { width, useAdvancedWrap: true }, lineSpacing: 8 });
   }
   private button(label: string, y: number, action: () => void, npc?: string): number {
+    const token = this.screenToken;
     const text = this.text(npc ? 142 : 70, y + 16, label, 28, npc ? 508 : 580);
     const height = Math.max(72, text.height + 32);
     const rect = this.add.rectangle(50, y, 620, height, 0xfff9f2, 0.95).setOrigin(0).setStrokeStyle(2, 0xc5aba0).setInteractive({ useHandCursor: true });
@@ -56,7 +60,7 @@ export class VillageScene extends Phaser.Scene {
       else this.add.circle(100, y + height / 2, 25, 0xe8bbc3);
     }
     text.setDepth(1);
-    rect.once("pointerdown", action);
+    rect.once("pointerdown", () => { if (token === this.screenToken) action(); });
     return height + 16;
   }
   private title(): void {
@@ -83,6 +87,7 @@ export class VillageScene extends Phaser.Scene {
     this.state.segment = segment;
     this.save();
     this.story = null;
+    this.lastLine = "";
     if (segment === "title") { this.title(); return; }
     if (segment === "hub") { this.hub(); return; }
     if (segment === "result") { this.result(); return; }
@@ -100,24 +105,25 @@ export class VillageScene extends Phaser.Scene {
     const segment = this.state.segment;
     this.background(segment === "festival" ? "festival" : segment === "gate" ? "gate" : "village", segment.startsWith("ep_") ? segment.slice(3) : undefined);
   }
-  private dialogue(line: string, next: () => void): void {
+  private dialogue(line: string, next?: () => void): void {
     this.visual();
+    const token = this.screenToken;
     this.add.rectangle(360, 1120, 680, 300, 0xfff9f2, 0.95).setStrokeStyle(2, 0xc5aba0);
     const match = line.match(/^([^:：\n]+)[:：]\s*(.*)$/s);
     if (match) { this.text(50, 986, match[1]!, 26); this.text(50, 1035, match[2]!, 29); }
     else this.text(50, 1000, line, 29);
-    this.add.rectangle(360, 1120, 680, 300, 0xffffff, 0.001).setInteractive().once("pointerdown", next);
+    if (next) this.add.rectangle(360, 1120, 680, 300, 0xffffff, 0.001).setInteractive().once("pointerdown", () => { if (token === this.screenToken) next(); });
   }
   private advance(): void {
     if (this.story) {
       try {
         while (this.story.canContinue) {
           const line = (this.story.Continue() ?? "").trim();
-          if (line) { this.dialogue(line, () => this.advance()); return; }
+          if (line) { this.lastLine = line; this.dialogue(line, () => this.advance()); return; }
         }
         if (this.story.currentChoices.length) {
           const choices = this.story.currentChoices;
-          this.visual();
+          this.dialogue(this.lastLine);
           let y = 680;
           for (const choice of choices) {
             y += this.button(choice.text, y, () => {
@@ -141,7 +147,7 @@ export class VillageScene extends Phaser.Scene {
     if (item) {
       const copy = translations(this.state.lang).items[item.id];
       this.dialogue(copy?.situation ?? item.situation, () => {
-        this.visual();
+        this.dialogue(copy?.situation ?? item.situation);
         let y = 670;
         for (const [pick, value] of Object.entries(item.picks)) y += this.button(copy?.picks[pick] ?? value.text, y, () => this.choose(item, pick, () => this.advance()));
       });
