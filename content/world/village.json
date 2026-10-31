@@ -2,419 +2,7754 @@
   "version": 1,
   "hexSize": 1,
   "tiles": [
-    { "q": -9, "r": 0, "model": "medieval/hex_grass", "walk": true },
-    { "q": -9, "r": 1, "model": "medieval/hex_grass", "walk": true },
-    { "q": -9, "r": 2, "model": "medieval/hex_grass", "walk": true },
-    { "q": -9, "r": 3, "model": "medieval/hex_grass", "walk": true },
-    { "q": -9, "r": 4, "model": "medieval/hex_grass", "walk": true },
-    { "q": -9, "r": 5, "model": "medieval/hex_grass", "walk": true },
-    { "q": -9, "r": 6, "model": "medieval/hex_grass", "walk": true },
-    { "q": -9, "r": 7, "model": "medieval/hex_grass", "walk": true },
-    { "q": -9, "r": 8, "model": "medieval/hex_grass", "walk": true },
-    { "q": -9, "r": 9, "model": "medieval/hex_grass", "walk": true },
-    { "q": -8, "r": -1, "model": "medieval/hex_grass", "walk": true },
-    { "q": -8, "r": 0, "model": "medieval/hex_grass", "walk": true },
-    { "q": -8, "r": 1, "model": "medieval/hex_grass", "walk": true },
-    { "q": -8, "r": 2, "model": "medieval/hex_grass", "walk": true },
-    { "q": -8, "r": 3, "model": "medieval/hex_grass", "walk": true },
-    { "q": -8, "r": 4, "model": "medieval/hex_grass", "walk": true },
-    { "q": -8, "r": 5, "model": "medieval/hex_grass", "walk": true },
-    { "q": -8, "r": 6, "model": "medieval/hex_grass", "walk": true },
-    { "q": -8, "r": 7, "model": "medieval/hex_coast_A", "walk": false },
-    { "q": -8, "r": 8, "model": "medieval/hex_grass", "walk": true },
-    { "q": -8, "r": 9, "model": "medieval/hex_grass", "walk": true },
-    { "q": -7, "r": -2, "model": "medieval/hex_grass", "walk": true },
-    { "q": -7, "r": -1, "model": "medieval/hex_grass", "walk": true },
-    { "q": -7, "r": 0, "model": "medieval/hex_grass", "walk": true },
-    { "q": -7, "r": 1, "model": "medieval/hex_grass", "walk": true },
-    { "q": -7, "r": 2, "model": "medieval/hex_road_B", "walk": true },
-    { "q": -7, "r": 3, "model": "medieval/hex_grass", "walk": true },
-    { "q": -7, "r": 4, "model": "medieval/hex_grass", "walk": true },
-    { "q": -7, "r": 5, "model": "medieval/hex_grass", "walk": true },
-    { "q": -7, "r": 6, "model": "medieval/hex_coast_B", "walk": false },
-    { "q": -7, "r": 7, "model": "medieval/hex_water", "walk": false },
-    { "q": -7, "r": 8, "model": "medieval/hex_coast_C", "walk": false },
-    { "q": -7, "r": 9, "model": "medieval/hex_grass", "walk": true },
-    { "q": -6, "r": -3, "model": "medieval/hex_grass", "walk": true },
-    { "q": -6, "r": -2, "model": "medieval/hex_grass", "walk": true },
-    { "q": -6, "r": -1, "model": "medieval/hex_grass", "walk": true },
-    { "q": -6, "r": 0, "model": "medieval/hex_road_C", "walk": true },
-    { "q": -6, "r": 1, "model": "medieval/hex_road_D", "walk": true },
-    { "q": -6, "r": 2, "model": "medieval/hex_grass", "walk": true },
-    { "q": -6, "r": 3, "model": "medieval/hex_grass", "walk": true },
-    { "q": -6, "r": 4, "model": "medieval/hex_grass", "walk": true },
-    { "q": -6, "r": 5, "model": "medieval/hex_coast_A", "walk": false },
-    { "q": -6, "r": 6, "model": "medieval/hex_water", "walk": false },
-    { "q": -6, "r": 7, "model": "medieval/hex_water", "walk": false },
-    { "q": -6, "r": 8, "model": "medieval/hex_water", "walk": false },
-    { "q": -6, "r": 9, "model": "medieval/hex_grass", "walk": true },
-    { "q": -5, "r": -4, "model": "medieval/hex_grass", "walk": true },
-    { "q": -5, "r": -3, "model": "medieval/hex_grass", "walk": true },
-    { "q": -5, "r": -2, "model": "medieval/hex_grass", "walk": true },
-    { "q": -5, "r": -1, "model": "medieval/hex_road_A", "walk": true },
-    { "q": -5, "r": 0, "model": "medieval/hex_grass", "walk": true },
-    { "q": -5, "r": 1, "model": "medieval/hex_grass", "walk": true },
-    { "q": -5, "r": 2, "model": "medieval/hex_grass", "walk": true },
-    { "q": -5, "r": 3, "model": "medieval/hex_grass", "walk": true },
-    { "q": -5, "r": 4, "model": "medieval/hex_grass", "walk": true },
-    { "q": -5, "r": 5, "model": "medieval/hex_coast_B", "walk": false },
-    { "q": -5, "r": 6, "model": "medieval/hex_water", "walk": false },
-    { "q": -5, "r": 7, "model": "medieval/hex_water", "walk": false },
-    { "q": -5, "r": 8, "model": "medieval/hex_coast_A", "walk": false },
-    { "q": -5, "r": 9, "model": "medieval/hex_grass", "walk": true },
-    { "q": -4, "r": -5, "model": "medieval/hex_grass", "walk": true },
-    { "q": -4, "r": -4, "model": "medieval/hex_grass", "walk": true },
-    { "q": -4, "r": -3, "model": "medieval/hex_grass", "walk": true },
-    { "q": -4, "r": -2, "model": "medieval/hex_grass", "walk": true },
-    { "q": -4, "r": -1, "model": "medieval/hex_road_B", "walk": true },
-    { "q": -4, "r": 0, "model": "medieval/hex_grass", "walk": true },
-    { "q": -4, "r": 1, "model": "medieval/hex_grass", "walk": true },
-    { "q": -4, "r": 2, "model": "medieval/hex_grass", "walk": true },
-    { "q": -4, "r": 3, "model": "medieval/hex_grass", "walk": true },
-    { "q": -4, "r": 4, "model": "medieval/hex_grass", "walk": true },
-    { "q": -4, "r": 5, "model": "medieval/hex_road_E", "walk": true },
-    { "q": -4, "r": 6, "model": "medieval/hex_coast_C", "walk": false },
-    { "q": -4, "r": 7, "model": "medieval/hex_water", "walk": false },
-    { "q": -4, "r": 8, "model": "medieval/hex_coast_B", "walk": false },
-    { "q": -4, "r": 9, "model": "medieval/hex_grass", "walk": true },
-    { "q": -3, "r": -6, "model": "medieval/hex_grass", "walk": true },
-    { "q": -3, "r": -5, "model": "medieval/hex_grass", "walk": true },
-    { "q": -3, "r": -4, "model": "medieval/hex_grass", "walk": true },
-    { "q": -3, "r": -3, "model": "medieval/hex_grass", "walk": true },
-    { "q": -3, "r": -2, "model": "medieval/hex_grass", "walk": true },
-    { "q": -3, "r": -1, "model": "medieval/hex_road_C", "walk": true },
-    { "q": -3, "r": 0, "model": "medieval/hex_road_D", "walk": true },
-    { "q": -3, "r": 1, "model": "medieval/hex_grass", "walk": true },
-    { "q": -3, "r": 2, "model": "medieval/hex_grass", "walk": true },
-    { "q": -3, "r": 3, "model": "medieval/hex_grass", "walk": true },
-    { "q": -3, "r": 4, "model": "medieval/hex_grass", "walk": true },
-    { "q": -3, "r": 5, "model": "medieval/hex_road_A", "walk": true },
-    { "q": -3, "r": 6, "model": "medieval/hex_coast_A", "walk": false },
-    { "q": -3, "r": 7, "model": "medieval/hex_coast_C", "walk": false },
-    { "q": -3, "r": 8, "model": "medieval/hex_grass", "walk": true },
-    { "q": -3, "r": 9, "model": "medieval/hex_grass", "walk": true },
-    { "q": -2, "r": -7, "model": "medieval/hex_grass", "walk": true },
-    { "q": -2, "r": -6, "model": "medieval/hex_grass", "walk": true },
-    { "q": -2, "r": -5, "model": "medieval/hex_grass", "walk": true },
-    { "q": -2, "r": -4, "model": "medieval/hex_grass", "walk": true },
-    { "q": -2, "r": -3, "model": "medieval/hex_grass", "walk": true },
-    { "q": -2, "r": -2, "model": "medieval/hex_grass", "walk": true },
-    { "q": -2, "r": -1, "model": "medieval/hex_grass", "walk": true },
-    { "q": -2, "r": 0, "model": "medieval/hex_road_A", "walk": true },
-    { "q": -2, "r": 1, "model": "medieval/hex_grass", "walk": true },
-    { "q": -2, "r": 2, "model": "medieval/hex_grass", "walk": true },
-    { "q": -2, "r": 3, "model": "medieval/hex_grass", "walk": true },
-    { "q": -2, "r": 4, "model": "medieval/hex_road_B", "walk": true },
-    { "q": -2, "r": 5, "model": "medieval/hex_grass", "walk": true },
-    { "q": -2, "r": 6, "model": "medieval/hex_grass", "walk": true },
-    { "q": -2, "r": 7, "model": "medieval/hex_grass", "walk": true },
-    { "q": -2, "r": 8, "model": "medieval/hex_grass", "walk": true },
-    { "q": -2, "r": 9, "model": "medieval/hex_grass", "walk": true },
-    { "q": -1, "r": -8, "model": "medieval/hex_grass", "walk": true },
-    { "q": -1, "r": -7, "model": "medieval/hex_grass", "walk": true },
-    { "q": -1, "r": -6, "model": "medieval/hex_grass", "walk": true },
-    { "q": -1, "r": -5, "model": "medieval/hex_grass", "walk": true },
-    { "q": -1, "r": -4, "model": "medieval/hex_grass", "walk": true },
-    { "q": -1, "r": -3, "model": "medieval/hex_grass", "walk": true },
-    { "q": -1, "r": -2, "model": "medieval/hex_grass", "walk": true },
-    { "q": -1, "r": -1, "model": "medieval/hex_grass", "walk": true },
-    { "q": -1, "r": 0, "model": "medieval/hex_road_B", "walk": true },
-    { "q": -1, "r": 1, "model": "medieval/hex_grass", "walk": true },
-    { "q": -1, "r": 2, "model": "medieval/hex_grass", "walk": true },
-    { "q": -1, "r": 3, "model": "medieval/hex_road_C", "walk": true },
-    { "q": -1, "r": 4, "model": "medieval/hex_grass", "walk": true },
-    { "q": -1, "r": 5, "model": "medieval/hex_grass", "walk": true },
-    { "q": -1, "r": 6, "model": "medieval/hex_grass", "walk": true },
-    { "q": -1, "r": 7, "model": "medieval/hex_grass", "walk": true },
-    { "q": -1, "r": 8, "model": "medieval/hex_grass", "walk": true },
-    { "q": -1, "r": 9, "model": "medieval/hex_grass", "walk": true },
-    { "q": 0, "r": -9, "model": "medieval/hex_grass", "walk": true },
-    { "q": 0, "r": -8, "model": "medieval/hex_road_E", "walk": true },
-    { "q": 0, "r": -7, "model": "medieval/hex_road_A", "walk": true },
-    { "q": 0, "r": -6, "model": "medieval/hex_road_B", "walk": true },
-    { "q": 0, "r": -5, "model": "medieval/hex_road_A", "walk": true },
-    { "q": 0, "r": -4, "model": "medieval/hex_road_C", "walk": true },
-    { "q": 0, "r": -3, "model": "medieval/hex_road_D", "walk": true },
-    { "q": 0, "r": -2, "model": "medieval/hex_road_A", "walk": true },
-    { "q": 0, "r": -1, "model": "medieval/hex_road_B", "walk": true },
-    { "q": 0, "r": 0, "model": "medieval/hex_road_E", "walk": true },
-    { "q": 0, "r": 1, "model": "medieval/hex_road_A", "walk": true },
-    { "q": 0, "r": 2, "model": "medieval/hex_road_D", "walk": true },
-    { "q": 0, "r": 3, "model": "medieval/hex_road_B", "walk": true },
-    { "q": 0, "r": 4, "model": "medieval/hex_road_A", "walk": true },
-    { "q": 0, "r": 5, "model": "medieval/hex_road_C", "walk": true },
-    { "q": 0, "r": 6, "model": "medieval/hex_road_E", "walk": true },
-    { "q": 0, "r": 7, "model": "medieval/hex_road_A", "walk": true },
-    { "q": 0, "r": 8, "model": "medieval/hex_grass", "walk": true },
-    { "q": 0, "r": 9, "model": "medieval/hex_grass", "walk": true },
-    { "q": 1, "r": -9, "model": "medieval/hex_grass", "walk": true },
-    { "q": 1, "r": -8, "model": "medieval/hex_grass", "walk": true },
-    { "q": 1, "r": -7, "model": "medieval/hex_grass", "walk": true },
-    { "q": 1, "r": -6, "model": "medieval/hex_grass", "walk": true },
-    { "q": 1, "r": -5, "model": "medieval/hex_grass", "walk": true },
-    { "q": 1, "r": -4, "model": "medieval/hex_road_B", "walk": true },
-    { "q": 1, "r": -3, "model": "medieval/hex_grass", "walk": true },
-    { "q": 1, "r": -2, "model": "medieval/hex_grass", "walk": true },
-    { "q": 1, "r": -1, "model": "medieval/hex_grass", "walk": true },
-    { "q": 1, "r": 0, "model": "medieval/hex_road_A", "walk": true },
-    { "q": 1, "r": 1, "model": "medieval/hex_grass", "walk": true },
-    { "q": 1, "r": 2, "model": "medieval/hex_road_B", "walk": true },
-    { "q": 1, "r": 3, "model": "medieval/hex_grass", "walk": true },
-    { "q": 1, "r": 4, "model": "medieval/hex_grass", "walk": true },
-    { "q": 1, "r": 5, "model": "medieval/hex_grass", "walk": true },
-    { "q": 1, "r": 6, "model": "medieval/hex_grass", "walk": true },
-    { "q": 1, "r": 7, "model": "medieval/hex_grass", "walk": true },
-    { "q": 1, "r": 8, "model": "medieval/hex_grass", "walk": true },
-    { "q": 2, "r": -9, "model": "medieval/hex_grass", "walk": true },
-    { "q": 2, "r": -8, "model": "medieval/hex_grass", "walk": true },
-    { "q": 2, "r": -7, "model": "medieval/hex_grass", "walk": true },
-    { "q": 2, "r": -6, "model": "medieval/hex_grass", "walk": true },
-    { "q": 2, "r": -5, "model": "medieval/hex_grass", "walk": true },
-    { "q": 2, "r": -4, "model": "medieval/hex_road_C", "walk": true },
-    { "q": 2, "r": -3, "model": "medieval/hex_grass", "walk": true },
-    { "q": 2, "r": -2, "model": "medieval/hex_grass", "walk": true },
-    { "q": 2, "r": -1, "model": "medieval/hex_road_B", "walk": true },
-    { "q": 2, "r": 0, "model": "medieval/hex_grass", "walk": true },
-    { "q": 2, "r": 1, "model": "medieval/hex_grass", "walk": true },
-    { "q": 2, "r": 2, "model": "medieval/hex_road_C", "walk": true },
-    { "q": 2, "r": 3, "model": "medieval/hex_road_D", "walk": true },
-    { "q": 2, "r": 4, "model": "medieval/hex_grass", "walk": true },
-    { "q": 2, "r": 5, "model": "medieval/hex_grass", "walk": true },
-    { "q": 2, "r": 6, "model": "medieval/hex_grass", "walk": true },
-    { "q": 2, "r": 7, "model": "medieval/hex_grass", "walk": true },
-    { "q": 3, "r": -9, "model": "medieval/hex_grass", "walk": true },
-    { "q": 3, "r": -8, "model": "medieval/hex_grass", "walk": true },
-    { "q": 3, "r": -7, "model": "medieval/hex_grass", "walk": true },
-    { "q": 3, "r": -6, "model": "medieval/hex_grass", "walk": true },
-    { "q": 3, "r": -5, "model": "medieval/hex_road_E", "walk": true },
-    { "q": 3, "r": -4, "model": "medieval/hex_grass", "walk": true },
-    { "q": 3, "r": -3, "model": "medieval/hex_grass", "walk": true },
-    { "q": 3, "r": -2, "model": "medieval/hex_grass", "walk": true },
-    { "q": 3, "r": -1, "model": "medieval/hex_road_C", "walk": true },
-    { "q": 3, "r": 0, "model": "medieval/hex_grass", "walk": true },
-    { "q": 3, "r": 1, "model": "medieval/hex_grass", "walk": true },
-    { "q": 3, "r": 2, "model": "medieval/hex_grass", "walk": true },
-    { "q": 3, "r": 3, "model": "medieval/hex_road_A", "walk": true },
-    { "q": 3, "r": 4, "model": "medieval/hex_road_B", "walk": true },
-    { "q": 3, "r": 5, "model": "medieval/hex_grass", "walk": true },
-    { "q": 3, "r": 6, "model": "medieval/hex_grass", "walk": true },
-    { "q": 4, "r": -9, "model": "medieval/hex_grass", "walk": true },
-    { "q": 4, "r": -8, "model": "medieval/hex_grass", "walk": true },
-    { "q": 4, "r": -7, "model": "medieval/hex_grass", "walk": true },
-    { "q": 4, "r": -6, "model": "medieval/hex_grass", "walk": true },
-    { "q": 4, "r": -5, "model": "medieval/hex_grass", "walk": true },
-    { "q": 4, "r": -4, "model": "medieval/hex_grass", "walk": true },
-    { "q": 4, "r": -3, "model": "medieval/hex_grass", "walk": true },
-    { "q": 4, "r": -2, "model": "medieval/hex_road_D", "walk": true },
-    { "q": 4, "r": -1, "model": "medieval/hex_grass", "walk": true },
-    { "q": 4, "r": 0, "model": "medieval/hex_grass", "walk": true },
-    { "q": 4, "r": 1, "model": "medieval/hex_grass", "walk": true },
-    { "q": 4, "r": 2, "model": "medieval/hex_grass", "walk": true },
-    { "q": 4, "r": 3, "model": "medieval/hex_grass", "walk": true },
-    { "q": 4, "r": 4, "model": "medieval/hex_road_E", "walk": true },
-    { "q": 4, "r": 5, "model": "medieval/hex_grass", "walk": true },
-    { "q": 5, "r": -9, "model": "medieval/hex_grass", "walk": true },
-    { "q": 5, "r": -8, "model": "medieval/hex_grass", "walk": true },
-    { "q": 5, "r": -7, "model": "medieval/hex_grass", "walk": true },
-    { "q": 5, "r": -6, "model": "medieval/hex_grass", "walk": true },
-    { "q": 5, "r": -5, "model": "medieval/hex_grass", "walk": true },
-    { "q": 5, "r": -4, "model": "medieval/hex_grass", "walk": true },
-    { "q": 5, "r": -3, "model": "medieval/hex_grass", "walk": true },
-    { "q": 5, "r": -2, "model": "medieval/hex_road_E", "walk": true },
-    { "q": 5, "r": -1, "model": "medieval/hex_grass", "walk": true },
-    { "q": 5, "r": 0, "model": "medieval/hex_grass", "walk": true },
-    { "q": 5, "r": 1, "model": "medieval/hex_grass", "walk": true },
-    { "q": 5, "r": 2, "model": "medieval/hex_grass", "walk": true },
-    { "q": 5, "r": 3, "model": "medieval/hex_grass", "walk": true },
-    { "q": 5, "r": 4, "model": "medieval/hex_grass", "walk": true },
-    { "q": 6, "r": -9, "model": "medieval/hex_grass", "walk": true },
-    { "q": 6, "r": -8, "model": "medieval/hex_grass", "walk": true },
-    { "q": 6, "r": -7, "model": "medieval/hex_grass", "walk": true },
-    { "q": 6, "r": -6, "model": "medieval/hex_grass", "walk": true },
-    { "q": 6, "r": -5, "model": "medieval/hex_grass", "walk": true },
-    { "q": 6, "r": -4, "model": "medieval/hex_grass", "walk": true },
-    { "q": 6, "r": -3, "model": "medieval/hex_grass", "walk": true },
-    { "q": 6, "r": -2, "model": "medieval/hex_road_A", "walk": true },
-    { "q": 6, "r": -1, "model": "medieval/hex_road_B", "walk": true },
-    { "q": 6, "r": 0, "model": "medieval/hex_grass", "walk": true },
-    { "q": 6, "r": 1, "model": "medieval/hex_grass", "walk": true },
-    { "q": 6, "r": 2, "model": "medieval/hex_grass", "walk": true },
-    { "q": 6, "r": 3, "model": "medieval/hex_grass", "walk": true },
-    { "q": 7, "r": -9, "model": "medieval/hex_grass", "walk": true },
-    { "q": 7, "r": -8, "model": "medieval/hex_grass", "walk": true },
-    { "q": 7, "r": -7, "model": "medieval/hex_grass", "walk": true },
-    { "q": 7, "r": -6, "model": "medieval/hex_grass", "walk": true },
-    { "q": 7, "r": -5, "model": "medieval/hex_grass", "walk": true },
-    { "q": 7, "r": -4, "model": "medieval/hex_grass", "walk": true },
-    { "q": 7, "r": -3, "model": "medieval/hex_grass", "walk": true },
-    { "q": 7, "r": -2, "model": "medieval/hex_grass", "walk": true },
-    { "q": 7, "r": -1, "model": "medieval/hex_road_C", "walk": true },
-    { "q": 7, "r": 0, "model": "medieval/hex_road_D", "walk": true },
-    { "q": 7, "r": 1, "model": "medieval/hex_grass", "walk": true },
-    { "q": 7, "r": 2, "model": "medieval/hex_grass", "walk": true },
-    { "q": 8, "r": -9, "model": "medieval/hex_grass", "walk": true },
-    { "q": 8, "r": -8, "model": "medieval/hex_grass", "walk": true },
-    { "q": 8, "r": -7, "model": "medieval/hex_grass", "walk": true },
-    { "q": 8, "r": -6, "model": "medieval/hex_grass", "walk": true },
-    { "q": 8, "r": -5, "model": "medieval/hex_grass", "walk": true },
-    { "q": 8, "r": -4, "model": "medieval/hex_grass", "walk": true },
-    { "q": 8, "r": -3, "model": "medieval/hex_grass", "walk": true },
-    { "q": 8, "r": -2, "model": "medieval/hex_grass", "walk": true },
-    { "q": 8, "r": -1, "model": "medieval/hex_grass", "walk": true },
-    { "q": 8, "r": 0, "model": "medieval/hex_grass", "walk": true },
-    { "q": 8, "r": 1, "model": "medieval/hex_grass", "walk": true },
-    { "q": 9, "r": -9, "model": "medieval/hex_grass", "walk": true },
-    { "q": 9, "r": -8, "model": "medieval/hex_grass", "walk": true },
-    { "q": 9, "r": -7, "model": "medieval/hex_grass", "walk": true },
-    { "q": 9, "r": -6, "model": "medieval/hex_grass", "walk": true },
-    { "q": 9, "r": -5, "model": "medieval/hex_grass", "walk": true },
-    { "q": 9, "r": -4, "model": "medieval/hex_grass", "walk": true },
-    { "q": 9, "r": -3, "model": "medieval/hex_grass", "walk": true },
-    { "q": 9, "r": -2, "model": "medieval/hex_grass", "walk": true },
-    { "q": 9, "r": -1, "model": "medieval/hex_grass", "walk": true },
-    { "q": 9, "r": 0, "model": "medieval/hex_grass", "walk": true }
+    {
+      "q": -9,
+      "r": 0,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -9,
+      "r": 1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -9,
+      "r": 2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -9,
+      "r": 3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -9,
+      "r": 4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -9,
+      "r": 5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -9,
+      "r": 6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -9,
+      "r": 7,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -9,
+      "r": 8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -9,
+      "r": 9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -8,
+      "r": -1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -8,
+      "r": 0,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -8,
+      "r": 1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -8,
+      "r": 2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -8,
+      "r": 3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -8,
+      "r": 4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -8,
+      "r": 5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -8,
+      "r": 6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -8,
+      "r": 7,
+      "model": "medieval/hex_coast_A",
+      "walk": false
+    },
+    {
+      "q": -8,
+      "r": 8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -8,
+      "r": 9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -7,
+      "r": -2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -7,
+      "r": -1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -7,
+      "r": 0,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -7,
+      "r": 1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -7,
+      "r": 2,
+      "model": "medieval/hex_road_B",
+      "walk": true
+    },
+    {
+      "q": -7,
+      "r": 3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -7,
+      "r": 4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -7,
+      "r": 5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -7,
+      "r": 6,
+      "model": "medieval/hex_coast_B",
+      "walk": false
+    },
+    {
+      "q": -7,
+      "r": 7,
+      "model": "medieval/hex_water",
+      "walk": false
+    },
+    {
+      "q": -7,
+      "r": 8,
+      "model": "medieval/hex_coast_C",
+      "walk": false
+    },
+    {
+      "q": -7,
+      "r": 9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -6,
+      "r": -3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -6,
+      "r": -2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -6,
+      "r": -1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -6,
+      "r": 0,
+      "model": "medieval/hex_road_C",
+      "walk": true
+    },
+    {
+      "q": -6,
+      "r": 1,
+      "model": "medieval/hex_road_D",
+      "walk": true
+    },
+    {
+      "q": -6,
+      "r": 2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -6,
+      "r": 3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -6,
+      "r": 4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -6,
+      "r": 5,
+      "model": "medieval/hex_coast_A",
+      "walk": false
+    },
+    {
+      "q": -6,
+      "r": 6,
+      "model": "medieval/hex_water",
+      "walk": false
+    },
+    {
+      "q": -6,
+      "r": 7,
+      "model": "medieval/hex_water",
+      "walk": false
+    },
+    {
+      "q": -6,
+      "r": 8,
+      "model": "medieval/hex_water",
+      "walk": false
+    },
+    {
+      "q": -6,
+      "r": 9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -5,
+      "r": -4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -5,
+      "r": -3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -5,
+      "r": -2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -5,
+      "r": -1,
+      "model": "medieval/hex_road_A",
+      "walk": true
+    },
+    {
+      "q": -5,
+      "r": 0,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -5,
+      "r": 1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -5,
+      "r": 2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -5,
+      "r": 3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -5,
+      "r": 4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -5,
+      "r": 5,
+      "model": "medieval/hex_coast_B",
+      "walk": false
+    },
+    {
+      "q": -5,
+      "r": 6,
+      "model": "medieval/hex_water",
+      "walk": false
+    },
+    {
+      "q": -5,
+      "r": 7,
+      "model": "medieval/hex_water",
+      "walk": false
+    },
+    {
+      "q": -5,
+      "r": 8,
+      "model": "medieval/hex_coast_A",
+      "walk": false
+    },
+    {
+      "q": -5,
+      "r": 9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -4,
+      "r": -5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -4,
+      "r": -4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -4,
+      "r": -3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -4,
+      "r": -2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -4,
+      "r": -1,
+      "model": "medieval/hex_road_B",
+      "walk": true
+    },
+    {
+      "q": -4,
+      "r": 0,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -4,
+      "r": 1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -4,
+      "r": 2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -4,
+      "r": 3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -4,
+      "r": 4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -4,
+      "r": 5,
+      "model": "medieval/hex_road_E",
+      "walk": true
+    },
+    {
+      "q": -4,
+      "r": 6,
+      "model": "medieval/hex_coast_C",
+      "walk": false
+    },
+    {
+      "q": -4,
+      "r": 7,
+      "model": "medieval/hex_water",
+      "walk": false
+    },
+    {
+      "q": -4,
+      "r": 8,
+      "model": "medieval/hex_coast_B",
+      "walk": false
+    },
+    {
+      "q": -4,
+      "r": 9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -3,
+      "r": -6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -3,
+      "r": -5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -3,
+      "r": -4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -3,
+      "r": -3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -3,
+      "r": -2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -3,
+      "r": -1,
+      "model": "medieval/hex_road_C",
+      "walk": true
+    },
+    {
+      "q": -3,
+      "r": 0,
+      "model": "medieval/hex_road_D",
+      "walk": true
+    },
+    {
+      "q": -3,
+      "r": 1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -3,
+      "r": 2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -3,
+      "r": 3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -3,
+      "r": 4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -3,
+      "r": 5,
+      "model": "medieval/hex_road_A",
+      "walk": true
+    },
+    {
+      "q": -3,
+      "r": 6,
+      "model": "medieval/hex_coast_A",
+      "walk": false
+    },
+    {
+      "q": -3,
+      "r": 7,
+      "model": "medieval/hex_coast_C",
+      "walk": false
+    },
+    {
+      "q": -3,
+      "r": 8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -3,
+      "r": 9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": -7,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": -6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": -5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": -4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": -3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": -2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": -1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": 0,
+      "model": "medieval/hex_road_A",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": 1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": 2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": 3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": 4,
+      "model": "medieval/hex_road_B",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": 5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": 6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": 7,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": 8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -2,
+      "r": 9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": -8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": -7,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": -6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": -5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": -4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": -3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": -2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": -1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": 0,
+      "model": "medieval/hex_road_B",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": 1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": 2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": 3,
+      "model": "medieval/hex_road_C",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": 4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": 5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": 6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": 7,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": 8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": -1,
+      "r": 9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": -9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": -8,
+      "model": "medieval/hex_road_E",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": -7,
+      "model": "medieval/hex_road_A",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": -6,
+      "model": "medieval/hex_road_B",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": -5,
+      "model": "medieval/hex_road_A",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": -4,
+      "model": "medieval/hex_road_C",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": -3,
+      "model": "medieval/hex_road_D",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": -2,
+      "model": "medieval/hex_road_A",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": -1,
+      "model": "medieval/hex_road_B",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": 0,
+      "model": "medieval/hex_road_E",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": 1,
+      "model": "medieval/hex_road_A",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": 2,
+      "model": "medieval/hex_road_D",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": 3,
+      "model": "medieval/hex_road_B",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": 4,
+      "model": "medieval/hex_road_A",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": 5,
+      "model": "medieval/hex_road_C",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": 6,
+      "model": "medieval/hex_road_E",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": 7,
+      "model": "medieval/hex_road_A",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": 8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 0,
+      "r": 9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": -9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": -8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": -7,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": -6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": -5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": -4,
+      "model": "medieval/hex_road_B",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": -3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": -2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": 0,
+      "model": "medieval/hex_road_A",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": 1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": 2,
+      "model": "medieval/hex_road_B",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": 3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": 4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": 5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": 6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": 7,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 1,
+      "r": 8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": -9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": -8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": -7,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": -6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": -5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": -4,
+      "model": "medieval/hex_road_C",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": -3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": -2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": -1,
+      "model": "medieval/hex_road_B",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": 0,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": 1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": 2,
+      "model": "medieval/hex_road_C",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": 3,
+      "model": "medieval/hex_road_D",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": 4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": 5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": 6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 2,
+      "r": 7,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 3,
+      "r": -9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 3,
+      "r": -8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 3,
+      "r": -7,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 3,
+      "r": -6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 3,
+      "r": -5,
+      "model": "medieval/hex_road_E",
+      "walk": true
+    },
+    {
+      "q": 3,
+      "r": -4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 3,
+      "r": -3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 3,
+      "r": -2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 3,
+      "r": -1,
+      "model": "medieval/hex_road_C",
+      "walk": true
+    },
+    {
+      "q": 3,
+      "r": 0,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 3,
+      "r": 1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 3,
+      "r": 2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 3,
+      "r": 3,
+      "model": "medieval/hex_road_A",
+      "walk": true
+    },
+    {
+      "q": 3,
+      "r": 4,
+      "model": "medieval/hex_road_B",
+      "walk": true
+    },
+    {
+      "q": 3,
+      "r": 5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 3,
+      "r": 6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 4,
+      "r": -9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 4,
+      "r": -8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 4,
+      "r": -7,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 4,
+      "r": -6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 4,
+      "r": -5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 4,
+      "r": -4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 4,
+      "r": -3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 4,
+      "r": -2,
+      "model": "medieval/hex_road_D",
+      "walk": true
+    },
+    {
+      "q": 4,
+      "r": -1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 4,
+      "r": 0,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 4,
+      "r": 1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 4,
+      "r": 2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 4,
+      "r": 3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 4,
+      "r": 4,
+      "model": "medieval/hex_road_E",
+      "walk": true
+    },
+    {
+      "q": 4,
+      "r": 5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 5,
+      "r": -9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 5,
+      "r": -8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 5,
+      "r": -7,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 5,
+      "r": -6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 5,
+      "r": -5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 5,
+      "r": -4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 5,
+      "r": -3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 5,
+      "r": -2,
+      "model": "medieval/hex_road_E",
+      "walk": true
+    },
+    {
+      "q": 5,
+      "r": -1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 5,
+      "r": 0,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 5,
+      "r": 1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 5,
+      "r": 2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 5,
+      "r": 3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 5,
+      "r": 4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 6,
+      "r": -9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 6,
+      "r": -8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 6,
+      "r": -7,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 6,
+      "r": -6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 6,
+      "r": -5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 6,
+      "r": -4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 6,
+      "r": -3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 6,
+      "r": -2,
+      "model": "medieval/hex_road_A",
+      "walk": true
+    },
+    {
+      "q": 6,
+      "r": -1,
+      "model": "medieval/hex_road_B",
+      "walk": true
+    },
+    {
+      "q": 6,
+      "r": 0,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 6,
+      "r": 1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 6,
+      "r": 2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 6,
+      "r": 3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 7,
+      "r": -9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 7,
+      "r": -8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 7,
+      "r": -7,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 7,
+      "r": -6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 7,
+      "r": -5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 7,
+      "r": -4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 7,
+      "r": -3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 7,
+      "r": -2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 7,
+      "r": -1,
+      "model": "medieval/hex_road_C",
+      "walk": true
+    },
+    {
+      "q": 7,
+      "r": 0,
+      "model": "medieval/hex_road_D",
+      "walk": true
+    },
+    {
+      "q": 7,
+      "r": 1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 7,
+      "r": 2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 8,
+      "r": -9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 8,
+      "r": -8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 8,
+      "r": -7,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 8,
+      "r": -6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 8,
+      "r": -5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 8,
+      "r": -4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 8,
+      "r": -3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 8,
+      "r": -2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 8,
+      "r": -1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 8,
+      "r": 0,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 8,
+      "r": 1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 9,
+      "r": -9,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 9,
+      "r": -8,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 9,
+      "r": -7,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 9,
+      "r": -6,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 9,
+      "r": -5,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 9,
+      "r": -4,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 9,
+      "r": -3,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 9,
+      "r": -2,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 9,
+      "r": -1,
+      "model": "medieval/hex_grass",
+      "walk": true
+    },
+    {
+      "q": 9,
+      "r": 0,
+      "model": "medieval/hex_grass",
+      "walk": true
+    }
   ],
   "props": [
-    { "q": -1, "r": -1, "model": "medieval/building_well_blue", "rot": 0, "scale": 1 },
-    { "q": 2, "r": -2, "model": "medieval/building_stage_A", "rot": 2.094, "scale": 1 },
-    { "q": 1, "r": -2, "model": "city/bench", "rot": 1.047, "scale": 1 },
-    { "q": -2, "r": 1, "model": "city/bench", "rot": 0, "scale": 1 },
-    { "q": -1, "r": -2, "model": "city/streetlight", "rot": 0, "scale": 1 },
-    { "q": 1, "r": 1, "model": "city/streetlight", "rot": 3.142, "scale": 1 },
-    { "q": 2, "r": 0, "model": "medieval/barrel", "rot": 0, "scale": 1 },
-    { "q": -2, "r": 2, "model": "medieval/barrel", "rot": 1.047, "scale": 1 },
-
-    { "q": 5, "r": -4, "model": "medieval/building_market_red", "rot": 3.142, "scale": 1 },
-    { "q": 7, "r": -3, "model": "medieval/building_tavern_yellow", "rot": 2.094, "scale": 1 },
-    { "q": 6, "r": -4, "model": "restaurant/crate_buns", "rot": 0, "scale": 1 },
-    { "q": 4, "r": -3, "model": "restaurant/crate_carrots", "rot": 1.047, "scale": 1 },
-    { "q": 3, "r": -2, "model": "restaurant/crate_tomatoes", "rot": 2.094, "scale": 1 },
-    { "q": 7, "r": -2, "model": "medieval/sack", "rot": 0, "scale": 1 },
-    { "q": 8, "r": -3, "model": "medieval/building_windmill_yellow", "rot": 4.189, "scale": 1 },
-
-    { "q": -5, "r": -3, "model": "medieval/building_church_blue", "rot": 0, "scale": 1 },
-    { "q": -6, "r": -2, "model": "furniture/shelf_B_small_decorated", "rot": 1.047, "scale": 1 },
-    { "q": -4, "r": -3, "model": "furniture/book_set", "rot": 0, "scale": 1 },
-    { "q": -3, "r": -2, "model": "furniture/lamp_standing", "rot": 0, "scale": 1 },
-    { "q": -7, "r": -1, "model": "city/bench", "rot": 1.047, "scale": 1 },
-    { "q": -7, "r": 0, "model": "furniture/book_set", "rot": 2.094, "scale": 1 },
-
-    { "q": 6, "r": 3, "model": "medieval/building_blacksmith_blue", "rot": 4.189, "scale": 1 },
-    { "q": 5, "r": 2, "model": "medieval/barrel", "rot": 0, "scale": 1 },
-    { "q": 6, "r": 4, "model": "medieval/resource_lumber", "rot": 1.047, "scale": 1 },
-    { "q": 5, "r": 5, "model": "medieval/wheelbarrow", "rot": 2.094, "scale": 1 },
-    { "q": 3, "r": 6, "model": "medieval/bucket_water", "rot": 0, "scale": 1 },
-    { "q": 2, "r": 6, "model": "medieval/crate_A_small", "rot": 1.047, "scale": 1 },
-
-    { "q": -5, "r": 6, "model": "medieval/waterlily_A", "rot": 0, "scale": 1 },
-    { "q": -6, "r": 7, "model": "medieval/waterlily_B", "rot": 1.047, "scale": 1 },
-    { "q": -5, "r": 7, "model": "medieval/waterplant_A", "rot": 2.094, "scale": 1 },
-    { "q": -6, "r": 6, "model": "medieval/waterlily_A", "rot": 3.142, "scale": 1 },
-    { "q": -4, "r": 7, "model": "medieval/waterplant_A", "rot": 0, "scale": 1 },
-    { "q": -7, "r": 6, "model": "medieval/building_watermill_red", "rot": 1.047, "scale": 1 },
-    { "q": -5, "r": 5, "model": "medieval/building_bridge_A", "rot": 0, "scale": 1 },
-    { "q": -5, "r": 4, "model": "city/bench", "rot": 0, "scale": 1 },
-    { "q": -2, "r": 5, "model": "city/bench", "rot": 4.189, "scale": 1 },
-    { "q": -3, "r": 3, "model": "city/streetlight", "rot": 0, "scale": 1 },
-
-    { "q": -1, "r": 7, "model": "medieval/fence_wood_straight", "rot": 0, "scale": 1 },
-    { "q": 1, "r": 6, "model": "medieval/fence_wood_straight", "rot": 0, "scale": 1 },
-    { "q": -2, "r": 7, "model": "medieval/tent", "rot": 1.047, "scale": 1 },
-    { "q": 2, "r": 5, "model": "medieval/building_home_A_yellow", "rot": 4.189, "scale": 1 },
-    { "q": -1, "r": 5, "model": "city/streetlight", "rot": 0, "scale": 1 },
-    { "q": 1, "r": 7, "model": "medieval/crate_A_small", "rot": 2.094, "scale": 1 },
-
-    { "q": 0, "r": -9, "model": "medieval/wall_straight_gate", "rot": 0, "scale": 1 },
-    { "q": -1, "r": -8, "model": "medieval/building_tower_base_blue", "rot": 0, "scale": 1 },
-    { "q": 1, "r": -9, "model": "medieval/building_tower_base_blue", "rot": 0, "scale": 1 },
-    { "q": -1, "r": -7, "model": "city/streetlight", "rot": 0, "scale": 1 },
-    { "q": 1, "r": -8, "model": "city/streetlight", "rot": 0, "scale": 1 },
-
-    { "q": -2, "r": -3, "model": "medieval/building_home_A_yellow", "rot": 0, "scale": 1 },
-    { "q": -1, "r": -4, "model": "medieval/building_home_B_red", "rot": 1.047, "scale": 1 },
-    { "q": 2, "r": -3, "model": "medieval/building_home_B_red", "rot": 3.142, "scale": 1 },
-    { "q": 4, "r": 1, "model": "medieval/building_home_A_yellow", "rot": 4.189, "scale": 1 },
-    { "q": -4, "r": 2, "model": "medieval/building_home_B_red", "rot": 1.047, "scale": 1 },
-    { "q": -3, "r": 1, "model": "medieval/fence_wood_straight", "rot": 1.047, "scale": 1 },
-    { "q": 3, "r": 1, "model": "medieval/fence_wood_straight", "rot": 2.094, "scale": 1 },
-
-    { "q": -2, "r": -2, "model": "city/bush", "rot": 0, "scale": 1 },
-    { "q": -1, "r": -3, "model": "medieval/trees_A_small", "rot": 1.047, "scale": 1 },
-    { "q": -3, "r": -4, "model": "medieval/trees_B_medium", "rot": 2.094, "scale": 1 },
-    { "q": -2, "r": -5, "model": "medieval/tree_single_A", "rot": 0, "scale": 1 },
-    { "q": -1, "r": -6, "model": "city/bush", "rot": 3.142, "scale": 1 },
-    { "q": 1, "r": -6, "model": "medieval/trees_A_medium", "rot": 1.047, "scale": 1 },
-    { "q": 1, "r": -5, "model": "city/bush", "rot": 0, "scale": 1 },
-    { "q": 1, "r": -3, "model": "medieval/tree_single_B", "rot": 2.094, "scale": 1 },
-    { "q": 3, "r": -3, "model": "city/bush", "rot": 1.047, "scale": 1 },
-    { "q": 4, "r": -4, "model": "medieval/trees_B_small", "rot": 0, "scale": 1 },
-    { "q": 5, "r": -6, "model": "medieval/trees_A_large", "rot": 3.142, "scale": 1 },
-    { "q": 6, "r": -6, "model": "medieval/rock_single_A", "rot": 1.047, "scale": 1 },
-
-    { "q": 3, "r": 0, "model": "city/bush", "rot": 0, "scale": 1 },
-    { "q": 4, "r": 0, "model": "medieval/trees_A_small", "rot": 2.094, "scale": 1 },
-    { "q": 5, "r": 0, "model": "medieval/tree_single_A", "rot": 1.047, "scale": 1 },
-    { "q": 5, "r": 1, "model": "city/bush", "rot": 0, "scale": 1 },
-    { "q": 6, "r": 2, "model": "medieval/trees_B_medium", "rot": 3.142, "scale": 1 },
-    { "q": 4, "r": 2, "model": "medieval/rock_single_B", "rot": 0, "scale": 1 },
-    { "q": 2, "r": 1, "model": "city/bush", "rot": 1.047, "scale": 1 },
-
-    { "q": -1, "r": 2, "model": "city/bush", "rot": 0, "scale": 1 },
-    { "q": -2, "r": 3, "model": "medieval/tree_single_B", "rot": 2.094, "scale": 1 },
-    { "q": -4, "r": 1, "model": "medieval/trees_A_small", "rot": 1.047, "scale": 1 },
-    { "q": -5, "r": 2, "model": "medieval/trees_B_small", "rot": 0, "scale": 1 },
-    { "q": -5, "r": 3, "model": "medieval/rock_single_C", "rot": 3.142, "scale": 1 },
-    { "q": -6, "r": 4, "model": "medieval/trees_A_medium", "rot": 1.047, "scale": 1 },
-    { "q": -1, "r": 4, "model": "medieval/trees_B_small", "rot": 0, "scale": 1 },
-    { "q": -2, "r": 6, "model": "medieval/trees_A_medium", "rot": 2.094, "scale": 1 },
-    { "q": 1, "r": 5, "model": "city/bush", "rot": 1.047, "scale": 1 },
-
-    { "q": -9, "r": 0, "model": "medieval/mountain_A_grass_trees", "rot": 0, "scale": 1 },
-    { "q": -9, "r": 2, "model": "medieval/hills_A_trees", "rot": 1.047, "scale": 1 },
-    { "q": -9, "r": 4, "model": "medieval/mountain_A_grass_trees", "rot": 2.094, "scale": 1 },
-    { "q": -9, "r": 6, "model": "medieval/trees_A_large", "rot": 0, "scale": 1 },
-    { "q": -9, "r": 8, "model": "medieval/hills_A_trees", "rot": 3.142, "scale": 1 },
-    { "q": -9, "r": 9, "model": "medieval/mountain_A_grass_trees", "rot": 1.047, "scale": 1 },
-    { "q": -7, "r": -2, "model": "medieval/mountain_A_grass_trees", "rot": 0, "scale": 1 },
-    { "q": -5, "r": -4, "model": "medieval/hills_A_trees", "rot": 2.094, "scale": 1 },
-    { "q": -3, "r": -6, "model": "medieval/mountain_A_grass_trees", "rot": 1.047, "scale": 1 },
-    { "q": -2, "r": -7, "model": "medieval/cloud_small", "rot": 0, "scale": 1 },
-    { "q": 2, "r": -9, "model": "medieval/cloud_big", "rot": 0, "scale": 1 },
-    { "q": 4, "r": -9, "model": "medieval/mountain_A_grass_trees", "rot": 3.142, "scale": 1 },
-    { "q": 6, "r": -9, "model": "medieval/hills_A_trees", "rot": 0, "scale": 1 },
-    { "q": 8, "r": -9, "model": "medieval/mountain_A_grass_trees", "rot": 1.047, "scale": 1 },
-    { "q": 9, "r": -9, "model": "medieval/trees_A_large", "rot": 2.094, "scale": 1 },
-    { "q": 9, "r": -7, "model": "medieval/hills_A_trees", "rot": 0, "scale": 1 },
-    { "q": 9, "r": -5, "model": "medieval/mountain_A_grass_trees", "rot": 3.142, "scale": 1 },
-    { "q": 9, "r": -3, "model": "medieval/trees_A_large", "rot": 1.047, "scale": 1 },
-    { "q": 9, "r": -1, "model": "medieval/hills_A_trees", "rot": 2.094, "scale": 1 },
-    { "q": 9, "r": 0, "model": "medieval/mountain_A_grass_trees", "rot": 0, "scale": 1 },
-    { "q": 8, "r": 1, "model": "medieval/trees_A_large", "rot": 1.047, "scale": 1 },
-    { "q": 7, "r": 2, "model": "medieval/hills_A_trees", "rot": 0, "scale": 1 },
-    { "q": 8, "r": -2, "model": "medieval/rock_single_A", "rot": 2.094, "scale": 1 },
-    { "q": 2, "r": 7, "model": "medieval/hills_A_trees", "rot": 1.047, "scale": 1 },
-    { "q": 0, "r": 9, "model": "medieval/trees_A_large", "rot": 0, "scale": 1 },
-    { "q": -2, "r": 9, "model": "medieval/mountain_A_grass_trees", "rot": 3.142, "scale": 1 },
-    { "q": -5, "r": 9, "model": "medieval/hills_A_trees", "rot": 1.047, "scale": 1 },
-    { "q": -7, "r": 9, "model": "medieval/mountain_A_grass_trees", "rot": 0, "scale": 1 }
+    {
+      "q": -1,
+      "r": -1,
+      "model": "medieval/building_well_blue",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 2,
+      "r": -2,
+      "model": "medieval/building_stage_A",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": -2,
+      "model": "city/bench",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 1,
+      "model": "city/bench",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": -2,
+      "model": "city/streetlight",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": 1,
+      "model": "city/streetlight",
+      "rot": 3.142,
+      "scale": 1
+    },
+    {
+      "q": 2,
+      "r": 0,
+      "model": "medieval/barrel",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 2,
+      "model": "medieval/barrel",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": -4,
+      "model": "medieval/building_market_red",
+      "rot": 3.142,
+      "scale": 1
+    },
+    {
+      "q": 7,
+      "r": -3,
+      "model": "medieval/building_tavern_yellow",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": 6,
+      "r": -4,
+      "model": "restaurant/crate_buns",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": -3,
+      "model": "restaurant/crate_carrots",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": -2,
+      "model": "restaurant/crate_tomatoes",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": 7,
+      "r": -2,
+      "model": "medieval/sack",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 8,
+      "r": -3,
+      "model": "medieval/building_windmill_yellow",
+      "rot": 4.189,
+      "scale": 1
+    },
+    {
+      "q": -5,
+      "r": -3,
+      "model": "medieval/building_church_blue",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -6,
+      "r": -2,
+      "model": "furniture/shelf_B_small_decorated",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": -4,
+      "r": -3,
+      "model": "furniture/book_set",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -3,
+      "r": -2,
+      "model": "furniture/lamp_standing",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -7,
+      "r": -1,
+      "model": "city/bench",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": -7,
+      "r": 0,
+      "model": "furniture/book_set",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": 6,
+      "r": 3,
+      "model": "medieval/building_blacksmith_blue",
+      "rot": 4.189,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": 2,
+      "model": "medieval/barrel",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 6,
+      "r": 4,
+      "model": "medieval/resource_lumber",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": 5,
+      "model": "medieval/wheelbarrow",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": 6,
+      "model": "medieval/bucket_water",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 2,
+      "r": 6,
+      "model": "medieval/crate_A_small",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": -5,
+      "r": 6,
+      "model": "medieval/waterlily_A",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -6,
+      "r": 7,
+      "model": "medieval/waterlily_B",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": -5,
+      "r": 7,
+      "model": "medieval/waterplant_A",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": -6,
+      "r": 6,
+      "model": "medieval/waterlily_A",
+      "rot": 3.142,
+      "scale": 1
+    },
+    {
+      "q": -4,
+      "r": 7,
+      "model": "medieval/waterplant_A",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -7,
+      "r": 6,
+      "model": "medieval/building_watermill_red",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": -5,
+      "r": 5,
+      "model": "medieval/building_bridge_A",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -5,
+      "r": 4,
+      "model": "city/bench",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 5,
+      "model": "city/bench",
+      "rot": 4.189,
+      "scale": 1
+    },
+    {
+      "q": -3,
+      "r": 3,
+      "model": "city/streetlight",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": 7,
+      "model": "medieval/fence_wood_straight",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": 6,
+      "model": "medieval/fence_wood_straight",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 7,
+      "model": "medieval/tent",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": 2,
+      "r": 5,
+      "model": "medieval/building_home_A_yellow",
+      "rot": 4.189,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": 5,
+      "model": "city/streetlight",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": 7,
+      "model": "medieval/crate_A_small",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": 0,
+      "r": -9,
+      "model": "medieval/wall_straight_gate",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": -8,
+      "model": "medieval/building_tower_base_blue",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": -9,
+      "model": "medieval/building_tower_base_blue",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": -7,
+      "model": "city/streetlight",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": -8,
+      "model": "city/streetlight",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": -3,
+      "model": "medieval/building_home_A_yellow",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": -4,
+      "model": "medieval/building_home_B_red",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": 2,
+      "r": -3,
+      "model": "medieval/building_home_B_red",
+      "rot": 3.142,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": 1,
+      "model": "medieval/building_home_A_yellow",
+      "rot": 4.189,
+      "scale": 1
+    },
+    {
+      "q": -4,
+      "r": 2,
+      "model": "medieval/building_home_B_red",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": -3,
+      "r": 1,
+      "model": "medieval/fence_wood_straight",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": 1,
+      "model": "medieval/fence_wood_straight",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": -2,
+      "model": "city/bush",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": -3,
+      "model": "medieval/trees_A_small",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": -3,
+      "r": -4,
+      "model": "medieval/trees_B_medium",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": -5,
+      "model": "medieval/tree_single_A",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": -6,
+      "model": "city/bush",
+      "rot": 3.142,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": -6,
+      "model": "medieval/trees_A_medium",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": -5,
+      "model": "city/bush",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": -3,
+      "model": "medieval/tree_single_B",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": -3,
+      "model": "city/bush",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": -4,
+      "model": "medieval/trees_B_small",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": -6,
+      "model": "medieval/trees_A_large",
+      "rot": 3.142,
+      "scale": 1
+    },
+    {
+      "q": 6,
+      "r": -6,
+      "model": "medieval/rock_single_A",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": 0,
+      "model": "city/bush",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": 0,
+      "model": "medieval/trees_A_small",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": 0,
+      "model": "medieval/tree_single_A",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": 1,
+      "model": "city/bush",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 6,
+      "r": 2,
+      "model": "medieval/trees_B_medium",
+      "rot": 3.142,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": 2,
+      "model": "medieval/rock_single_B",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 2,
+      "r": 1,
+      "model": "city/bush",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": 2,
+      "model": "city/bush",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 3,
+      "model": "medieval/tree_single_B",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": -4,
+      "r": 1,
+      "model": "medieval/trees_A_small",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": -5,
+      "r": 2,
+      "model": "medieval/trees_B_small",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -5,
+      "r": 3,
+      "model": "medieval/rock_single_C",
+      "rot": 3.142,
+      "scale": 1
+    },
+    {
+      "q": -6,
+      "r": 4,
+      "model": "medieval/trees_A_medium",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": 4,
+      "model": "medieval/trees_B_small",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 6,
+      "model": "medieval/trees_A_medium",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": 5,
+      "model": "city/bush",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": -9,
+      "r": 0,
+      "model": "medieval/mountain_A_grass_trees",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -9,
+      "r": 2,
+      "model": "medieval/hills_A_trees",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": -9,
+      "r": 4,
+      "model": "medieval/mountain_A_grass_trees",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": -9,
+      "r": 6,
+      "model": "medieval/trees_A_large",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -9,
+      "r": 8,
+      "model": "medieval/hills_A_trees",
+      "rot": 3.142,
+      "scale": 1
+    },
+    {
+      "q": -9,
+      "r": 9,
+      "model": "medieval/mountain_A_grass_trees",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": -7,
+      "r": -2,
+      "model": "medieval/mountain_A_grass_trees",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -5,
+      "r": -4,
+      "model": "medieval/hills_A_trees",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": -3,
+      "r": -6,
+      "model": "medieval/mountain_A_grass_trees",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": -7,
+      "model": "medieval/cloud_small",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 2,
+      "r": -9,
+      "model": "medieval/cloud_big",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": -9,
+      "model": "medieval/mountain_A_grass_trees",
+      "rot": 3.142,
+      "scale": 1
+    },
+    {
+      "q": 6,
+      "r": -9,
+      "model": "medieval/hills_A_trees",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 8,
+      "r": -9,
+      "model": "medieval/mountain_A_grass_trees",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": 9,
+      "r": -9,
+      "model": "medieval/trees_A_large",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": 9,
+      "r": -7,
+      "model": "medieval/hills_A_trees",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 9,
+      "r": -5,
+      "model": "medieval/mountain_A_grass_trees",
+      "rot": 3.142,
+      "scale": 1
+    },
+    {
+      "q": 9,
+      "r": -3,
+      "model": "medieval/trees_A_large",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": 9,
+      "r": -1,
+      "model": "medieval/hills_A_trees",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": 9,
+      "r": 0,
+      "model": "medieval/mountain_A_grass_trees",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 8,
+      "r": 1,
+      "model": "medieval/trees_A_large",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": 7,
+      "r": 2,
+      "model": "medieval/hills_A_trees",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": 8,
+      "r": -2,
+      "model": "medieval/rock_single_A",
+      "rot": 2.094,
+      "scale": 1
+    },
+    {
+      "q": 2,
+      "r": 7,
+      "model": "medieval/hills_A_trees",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": 0,
+      "r": 9,
+      "model": "medieval/trees_A_large",
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 9,
+      "model": "medieval/mountain_A_grass_trees",
+      "rot": 3.142,
+      "scale": 1
+    },
+    {
+      "q": -5,
+      "r": 9,
+      "model": "medieval/hills_A_trees",
+      "rot": 1.047,
+      "scale": 1
+    },
+    {
+      "q": -7,
+      "r": 9,
+      "model": "medieval/mountain_A_grass_trees",
+      "rot": 0,
+      "scale": 1
+    }
   ],
   "zones": {
-    "entrance": { "q": 0, "r": 6 },
-    "plaza": { "q": 0, "r": 0 },
-    "bakery": { "q": 5, "r": -2 },
-    "library": { "q": -5, "r": -1 },
-    "smithy": { "q": 4, "r": 4 },
-    "lake": { "q": -4, "r": 5 },
-    "gate": { "q": 0, "r": -8 }
+    "entrance": {
+      "q": 0,
+      "r": 6
+    },
+    "plaza": {
+      "q": 0,
+      "r": 0
+    },
+    "bakery": {
+      "q": 5,
+      "r": -2
+    },
+    "library": {
+      "q": -5,
+      "r": -1
+    },
+    "smithy": {
+      "q": 4,
+      "r": 4
+    },
+    "lake": {
+      "q": -4,
+      "r": 5
+    },
+    "gate": {
+      "q": 0,
+      "r": -8
+    }
   },
   "actors": [
-    { "id": "A", "zone": "plaza" },
-    { "id": "B", "zone": "bakery" },
-    { "id": "C", "zone": "library" },
-    { "id": "D", "zone": "smithy" },
-    { "id": "s1j2", "q": 2, "r": 3 },
-    { "id": "v1j2", "q": 7, "r": 0 },
-    { "id": "t1p2", "q": -7, "r": 2 },
-    { "id": "s2j2", "q": 3, "r": -5 }
+    {
+      "id": "A",
+      "zone": "plaza"
+    },
+    {
+      "id": "B",
+      "zone": "bakery"
+    },
+    {
+      "id": "C",
+      "zone": "library"
+    },
+    {
+      "id": "D",
+      "zone": "smithy"
+    },
+    {
+      "id": "s1j2",
+      "q": 2,
+      "r": 3
+    },
+    {
+      "id": "v1j2",
+      "q": 7,
+      "r": 0
+    },
+    {
+      "id": "t1p2",
+      "q": -7,
+      "r": 2
+    },
+    {
+      "id": "s2j2",
+      "q": 3,
+      "r": -5
+    }
+  ],
+  "decor": [
+    {
+      "q": 0,
+      "r": 0,
+      "kind": "flowers_red",
+      "dx": -0.52,
+      "dz": -0.45,
+      "rot": 0.4,
+      "scale": 1
+    },
+    {
+      "q": 0,
+      "r": 0,
+      "kind": "flowers_yellow",
+      "dx": 0.52,
+      "dz": -0.45,
+      "rot": 1.2,
+      "scale": 0.95
+    },
+    {
+      "q": 0,
+      "r": 0,
+      "kind": "grass_tuft",
+      "dx": -0.55,
+      "dz": 0.42,
+      "rot": 2.1,
+      "scale": 0.9
+    },
+    {
+      "q": 0,
+      "r": 0,
+      "kind": "pebbles",
+      "dx": 0.48,
+      "dz": 0.46,
+      "rot": 0.8,
+      "scale": 0.85
+    },
+    {
+      "q": 0,
+      "r": -1,
+      "kind": "flowers_red",
+      "dx": -0.48,
+      "dz": -0.25,
+      "rot": 0.5,
+      "scale": 1.1
+    },
+    {
+      "q": 0,
+      "r": -1,
+      "kind": "flowers_yellow",
+      "dx": -0.48,
+      "dz": 0.25,
+      "rot": 1.7,
+      "scale": 1.05
+    },
+    {
+      "q": 0,
+      "r": -1,
+      "kind": "flowers_pink",
+      "dx": 0.48,
+      "dz": -0.25,
+      "rot": 2.4,
+      "scale": 1
+    },
+    {
+      "q": 0,
+      "r": -1,
+      "kind": "flowers_white",
+      "dx": 0.48,
+      "dz": 0.25,
+      "rot": 0.9,
+      "scale": 1
+    },
+    {
+      "q": 0,
+      "r": 1,
+      "kind": "flowers_yellow",
+      "dx": -0.46,
+      "dz": -0.2,
+      "rot": 1.1,
+      "scale": 1.05
+    },
+    {
+      "q": 0,
+      "r": 1,
+      "kind": "flowers_red",
+      "dx": 0.46,
+      "dz": 0.2,
+      "rot": 2.8,
+      "scale": 1.05
+    },
+    {
+      "q": 0,
+      "r": 1,
+      "kind": "pebbles",
+      "dx": -0.5,
+      "dz": 0.35,
+      "rot": 0.3,
+      "scale": 0.9
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "kind": "flowers_red",
+      "dx": -0.35,
+      "dz": -0.4,
+      "rot": 0.2,
+      "scale": 1.15
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "kind": "flowers_red",
+      "dx": 0,
+      "dz": -0.4,
+      "rot": 1.4,
+      "scale": 1.2
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "kind": "flowers_red",
+      "dx": 0.35,
+      "dz": -0.4,
+      "rot": 2.6,
+      "scale": 1.15
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "kind": "flowers_yellow",
+      "dx": -0.35,
+      "dz": 0,
+      "rot": 0.7,
+      "scale": 1.1
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "kind": "flowers_yellow",
+      "dx": 0,
+      "dz": 0,
+      "rot": 1.9,
+      "scale": 1.15
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "kind": "flowers_yellow",
+      "dx": 0.35,
+      "dz": 0,
+      "rot": 3.1,
+      "scale": 1.1
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "kind": "flowers_pink",
+      "dx": -0.35,
+      "dz": 0.4,
+      "rot": 1.1,
+      "scale": 1.05
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "kind": "flowers_pink",
+      "dx": 0,
+      "dz": 0.4,
+      "rot": 2.3,
+      "scale": 1.1
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "kind": "flowers_pink",
+      "dx": 0.35,
+      "dz": 0.4,
+      "rot": 3.5,
+      "scale": 1.05
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "kind": "grass_tuft",
+      "dx": -0.52,
+      "dz": -0.5,
+      "rot": 0.4,
+      "scale": 0.95
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "kind": "grass_tuft",
+      "dx": 0.52,
+      "dz": 0.5,
+      "rot": 2.2,
+      "scale": 0.95
+    },
+    {
+      "q": -1,
+      "r": 1,
+      "kind": "flowers_pink",
+      "dx": -0.35,
+      "dz": -0.38,
+      "rot": 0.6,
+      "scale": 1.15
+    },
+    {
+      "q": -1,
+      "r": 1,
+      "kind": "flowers_pink",
+      "dx": 0,
+      "dz": -0.38,
+      "rot": 1.8,
+      "scale": 1.2
+    },
+    {
+      "q": -1,
+      "r": 1,
+      "kind": "flowers_pink",
+      "dx": 0.35,
+      "dz": -0.38,
+      "rot": 3,
+      "scale": 1.15
+    },
+    {
+      "q": -1,
+      "r": 1,
+      "kind": "flowers_white",
+      "dx": -0.35,
+      "dz": 0,
+      "rot": 0.9,
+      "scale": 1.1
+    },
+    {
+      "q": -1,
+      "r": 1,
+      "kind": "flowers_white",
+      "dx": 0,
+      "dz": 0,
+      "rot": 2.1,
+      "scale": 1.15
+    },
+    {
+      "q": -1,
+      "r": 1,
+      "kind": "flowers_white",
+      "dx": 0.35,
+      "dz": 0,
+      "rot": 3.3,
+      "scale": 1.1
+    },
+    {
+      "q": -1,
+      "r": 1,
+      "kind": "flowers_yellow",
+      "dx": -0.35,
+      "dz": 0.38,
+      "rot": 1.3,
+      "scale": 1.1
+    },
+    {
+      "q": -1,
+      "r": 1,
+      "kind": "flowers_yellow",
+      "dx": 0,
+      "dz": 0.38,
+      "rot": 2.5,
+      "scale": 1.15
+    },
+    {
+      "q": -1,
+      "r": 1,
+      "kind": "flowers_yellow",
+      "dx": 0.35,
+      "dz": 0.38,
+      "rot": 3.7,
+      "scale": 1.1
+    },
+    {
+      "q": -1,
+      "r": 1,
+      "kind": "pebbles",
+      "dx": 0.5,
+      "dz": -0.48,
+      "rot": 1,
+      "scale": 0.9
+    },
+    {
+      "q": 1,
+      "r": 1,
+      "kind": "flowers_red",
+      "dx": -0.38,
+      "dz": -0.35,
+      "rot": 0.5,
+      "scale": 1.1
+    },
+    {
+      "q": 1,
+      "r": 1,
+      "kind": "flowers_yellow",
+      "dx": 0.38,
+      "dz": -0.35,
+      "rot": 1.6,
+      "scale": 1.05
+    },
+    {
+      "q": 1,
+      "r": 1,
+      "kind": "flowers_white",
+      "dx": -0.38,
+      "dz": 0.35,
+      "rot": 2.7,
+      "scale": 1.05
+    },
+    {
+      "q": 1,
+      "r": 1,
+      "kind": "grass_tuft",
+      "dx": 0.42,
+      "dz": 0.38,
+      "rot": 0.8,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": -1,
+      "kind": "flowers_white",
+      "dx": -0.45,
+      "dz": 0.35,
+      "rot": 1.2,
+      "scale": 1.05
+    },
+    {
+      "q": -1,
+      "r": -1,
+      "kind": "flowers_pink",
+      "dx": 0.45,
+      "dz": 0.35,
+      "rot": 2.4,
+      "scale": 1.1
+    },
+    {
+      "q": -1,
+      "r": -1,
+      "kind": "grass_tuft",
+      "dx": -0.48,
+      "dz": -0.38,
+      "rot": 0.3,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": -1,
+      "kind": "pebbles",
+      "dx": 0.42,
+      "dz": -0.42,
+      "rot": 1.9,
+      "scale": 0.95
+    },
+    {
+      "q": 1,
+      "r": -2,
+      "kind": "flowers_red",
+      "dx": -0.45,
+      "dz": 0.35,
+      "rot": 0.7,
+      "scale": 1.1
+    },
+    {
+      "q": 1,
+      "r": -2,
+      "kind": "flowers_yellow",
+      "dx": 0.45,
+      "dz": -0.35,
+      "rot": 1.8,
+      "scale": 1.1
+    },
+    {
+      "q": 1,
+      "r": -2,
+      "kind": "grass_tuft",
+      "dx": -0.48,
+      "dz": -0.38,
+      "rot": 2.9,
+      "scale": 0.95
+    },
+    {
+      "q": 2,
+      "r": -2,
+      "kind": "flowers_red",
+      "dx": -0.5,
+      "dz": 0.42,
+      "rot": 0.4,
+      "scale": 1.2
+    },
+    {
+      "q": 2,
+      "r": -2,
+      "kind": "flowers_yellow",
+      "dx": -0.15,
+      "dz": 0.48,
+      "rot": 1.5,
+      "scale": 1.15
+    },
+    {
+      "q": 2,
+      "r": -2,
+      "kind": "flowers_pink",
+      "dx": 0.2,
+      "dz": 0.48,
+      "rot": 2.6,
+      "scale": 1.2
+    },
+    {
+      "q": 2,
+      "r": -2,
+      "kind": "flowers_white",
+      "dx": 0.5,
+      "dz": 0.42,
+      "rot": 3.7,
+      "scale": 1.15
+    },
+    {
+      "q": 2,
+      "r": -2,
+      "kind": "model:medieval/crate_A_small",
+      "dx": 0.52,
+      "dz": -0.42,
+      "rot": 0.6,
+      "scale": 0.9
+    },
+    {
+      "q": -2,
+      "r": 1,
+      "kind": "flowers_pink",
+      "dx": -0.42,
+      "dz": -0.38,
+      "rot": 1,
+      "scale": 1.1
+    },
+    {
+      "q": -2,
+      "r": 1,
+      "kind": "flowers_white",
+      "dx": 0.42,
+      "dz": 0.38,
+      "rot": 2.1,
+      "scale": 1.05
+    },
+    {
+      "q": -2,
+      "r": 1,
+      "kind": "grass_tuft",
+      "dx": -0.45,
+      "dz": 0.38,
+      "rot": 3.2,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 1,
+      "kind": "model:city/bush",
+      "dx": 0.48,
+      "dz": -0.42,
+      "rot": 0.5,
+      "scale": 0.85
+    },
+    {
+      "q": 2,
+      "r": 0,
+      "kind": "model:medieval/crate_A_small",
+      "dx": -0.42,
+      "dz": 0.38,
+      "rot": 1.1,
+      "scale": 0.95
+    },
+    {
+      "q": 2,
+      "r": 0,
+      "kind": "flowers_yellow",
+      "dx": 0.38,
+      "dz": -0.35,
+      "rot": 0.4,
+      "scale": 1.1
+    },
+    {
+      "q": 2,
+      "r": 0,
+      "kind": "grass_tuft",
+      "dx": 0.42,
+      "dz": 0.35,
+      "rot": 2.2,
+      "scale": 1
+    },
+    {
+      "q": 2,
+      "r": 1,
+      "kind": "flowers_red",
+      "dx": -0.38,
+      "dz": -0.32,
+      "rot": 0.8,
+      "scale": 1.15
+    },
+    {
+      "q": 2,
+      "r": 1,
+      "kind": "flowers_yellow",
+      "dx": 0.35,
+      "dz": 0.35,
+      "rot": 1.9,
+      "scale": 1.1
+    },
+    {
+      "q": 2,
+      "r": 1,
+      "kind": "grass_tuft",
+      "dx": -0.4,
+      "dz": 0.38,
+      "rot": 3,
+      "scale": 0.95
+    },
+    {
+      "q": -1,
+      "r": 2,
+      "kind": "flowers_pink",
+      "dx": -0.35,
+      "dz": -0.35,
+      "rot": 0.6,
+      "scale": 1.1
+    },
+    {
+      "q": -1,
+      "r": 2,
+      "kind": "flowers_white",
+      "dx": 0.35,
+      "dz": 0.35,
+      "rot": 1.7,
+      "scale": 1.1
+    },
+    {
+      "q": -1,
+      "r": 2,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": -0.35,
+      "rot": 2.8,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": -1,
+      "kind": "flowers_red",
+      "dx": -0.35,
+      "dz": -0.35,
+      "rot": 0.3,
+      "scale": 1.15
+    },
+    {
+      "q": -2,
+      "r": -1,
+      "kind": "flowers_yellow",
+      "dx": 0,
+      "dz": -0.35,
+      "rot": 1.4,
+      "scale": 1.15
+    },
+    {
+      "q": -2,
+      "r": -1,
+      "kind": "flowers_pink",
+      "dx": 0.35,
+      "dz": -0.35,
+      "rot": 2.5,
+      "scale": 1.15
+    },
+    {
+      "q": -2,
+      "r": -1,
+      "kind": "flowers_white",
+      "dx": -0.35,
+      "dz": 0.25,
+      "rot": 0.9,
+      "scale": 1.1
+    },
+    {
+      "q": -2,
+      "r": -1,
+      "kind": "flowers_purple",
+      "dx": 0.35,
+      "dz": 0.25,
+      "rot": 2,
+      "scale": 1.1
+    },
+    {
+      "q": -2,
+      "r": -1,
+      "kind": "grass_tuft",
+      "dx": 0,
+      "dz": 0.42,
+      "rot": 3.1,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": 0,
+      "kind": "flowers_yellow",
+      "dx": -0.48,
+      "dz": -0.46,
+      "rot": 0.7,
+      "scale": 0.95
+    },
+    {
+      "q": -1,
+      "r": 0,
+      "kind": "pebbles",
+      "dx": 0.48,
+      "dz": 0.46,
+      "rot": 1.8,
+      "scale": 0.85
+    },
+    {
+      "q": 1,
+      "r": 0,
+      "kind": "flowers_red",
+      "dx": -0.48,
+      "dz": -0.46,
+      "rot": 1.2,
+      "scale": 0.95
+    },
+    {
+      "q": 1,
+      "r": 0,
+      "kind": "pebbles",
+      "dx": 0.48,
+      "dz": 0.46,
+      "rot": 2.3,
+      "scale": 0.85
+    },
+    {
+      "q": 0,
+      "r": 6,
+      "kind": "flowers_yellow",
+      "dx": -0.52,
+      "dz": -0.42,
+      "rot": 0.5,
+      "scale": 1.1
+    },
+    {
+      "q": 0,
+      "r": 6,
+      "kind": "flowers_yellow",
+      "dx": 0.52,
+      "dz": -0.42,
+      "rot": 1.6,
+      "scale": 1.1
+    },
+    {
+      "q": 0,
+      "r": 6,
+      "kind": "grass_tuft",
+      "dx": -0.54,
+      "dz": 0.44,
+      "rot": 2.7,
+      "scale": 1
+    },
+    {
+      "q": 0,
+      "r": 6,
+      "kind": "pebbles",
+      "dx": 0.5,
+      "dz": 0.46,
+      "rot": 0.9,
+      "scale": 0.9
+    },
+    {
+      "q": 0,
+      "r": 7,
+      "kind": "flowers_yellow",
+      "dx": -0.5,
+      "dz": -0.35,
+      "rot": 0.3,
+      "scale": 1.15
+    },
+    {
+      "q": 0,
+      "r": 7,
+      "kind": "flowers_white",
+      "dx": 0.5,
+      "dz": -0.35,
+      "rot": 1.4,
+      "scale": 1.05
+    },
+    {
+      "q": 0,
+      "r": 7,
+      "kind": "grass_tuft",
+      "dx": -0.48,
+      "dz": 0.38,
+      "rot": 2.5,
+      "scale": 1.05
+    },
+    {
+      "q": 0,
+      "r": 7,
+      "kind": "grass_tuft",
+      "dx": 0.48,
+      "dz": 0.38,
+      "rot": 3.6,
+      "scale": 1
+    },
+    {
+      "q": 0,
+      "r": 5,
+      "kind": "flowers_yellow",
+      "dx": -0.5,
+      "dz": -0.2,
+      "rot": 0.8,
+      "scale": 1.05
+    },
+    {
+      "q": 0,
+      "r": 5,
+      "kind": "flowers_yellow",
+      "dx": 0.5,
+      "dz": 0.2,
+      "rot": 1.9,
+      "scale": 1.1
+    },
+    {
+      "q": 0,
+      "r": 5,
+      "kind": "pebbles",
+      "dx": -0.48,
+      "dz": 0.42,
+      "rot": 3,
+      "scale": 0.85
+    },
+    {
+      "q": 0,
+      "r": 4,
+      "kind": "flowers_yellow",
+      "dx": -0.48,
+      "dz": -0.38,
+      "rot": 1.1,
+      "scale": 1
+    },
+    {
+      "q": 0,
+      "r": 4,
+      "kind": "grass_tuft",
+      "dx": 0.48,
+      "dz": 0.38,
+      "rot": 2.2,
+      "scale": 0.95
+    },
+    {
+      "q": 0,
+      "r": 3,
+      "kind": "flowers_yellow",
+      "dx": 0.5,
+      "dz": -0.42,
+      "rot": 0.4,
+      "scale": 1
+    },
+    {
+      "q": 0,
+      "r": 3,
+      "kind": "pebbles",
+      "dx": -0.5,
+      "dz": 0.42,
+      "rot": 1.5,
+      "scale": 0.9
+    },
+    {
+      "q": 0,
+      "r": 2,
+      "kind": "flowers_white",
+      "dx": -0.5,
+      "dz": -0.42,
+      "rot": 2.6,
+      "scale": 0.95
+    },
+    {
+      "q": 0,
+      "r": 2,
+      "kind": "grass_tuft",
+      "dx": 0.5,
+      "dz": 0.42,
+      "rot": 0.7,
+      "scale": 0.95
+    },
+    {
+      "q": -1,
+      "r": 6,
+      "kind": "flowers_yellow",
+      "dx": -0.35,
+      "dz": -0.35,
+      "rot": 0.2,
+      "scale": 1.2
+    },
+    {
+      "q": -1,
+      "r": 6,
+      "kind": "flowers_yellow",
+      "dx": 0.1,
+      "dz": -0.38,
+      "rot": 1.3,
+      "scale": 1.15
+    },
+    {
+      "q": -1,
+      "r": 6,
+      "kind": "flowers_white",
+      "dx": 0.38,
+      "dz": 0.1,
+      "rot": 2.4,
+      "scale": 1.1
+    },
+    {
+      "q": -1,
+      "r": 6,
+      "kind": "grass_tuft",
+      "dx": -0.38,
+      "dz": 0.35,
+      "rot": 3.5,
+      "scale": 1.05
+    },
+    {
+      "q": -1,
+      "r": 6,
+      "kind": "pebbles",
+      "dx": 0.25,
+      "dz": 0.4,
+      "rot": 0.9,
+      "scale": 0.95
+    },
+    {
+      "q": -1,
+      "r": 6,
+      "kind": "model:city/bush",
+      "dx": -0.48,
+      "dz": 0,
+      "rot": 1.7,
+      "scale": 0.9
+    },
+    {
+      "q": 1,
+      "r": 6,
+      "kind": "flowers_yellow",
+      "dx": -0.4,
+      "dz": -0.38,
+      "rot": 0.6,
+      "scale": 1.15
+    },
+    {
+      "q": 1,
+      "r": 6,
+      "kind": "flowers_yellow",
+      "dx": 0.4,
+      "dz": 0.38,
+      "rot": 1.8,
+      "scale": 1.1
+    },
+    {
+      "q": 1,
+      "r": 6,
+      "kind": "grass_tuft",
+      "dx": -0.42,
+      "dz": 0.38,
+      "rot": 2.9,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": 7,
+      "kind": "model:medieval/barrel",
+      "dx": -0.42,
+      "dz": -0.35,
+      "rot": 0.4,
+      "scale": 0.9
+    },
+    {
+      "q": 1,
+      "r": 7,
+      "kind": "flowers_yellow",
+      "dx": 0.38,
+      "dz": -0.35,
+      "rot": 1.5,
+      "scale": 1.15
+    },
+    {
+      "q": 1,
+      "r": 7,
+      "kind": "grass_tuft",
+      "dx": 0.35,
+      "dz": 0.38,
+      "rot": 2.6,
+      "scale": 1.05
+    },
+    {
+      "q": 1,
+      "r": 7,
+      "kind": "pebbles",
+      "dx": -0.35,
+      "dz": 0.4,
+      "rot": 3.7,
+      "scale": 0.9
+    },
+    {
+      "q": -1,
+      "r": 7,
+      "kind": "flowers_yellow",
+      "dx": -0.38,
+      "dz": 0.38,
+      "rot": 0.8,
+      "scale": 1.1
+    },
+    {
+      "q": -1,
+      "r": 7,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": -0.38,
+      "rot": 1.9,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 7,
+      "kind": "log",
+      "dx": 0.45,
+      "dz": 0.38,
+      "rot": 0.5,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 7,
+      "kind": "grass_tuft",
+      "dx": -0.45,
+      "dz": 0.4,
+      "rot": 1.6,
+      "scale": 1.05
+    },
+    {
+      "q": -2,
+      "r": 7,
+      "kind": "pebbles",
+      "dx": 0.42,
+      "dz": -0.4,
+      "rot": 2.7,
+      "scale": 0.95
+    },
+    {
+      "q": 2,
+      "r": 5,
+      "kind": "flowers_yellow",
+      "dx": -0.45,
+      "dz": -0.42,
+      "rot": 0.3,
+      "scale": 1.15
+    },
+    {
+      "q": 2,
+      "r": 5,
+      "kind": "flowers_pink",
+      "dx": -0.45,
+      "dz": 0.42,
+      "rot": 1.4,
+      "scale": 1.1
+    },
+    {
+      "q": 2,
+      "r": 5,
+      "kind": "grass_tuft",
+      "dx": 0.48,
+      "dz": 0.4,
+      "rot": 2.5,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": 4,
+      "kind": "flowers_yellow",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.7,
+      "scale": 1.15
+    },
+    {
+      "q": 1,
+      "r": 4,
+      "kind": "flowers_yellow",
+      "dx": 0.25,
+      "dz": -0.35,
+      "rot": 1.8,
+      "scale": 1.1
+    },
+    {
+      "q": 1,
+      "r": 4,
+      "kind": "flowers_white",
+      "dx": 0,
+      "dz": 0.25,
+      "rot": 2.9,
+      "scale": 1.05
+    },
+    {
+      "q": 1,
+      "r": 4,
+      "kind": "grass_tuft",
+      "dx": -0.38,
+      "dz": 0.35,
+      "rot": 0.4,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": 4,
+      "kind": "pebbles",
+      "dx": 0.38,
+      "dz": 0.35,
+      "rot": 1.5,
+      "scale": 0.9
+    },
+    {
+      "q": 1,
+      "r": 3,
+      "kind": "flowers_yellow",
+      "dx": -0.32,
+      "dz": -0.32,
+      "rot": 1,
+      "scale": 1.1
+    },
+    {
+      "q": 1,
+      "r": 3,
+      "kind": "grass_tuft",
+      "dx": 0.35,
+      "dz": 0.28,
+      "rot": 2.1,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": 3,
+      "kind": "pebbles",
+      "dx": -0.3,
+      "dz": 0.35,
+      "rot": 3.2,
+      "scale": 0.85
+    },
+    {
+      "q": 2,
+      "r": 3,
+      "kind": "flowers_yellow",
+      "dx": -0.5,
+      "dz": -0.45,
+      "rot": 0.6,
+      "scale": 1.05
+    },
+    {
+      "q": 2,
+      "r": 3,
+      "kind": "grass_tuft",
+      "dx": 0.5,
+      "dz": 0.45,
+      "rot": 1.7,
+      "scale": 0.95
+    },
+    {
+      "q": 2,
+      "r": 4,
+      "kind": "flowers_yellow",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.9,
+      "scale": 1.15
+    },
+    {
+      "q": 2,
+      "r": 4,
+      "kind": "flowers_white",
+      "dx": 0.3,
+      "dz": -0.25,
+      "rot": 2,
+      "scale": 1.1
+    },
+    {
+      "q": 2,
+      "r": 4,
+      "kind": "grass_tuft",
+      "dx": -0.25,
+      "dz": 0.35,
+      "rot": 3.1,
+      "scale": 1
+    },
+    {
+      "q": 2,
+      "r": 4,
+      "kind": "model:medieval/crate_A_small",
+      "dx": 0.42,
+      "dz": 0.38,
+      "rot": 0.5,
+      "scale": 0.85
+    },
+    {
+      "q": 0,
+      "r": 8,
+      "kind": "flowers_yellow",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.4,
+      "scale": 1.15
+    },
+    {
+      "q": 0,
+      "r": 8,
+      "kind": "flowers_yellow",
+      "dx": 0.35,
+      "dz": -0.25,
+      "rot": 1.5,
+      "scale": 1.1
+    },
+    {
+      "q": 0,
+      "r": 8,
+      "kind": "grass_tuft",
+      "dx": -0.4,
+      "dz": 0.3,
+      "rot": 2.6,
+      "scale": 1.05
+    },
+    {
+      "q": 0,
+      "r": 8,
+      "kind": "grass_tuft",
+      "dx": 0.4,
+      "dz": 0.35,
+      "rot": 3.7,
+      "scale": 1
+    },
+    {
+      "q": 0,
+      "r": 8,
+      "kind": "pebbles",
+      "dx": 0,
+      "dz": 0.42,
+      "rot": 1.2,
+      "scale": 0.95
+    },
+    {
+      "q": -1,
+      "r": 8,
+      "kind": "flowers_yellow",
+      "dx": -0.3,
+      "dz": 0.2,
+      "rot": 0.7,
+      "scale": 1.1
+    },
+    {
+      "q": -1,
+      "r": 8,
+      "kind": "grass_tuft",
+      "dx": 0.3,
+      "dz": -0.25,
+      "rot": 1.8,
+      "scale": 1.05
+    },
+    {
+      "q": -1,
+      "r": 8,
+      "kind": "log",
+      "dx": -0.35,
+      "dz": -0.35,
+      "rot": 2.9,
+      "scale": 0.95
+    },
+    {
+      "q": 1,
+      "r": 8,
+      "kind": "flowers_yellow",
+      "dx": 0.25,
+      "dz": -0.25,
+      "rot": 0.3,
+      "scale": 1.1
+    },
+    {
+      "q": 1,
+      "r": 8,
+      "kind": "grass_tuft",
+      "dx": -0.3,
+      "dz": 0.3,
+      "rot": 1.4,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": 8,
+      "kind": "pebbles",
+      "dx": 0.35,
+      "dz": 0.35,
+      "rot": 2.5,
+      "scale": 0.9
+    },
+    {
+      "q": 5,
+      "r": -2,
+      "kind": "flowers_red",
+      "dx": -0.5,
+      "dz": -0.45,
+      "rot": 0.4,
+      "scale": 1.05
+    },
+    {
+      "q": 5,
+      "r": -2,
+      "kind": "flowers_yellow",
+      "dx": 0.5,
+      "dz": -0.45,
+      "rot": 1.5,
+      "scale": 1.05
+    },
+    {
+      "q": 5,
+      "r": -2,
+      "kind": "grass_tuft",
+      "dx": -0.5,
+      "dz": 0.45,
+      "rot": 2.6,
+      "scale": 0.95
+    },
+    {
+      "q": 5,
+      "r": -3,
+      "kind": "flowers_red",
+      "dx": -0.38,
+      "dz": -0.35,
+      "rot": 0.2,
+      "scale": 1.2
+    },
+    {
+      "q": 5,
+      "r": -3,
+      "kind": "flowers_red",
+      "dx": 0,
+      "dz": -0.35,
+      "rot": 1.3,
+      "scale": 1.15
+    },
+    {
+      "q": 5,
+      "r": -3,
+      "kind": "flowers_red",
+      "dx": 0.38,
+      "dz": -0.35,
+      "rot": 2.4,
+      "scale": 1.2
+    },
+    {
+      "q": 5,
+      "r": -3,
+      "kind": "flowers_yellow",
+      "dx": -0.38,
+      "dz": 0.1,
+      "rot": 0.8,
+      "scale": 1.15
+    },
+    {
+      "q": 5,
+      "r": -3,
+      "kind": "flowers_yellow",
+      "dx": 0,
+      "dz": 0.1,
+      "rot": 1.9,
+      "scale": 1.15
+    },
+    {
+      "q": 5,
+      "r": -3,
+      "kind": "flowers_yellow",
+      "dx": 0.38,
+      "dz": 0.1,
+      "rot": 3,
+      "scale": 1.15
+    },
+    {
+      "q": 5,
+      "r": -3,
+      "kind": "grass_tuft",
+      "dx": -0.42,
+      "dz": 0.42,
+      "rot": 0.5,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": -3,
+      "kind": "grass_tuft",
+      "dx": 0.42,
+      "dz": 0.42,
+      "rot": 1.6,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": -3,
+      "kind": "pebbles",
+      "dx": 0,
+      "dz": 0.45,
+      "rot": 2.7,
+      "scale": 0.9
+    },
+    {
+      "q": 6,
+      "r": -3,
+      "kind": "flowers_pink",
+      "dx": -0.35,
+      "dz": -0.35,
+      "rot": 0.6,
+      "scale": 1.2
+    },
+    {
+      "q": 6,
+      "r": -3,
+      "kind": "flowers_pink",
+      "dx": 0,
+      "dz": -0.35,
+      "rot": 1.7,
+      "scale": 1.15
+    },
+    {
+      "q": 6,
+      "r": -3,
+      "kind": "flowers_pink",
+      "dx": 0.35,
+      "dz": -0.35,
+      "rot": 2.8,
+      "scale": 1.2
+    },
+    {
+      "q": 6,
+      "r": -3,
+      "kind": "flowers_white",
+      "dx": -0.35,
+      "dz": 0.15,
+      "rot": 1.1,
+      "scale": 1.15
+    },
+    {
+      "q": 6,
+      "r": -3,
+      "kind": "flowers_white",
+      "dx": 0.35,
+      "dz": 0.15,
+      "rot": 2.2,
+      "scale": 1.15
+    },
+    {
+      "q": 6,
+      "r": -3,
+      "kind": "model:restaurant/crate_buns",
+      "dx": 0,
+      "dz": 0.42,
+      "rot": 0.3,
+      "scale": 0.9
+    },
+    {
+      "q": 6,
+      "r": -3,
+      "kind": "grass_tuft",
+      "dx": -0.45,
+      "dz": 0.42,
+      "rot": 3.3,
+      "scale": 0.95
+    },
+    {
+      "q": 4,
+      "r": -3,
+      "kind": "flowers_yellow",
+      "dx": -0.4,
+      "dz": -0.38,
+      "rot": 0.9,
+      "scale": 1.15
+    },
+    {
+      "q": 4,
+      "r": -3,
+      "kind": "flowers_red",
+      "dx": 0.4,
+      "dz": 0.38,
+      "rot": 2,
+      "scale": 1.15
+    },
+    {
+      "q": 4,
+      "r": -3,
+      "kind": "grass_tuft",
+      "dx": -0.42,
+      "dz": 0.35,
+      "rot": 3.1,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": -3,
+      "kind": "pebbles",
+      "dx": 0.38,
+      "dz": -0.38,
+      "rot": 0.4,
+      "scale": 0.9
+    },
+    {
+      "q": 3,
+      "r": -2,
+      "kind": "flowers_red",
+      "dx": -0.4,
+      "dz": 0.38,
+      "rot": 1.2,
+      "scale": 1.15
+    },
+    {
+      "q": 3,
+      "r": -2,
+      "kind": "flowers_yellow",
+      "dx": 0.4,
+      "dz": -0.38,
+      "rot": 2.3,
+      "scale": 1.1
+    },
+    {
+      "q": 3,
+      "r": -2,
+      "kind": "grass_tuft",
+      "dx": -0.38,
+      "dz": -0.38,
+      "rot": 3.4,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": -2,
+      "kind": "flowers_pink",
+      "dx": -0.48,
+      "dz": -0.45,
+      "rot": 0.7,
+      "scale": 1.05
+    },
+    {
+      "q": 4,
+      "r": -2,
+      "kind": "flowers_yellow",
+      "dx": 0.48,
+      "dz": 0.45,
+      "rot": 1.8,
+      "scale": 1.05
+    },
+    {
+      "q": 5,
+      "r": -1,
+      "kind": "flowers_red",
+      "dx": -0.35,
+      "dz": -0.32,
+      "rot": 0.3,
+      "scale": 1.15
+    },
+    {
+      "q": 5,
+      "r": -1,
+      "kind": "flowers_yellow",
+      "dx": 0,
+      "dz": -0.32,
+      "rot": 1.4,
+      "scale": 1.2
+    },
+    {
+      "q": 5,
+      "r": -1,
+      "kind": "flowers_pink",
+      "dx": 0.35,
+      "dz": -0.32,
+      "rot": 2.5,
+      "scale": 1.15
+    },
+    {
+      "q": 5,
+      "r": -1,
+      "kind": "grass_tuft",
+      "dx": -0.38,
+      "dz": 0.35,
+      "rot": 3.6,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": -1,
+      "kind": "model:restaurant/crate_carrots",
+      "dx": 0.38,
+      "dz": 0.35,
+      "rot": 0.8,
+      "scale": 0.9
+    },
+    {
+      "q": 4,
+      "r": -1,
+      "kind": "flowers_yellow",
+      "dx": -0.32,
+      "dz": -0.28,
+      "rot": 1,
+      "scale": 1.1
+    },
+    {
+      "q": 4,
+      "r": -1,
+      "kind": "flowers_pink",
+      "dx": 0.32,
+      "dz": 0.28,
+      "rot": 2.1,
+      "scale": 1.1
+    },
+    {
+      "q": 4,
+      "r": -1,
+      "kind": "grass_tuft",
+      "dx": -0.35,
+      "dz": 0.32,
+      "rot": 3.2,
+      "scale": 0.95
+    },
+    {
+      "q": 4,
+      "r": -1,
+      "kind": "pebbles",
+      "dx": 0.35,
+      "dz": -0.32,
+      "rot": 0.5,
+      "scale": 0.9
+    },
+    {
+      "q": 6,
+      "r": -2,
+      "kind": "flowers_red",
+      "dx": -0.48,
+      "dz": -0.44,
+      "rot": 1.3,
+      "scale": 1.05
+    },
+    {
+      "q": 6,
+      "r": -2,
+      "kind": "grass_tuft",
+      "dx": 0.48,
+      "dz": 0.44,
+      "rot": 2.4,
+      "scale": 0.95
+    },
+    {
+      "q": 6,
+      "r": -1,
+      "kind": "flowers_yellow",
+      "dx": -0.48,
+      "dz": 0.44,
+      "rot": 0.6,
+      "scale": 1.05
+    },
+    {
+      "q": 6,
+      "r": -1,
+      "kind": "pebbles",
+      "dx": 0.48,
+      "dz": -0.44,
+      "rot": 1.7,
+      "scale": 0.85
+    },
+    {
+      "q": 7,
+      "r": -2,
+      "kind": "model:restaurant/crate_tomatoes",
+      "dx": -0.42,
+      "dz": 0.38,
+      "rot": 0.9,
+      "scale": 0.9
+    },
+    {
+      "q": 7,
+      "r": -2,
+      "kind": "flowers_yellow",
+      "dx": 0.4,
+      "dz": -0.38,
+      "rot": 2,
+      "scale": 1.15
+    },
+    {
+      "q": 7,
+      "r": -2,
+      "kind": "grass_tuft",
+      "dx": 0.42,
+      "dz": 0.38,
+      "rot": 3.1,
+      "scale": 1
+    },
+    {
+      "q": 7,
+      "r": -1,
+      "kind": "flowers_pink",
+      "dx": -0.5,
+      "dz": -0.42,
+      "rot": 0.4,
+      "scale": 1.05
+    },
+    {
+      "q": 7,
+      "r": -1,
+      "kind": "grass_tuft",
+      "dx": 0.5,
+      "dz": 0.42,
+      "rot": 1.5,
+      "scale": 0.95
+    },
+    {
+      "q": 7,
+      "r": 0,
+      "kind": "flowers_yellow",
+      "dx": -0.5,
+      "dz": 0.45,
+      "rot": 2.6,
+      "scale": 1.05
+    },
+    {
+      "q": 7,
+      "r": 0,
+      "kind": "pebbles",
+      "dx": 0.5,
+      "dz": -0.45,
+      "rot": 0.7,
+      "scale": 0.9
+    },
+    {
+      "q": 7,
+      "r": 1,
+      "kind": "flowers_red",
+      "dx": -0.32,
+      "dz": -0.3,
+      "rot": 1.1,
+      "scale": 1.15
+    },
+    {
+      "q": 7,
+      "r": 1,
+      "kind": "flowers_yellow",
+      "dx": 0.32,
+      "dz": -0.25,
+      "rot": 2.2,
+      "scale": 1.1
+    },
+    {
+      "q": 7,
+      "r": 1,
+      "kind": "grass_tuft",
+      "dx": -0.3,
+      "dz": 0.35,
+      "rot": 3.3,
+      "scale": 1
+    },
+    {
+      "q": 7,
+      "r": 1,
+      "kind": "model:medieval/sack",
+      "dx": 0.38,
+      "dz": 0.35,
+      "rot": 0.5,
+      "scale": 0.9
+    },
+    {
+      "q": 6,
+      "r": 0,
+      "kind": "flowers_pink",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.8,
+      "scale": 1.15
+    },
+    {
+      "q": 6,
+      "r": 0,
+      "kind": "flowers_white",
+      "dx": 0.3,
+      "dz": 0.25,
+      "rot": 1.9,
+      "scale": 1.1
+    },
+    {
+      "q": 6,
+      "r": 0,
+      "kind": "grass_tuft",
+      "dx": -0.3,
+      "dz": 0.35,
+      "rot": 3,
+      "scale": 1
+    },
+    {
+      "q": 8,
+      "r": -2,
+      "kind": "flowers_yellow",
+      "dx": -0.38,
+      "dz": -0.35,
+      "rot": 0.2,
+      "scale": 1.15
+    },
+    {
+      "q": 8,
+      "r": -2,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": 0.35,
+      "rot": 1.3,
+      "scale": 1.05
+    },
+    {
+      "q": 8,
+      "r": -1,
+      "kind": "flowers_red",
+      "dx": -0.3,
+      "dz": -0.25,
+      "rot": 2.4,
+      "scale": 1.1
+    },
+    {
+      "q": 8,
+      "r": -1,
+      "kind": "flowers_yellow",
+      "dx": 0.3,
+      "dz": 0.25,
+      "rot": 3.5,
+      "scale": 1.15
+    },
+    {
+      "q": 8,
+      "r": -1,
+      "kind": "grass_tuft",
+      "dx": -0.35,
+      "dz": 0.35,
+      "rot": 0.9,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": -4,
+      "kind": "flowers_yellow",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.6,
+      "scale": 1.15
+    },
+    {
+      "q": 3,
+      "r": -4,
+      "kind": "flowers_pink",
+      "dx": 0.32,
+      "dz": -0.28,
+      "rot": 1.7,
+      "scale": 1.1
+    },
+    {
+      "q": 3,
+      "r": -4,
+      "kind": "grass_tuft",
+      "dx": 0,
+      "dz": 0.35,
+      "rot": 2.8,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": -5,
+      "kind": "flowers_yellow",
+      "dx": -0.5,
+      "dz": -0.45,
+      "rot": 0.4,
+      "scale": 1.05
+    },
+    {
+      "q": 3,
+      "r": -5,
+      "kind": "pebbles",
+      "dx": 0.5,
+      "dz": 0.45,
+      "rot": 1.5,
+      "scale": 0.9
+    },
+    {
+      "q": 4,
+      "r": -5,
+      "kind": "flowers_pink",
+      "dx": -0.32,
+      "dz": -0.28,
+      "rot": 2.1,
+      "scale": 1.15
+    },
+    {
+      "q": 4,
+      "r": -5,
+      "kind": "flowers_white",
+      "dx": 0.32,
+      "dz": 0.28,
+      "rot": 3.2,
+      "scale": 1.1
+    },
+    {
+      "q": 4,
+      "r": -5,
+      "kind": "grass_tuft",
+      "dx": -0.35,
+      "dz": 0.32,
+      "rot": 0.7,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": -5,
+      "kind": "flowers_red",
+      "dx": -0.35,
+      "dz": 0.25,
+      "rot": 1.2,
+      "scale": 1.1
+    },
+    {
+      "q": 5,
+      "r": -5,
+      "kind": "grass_tuft",
+      "dx": 0.35,
+      "dz": -0.25,
+      "rot": 2.3,
+      "scale": 1.05
+    },
+    {
+      "q": 5,
+      "r": -5,
+      "kind": "mushroom",
+      "dx": 0.25,
+      "dz": 0.35,
+      "rot": 3.4,
+      "scale": 0.95
+    },
+    {
+      "q": -5,
+      "r": -1,
+      "kind": "flowers_white",
+      "dx": -0.5,
+      "dz": -0.45,
+      "rot": 0.3,
+      "scale": 1.05
+    },
+    {
+      "q": -5,
+      "r": -1,
+      "kind": "flowers_purple",
+      "dx": 0.5,
+      "dz": -0.45,
+      "rot": 1.4,
+      "scale": 1.05
+    },
+    {
+      "q": -5,
+      "r": -1,
+      "kind": "grass_tuft",
+      "dx": -0.5,
+      "dz": 0.45,
+      "rot": 2.5,
+      "scale": 0.95
+    },
+    {
+      "q": -5,
+      "r": -2,
+      "kind": "flowers_white",
+      "dx": -0.38,
+      "dz": -0.35,
+      "rot": 0.5,
+      "scale": 1.2
+    },
+    {
+      "q": -5,
+      "r": -2,
+      "kind": "flowers_purple",
+      "dx": 0,
+      "dz": -0.35,
+      "rot": 1.6,
+      "scale": 1.15
+    },
+    {
+      "q": -5,
+      "r": -2,
+      "kind": "flowers_white",
+      "dx": 0.38,
+      "dz": -0.35,
+      "rot": 2.7,
+      "scale": 1.2
+    },
+    {
+      "q": -5,
+      "r": -2,
+      "kind": "flowers_purple",
+      "dx": -0.35,
+      "dz": 0.25,
+      "rot": 0.9,
+      "scale": 1.15
+    },
+    {
+      "q": -5,
+      "r": -2,
+      "kind": "flowers_white",
+      "dx": 0.35,
+      "dz": 0.25,
+      "rot": 2,
+      "scale": 1.15
+    },
+    {
+      "q": -5,
+      "r": -2,
+      "kind": "grass_tuft",
+      "dx": 0,
+      "dz": 0.4,
+      "rot": 3.1,
+      "scale": 1
+    },
+    {
+      "q": -6,
+      "r": -2,
+      "kind": "flowers_purple",
+      "dx": -0.42,
+      "dz": -0.38,
+      "rot": 0.4,
+      "scale": 1.15
+    },
+    {
+      "q": -6,
+      "r": -2,
+      "kind": "flowers_white",
+      "dx": 0.42,
+      "dz": 0.38,
+      "rot": 1.5,
+      "scale": 1.1
+    },
+    {
+      "q": -6,
+      "r": -2,
+      "kind": "grass_tuft",
+      "dx": -0.42,
+      "dz": 0.38,
+      "rot": 2.6,
+      "scale": 1
+    },
+    {
+      "q": -4,
+      "r": -2,
+      "kind": "flowers_white",
+      "dx": -0.35,
+      "dz": -0.32,
+      "rot": 0.7,
+      "scale": 1.15
+    },
+    {
+      "q": -4,
+      "r": -2,
+      "kind": "flowers_purple",
+      "dx": 0.35,
+      "dz": -0.32,
+      "rot": 1.8,
+      "scale": 1.2
+    },
+    {
+      "q": -4,
+      "r": -2,
+      "kind": "grass_tuft",
+      "dx": -0.35,
+      "dz": 0.32,
+      "rot": 2.9,
+      "scale": 1
+    },
+    {
+      "q": -4,
+      "r": -2,
+      "kind": "model:furniture/book_set",
+      "dx": 0.35,
+      "dz": 0.32,
+      "rot": 0.6,
+      "scale": 0.95
+    },
+    {
+      "q": -4,
+      "r": -3,
+      "kind": "flowers_purple",
+      "dx": -0.4,
+      "dz": 0.38,
+      "rot": 1.2,
+      "scale": 1.1
+    },
+    {
+      "q": -4,
+      "r": -3,
+      "kind": "flowers_white",
+      "dx": 0.4,
+      "dz": -0.38,
+      "rot": 2.3,
+      "scale": 1.15
+    },
+    {
+      "q": -4,
+      "r": -3,
+      "kind": "grass_tuft",
+      "dx": -0.4,
+      "dz": -0.38,
+      "rot": 3.4,
+      "scale": 0.95
+    },
+    {
+      "q": -3,
+      "r": -2,
+      "kind": "flowers_white",
+      "dx": -0.4,
+      "dz": -0.38,
+      "rot": 0.8,
+      "scale": 1.1
+    },
+    {
+      "q": -3,
+      "r": -2,
+      "kind": "flowers_purple",
+      "dx": 0.4,
+      "dz": 0.38,
+      "rot": 1.9,
+      "scale": 1.15
+    },
+    {
+      "q": -3,
+      "r": -2,
+      "kind": "pebbles",
+      "dx": -0.38,
+      "dz": 0.38,
+      "rot": 3,
+      "scale": 0.9
+    },
+    {
+      "q": -6,
+      "r": -1,
+      "kind": "flowers_purple",
+      "dx": -0.35,
+      "dz": -0.32,
+      "rot": 0.2,
+      "scale": 1.2
+    },
+    {
+      "q": -6,
+      "r": -1,
+      "kind": "flowers_white",
+      "dx": 0.35,
+      "dz": -0.32,
+      "rot": 1.3,
+      "scale": 1.15
+    },
+    {
+      "q": -6,
+      "r": -1,
+      "kind": "flowers_purple",
+      "dx": 0,
+      "dz": 0.28,
+      "rot": 2.4,
+      "scale": 1.15
+    },
+    {
+      "q": -6,
+      "r": -1,
+      "kind": "grass_tuft",
+      "dx": -0.4,
+      "dz": 0.35,
+      "rot": 3.5,
+      "scale": 1
+    },
+    {
+      "q": -6,
+      "r": -1,
+      "kind": "pebbles",
+      "dx": 0.4,
+      "dz": 0.35,
+      "rot": 0.9,
+      "scale": 0.9
+    },
+    {
+      "q": -7,
+      "r": -1,
+      "kind": "flowers_white",
+      "dx": -0.42,
+      "dz": -0.38,
+      "rot": 0.5,
+      "scale": 1.15
+    },
+    {
+      "q": -7,
+      "r": -1,
+      "kind": "flowers_purple",
+      "dx": 0.42,
+      "dz": 0.38,
+      "rot": 1.6,
+      "scale": 1.15
+    },
+    {
+      "q": -7,
+      "r": -1,
+      "kind": "grass_tuft",
+      "dx": -0.42,
+      "dz": 0.38,
+      "rot": 2.7,
+      "scale": 1
+    },
+    {
+      "q": -7,
+      "r": 0,
+      "kind": "flowers_purple",
+      "dx": -0.4,
+      "dz": -0.38,
+      "rot": 1.1,
+      "scale": 1.1
+    },
+    {
+      "q": -7,
+      "r": 0,
+      "kind": "flowers_white",
+      "dx": 0.4,
+      "dz": 0.38,
+      "rot": 2.2,
+      "scale": 1.1
+    },
+    {
+      "q": -7,
+      "r": 0,
+      "kind": "mushroom",
+      "dx": -0.38,
+      "dz": 0.38,
+      "rot": 3.3,
+      "scale": 0.95
+    },
+    {
+      "q": -5,
+      "r": 0,
+      "kind": "flowers_white",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.4,
+      "scale": 1.15
+    },
+    {
+      "q": -5,
+      "r": 0,
+      "kind": "flowers_purple",
+      "dx": 0.35,
+      "dz": -0.3,
+      "rot": 1.5,
+      "scale": 1.15
+    },
+    {
+      "q": -5,
+      "r": 0,
+      "kind": "grass_tuft",
+      "dx": -0.32,
+      "dz": 0.32,
+      "rot": 2.6,
+      "scale": 1
+    },
+    {
+      "q": -5,
+      "r": 0,
+      "kind": "pebbles",
+      "dx": 0.32,
+      "dz": 0.32,
+      "rot": 3.7,
+      "scale": 0.9
+    },
+    {
+      "q": -4,
+      "r": 0,
+      "kind": "flowers_purple",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.9,
+      "scale": 1.15
+    },
+    {
+      "q": -4,
+      "r": 0,
+      "kind": "flowers_white",
+      "dx": 0.3,
+      "dz": 0.28,
+      "rot": 2,
+      "scale": 1.1
+    },
+    {
+      "q": -4,
+      "r": 0,
+      "kind": "grass_tuft",
+      "dx": -0.3,
+      "dz": 0.35,
+      "rot": 3.1,
+      "scale": 0.95
+    },
+    {
+      "q": -7,
+      "r": 1,
+      "kind": "flowers_white",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.6,
+      "scale": 1.15
+    },
+    {
+      "q": -7,
+      "r": 1,
+      "kind": "flowers_purple",
+      "dx": 0.32,
+      "dz": -0.25,
+      "rot": 1.7,
+      "scale": 1.1
+    },
+    {
+      "q": -7,
+      "r": 1,
+      "kind": "grass_tuft",
+      "dx": -0.3,
+      "dz": 0.35,
+      "rot": 2.8,
+      "scale": 1
+    },
+    {
+      "q": -7,
+      "r": 1,
+      "kind": "log",
+      "dx": 0.35,
+      "dz": 0.35,
+      "rot": 0.4,
+      "scale": 0.95
+    },
+    {
+      "q": -7,
+      "r": 2,
+      "kind": "flowers_white",
+      "dx": -0.5,
+      "dz": -0.45,
+      "rot": 1.2,
+      "scale": 1.05
+    },
+    {
+      "q": -7,
+      "r": 2,
+      "kind": "flowers_purple",
+      "dx": 0.5,
+      "dz": 0.45,
+      "rot": 2.3,
+      "scale": 1.05
+    },
+    {
+      "q": -6,
+      "r": 2,
+      "kind": "flowers_purple",
+      "dx": -0.35,
+      "dz": -0.28,
+      "rot": 0.3,
+      "scale": 1.15
+    },
+    {
+      "q": -6,
+      "r": 2,
+      "kind": "flowers_white",
+      "dx": 0.35,
+      "dz": 0.28,
+      "rot": 1.4,
+      "scale": 1.1
+    },
+    {
+      "q": -6,
+      "r": 2,
+      "kind": "grass_tuft",
+      "dx": -0.32,
+      "dz": 0.32,
+      "rot": 2.5,
+      "scale": 1
+    },
+    {
+      "q": -6,
+      "r": 2,
+      "kind": "mushroom",
+      "dx": 0.32,
+      "dz": -0.32,
+      "rot": 3.6,
+      "scale": 0.9
+    },
+    {
+      "q": -6,
+      "r": -3,
+      "kind": "flowers_white",
+      "dx": -0.32,
+      "dz": 0.28,
+      "rot": 0.8,
+      "scale": 1.1
+    },
+    {
+      "q": -6,
+      "r": -3,
+      "kind": "flowers_purple",
+      "dx": 0.32,
+      "dz": -0.28,
+      "rot": 1.9,
+      "scale": 1.15
+    },
+    {
+      "q": -6,
+      "r": -3,
+      "kind": "grass_tuft",
+      "dx": 0,
+      "dz": 0.35,
+      "rot": 3,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": 4,
+      "kind": "pebbles",
+      "dx": -0.5,
+      "dz": -0.45,
+      "rot": 0.5,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": 4,
+      "kind": "grass_tuft",
+      "dx": 0.5,
+      "dz": -0.45,
+      "rot": 1.6,
+      "scale": 0.95
+    },
+    {
+      "q": 4,
+      "r": 4,
+      "kind": "pebbles",
+      "dx": -0.5,
+      "dz": 0.45,
+      "rot": 2.7,
+      "scale": 0.9
+    },
+    {
+      "q": 4,
+      "r": 3,
+      "kind": "pebbles",
+      "dx": -0.35,
+      "dz": -0.32,
+      "rot": 0.3,
+      "scale": 1.1
+    },
+    {
+      "q": 4,
+      "r": 3,
+      "kind": "log",
+      "dx": 0.32,
+      "dz": -0.28,
+      "rot": 1.4,
+      "scale": 1.05
+    },
+    {
+      "q": 4,
+      "r": 3,
+      "kind": "grass_tuft",
+      "dx": -0.35,
+      "dz": 0.32,
+      "rot": 2.5,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": 3,
+      "kind": "pebbles",
+      "dx": 0.35,
+      "dz": 0.32,
+      "rot": 3.6,
+      "scale": 0.95
+    },
+    {
+      "q": 5,
+      "r": 3,
+      "kind": "log",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.7,
+      "scale": 1.15
+    },
+    {
+      "q": 5,
+      "r": 3,
+      "kind": "pebbles",
+      "dx": 0.35,
+      "dz": -0.3,
+      "rot": 1.8,
+      "scale": 1.1
+    },
+    {
+      "q": 5,
+      "r": 3,
+      "kind": "grass_tuft",
+      "dx": -0.35,
+      "dz": 0.32,
+      "rot": 2.9,
+      "scale": 1.05
+    },
+    {
+      "q": 5,
+      "r": 3,
+      "kind": "model:medieval/bucket_water",
+      "dx": 0.38,
+      "dz": 0.35,
+      "rot": 0.4,
+      "scale": 0.95
+    },
+    {
+      "q": 5,
+      "r": 4,
+      "kind": "pebbles",
+      "dx": -0.38,
+      "dz": -0.35,
+      "rot": 1.1,
+      "scale": 1.15
+    },
+    {
+      "q": 5,
+      "r": 4,
+      "kind": "log",
+      "dx": 0.35,
+      "dz": -0.28,
+      "rot": 2.2,
+      "scale": 1.1
+    },
+    {
+      "q": 5,
+      "r": 4,
+      "kind": "grass_tuft",
+      "dx": -0.32,
+      "dz": 0.35,
+      "rot": 3.3,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": 4,
+      "kind": "model:medieval/rock_single_A",
+      "dx": 0.4,
+      "dz": 0.38,
+      "rot": 0.8,
+      "scale": 0.9
+    },
+    {
+      "q": 4,
+      "r": 5,
+      "kind": "log",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.6,
+      "scale": 1.1
+    },
+    {
+      "q": 4,
+      "r": 5,
+      "kind": "pebbles",
+      "dx": 0.35,
+      "dz": -0.3,
+      "rot": 1.7,
+      "scale": 1.05
+    },
+    {
+      "q": 4,
+      "r": 5,
+      "kind": "grass_tuft",
+      "dx": -0.32,
+      "dz": 0.35,
+      "rot": 2.8,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": 5,
+      "kind": "flowers_yellow",
+      "dx": 0.35,
+      "dz": 0.35,
+      "rot": 3.9,
+      "scale": 0.95
+    },
+    {
+      "q": 3,
+      "r": 5,
+      "kind": "pebbles",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.4,
+      "scale": 1.05
+    },
+    {
+      "q": 3,
+      "r": 5,
+      "kind": "log",
+      "dx": 0.32,
+      "dz": 0.28,
+      "rot": 1.5,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": 5,
+      "kind": "grass_tuft",
+      "dx": -0.32,
+      "dz": 0.32,
+      "rot": 2.6,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": 5,
+      "kind": "mushroom",
+      "dx": 0.35,
+      "dz": -0.32,
+      "rot": 3.7,
+      "scale": 0.9
+    },
+    {
+      "q": 5,
+      "r": 2,
+      "kind": "log",
+      "dx": -0.4,
+      "dz": 0.38,
+      "rot": 0.5,
+      "scale": 1.05
+    },
+    {
+      "q": 5,
+      "r": 2,
+      "kind": "pebbles",
+      "dx": 0.4,
+      "dz": -0.38,
+      "rot": 1.6,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": 2,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": 0.38,
+      "rot": 2.7,
+      "scale": 0.95
+    },
+    {
+      "q": 3,
+      "r": 2,
+      "kind": "pebbles",
+      "dx": -0.32,
+      "dz": -0.28,
+      "rot": 0.8,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": 2,
+      "kind": "grass_tuft",
+      "dx": 0.32,
+      "dz": 0.28,
+      "rot": 1.9,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": 2,
+      "kind": "flowers_yellow",
+      "dx": -0.3,
+      "dz": 0.32,
+      "rot": 3,
+      "scale": 1.05
+    },
+    {
+      "q": 4,
+      "r": 2,
+      "kind": "pebbles",
+      "dx": -0.42,
+      "dz": -0.38,
+      "rot": 0.2,
+      "scale": 1.1
+    },
+    {
+      "q": 4,
+      "r": 2,
+      "kind": "grass_tuft",
+      "dx": 0.42,
+      "dz": 0.38,
+      "rot": 1.3,
+      "scale": 1
+    },
+    {
+      "q": 6,
+      "r": 1,
+      "kind": "log",
+      "dx": -0.35,
+      "dz": -0.28,
+      "rot": 2.1,
+      "scale": 1.05
+    },
+    {
+      "q": 6,
+      "r": 1,
+      "kind": "pebbles",
+      "dx": 0.35,
+      "dz": 0.28,
+      "rot": 3.2,
+      "scale": 1
+    },
+    {
+      "q": 6,
+      "r": 1,
+      "kind": "grass_tuft",
+      "dx": -0.3,
+      "dz": 0.35,
+      "rot": 0.7,
+      "scale": 1
+    },
+    {
+      "q": -4,
+      "r": 5,
+      "kind": "flowers_pink",
+      "dx": -0.5,
+      "dz": -0.45,
+      "rot": 0.4,
+      "scale": 1.1
+    },
+    {
+      "q": -4,
+      "r": 5,
+      "kind": "grass_tuft",
+      "dx": 0.5,
+      "dz": -0.45,
+      "rot": 1.5,
+      "scale": 1.05
+    },
+    {
+      "q": -4,
+      "r": 5,
+      "kind": "mushroom",
+      "dx": -0.5,
+      "dz": 0.45,
+      "rot": 2.6,
+      "scale": 0.95
+    },
+    {
+      "q": -4,
+      "r": 4,
+      "kind": "flowers_pink",
+      "dx": -0.35,
+      "dz": -0.32,
+      "rot": 0.3,
+      "scale": 1.2
+    },
+    {
+      "q": -4,
+      "r": 4,
+      "kind": "flowers_pink",
+      "dx": 0.25,
+      "dz": -0.3,
+      "rot": 1.4,
+      "scale": 1.15
+    },
+    {
+      "q": -4,
+      "r": 4,
+      "kind": "grass_tuft",
+      "dx": -0.38,
+      "dz": 0.3,
+      "rot": 2.5,
+      "scale": 1.1
+    },
+    {
+      "q": -4,
+      "r": 4,
+      "kind": "mushroom",
+      "dx": 0.35,
+      "dz": 0.32,
+      "rot": 3.6,
+      "scale": 1.05
+    },
+    {
+      "q": -4,
+      "r": 4,
+      "kind": "pebbles",
+      "dx": 0,
+      "dz": 0.4,
+      "rot": 0.9,
+      "scale": 0.9
+    },
+    {
+      "q": -3,
+      "r": 4,
+      "kind": "flowers_pink",
+      "dx": -0.35,
+      "dz": -0.28,
+      "rot": 0.7,
+      "scale": 1.15
+    },
+    {
+      "q": -3,
+      "r": 4,
+      "kind": "flowers_white",
+      "dx": 0.32,
+      "dz": -0.28,
+      "rot": 1.8,
+      "scale": 1.1
+    },
+    {
+      "q": -3,
+      "r": 4,
+      "kind": "grass_tuft",
+      "dx": -0.32,
+      "dz": 0.35,
+      "rot": 2.9,
+      "scale": 1.05
+    },
+    {
+      "q": -3,
+      "r": 4,
+      "kind": "mushroom",
+      "dx": 0.35,
+      "dz": 0.35,
+      "rot": 0.4,
+      "scale": 1
+    },
+    {
+      "q": -3,
+      "r": 5,
+      "kind": "flowers_pink",
+      "dx": -0.5,
+      "dz": -0.44,
+      "rot": 1.2,
+      "scale": 1.1
+    },
+    {
+      "q": -3,
+      "r": 5,
+      "kind": "grass_tuft",
+      "dx": 0.5,
+      "dz": 0.44,
+      "rot": 2.3,
+      "scale": 1
+    },
+    {
+      "q": -5,
+      "r": 4,
+      "kind": "flowers_pink",
+      "dx": -0.42,
+      "dz": -0.38,
+      "rot": 0.5,
+      "scale": 1.15
+    },
+    {
+      "q": -5,
+      "r": 4,
+      "kind": "grass_tuft",
+      "dx": 0.42,
+      "dz": 0.38,
+      "rot": 1.6,
+      "scale": 1.05
+    },
+    {
+      "q": -5,
+      "r": 4,
+      "kind": "mushroom",
+      "dx": -0.42,
+      "dz": 0.38,
+      "rot": 2.7,
+      "scale": 1
+    },
+    {
+      "q": -6,
+      "r": 4,
+      "kind": "mushroom",
+      "dx": -0.4,
+      "dz": -0.35,
+      "rot": 0.8,
+      "scale": 1.1
+    },
+    {
+      "q": -6,
+      "r": 4,
+      "kind": "flowers_pink",
+      "dx": 0.4,
+      "dz": 0.35,
+      "rot": 1.9,
+      "scale": 1.15
+    },
+    {
+      "q": -6,
+      "r": 4,
+      "kind": "grass_tuft",
+      "dx": -0.38,
+      "dz": 0.38,
+      "rot": 3,
+      "scale": 1.05
+    },
+    {
+      "q": -7,
+      "r": 5,
+      "kind": "flowers_pink",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.2,
+      "scale": 1.15
+    },
+    {
+      "q": -7,
+      "r": 5,
+      "kind": "mushroom",
+      "dx": 0.35,
+      "dz": -0.28,
+      "rot": 1.3,
+      "scale": 1.05
+    },
+    {
+      "q": -7,
+      "r": 5,
+      "kind": "grass_tuft",
+      "dx": -0.32,
+      "dz": 0.35,
+      "rot": 2.4,
+      "scale": 1.1
+    },
+    {
+      "q": -7,
+      "r": 5,
+      "kind": "pebbles",
+      "dx": 0.35,
+      "dz": 0.35,
+      "rot": 3.5,
+      "scale": 0.95
+    },
+    {
+      "q": -7,
+      "r": 4,
+      "kind": "flowers_pink",
+      "dx": -0.32,
+      "dz": -0.28,
+      "rot": 0.9,
+      "scale": 1.15
+    },
+    {
+      "q": -7,
+      "r": 4,
+      "kind": "flowers_purple",
+      "dx": 0.32,
+      "dz": 0.28,
+      "rot": 2,
+      "scale": 1.1
+    },
+    {
+      "q": -7,
+      "r": 4,
+      "kind": "grass_tuft",
+      "dx": -0.35,
+      "dz": 0.32,
+      "rot": 3.1,
+      "scale": 1
+    },
+    {
+      "q": -7,
+      "r": 4,
+      "kind": "mushroom",
+      "dx": 0.35,
+      "dz": -0.32,
+      "rot": 0.6,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 5,
+      "kind": "flowers_pink",
+      "dx": -0.42,
+      "dz": -0.38,
+      "rot": 1.1,
+      "scale": 1.15
+    },
+    {
+      "q": -2,
+      "r": 5,
+      "kind": "grass_tuft",
+      "dx": 0.42,
+      "dz": 0.38,
+      "rot": 2.2,
+      "scale": 1.05
+    },
+    {
+      "q": -2,
+      "r": 5,
+      "kind": "mushroom",
+      "dx": 0.4,
+      "dz": -0.38,
+      "rot": 3.3,
+      "scale": 0.95
+    },
+    {
+      "q": -3,
+      "r": 6,
+      "kind": "grass_tuft",
+      "dx": -0.35,
+      "dz": -0.35,
+      "rot": 0.4,
+      "scale": 1.1
+    },
+    {
+      "q": -3,
+      "r": 6,
+      "kind": "flowers_pink",
+      "dx": 0.35,
+      "dz": -0.35,
+      "rot": 1.5,
+      "scale": 1.1
+    },
+    {
+      "q": -3,
+      "r": 6,
+      "kind": "pebbles",
+      "dx": 0,
+      "dz": -0.4,
+      "rot": 2.6,
+      "scale": 0.95
+    },
+    {
+      "q": -4,
+      "r": 6,
+      "kind": "grass_tuft",
+      "dx": -0.35,
+      "dz": -0.35,
+      "rot": 0.7,
+      "scale": 1.1
+    },
+    {
+      "q": -4,
+      "r": 6,
+      "kind": "mushroom",
+      "dx": 0.35,
+      "dz": -0.35,
+      "rot": 1.8,
+      "scale": 1
+    },
+    {
+      "q": -6,
+      "r": 5,
+      "kind": "grass_tuft",
+      "dx": -0.35,
+      "dz": -0.35,
+      "rot": 2.9,
+      "scale": 1.1
+    },
+    {
+      "q": -6,
+      "r": 5,
+      "kind": "flowers_pink",
+      "dx": 0.35,
+      "dz": -0.35,
+      "rot": 0.3,
+      "scale": 1.15
+    },
+    {
+      "q": -3,
+      "r": 8,
+      "kind": "flowers_pink",
+      "dx": -0.32,
+      "dz": -0.28,
+      "rot": 1.4,
+      "scale": 1.15
+    },
+    {
+      "q": -3,
+      "r": 8,
+      "kind": "grass_tuft",
+      "dx": 0.32,
+      "dz": 0.28,
+      "rot": 2.5,
+      "scale": 1.05
+    },
+    {
+      "q": -3,
+      "r": 8,
+      "kind": "mushroom",
+      "dx": -0.3,
+      "dz": 0.32,
+      "rot": 3.6,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 8,
+      "kind": "flowers_pink",
+      "dx": -0.35,
+      "dz": -0.25,
+      "rot": 0.8,
+      "scale": 1.1
+    },
+    {
+      "q": -2,
+      "r": 8,
+      "kind": "grass_tuft",
+      "dx": 0.35,
+      "dz": 0.25,
+      "rot": 1.9,
+      "scale": 1.05
+    },
+    {
+      "q": -2,
+      "r": 8,
+      "kind": "log",
+      "dx": 0,
+      "dz": 0.38,
+      "rot": 3,
+      "scale": 0.95
+    },
+    {
+      "q": 0,
+      "r": -8,
+      "kind": "flowers_white",
+      "dx": -0.5,
+      "dz": -0.45,
+      "rot": 0.2,
+      "scale": 1.1
+    },
+    {
+      "q": 0,
+      "r": -8,
+      "kind": "flowers_white",
+      "dx": 0.5,
+      "dz": -0.45,
+      "rot": 1.3,
+      "scale": 1.1
+    },
+    {
+      "q": 0,
+      "r": -8,
+      "kind": "pebbles",
+      "dx": -0.5,
+      "dz": 0.45,
+      "rot": 2.4,
+      "scale": 0.95
+    },
+    {
+      "q": 0,
+      "r": -8,
+      "kind": "pebbles",
+      "dx": 0.5,
+      "dz": 0.45,
+      "rot": 3.5,
+      "scale": 0.95
+    },
+    {
+      "q": 0,
+      "r": -7,
+      "kind": "flowers_white",
+      "dx": -0.5,
+      "dz": -0.3,
+      "rot": 0.6,
+      "scale": 1.15
+    },
+    {
+      "q": 0,
+      "r": -7,
+      "kind": "flowers_white",
+      "dx": 0.5,
+      "dz": -0.3,
+      "rot": 1.7,
+      "scale": 1.15
+    },
+    {
+      "q": 0,
+      "r": -7,
+      "kind": "pebbles",
+      "dx": -0.48,
+      "dz": 0.35,
+      "rot": 2.8,
+      "scale": 0.9
+    },
+    {
+      "q": 0,
+      "r": -7,
+      "kind": "pebbles",
+      "dx": 0.48,
+      "dz": 0.35,
+      "rot": 3.9,
+      "scale": 0.9
+    },
+    {
+      "q": 0,
+      "r": -6,
+      "kind": "flowers_white",
+      "dx": -0.5,
+      "dz": 0,
+      "rot": 0.4,
+      "scale": 1.1
+    },
+    {
+      "q": 0,
+      "r": -6,
+      "kind": "flowers_white",
+      "dx": 0.5,
+      "dz": 0,
+      "rot": 1.5,
+      "scale": 1.1
+    },
+    {
+      "q": 0,
+      "r": -5,
+      "kind": "flowers_white",
+      "dx": -0.5,
+      "dz": -0.35,
+      "rot": 2.6,
+      "scale": 1.05
+    },
+    {
+      "q": 0,
+      "r": -5,
+      "kind": "pebbles",
+      "dx": 0.5,
+      "dz": 0.35,
+      "rot": 0.7,
+      "scale": 0.9
+    },
+    {
+      "q": 0,
+      "r": -4,
+      "kind": "flowers_white",
+      "dx": -0.5,
+      "dz": -0.42,
+      "rot": 1.8,
+      "scale": 1.05
+    },
+    {
+      "q": 0,
+      "r": -4,
+      "kind": "pebbles",
+      "dx": 0.5,
+      "dz": 0.42,
+      "rot": 2.9,
+      "scale": 0.9
+    },
+    {
+      "q": 0,
+      "r": -3,
+      "kind": "flowers_white",
+      "dx": -0.5,
+      "dz": 0.42,
+      "rot": 0.5,
+      "scale": 1
+    },
+    {
+      "q": 0,
+      "r": -2,
+      "kind": "flowers_white",
+      "dx": 0.5,
+      "dz": -0.42,
+      "rot": 1.6,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": -7,
+      "kind": "flowers_white",
+      "dx": -0.4,
+      "dz": -0.38,
+      "rot": 0.3,
+      "scale": 1.2
+    },
+    {
+      "q": -1,
+      "r": -7,
+      "kind": "flowers_white",
+      "dx": 0.4,
+      "dz": 0.38,
+      "rot": 1.4,
+      "scale": 1.15
+    },
+    {
+      "q": -1,
+      "r": -7,
+      "kind": "pebbles",
+      "dx": -0.4,
+      "dz": 0.38,
+      "rot": 2.5,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": -8,
+      "kind": "flowers_white",
+      "dx": -0.4,
+      "dz": 0.38,
+      "rot": 0.8,
+      "scale": 1.2
+    },
+    {
+      "q": 1,
+      "r": -8,
+      "kind": "flowers_white",
+      "dx": 0.4,
+      "dz": -0.38,
+      "rot": 1.9,
+      "scale": 1.15
+    },
+    {
+      "q": 1,
+      "r": -8,
+      "kind": "pebbles",
+      "dx": 0.4,
+      "dz": 0.38,
+      "rot": 3,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": -7,
+      "kind": "flowers_white",
+      "dx": -0.35,
+      "dz": -0.32,
+      "rot": 0.4,
+      "scale": 1.2
+    },
+    {
+      "q": 1,
+      "r": -7,
+      "kind": "flowers_white",
+      "dx": 0.35,
+      "dz": -0.32,
+      "rot": 1.5,
+      "scale": 1.15
+    },
+    {
+      "q": 1,
+      "r": -7,
+      "kind": "pebbles",
+      "dx": -0.35,
+      "dz": 0.32,
+      "rot": 2.6,
+      "scale": 1.05
+    },
+    {
+      "q": 1,
+      "r": -7,
+      "kind": "grass_tuft",
+      "dx": 0.35,
+      "dz": 0.32,
+      "rot": 3.7,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": -7,
+      "kind": "model:medieval/rock_single_C",
+      "dx": 0,
+      "dz": -0.42,
+      "rot": 1.1,
+      "scale": 0.9
+    },
+    {
+      "q": -1,
+      "r": -6,
+      "kind": "flowers_white",
+      "dx": -0.4,
+      "dz": -0.38,
+      "rot": 0.9,
+      "scale": 1.15
+    },
+    {
+      "q": -1,
+      "r": -6,
+      "kind": "pebbles",
+      "dx": 0.4,
+      "dz": 0.38,
+      "rot": 2,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": -5,
+      "kind": "flowers_white",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.2,
+      "scale": 1.15
+    },
+    {
+      "q": -1,
+      "r": -5,
+      "kind": "flowers_purple",
+      "dx": 0.35,
+      "dz": -0.3,
+      "rot": 1.3,
+      "scale": 1.1
+    },
+    {
+      "q": -1,
+      "r": -5,
+      "kind": "pebbles",
+      "dx": -0.35,
+      "dz": 0.32,
+      "rot": 2.4,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": -5,
+      "kind": "grass_tuft",
+      "dx": 0.35,
+      "dz": 0.32,
+      "rot": 3.5,
+      "scale": 0.95
+    },
+    {
+      "q": -2,
+      "r": -6,
+      "kind": "flowers_white",
+      "dx": -0.32,
+      "dz": -0.28,
+      "rot": 0.7,
+      "scale": 1.15
+    },
+    {
+      "q": -2,
+      "r": -6,
+      "kind": "pebbles",
+      "dx": 0.32,
+      "dz": 0.28,
+      "rot": 1.8,
+      "scale": 1.05
+    },
+    {
+      "q": -2,
+      "r": -6,
+      "kind": "grass_tuft",
+      "dx": -0.3,
+      "dz": 0.32,
+      "rot": 2.9,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": -6,
+      "kind": "model:medieval/rock_single_A",
+      "dx": 0.38,
+      "dz": -0.35,
+      "rot": 0.4,
+      "scale": 0.85
+    },
+    {
+      "q": 2,
+      "r": -7,
+      "kind": "flowers_white",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 1.1,
+      "scale": 1.15
+    },
+    {
+      "q": 2,
+      "r": -7,
+      "kind": "pebbles",
+      "dx": 0.35,
+      "dz": 0.3,
+      "rot": 2.2,
+      "scale": 1
+    },
+    {
+      "q": 2,
+      "r": -7,
+      "kind": "grass_tuft",
+      "dx": -0.32,
+      "dz": 0.32,
+      "rot": 3.3,
+      "scale": 0.95
+    },
+    {
+      "q": 2,
+      "r": -6,
+      "kind": "flowers_white",
+      "dx": -0.32,
+      "dz": 0.28,
+      "rot": 0.5,
+      "scale": 1.1
+    },
+    {
+      "q": 2,
+      "r": -6,
+      "kind": "flowers_purple",
+      "dx": 0.32,
+      "dz": -0.28,
+      "rot": 1.6,
+      "scale": 1.1
+    },
+    {
+      "q": 2,
+      "r": -6,
+      "kind": "pebbles",
+      "dx": 0,
+      "dz": 0.38,
+      "rot": 2.7,
+      "scale": 1
+    },
+    {
+      "q": -8,
+      "r": 0,
+      "kind": "grass_tuft",
+      "dx": -0.3,
+      "dz": -0.25,
+      "rot": 0.4,
+      "scale": 1.05
+    },
+    {
+      "q": -8,
+      "r": 0,
+      "kind": "flowers_white",
+      "dx": 0.3,
+      "dz": 0.25,
+      "rot": 1.5,
+      "scale": 1
+    },
+    {
+      "q": -8,
+      "r": 1,
+      "kind": "grass_tuft",
+      "dx": -0.32,
+      "dz": 0.28,
+      "rot": 2.6,
+      "scale": 1
+    },
+    {
+      "q": -8,
+      "r": 1,
+      "kind": "flowers_purple",
+      "dx": 0.32,
+      "dz": -0.28,
+      "rot": 3.7,
+      "scale": 1.05
+    },
+    {
+      "q": -8,
+      "r": 2,
+      "kind": "grass_tuft",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.8,
+      "scale": 1.1
+    },
+    {
+      "q": -8,
+      "r": 2,
+      "kind": "pebbles",
+      "dx": 0.35,
+      "dz": 0.3,
+      "rot": 1.9,
+      "scale": 0.9
+    },
+    {
+      "q": -8,
+      "r": 3,
+      "kind": "flowers_pink",
+      "dx": -0.3,
+      "dz": -0.25,
+      "rot": 3,
+      "scale": 1.05
+    },
+    {
+      "q": -8,
+      "r": 3,
+      "kind": "grass_tuft",
+      "dx": 0.3,
+      "dz": 0.25,
+      "rot": 0.3,
+      "scale": 1
+    },
+    {
+      "q": -8,
+      "r": 4,
+      "kind": "mushroom",
+      "dx": -0.32,
+      "dz": 0.28,
+      "rot": 1.4,
+      "scale": 1
+    },
+    {
+      "q": -8,
+      "r": 4,
+      "kind": "grass_tuft",
+      "dx": 0.32,
+      "dz": -0.28,
+      "rot": 2.5,
+      "scale": 1.05
+    },
+    {
+      "q": -8,
+      "r": 5,
+      "kind": "flowers_pink",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 3.6,
+      "scale": 1.1
+    },
+    {
+      "q": -8,
+      "r": 5,
+      "kind": "grass_tuft",
+      "dx": 0.35,
+      "dz": 0.3,
+      "rot": 0.9,
+      "scale": 1.05
+    },
+    {
+      "q": -8,
+      "r": 6,
+      "kind": "mushroom",
+      "dx": -0.3,
+      "dz": -0.25,
+      "rot": 2,
+      "scale": 1
+    },
+    {
+      "q": -8,
+      "r": 6,
+      "kind": "grass_tuft",
+      "dx": 0.3,
+      "dz": 0.25,
+      "rot": 3.1,
+      "scale": 1.1
+    },
+    {
+      "q": -8,
+      "r": 8,
+      "kind": "grass_tuft",
+      "dx": -0.32,
+      "dz": 0.28,
+      "rot": 0.5,
+      "scale": 1.05
+    },
+    {
+      "q": -8,
+      "r": 8,
+      "kind": "pebbles",
+      "dx": 0.32,
+      "dz": -0.28,
+      "rot": 1.6,
+      "scale": 0.95
+    },
+    {
+      "q": -7,
+      "r": -1,
+      "kind": "pebbles",
+      "dx": 0,
+      "dz": -0.45,
+      "rot": 2.7,
+      "scale": 0.9
+    },
+    {
+      "q": -7,
+      "r": 3,
+      "kind": "flowers_purple",
+      "dx": -0.32,
+      "dz": -0.28,
+      "rot": 0.4,
+      "scale": 1.1
+    },
+    {
+      "q": -7,
+      "r": 3,
+      "kind": "grass_tuft",
+      "dx": 0.32,
+      "dz": 0.28,
+      "rot": 1.5,
+      "scale": 1
+    },
+    {
+      "q": -6,
+      "r": 3,
+      "kind": "flowers_pink",
+      "dx": -0.35,
+      "dz": 0.25,
+      "rot": 2.6,
+      "scale": 1.1
+    },
+    {
+      "q": -6,
+      "r": 3,
+      "kind": "grass_tuft",
+      "dx": 0.35,
+      "dz": -0.25,
+      "rot": 3.7,
+      "scale": 1.05
+    },
+    {
+      "q": -5,
+      "r": -3,
+      "kind": "flowers_white",
+      "dx": -0.45,
+      "dz": 0.4,
+      "rot": 0.8,
+      "scale": 1.1
+    },
+    {
+      "q": -5,
+      "r": -3,
+      "kind": "flowers_purple",
+      "dx": 0.45,
+      "dz": 0.4,
+      "rot": 1.9,
+      "scale": 1.1
+    },
+    {
+      "q": -5,
+      "r": 1,
+      "kind": "flowers_white",
+      "dx": -0.32,
+      "dz": -0.28,
+      "rot": 3,
+      "scale": 1.1
+    },
+    {
+      "q": -5,
+      "r": 1,
+      "kind": "grass_tuft",
+      "dx": 0.32,
+      "dz": 0.28,
+      "rot": 0.3,
+      "scale": 1
+    },
+    {
+      "q": -4,
+      "r": -4,
+      "kind": "flowers_purple",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 1.4,
+      "scale": 1.05
+    },
+    {
+      "q": -4,
+      "r": -4,
+      "kind": "grass_tuft",
+      "dx": 0.35,
+      "dz": 0.3,
+      "rot": 2.5,
+      "scale": 1
+    },
+    {
+      "q": -4,
+      "r": 3,
+      "kind": "flowers_pink",
+      "dx": -0.3,
+      "dz": 0.28,
+      "rot": 3.6,
+      "scale": 1.1
+    },
+    {
+      "q": -4,
+      "r": 3,
+      "kind": "grass_tuft",
+      "dx": 0.3,
+      "dz": -0.28,
+      "rot": 0.9,
+      "scale": 1
+    },
+    {
+      "q": -3,
+      "r": -5,
+      "kind": "flowers_white",
+      "dx": -0.32,
+      "dz": -0.28,
+      "rot": 2,
+      "scale": 1.05
+    },
+    {
+      "q": -3,
+      "r": -5,
+      "kind": "pebbles",
+      "dx": 0.32,
+      "dz": 0.28,
+      "rot": 3.1,
+      "scale": 0.95
+    },
+    {
+      "q": -3,
+      "r": -3,
+      "kind": "flowers_purple",
+      "dx": -0.35,
+      "dz": 0.28,
+      "rot": 0.5,
+      "scale": 1.1
+    },
+    {
+      "q": -3,
+      "r": -3,
+      "kind": "grass_tuft",
+      "dx": 0.35,
+      "dz": -0.28,
+      "rot": 1.6,
+      "scale": 1
+    },
+    {
+      "q": -3,
+      "r": 2,
+      "kind": "flowers_pink",
+      "dx": -0.32,
+      "dz": -0.28,
+      "rot": 2.7,
+      "scale": 1.1
+    },
+    {
+      "q": -3,
+      "r": 2,
+      "kind": "grass_tuft",
+      "dx": 0.32,
+      "dz": 0.28,
+      "rot": 3.8,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": -4,
+      "kind": "flowers_white",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.4,
+      "scale": 1.1
+    },
+    {
+      "q": -2,
+      "r": -4,
+      "kind": "grass_tuft",
+      "dx": 0.35,
+      "dz": 0.3,
+      "rot": 1.5,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 2,
+      "kind": "flowers_yellow",
+      "dx": -0.4,
+      "dz": -0.38,
+      "rot": 2.6,
+      "scale": 1.05
+    },
+    {
+      "q": -2,
+      "r": 2,
+      "kind": "grass_tuft",
+      "dx": 0.4,
+      "dz": 0.38,
+      "rot": 3.7,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": 5,
+      "kind": "flowers_yellow",
+      "dx": -0.4,
+      "dz": -0.38,
+      "rot": 0.8,
+      "scale": 1.1
+    },
+    {
+      "q": -1,
+      "r": 5,
+      "kind": "grass_tuft",
+      "dx": 0.4,
+      "dz": 0.38,
+      "rot": 1.9,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": -4,
+      "kind": "flowers_white",
+      "dx": -0.48,
+      "dz": -0.45,
+      "rot": 3,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": -4,
+      "kind": "pebbles",
+      "dx": 0.48,
+      "dz": 0.45,
+      "rot": 0.3,
+      "scale": 0.9
+    },
+    {
+      "q": 2,
+      "r": -5,
+      "kind": "flowers_white",
+      "dx": -0.32,
+      "dz": -0.28,
+      "rot": 1.4,
+      "scale": 1.1
+    },
+    {
+      "q": 2,
+      "r": -5,
+      "kind": "grass_tuft",
+      "dx": 0.32,
+      "dz": 0.28,
+      "rot": 2.5,
+      "scale": 1
+    },
+    {
+      "q": 2,
+      "r": -4,
+      "kind": "flowers_yellow",
+      "dx": -0.48,
+      "dz": 0.45,
+      "rot": 3.6,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": -7,
+      "kind": "flowers_white",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.9,
+      "scale": 1.05
+    },
+    {
+      "q": 3,
+      "r": -7,
+      "kind": "pebbles",
+      "dx": 0.35,
+      "dz": 0.3,
+      "rot": 2,
+      "scale": 0.95
+    },
+    {
+      "q": 3,
+      "r": -6,
+      "kind": "grass_tuft",
+      "dx": -0.32,
+      "dz": 0.28,
+      "rot": 3.1,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": -6,
+      "kind": "flowers_yellow",
+      "dx": 0.32,
+      "dz": -0.28,
+      "rot": 0.5,
+      "scale": 1.05
+    },
+    {
+      "q": 3,
+      "r": 6,
+      "kind": "pebbles",
+      "dx": -0.4,
+      "dz": -0.38,
+      "rot": 1.6,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": 6,
+      "kind": "grass_tuft",
+      "dx": 0.4,
+      "dz": 0.38,
+      "rot": 2.7,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": -7,
+      "kind": "flowers_yellow",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 3.8,
+      "scale": 1.05
+    },
+    {
+      "q": 4,
+      "r": -7,
+      "kind": "grass_tuft",
+      "dx": 0.35,
+      "dz": 0.3,
+      "rot": 0.4,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": -6,
+      "kind": "flowers_pink",
+      "dx": -0.32,
+      "dz": 0.28,
+      "rot": 1.5,
+      "scale": 1.1
+    },
+    {
+      "q": 4,
+      "r": -6,
+      "kind": "grass_tuft",
+      "dx": 0.32,
+      "dz": -0.28,
+      "rot": 2.6,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": -7,
+      "kind": "grass_tuft",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 3.7,
+      "scale": 1.05
+    },
+    {
+      "q": 5,
+      "r": -7,
+      "kind": "pebbles",
+      "dx": 0.35,
+      "dz": 0.3,
+      "rot": 0.8,
+      "scale": 0.95
+    },
+    {
+      "q": 6,
+      "r": -7,
+      "kind": "flowers_yellow",
+      "dx": -0.32,
+      "dz": -0.28,
+      "rot": 1.9,
+      "scale": 1.1
+    },
+    {
+      "q": 6,
+      "r": -7,
+      "kind": "grass_tuft",
+      "dx": 0.32,
+      "dz": 0.28,
+      "rot": 3,
+      "scale": 1
+    },
+    {
+      "q": 6,
+      "r": -5,
+      "kind": "flowers_red",
+      "dx": -0.35,
+      "dz": 0.28,
+      "rot": 0.3,
+      "scale": 1.1
+    },
+    {
+      "q": 6,
+      "r": -5,
+      "kind": "grass_tuft",
+      "dx": 0.35,
+      "dz": -0.28,
+      "rot": 1.4,
+      "scale": 1.05
+    },
+    {
+      "q": 7,
+      "r": -6,
+      "kind": "flowers_yellow",
+      "dx": -0.32,
+      "dz": -0.28,
+      "rot": 2.5,
+      "scale": 1.05
+    },
+    {
+      "q": 7,
+      "r": -6,
+      "kind": "grass_tuft",
+      "dx": 0.32,
+      "dz": 0.28,
+      "rot": 3.6,
+      "scale": 1
+    },
+    {
+      "q": 7,
+      "r": -5,
+      "kind": "flowers_pink",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.9,
+      "scale": 1.1
+    },
+    {
+      "q": 7,
+      "r": -5,
+      "kind": "grass_tuft",
+      "dx": 0.35,
+      "dz": 0.3,
+      "rot": 2,
+      "scale": 1
+    },
+    {
+      "q": 7,
+      "r": -4,
+      "kind": "flowers_red",
+      "dx": -0.32,
+      "dz": 0.28,
+      "rot": 3.1,
+      "scale": 1.15
+    },
+    {
+      "q": 7,
+      "r": -4,
+      "kind": "flowers_yellow",
+      "dx": 0.32,
+      "dz": -0.28,
+      "rot": 0.5,
+      "scale": 1.1
+    },
+    {
+      "q": 8,
+      "r": -5,
+      "kind": "grass_tuft",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 1.6,
+      "scale": 1.05
+    },
+    {
+      "q": 8,
+      "r": -5,
+      "kind": "pebbles",
+      "dx": 0.35,
+      "dz": 0.3,
+      "rot": 2.7,
+      "scale": 0.95
+    },
+    {
+      "q": 8,
+      "r": -4,
+      "kind": "flowers_yellow",
+      "dx": -0.32,
+      "dz": 0.28,
+      "rot": 3.8,
+      "scale": 1.1
+    },
+    {
+      "q": 8,
+      "r": -4,
+      "kind": "grass_tuft",
+      "dx": 0.32,
+      "dz": -0.28,
+      "rot": 0.4,
+      "scale": 1
+    },
+    {
+      "q": 8,
+      "r": 0,
+      "kind": "flowers_yellow",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 1.5,
+      "scale": 1.1
+    },
+    {
+      "q": 8,
+      "r": 0,
+      "kind": "grass_tuft",
+      "dx": 0.35,
+      "dz": 0.3,
+      "rot": 2.6,
+      "scale": 1.05
+    },
+    {
+      "q": 2,
+      "r": 2,
+      "kind": "flowers_yellow",
+      "dx": -0.48,
+      "dz": -0.45,
+      "rot": 0.7,
+      "scale": 1
+    },
+    {
+      "q": 2,
+      "r": 2,
+      "kind": "pebbles",
+      "dx": 0.48,
+      "dz": 0.45,
+      "rot": 1.8,
+      "scale": 0.9
+    },
+    {
+      "q": 3,
+      "r": -1,
+      "kind": "flowers_red",
+      "dx": -0.48,
+      "dz": -0.45,
+      "rot": 2.9,
+      "scale": 1.05
+    },
+    {
+      "q": 3,
+      "r": -1,
+      "kind": "grass_tuft",
+      "dx": 0.48,
+      "dz": 0.45,
+      "rot": 0.4,
+      "scale": 0.95
+    },
+    {
+      "q": 2,
+      "r": -1,
+      "kind": "flowers_yellow",
+      "dx": -0.48,
+      "dz": 0.45,
+      "rot": 1.5,
+      "scale": 1.05
+    },
+    {
+      "q": 1,
+      "r": 2,
+      "kind": "flowers_yellow",
+      "dx": -0.48,
+      "dz": -0.45,
+      "rot": 2.6,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 0,
+      "kind": "flowers_purple",
+      "dx": -0.48,
+      "dz": -0.45,
+      "rot": 3.7,
+      "scale": 1.05
+    },
+    {
+      "q": -3,
+      "r": 0,
+      "kind": "flowers_white",
+      "dx": 0.48,
+      "dz": 0.45,
+      "rot": 0.8,
+      "scale": 1
+    },
+    {
+      "q": -3,
+      "r": -1,
+      "kind": "flowers_purple",
+      "dx": -0.48,
+      "dz": 0.45,
+      "rot": 1.9,
+      "scale": 1.05
+    },
+    {
+      "q": -4,
+      "r": -1,
+      "kind": "flowers_white",
+      "dx": 0.48,
+      "dz": -0.45,
+      "rot": 3,
+      "scale": 1.05
+    },
+    {
+      "q": -6,
+      "r": 0,
+      "kind": "flowers_purple",
+      "dx": -0.48,
+      "dz": -0.45,
+      "rot": 0.3,
+      "scale": 1.05
+    },
+    {
+      "q": -6,
+      "r": 1,
+      "kind": "flowers_white",
+      "dx": 0.48,
+      "dz": 0.45,
+      "rot": 1.4,
+      "scale": 1.05
+    },
+    {
+      "q": -1,
+      "r": 3,
+      "kind": "flowers_pink",
+      "dx": -0.48,
+      "dz": -0.45,
+      "rot": 2.5,
+      "scale": 1.05
+    },
+    {
+      "q": -2,
+      "r": 4,
+      "kind": "flowers_pink",
+      "dx": 0.48,
+      "dz": 0.45,
+      "rot": 3.6,
+      "scale": 1.05
+    },
+    {
+      "q": 3,
+      "r": 3,
+      "kind": "pebbles",
+      "dx": -0.48,
+      "dz": -0.45,
+      "rot": 0.9,
+      "scale": 0.95
+    },
+    {
+      "q": 3,
+      "r": 4,
+      "kind": "pebbles",
+      "dx": 0.48,
+      "dz": 0.45,
+      "rot": 2,
+      "scale": 0.95
+    },
+    {
+      "q": -7,
+      "r": -2,
+      "kind": "grass_tuft",
+      "dx": 0.35,
+      "dz": 0.35,
+      "rot": 0.4,
+      "scale": 1.05
+    },
+    {
+      "q": -7,
+      "r": -2,
+      "kind": "pebbles",
+      "dx": -0.35,
+      "dz": 0.35,
+      "rot": 1.5,
+      "scale": 0.95
+    },
+    {
+      "q": -6,
+      "r": 8,
+      "kind": "model:medieval/waterlily_B",
+      "dx": -0.25,
+      "dz": 0.2,
+      "rot": 0.8,
+      "scale": 1
+    },
+    {
+      "q": -6,
+      "r": 8,
+      "kind": "model:medieval/waterplant_A",
+      "dx": 0.3,
+      "dz": -0.25,
+      "rot": 2.1,
+      "scale": 1.05
+    },
+    {
+      "q": -7,
+      "r": 7,
+      "kind": "model:medieval/waterlily_A",
+      "dx": 0.2,
+      "dz": 0.25,
+      "rot": 1.3,
+      "scale": 1
+    },
+    {
+      "q": -5,
+      "r": 8,
+      "kind": "grass_tuft",
+      "dx": -0.3,
+      "dz": 0.3,
+      "rot": 0.6,
+      "scale": 1.1
+    },
+    {
+      "q": -5,
+      "r": 8,
+      "kind": "flowers_pink",
+      "dx": 0.3,
+      "dz": 0.3,
+      "rot": 1.7,
+      "scale": 1.1
+    },
+    {
+      "q": -4,
+      "r": 8,
+      "kind": "grass_tuft",
+      "dx": -0.3,
+      "dz": 0.3,
+      "rot": 2.8,
+      "scale": 1.05
+    },
+    {
+      "q": -4,
+      "r": 8,
+      "kind": "mushroom",
+      "dx": 0.3,
+      "dz": 0.3,
+      "rot": 3.9,
+      "scale": 1
+    },
+    {
+      "q": -8,
+      "r": 7,
+      "kind": "grass_tuft",
+      "dx": -0.35,
+      "dz": -0.3,
+      "rot": 0.5,
+      "scale": 1.05
+    },
+    {
+      "q": -8,
+      "r": 7,
+      "kind": "pebbles",
+      "dx": 0.35,
+      "dz": 0.3,
+      "rot": 1.6,
+      "scale": 0.95
+    },
+    {
+      "q": -7,
+      "r": 8,
+      "kind": "grass_tuft",
+      "dx": -0.32,
+      "dz": 0.32,
+      "rot": 2.7,
+      "scale": 1.05
+    },
+    {
+      "q": -7,
+      "r": 8,
+      "kind": "flowers_pink",
+      "dx": 0.32,
+      "dz": 0.32,
+      "rot": 3.8,
+      "scale": 1.1
+    },
+    {
+      "q": -4,
+      "r": 1,
+      "kind": "flowers_purple",
+      "dx": -0.4,
+      "dz": 0.38,
+      "rot": 0.4,
+      "scale": 1.1
+    },
+    {
+      "q": -4,
+      "r": 1,
+      "kind": "grass_tuft",
+      "dx": 0.4,
+      "dz": -0.38,
+      "rot": 1.5,
+      "scale": 1
+    },
+    {
+      "q": -4,
+      "r": 2,
+      "kind": "flowers_white",
+      "dx": -0.42,
+      "dz": -0.38,
+      "rot": 2.6,
+      "scale": 1.15
+    },
+    {
+      "q": -4,
+      "r": 2,
+      "kind": "flowers_pink",
+      "dx": 0.42,
+      "dz": 0.38,
+      "rot": 3.7,
+      "scale": 1.1
+    },
+    {
+      "q": -3,
+      "r": 1,
+      "kind": "flowers_white",
+      "dx": -0.38,
+      "dz": -0.35,
+      "rot": 0.8,
+      "scale": 1.1
+    },
+    {
+      "q": -3,
+      "r": 1,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": 0.35,
+      "rot": 1.9,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": -3,
+      "kind": "flowers_yellow",
+      "dx": -0.42,
+      "dz": 0.38,
+      "rot": 3,
+      "scale": 1.15
+    },
+    {
+      "q": -2,
+      "r": -3,
+      "kind": "flowers_red",
+      "dx": 0.42,
+      "dz": -0.38,
+      "rot": 0.3,
+      "scale": 1.1
+    },
+    {
+      "q": -1,
+      "r": -4,
+      "kind": "flowers_white",
+      "dx": -0.42,
+      "dz": -0.38,
+      "rot": 1.4,
+      "scale": 1.15
+    },
+    {
+      "q": -1,
+      "r": -4,
+      "kind": "grass_tuft",
+      "dx": 0.42,
+      "dz": 0.38,
+      "rot": 2.5,
+      "scale": 1
+    },
+    {
+      "q": 2,
+      "r": -3,
+      "kind": "flowers_red",
+      "dx": -0.42,
+      "dz": -0.38,
+      "rot": 3.6,
+      "scale": 1.15
+    },
+    {
+      "q": 2,
+      "r": -3,
+      "kind": "flowers_yellow",
+      "dx": 0.42,
+      "dz": 0.38,
+      "rot": 0.9,
+      "scale": 1.15
+    },
+    {
+      "q": 4,
+      "r": 1,
+      "kind": "flowers_yellow",
+      "dx": -0.42,
+      "dz": -0.38,
+      "rot": 2,
+      "scale": 1.1
+    },
+    {
+      "q": 4,
+      "r": 1,
+      "kind": "grass_tuft",
+      "dx": 0.42,
+      "dz": 0.38,
+      "rot": 3.1,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": 1,
+      "kind": "flowers_yellow",
+      "dx": -0.38,
+      "dz": 0.35,
+      "rot": 0.5,
+      "scale": 1.1
+    },
+    {
+      "q": 3,
+      "r": 1,
+      "kind": "pebbles",
+      "dx": 0.38,
+      "dz": -0.35,
+      "rot": 1.6,
+      "scale": 0.95
+    },
+    {
+      "q": -2,
+      "r": -2,
+      "kind": "flowers_white",
+      "dx": -0.4,
+      "dz": 0.38,
+      "rot": 0.7,
+      "scale": 1.1
+    },
+    {
+      "q": -2,
+      "r": -2,
+      "kind": "grass_tuft",
+      "dx": 0.4,
+      "dz": -0.38,
+      "rot": 1.8,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": -3,
+      "kind": "mushroom",
+      "dx": -0.38,
+      "dz": -0.35,
+      "rot": 2.9,
+      "scale": 0.95
+    },
+    {
+      "q": -1,
+      "r": -3,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": 0.35,
+      "rot": 0.4,
+      "scale": 1.05
+    },
+    {
+      "q": -3,
+      "r": -4,
+      "kind": "mushroom",
+      "dx": -0.4,
+      "dz": 0.38,
+      "rot": 1.5,
+      "scale": 1
+    },
+    {
+      "q": -3,
+      "r": -4,
+      "kind": "log",
+      "dx": 0.4,
+      "dz": -0.38,
+      "rot": 2.6,
+      "scale": 0.95
+    },
+    {
+      "q": -2,
+      "r": -5,
+      "kind": "flowers_white",
+      "dx": -0.38,
+      "dz": -0.35,
+      "rot": 3.7,
+      "scale": 1.1
+    },
+    {
+      "q": -2,
+      "r": -5,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": 0.35,
+      "rot": 0.8,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": -6,
+      "kind": "flowers_white",
+      "dx": -0.4,
+      "dz": -0.38,
+      "rot": 1.9,
+      "scale": 1.1
+    },
+    {
+      "q": 1,
+      "r": -6,
+      "kind": "pebbles",
+      "dx": 0.4,
+      "dz": 0.38,
+      "rot": 3,
+      "scale": 0.95
+    },
+    {
+      "q": 1,
+      "r": -5,
+      "kind": "flowers_white",
+      "dx": -0.38,
+      "dz": 0.35,
+      "rot": 0.3,
+      "scale": 1.1
+    },
+    {
+      "q": 1,
+      "r": -5,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": -0.35,
+      "rot": 1.4,
+      "scale": 1
+    },
+    {
+      "q": 1,
+      "r": -3,
+      "kind": "flowers_yellow",
+      "dx": -0.38,
+      "dz": -0.35,
+      "rot": 2.5,
+      "scale": 1.1
+    },
+    {
+      "q": 1,
+      "r": -3,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": 0.35,
+      "rot": 3.6,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": -3,
+      "kind": "flowers_red",
+      "dx": -0.38,
+      "dz": 0.35,
+      "rot": 0.9,
+      "scale": 1.1
+    },
+    {
+      "q": 3,
+      "r": -3,
+      "kind": "flowers_yellow",
+      "dx": 0.38,
+      "dz": -0.35,
+      "rot": 2,
+      "scale": 1.1
+    },
+    {
+      "q": 4,
+      "r": -4,
+      "kind": "mushroom",
+      "dx": -0.38,
+      "dz": -0.35,
+      "rot": 3.1,
+      "scale": 0.95
+    },
+    {
+      "q": 4,
+      "r": -4,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": 0.35,
+      "rot": 0.5,
+      "scale": 1.05
+    },
+    {
+      "q": 5,
+      "r": -6,
+      "kind": "log",
+      "dx": -0.42,
+      "dz": 0.38,
+      "rot": 1.6,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": -6,
+      "kind": "mushroom",
+      "dx": 0.42,
+      "dz": -0.38,
+      "rot": 2.7,
+      "scale": 1
+    },
+    {
+      "q": 6,
+      "r": -6,
+      "kind": "pebbles",
+      "dx": -0.38,
+      "dz": -0.35,
+      "rot": 3.8,
+      "scale": 1
+    },
+    {
+      "q": 6,
+      "r": -6,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": 0.35,
+      "rot": 0.4,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": 0,
+      "kind": "flowers_yellow",
+      "dx": -0.38,
+      "dz": -0.35,
+      "rot": 1.5,
+      "scale": 1.1
+    },
+    {
+      "q": 3,
+      "r": 0,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": 0.35,
+      "rot": 2.6,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": 0,
+      "kind": "mushroom",
+      "dx": -0.38,
+      "dz": 0.35,
+      "rot": 3.7,
+      "scale": 0.95
+    },
+    {
+      "q": 4,
+      "r": 0,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": -0.35,
+      "rot": 0.8,
+      "scale": 1.05
+    },
+    {
+      "q": 5,
+      "r": 0,
+      "kind": "log",
+      "dx": -0.4,
+      "dz": -0.35,
+      "rot": 1.9,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": 0,
+      "kind": "grass_tuft",
+      "dx": 0.4,
+      "dz": 0.35,
+      "rot": 3,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": 1,
+      "kind": "pebbles",
+      "dx": -0.38,
+      "dz": 0.35,
+      "rot": 0.3,
+      "scale": 1
+    },
+    {
+      "q": 5,
+      "r": 1,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": -0.35,
+      "rot": 1.4,
+      "scale": 1
+    },
+    {
+      "q": 6,
+      "r": 2,
+      "kind": "log",
+      "dx": -0.4,
+      "dz": -0.38,
+      "rot": 2.5,
+      "scale": 1.05
+    },
+    {
+      "q": 6,
+      "r": 2,
+      "kind": "pebbles",
+      "dx": 0.4,
+      "dz": 0.38,
+      "rot": 3.6,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 3,
+      "kind": "flowers_pink",
+      "dx": -0.38,
+      "dz": -0.35,
+      "rot": 0.9,
+      "scale": 1.1
+    },
+    {
+      "q": -2,
+      "r": 3,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": 0.35,
+      "rot": 2,
+      "scale": 1
+    },
+    {
+      "q": -5,
+      "r": 2,
+      "kind": "mushroom",
+      "dx": -0.38,
+      "dz": 0.35,
+      "rot": 3.1,
+      "scale": 1
+    },
+    {
+      "q": -5,
+      "r": 2,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": -0.35,
+      "rot": 0.5,
+      "scale": 1.05
+    },
+    {
+      "q": -5,
+      "r": 3,
+      "kind": "pebbles",
+      "dx": -0.38,
+      "dz": -0.35,
+      "rot": 1.6,
+      "scale": 1
+    },
+    {
+      "q": -5,
+      "r": 3,
+      "kind": "flowers_pink",
+      "dx": 0.38,
+      "dz": 0.35,
+      "rot": 2.7,
+      "scale": 1.1
+    },
+    {
+      "q": -1,
+      "r": 4,
+      "kind": "flowers_yellow",
+      "dx": -0.38,
+      "dz": 0.35,
+      "rot": 3.8,
+      "scale": 1.1
+    },
+    {
+      "q": -1,
+      "r": 4,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": -0.35,
+      "rot": 0.4,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 6,
+      "kind": "mushroom",
+      "dx": -0.4,
+      "dz": -0.38,
+      "rot": 1.5,
+      "scale": 1
+    },
+    {
+      "q": -2,
+      "r": 6,
+      "kind": "grass_tuft",
+      "dx": 0.4,
+      "dz": 0.38,
+      "rot": 2.6,
+      "scale": 1.05
+    },
+    {
+      "q": 1,
+      "r": 5,
+      "kind": "flowers_yellow",
+      "dx": -0.38,
+      "dz": -0.35,
+      "rot": 3.7,
+      "scale": 1.15
+    },
+    {
+      "q": 1,
+      "r": 5,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": 0.35,
+      "rot": 0.8,
+      "scale": 1
+    },
+    {
+      "q": -9,
+      "r": 1,
+      "kind": "grass_tuft",
+      "dx": 0.25,
+      "dz": -0.2,
+      "rot": 0.4,
+      "scale": 1.05
+    },
+    {
+      "q": -9,
+      "r": 1,
+      "kind": "flowers_white",
+      "dx": -0.25,
+      "dz": 0.25,
+      "rot": 1.5,
+      "scale": 1
+    },
+    {
+      "q": -9,
+      "r": 3,
+      "kind": "grass_tuft",
+      "dx": 0.28,
+      "dz": 0.22,
+      "rot": 2.6,
+      "scale": 1.05
+    },
+    {
+      "q": -9,
+      "r": 3,
+      "kind": "mushroom",
+      "dx": -0.28,
+      "dz": -0.22,
+      "rot": 3.7,
+      "scale": 0.95
+    },
+    {
+      "q": -9,
+      "r": 5,
+      "kind": "grass_tuft",
+      "dx": 0.25,
+      "dz": -0.25,
+      "rot": 0.8,
+      "scale": 1.1
+    },
+    {
+      "q": -9,
+      "r": 5,
+      "kind": "flowers_pink",
+      "dx": -0.25,
+      "dz": 0.25,
+      "rot": 1.9,
+      "scale": 1.05
+    },
+    {
+      "q": -9,
+      "r": 7,
+      "kind": "grass_tuft",
+      "dx": 0.3,
+      "dz": 0.2,
+      "rot": 3,
+      "scale": 1.05
+    },
+    {
+      "q": -9,
+      "r": 7,
+      "kind": "pebbles",
+      "dx": -0.3,
+      "dz": -0.2,
+      "rot": 0.3,
+      "scale": 0.95
+    },
+    {
+      "q": -8,
+      "r": -1,
+      "kind": "grass_tuft",
+      "dx": 0.25,
+      "dz": 0.25,
+      "rot": 1.4,
+      "scale": 1
+    },
+    {
+      "q": -8,
+      "r": -1,
+      "kind": "flowers_purple",
+      "dx": -0.25,
+      "dz": -0.25,
+      "rot": 2.5,
+      "scale": 1.05
+    },
+    {
+      "q": -8,
+      "r": 9,
+      "kind": "grass_tuft",
+      "dx": 0.28,
+      "dz": -0.25,
+      "rot": 3.6,
+      "scale": 1.05
+    },
+    {
+      "q": -6,
+      "r": 9,
+      "kind": "grass_tuft",
+      "dx": -0.28,
+      "dz": -0.25,
+      "rot": 0.9,
+      "scale": 1.05
+    },
+    {
+      "q": -6,
+      "r": 9,
+      "kind": "flowers_pink",
+      "dx": 0.28,
+      "dz": 0.25,
+      "rot": 2,
+      "scale": 1.05
+    },
+    {
+      "q": -4,
+      "r": 9,
+      "kind": "grass_tuft",
+      "dx": -0.25,
+      "dz": 0.25,
+      "rot": 3.1,
+      "scale": 1.05
+    },
+    {
+      "q": -4,
+      "r": 9,
+      "kind": "pebbles",
+      "dx": 0.25,
+      "dz": -0.25,
+      "rot": 0.5,
+      "scale": 0.95
+    },
+    {
+      "q": -3,
+      "r": 9,
+      "kind": "grass_tuft",
+      "dx": 0.25,
+      "dz": -0.25,
+      "rot": 1.6,
+      "scale": 1
+    },
+    {
+      "q": -1,
+      "r": 9,
+      "kind": "flowers_yellow",
+      "dx": -0.25,
+      "dz": -0.25,
+      "rot": 2.7,
+      "scale": 1.1
+    },
+    {
+      "q": -1,
+      "r": 9,
+      "kind": "grass_tuft",
+      "dx": 0.25,
+      "dz": 0.25,
+      "rot": 3.8,
+      "scale": 1.05
+    },
+    {
+      "q": 1,
+      "r": -9,
+      "kind": "flowers_white",
+      "dx": -0.4,
+      "dz": 0.38,
+      "rot": 0.4,
+      "scale": 1.1
+    },
+    {
+      "q": 1,
+      "r": -9,
+      "kind": "pebbles",
+      "dx": 0.4,
+      "dz": 0.38,
+      "rot": 1.5,
+      "scale": 0.95
+    },
+    {
+      "q": 3,
+      "r": -9,
+      "kind": "grass_tuft",
+      "dx": -0.25,
+      "dz": 0.25,
+      "rot": 2.6,
+      "scale": 1
+    },
+    {
+      "q": 3,
+      "r": -8,
+      "kind": "flowers_white",
+      "dx": -0.28,
+      "dz": -0.25,
+      "rot": 3.7,
+      "scale": 1.05
+    },
+    {
+      "q": 3,
+      "r": -8,
+      "kind": "grass_tuft",
+      "dx": 0.28,
+      "dz": 0.25,
+      "rot": 0.8,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": -8,
+      "kind": "grass_tuft",
+      "dx": -0.25,
+      "dz": 0.25,
+      "rot": 1.9,
+      "scale": 1
+    },
+    {
+      "q": 4,
+      "r": -8,
+      "kind": "pebbles",
+      "dx": 0.25,
+      "dz": -0.25,
+      "rot": 3,
+      "scale": 0.95
+    },
+    {
+      "q": 5,
+      "r": -8,
+      "kind": "flowers_yellow",
+      "dx": -0.28,
+      "dz": -0.25,
+      "rot": 0.3,
+      "scale": 1.05
+    },
+    {
+      "q": 5,
+      "r": -8,
+      "kind": "grass_tuft",
+      "dx": 0.28,
+      "dz": 0.25,
+      "rot": 1.4,
+      "scale": 1
+    },
+    {
+      "q": 6,
+      "r": -8,
+      "kind": "grass_tuft",
+      "dx": -0.25,
+      "dz": 0.25,
+      "rot": 2.5,
+      "scale": 1.05
+    },
+    {
+      "q": 7,
+      "r": -8,
+      "kind": "flowers_yellow",
+      "dx": 0.25,
+      "dz": 0.25,
+      "rot": 3.6,
+      "scale": 1.05
+    },
+    {
+      "q": 7,
+      "r": -7,
+      "kind": "grass_tuft",
+      "dx": -0.28,
+      "dz": -0.25,
+      "rot": 0.9,
+      "scale": 1
+    },
+    {
+      "q": 7,
+      "r": -7,
+      "kind": "pebbles",
+      "dx": 0.28,
+      "dz": 0.25,
+      "rot": 2,
+      "scale": 0.95
+    },
+    {
+      "q": 8,
+      "r": -8,
+      "kind": "grass_tuft",
+      "dx": -0.25,
+      "dz": 0.25,
+      "rot": 3.1,
+      "scale": 1
+    },
+    {
+      "q": 8,
+      "r": -7,
+      "kind": "log",
+      "dx": -0.28,
+      "dz": -0.25,
+      "rot": 0.5,
+      "scale": 0.95
+    },
+    {
+      "q": 8,
+      "r": -7,
+      "kind": "grass_tuft",
+      "dx": 0.28,
+      "dz": 0.25,
+      "rot": 1.6,
+      "scale": 1.05
+    },
+    {
+      "q": 8,
+      "r": -6,
+      "kind": "mushroom",
+      "dx": -0.25,
+      "dz": 0.25,
+      "rot": 2.7,
+      "scale": 0.95
+    },
+    {
+      "q": 8,
+      "r": -6,
+      "kind": "grass_tuft",
+      "dx": 0.25,
+      "dz": -0.25,
+      "rot": 3.8,
+      "scale": 1
+    },
+    {
+      "q": 9,
+      "r": -8,
+      "kind": "grass_tuft",
+      "dx": -0.25,
+      "dz": 0.25,
+      "rot": 0.4,
+      "scale": 1.05
+    },
+    {
+      "q": 9,
+      "r": -6,
+      "kind": "grass_tuft",
+      "dx": -0.25,
+      "dz": -0.25,
+      "rot": 1.5,
+      "scale": 1.05
+    },
+    {
+      "q": 9,
+      "r": -4,
+      "kind": "grass_tuft",
+      "dx": -0.25,
+      "dz": 0.25,
+      "rot": 2.6,
+      "scale": 1
+    },
+    {
+      "q": 9,
+      "r": -2,
+      "kind": "grass_tuft",
+      "dx": -0.25,
+      "dz": -0.25,
+      "rot": 3.7,
+      "scale": 1.05
+    },
+    {
+      "q": 6,
+      "r": 3,
+      "kind": "pebbles",
+      "dx": -0.45,
+      "dz": -0.4,
+      "rot": 0.8,
+      "scale": 1.05
+    },
+    {
+      "q": 6,
+      "r": 3,
+      "kind": "log",
+      "dx": 0.45,
+      "dz": 0.4,
+      "rot": 1.9,
+      "scale": 1
+    },
+    {
+      "q": 2,
+      "r": 6,
+      "kind": "pebbles",
+      "dx": -0.38,
+      "dz": 0.35,
+      "rot": 3,
+      "scale": 0.95
+    },
+    {
+      "q": 2,
+      "r": 6,
+      "kind": "grass_tuft",
+      "dx": 0.38,
+      "dz": -0.35,
+      "rot": 0.3,
+      "scale": 1
+    }
   ]
 }
