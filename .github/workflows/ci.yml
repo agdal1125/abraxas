@@ -32,8 +32,24 @@ jobs:
           node-version-file: .nvmrc
       - run: node scripts/link-agent-config.mjs
 
+  # hashFiles() is not allowed in job-level "if", so detect which parts exist first.
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      scoring: ${{ steps.files.outputs.scoring }}
+      client: ${{ steps.files.outputs.client }}
+      server: ${{ steps.files.outputs.server }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: files
+        run: |
+          echo "scoring=$([ -f content/scoring/items.json ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "client=$([ -f client/package.json ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "server=$([ -f server/go.mod ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
   scoring-data:
-    if: ${{ hashFiles('content/scoring/items.json') != '' }}
+    needs: detect
+    if: needs.detect.outputs.scoring == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,7 +59,8 @@ jobs:
       - run: node scripts/check-scoring.mjs
 
   client:
-    if: ${{ hashFiles('client/package.json') != '' }}
+    needs: detect
+    if: needs.detect.outputs.client == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -58,10 +75,13 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
+      - run: npm run build
+      - run: npm run check:size
       - run: npm audit --omit=dev --audit-level=high
 
   server:
-    if: ${{ hashFiles('server/go.mod') != '' }}
+    needs: detect
+    if: needs.detect.outputs.server == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
