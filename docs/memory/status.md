@@ -13,7 +13,7 @@
 - [ ] 클라이언트 뼈대 (`npm create @phaserjs/game@latest`, TypeScript + Vite)
 - [ ] 서버 뼈대 (Go, `/healthz`, 토큰 검증 미들웨어)
 - [x] 성향 데이터 형식(`content/scoring/SCHEMA.md`) + 검증 스크립트(`npm run check:scoring`)
-- [ ] T001 측정 문항 설계 — 담당 agy, 검수 Claude (`docs/tasks/T001-measurement-items.md`) · 상태: 착수 전
+- [ ] T001 측정 문항 설계 — 담당 agy, 검수 Claude (`docs/tasks/T001-measurement-items.md`) · 상태: 검수 대기
 - [ ] 성향 계산 코어 + 골든 테스트
 - [ ] 수직 슬라이스: 프롤로그 + 에피소드 1개 + 결과 카드
 
@@ -21,4 +21,3 @@
 
 - 16유형 이름·일러스트 (추후)
 - 광고 노출 위치 (H5 Games Ads 승인 필요)
-- 보조축 E의 NPC별 스타팅 값
