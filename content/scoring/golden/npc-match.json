@@ -1,0 +1,228 @@
+{
+  "name": "npc-match",
+  "note": "NPC 장면에서 항상 그 NPC의 기대 극을 고른다. NPC 주제 축 30 → 90, 호감도 20 + 12×6 = 92.",
+  "playId": "npc",
+  "log": [
+    {
+      "id": "prologue_01",
+      "pick": "b"
+    },
+    {
+      "id": "prologue_02",
+      "pick": "a"
+    },
+    {
+      "id": "prologue_03",
+      "pick": "b"
+    },
+    {
+      "id": "lumi_01",
+      "pick": "b"
+    },
+    {
+      "id": "lumi_02",
+      "pick": "a"
+    },
+    {
+      "id": "lumi_03",
+      "pick": "a"
+    },
+    {
+      "id": "lumi_04",
+      "pick": "b"
+    },
+    {
+      "id": "lumi_05",
+      "pick": "b"
+    },
+    {
+      "id": "lumi_06",
+      "pick": "a"
+    },
+    {
+      "id": "interlude_1_01",
+      "pick": "b"
+    },
+    {
+      "id": "interlude_1_02",
+      "pick": "b"
+    },
+    {
+      "id": "moka_01",
+      "pick": "b"
+    },
+    {
+      "id": "moka_02",
+      "pick": "b"
+    },
+    {
+      "id": "moka_03",
+      "pick": "a"
+    },
+    {
+      "id": "moka_04",
+      "pick": "a"
+    },
+    {
+      "id": "moka_05",
+      "pick": "b"
+    },
+    {
+      "id": "moka_06",
+      "pick": "b"
+    },
+    {
+      "id": "interlude_2_01",
+      "pick": "b"
+    },
+    {
+      "id": "interlude_2_02",
+      "pick": "b"
+    },
+    {
+      "id": "echo_01",
+      "pick": "b"
+    },
+    {
+      "id": "echo_02",
+      "pick": "b"
+    },
+    {
+      "id": "echo_03",
+      "pick": "a"
+    },
+    {
+      "id": "echo_04",
+      "pick": "a"
+    },
+    {
+      "id": "echo_05",
+      "pick": "b"
+    },
+    {
+      "id": "echo_06",
+      "pick": "b"
+    },
+    {
+      "id": "interlude_3_01",
+      "pick": "b"
+    },
+    {
+      "id": "interlude_3_02",
+      "pick": "b"
+    },
+    {
+      "id": "or_01",
+      "pick": "a"
+    },
+    {
+      "id": "or_02",
+      "pick": "a"
+    },
+    {
+      "id": "or_03",
+      "pick": "b"
+    },
+    {
+      "id": "or_04",
+      "pick": "b"
+    },
+    {
+      "id": "or_05",
+      "pick": "a"
+    },
+    {
+      "id": "or_06",
+      "pick": "a"
+    },
+    {
+      "id": "festival_01",
+      "pick": "b"
+    },
+    {
+      "id": "festival_02",
+      "pick": "b"
+    },
+    {
+      "id": "festival_03",
+      "pick": "a"
+    },
+    {
+      "id": "festival_04",
+      "pick": "b"
+    },
+    {
+      "id": "festival_05",
+      "pick": "b"
+    },
+    {
+      "id": "gate_a",
+      "pick": "a"
+    },
+    {
+      "id": "gate_b",
+      "pick": "a"
+    },
+    {
+      "id": "gate_c",
+      "pick": "a"
+    },
+    {
+      "id": "gate_d",
+      "pick": "a"
+    }
+  ],
+  "expect": {
+    "s": {
+      "A": -21,
+      "B": 3,
+      "C": 75,
+      "D": 27,
+      "E": 0
+    },
+    "type": "IHVG",
+    "modifier": "between",
+    "npcs": {
+      "lumi": {
+        "s": {
+          "A": 90,
+          "B": 30,
+          "C": 90,
+          "D": 30,
+          "E": 30
+        },
+        "affinity": 92
+      },
+      "moka": {
+        "s": {
+          "A": 30,
+          "B": 90,
+          "C": -30,
+          "D": -90,
+          "E": 30
+        },
+        "affinity": 92
+      },
+      "echo": {
+        "s": {
+          "A": -30,
+          "B": -90,
+          "C": 90,
+          "D": -30,
+          "E": -30
+        },
+        "affinity": 92
+      },
+      "or": {
+        "s": {
+          "A": -90,
+          "B": -30,
+          "C": -30,
+          "D": 90,
+          "E": -30
+        },
+        "affinity": 92
+      }
+    }
+  }
+}

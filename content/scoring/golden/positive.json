@@ -1,0 +1,228 @@
+{
+  "name": "positive",
+  "note": "주축 8문항 +12 = 96, 타이브레이커 +3 → 99. E 6문항 +12 = 72. 모카 D: −30 → −10 → +10(부호 반전) → 다음 문항은 기대 극 +와 일치해 +12, 30.",
+  "playId": "simple",
+  "log": [
+    {
+      "id": "prologue_01",
+      "pick": "a"
+    },
+    {
+      "id": "prologue_02",
+      "pick": "b"
+    },
+    {
+      "id": "prologue_03",
+      "pick": "a"
+    },
+    {
+      "id": "lumi_01",
+      "pick": "b"
+    },
+    {
+      "id": "lumi_02",
+      "pick": "a"
+    },
+    {
+      "id": "lumi_03",
+      "pick": "a"
+    },
+    {
+      "id": "lumi_04",
+      "pick": "b"
+    },
+    {
+      "id": "lumi_05",
+      "pick": "b"
+    },
+    {
+      "id": "lumi_06",
+      "pick": "a"
+    },
+    {
+      "id": "interlude_1_01",
+      "pick": "b"
+    },
+    {
+      "id": "interlude_1_02",
+      "pick": "a"
+    },
+    {
+      "id": "moka_01",
+      "pick": "a"
+    },
+    {
+      "id": "moka_02",
+      "pick": "b"
+    },
+    {
+      "id": "moka_03",
+      "pick": "b"
+    },
+    {
+      "id": "moka_04",
+      "pick": "a"
+    },
+    {
+      "id": "moka_05",
+      "pick": "a"
+    },
+    {
+      "id": "moka_06",
+      "pick": "b"
+    },
+    {
+      "id": "interlude_2_01",
+      "pick": "a"
+    },
+    {
+      "id": "interlude_2_02",
+      "pick": "b"
+    },
+    {
+      "id": "echo_01",
+      "pick": "a"
+    },
+    {
+      "id": "echo_02",
+      "pick": "b"
+    },
+    {
+      "id": "echo_03",
+      "pick": "b"
+    },
+    {
+      "id": "echo_04",
+      "pick": "a"
+    },
+    {
+      "id": "echo_05",
+      "pick": "a"
+    },
+    {
+      "id": "echo_06",
+      "pick": "b"
+    },
+    {
+      "id": "interlude_3_01",
+      "pick": "a"
+    },
+    {
+      "id": "interlude_3_02",
+      "pick": "b"
+    },
+    {
+      "id": "or_01",
+      "pick": "a"
+    },
+    {
+      "id": "or_02",
+      "pick": "b"
+    },
+    {
+      "id": "or_03",
+      "pick": "b"
+    },
+    {
+      "id": "or_04",
+      "pick": "a"
+    },
+    {
+      "id": "or_05",
+      "pick": "a"
+    },
+    {
+      "id": "or_06",
+      "pick": "b"
+    },
+    {
+      "id": "festival_01",
+      "pick": "a"
+    },
+    {
+      "id": "festival_02",
+      "pick": "b"
+    },
+    {
+      "id": "festival_03",
+      "pick": "a"
+    },
+    {
+      "id": "festival_04",
+      "pick": "b"
+    },
+    {
+      "id": "festival_05",
+      "pick": "b"
+    },
+    {
+      "id": "gate_a",
+      "pick": "a"
+    },
+    {
+      "id": "gate_b",
+      "pick": "a"
+    },
+    {
+      "id": "gate_c",
+      "pick": "a"
+    },
+    {
+      "id": "gate_d",
+      "pick": "a"
+    }
+  ],
+  "expect": {
+    "s": {
+      "A": 99,
+      "B": 99,
+      "C": 99,
+      "D": 99,
+      "E": 72
+    },
+    "type": "OHVG",
+    "modifier": "today",
+    "npcs": {
+      "lumi": {
+        "s": {
+          "A": 90,
+          "B": 30,
+          "C": 90,
+          "D": 30,
+          "E": 30
+        },
+        "affinity": 92
+      },
+      "moka": {
+        "s": {
+          "A": 30,
+          "B": 90,
+          "C": -30,
+          "D": 30,
+          "E": 30
+        },
+        "affinity": 68
+      },
+      "echo": {
+        "s": {
+          "A": -30,
+          "B": 30,
+          "C": 90,
+          "D": -30,
+          "E": -30
+        },
+        "affinity": 68
+      },
+      "or": {
+        "s": {
+          "A": 30,
+          "B": -30,
+          "C": -30,
+          "D": 90,
+          "E": -30
+        },
+        "affinity": 68
+      }
+    }
+  }
+}

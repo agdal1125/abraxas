@@ -1,0 +1,228 @@
+{
+  "name": "first",
+  "note": "모든 문항에서 a를 고른다. 주축은 ±12가 상쇄되어 0, 타이브레이커 a(+3)로 OHVG.",
+  "playId": "first",
+  "log": [
+    {
+      "id": "prologue_01",
+      "pick": "a"
+    },
+    {
+      "id": "prologue_02",
+      "pick": "a"
+    },
+    {
+      "id": "prologue_03",
+      "pick": "a"
+    },
+    {
+      "id": "lumi_01",
+      "pick": "a"
+    },
+    {
+      "id": "lumi_02",
+      "pick": "a"
+    },
+    {
+      "id": "lumi_03",
+      "pick": "a"
+    },
+    {
+      "id": "lumi_04",
+      "pick": "a"
+    },
+    {
+      "id": "lumi_05",
+      "pick": "a"
+    },
+    {
+      "id": "lumi_06",
+      "pick": "a"
+    },
+    {
+      "id": "interlude_1_01",
+      "pick": "a"
+    },
+    {
+      "id": "interlude_1_02",
+      "pick": "a"
+    },
+    {
+      "id": "moka_01",
+      "pick": "a"
+    },
+    {
+      "id": "moka_02",
+      "pick": "a"
+    },
+    {
+      "id": "moka_03",
+      "pick": "a"
+    },
+    {
+      "id": "moka_04",
+      "pick": "a"
+    },
+    {
+      "id": "moka_05",
+      "pick": "a"
+    },
+    {
+      "id": "moka_06",
+      "pick": "a"
+    },
+    {
+      "id": "interlude_2_01",
+      "pick": "a"
+    },
+    {
+      "id": "interlude_2_02",
+      "pick": "a"
+    },
+    {
+      "id": "echo_01",
+      "pick": "a"
+    },
+    {
+      "id": "echo_02",
+      "pick": "a"
+    },
+    {
+      "id": "echo_03",
+      "pick": "a"
+    },
+    {
+      "id": "echo_04",
+      "pick": "a"
+    },
+    {
+      "id": "echo_05",
+      "pick": "a"
+    },
+    {
+      "id": "echo_06",
+      "pick": "a"
+    },
+    {
+      "id": "interlude_3_01",
+      "pick": "a"
+    },
+    {
+      "id": "interlude_3_02",
+      "pick": "a"
+    },
+    {
+      "id": "or_01",
+      "pick": "a"
+    },
+    {
+      "id": "or_02",
+      "pick": "a"
+    },
+    {
+      "id": "or_03",
+      "pick": "a"
+    },
+    {
+      "id": "or_04",
+      "pick": "a"
+    },
+    {
+      "id": "or_05",
+      "pick": "a"
+    },
+    {
+      "id": "or_06",
+      "pick": "a"
+    },
+    {
+      "id": "festival_01",
+      "pick": "a"
+    },
+    {
+      "id": "festival_02",
+      "pick": "a"
+    },
+    {
+      "id": "festival_03",
+      "pick": "a"
+    },
+    {
+      "id": "festival_04",
+      "pick": "a"
+    },
+    {
+      "id": "festival_05",
+      "pick": "a"
+    },
+    {
+      "id": "gate_a",
+      "pick": "a"
+    },
+    {
+      "id": "gate_b",
+      "pick": "a"
+    },
+    {
+      "id": "gate_c",
+      "pick": "a"
+    },
+    {
+      "id": "gate_d",
+      "pick": "a"
+    }
+  ],
+  "expect": {
+    "s": {
+      "A": 3,
+      "B": 3,
+      "C": 3,
+      "D": 3,
+      "E": 0
+    },
+    "type": "OHVG",
+    "modifier": "between",
+    "npcs": {
+      "lumi": {
+        "s": {
+          "A": 10,
+          "B": 30,
+          "C": 50,
+          "D": 30,
+          "E": 30
+        },
+        "affinity": 56
+      },
+      "moka": {
+        "s": {
+          "A": 30,
+          "B": 10,
+          "C": -30,
+          "D": -10,
+          "E": 30
+        },
+        "affinity": 44
+      },
+      "echo": {
+        "s": {
+          "A": -30,
+          "B": -10,
+          "C": 10,
+          "D": -30,
+          "E": -30
+        },
+        "affinity": 44
+      },
+      "or": {
+        "s": {
+          "A": -50,
+          "B": -30,
+          "C": -30,
+          "D": 50,
+          "E": -30
+        },
+        "affinity": 68
+      }
+    }
+  }
+}

@@ -15,7 +15,7 @@
 - [x] CI 워크플로 무효 오류 수정 (#6)
 - [x] 성향 데이터 형식(`content/scoring/SCHEMA.md`) + 검증 스크립트(`npm run check:scoring`)
 - [x] T001 측정 문항 설계 — 담당 agy, 검수 Claude (`docs/tasks/T001-measurement-items.md`) · 승인, main 병합(#5)
-- [ ] 성향 계산 코어 + 골든 테스트
+- [x] T005 성향 계산 코어 + 골든 테스트 (TS·Go 일치) — 담당 Codex, 검수 Claude (`docs/reviews/T005-review.md`)
 - [ ] 수직 슬라이스: 프롤로그 + 에피소드 1개 + 결과 카드
 
 ## 열린 질문
