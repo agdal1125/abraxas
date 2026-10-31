@@ -35,3 +35,5 @@
 | 겪어본 함정, 우회법 | `docs/memory/lessons.md` |
 | 날짜별 작업 기록 | `docs/devlog/YYYY-MM-DD.md` |
 | 아트 기준 | `docs/art/style-guide.md` |
+| 작업 지시서 · 검수 보고서 | `docs/tasks/`, `docs/reviews/` |
+| 콘텐츠 구조(흐름·NPC·퀘스트) | `docs/gdd/content-structure.md` |

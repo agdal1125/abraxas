@@ -12,7 +12,9 @@
 - [ ] Phaser 공식 스킬 설치 (`npx skills add phaserjs/phaser`)
 - [ ] 클라이언트 뼈대 (`npm create @phaserjs/game@latest`, TypeScript + Vite)
 - [ ] 서버 뼈대 (Go, `/healthz`, 토큰 검증 미들웨어)
-- [ ] 성향 데이터 스키마(`content/scoring/items.json`) + 골든 테스트
+- [x] 성향 데이터 형식(`content/scoring/SCHEMA.md`) + 검증 스크립트(`npm run check:scoring`)
+- [ ] T001 측정 문항 설계 — 담당 agy, 검수 Claude (`docs/tasks/T001-measurement-items.md`) · 상태: 착수 전
+- [ ] 성향 계산 코어 + 골든 테스트
 - [ ] 수직 슬라이스: 프롤로그 + 에피소드 1개 + 결과 카드
 
 ## 열린 질문

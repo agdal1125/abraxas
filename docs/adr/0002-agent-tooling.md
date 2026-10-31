@@ -7,11 +7,11 @@
 
 | 도구 | 주로 맡는 일 |
 | --- | --- |
-| Antigravity CLI (`agy`) | 저장소 안 구현·테스트·리팩터링, 에셋 생성(이미지 모델), 배포 보조 |
-| Claude (프로젝트 채팅) | 기획서 유지, 설계 검토, 한국어 대사·UI 문구 다듬기, 노션 개발 일지, 코드 리뷰 |
+| Antigravity CLI (`agy`) | 콘텐츠·시스템 설계(작업 지시서 `docs/tasks/` 기준), 구현·테스트, 에셋 생성(이미지 모델), 배포 보조 |
+| Claude (프로젝트 채팅) | 설계·코드 검수와 리뷰(`design-review` 스킬, `docs/reviews/`), 작업 지시서 작성, 기획서 유지, 노션 개발 일지 |
 | 사람 | 측정 수치·디자인 승인, 비밀값·배포·결제, 아트 최종 선택 |
 
-두 에이전트 모두 `AGENTS.md`, `.agents/rules/`, `.agents/skills/`, `docs/memory/`를 읽는다. Antigravity는 `.agents/` 경로를 기본으로 읽고, Claude Code는 `CLAUDE.md`가 `AGENTS.md`를 불러오며 스킬은 `scripts/link-agent-config.sh`로 연결한다.
+두 에이전트 모두 `AGENTS.md`, `.agents/rules/`, `.agents/skills/`, `docs/memory/`를 읽는다. Antigravity는 `.agents/` 경로를 기본으로 읽고, Claude Code는 `CLAUDE.md`가 `AGENTS.md`를 불러오며 스킬은 `npm run setup`(`scripts/link-agent-config.mjs`)으로 연결한다.
 
 ## Antigravity 설정
 

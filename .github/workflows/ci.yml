@@ -32,6 +32,16 @@ jobs:
           node-version-file: .nvmrc
       - run: node scripts/link-agent-config.mjs
 
+  scoring-data:
+    if: ${{ hashFiles('content/scoring/items.json') != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: node scripts/check-scoring.mjs
+
   client:
     if: ${{ hashFiles('client/package.json') != '' }}
     runs-on: ubuntu-latest

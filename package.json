@@ -8,6 +8,7 @@
   },
   "scripts": {
     "setup": "node scripts/link-agent-config.mjs && node scripts/doctor.mjs",
-    "doctor": "node scripts/doctor.mjs"
+    "doctor": "node scripts/doctor.mjs",
+    "check:scoring": "node scripts/check-scoring.mjs"
   }
 }
