@@ -6,3 +6,7 @@ export function nextSegment(segment: string, completed: number): string {
   if (segment === "gate") return "result";
   return "title";
 }
+export function episodeStage(answered: number): "character" | "quest" | "return" | "done" {
+  return answered < 3 ? "character" : answered < 5 ? "quest" : answered < 6 ? "return" : "done";
+}
+
