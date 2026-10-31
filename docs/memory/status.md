@@ -16,8 +16,10 @@
 - [x] 성향 데이터 형식(`content/scoring/SCHEMA.md`) + 검증 스크립트(`npm run check:scoring`)
 - [x] T001 측정 문항 설계 — 담당 agy, 검수 Claude (`docs/tasks/T001-measurement-items.md`) · 승인, main 병합(#5)
 - [x] T005 성향 계산 코어 + 골든 테스트 (TS·Go 일치) — 담당 Codex, 검수 Claude (`docs/reviews/T005-review.md`)
-- [x] 첫 로컬 프로토타입: Title(KO/EN) → 프롤로그 → 허브 → 에피소드 4·막간 3 → 축제 → 기억의 문 → 결과 (`npm --prefix client run dev`, 계약서 `docs/design/prototype-contract.md`). ink는 프롤로그·루미만, 나머지는 items.json 일반 문항 장면
-- [ ] 다음: 모카·에코·오르·막간·축제 ink 대사, 결과 화면 레이아웃(배경과 글자 겹침), 고백 장면, 서버 연동(결과 저장)
+- [x] 1차 프로토타입(2D 대사창) — 사람 피드백으로 폐기: 미연시처럼 보이고 마을 탐색·퀘스트가 없음
+- [x] 2차 프로토타입: Three.js 정사영 쿼터뷰 3D 마을(KayKit CC0), 탭 이동, 공략 A·B·C·D + 퀘스트 NPC(s1j2 등), 프롤로그 → 에피소드(캐릭터→퀘스트 NPC→복귀)×4·막간(호숫가) → 축제 → 기억의 문 → 결과. `npm --prefix client run dev` (#16~#19, 계약서 `docs/design/village-3d-contract.md`)
+- [ ] 디자인 시스템 대화 계속(`docs/art/design-system.md` 정할 것: UI 형태, 팔레트 확정)
+- [ ] 다음: B·C·D·막간·축제 ink 대사, 퀘스트 NPC 고유 대사, 고백 장면, 실제 폰(iOS 사파리·안드로이드·카카오톡 인앱) 성능 확인, 서버 결과 저장
 
 ## 열린 질문
 

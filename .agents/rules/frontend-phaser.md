@@ -1,16 +1,17 @@
 ---
 trigger: glob
 globs: "client/**/*.ts, client/**/*.json, client/vite.config.*"
-description: "Phaser 4 + TypeScript 클라이언트 코드 규칙."
+description: "Three.js + TypeScript 클라이언트 코드 규칙 (ADR-0005로 Phaser에서 전환, 파일 이름은 유지)."
 ---
 
-# 클라이언트 규칙 (Phaser 4 + TypeScript)
+# 클라이언트 규칙 (Three.js + TypeScript)
 
 - TypeScript `strict: true`. `any` 금지(불가피하면 이유 주석).
-- Phaser 4 API만 쓴다. v3 예제를 옮길 때는 Phaser 스킬의 `v3-to-v4-migration`을 확인한다.
+- 렌더링은 Three.js(ADR-0005). 모르는 API는 `node_modules/three` 타입 정의와 공식 문서로 확인한다. 대사·선택지·결과 UI는 HTML 오버레이.
+- 3D 마을 구조와 형식: `docs/design/village-3d-contract.md`.
 - 폴더:
   - `src/scenes/` 씬 (Boot, Preload, Village, Episode, Interlude, MemoryGate, Confession, Result)
-  - `src/core/` 게임 규칙. 성향 계산, 호감도, 진행 상태. **Phaser를 import하지 않는 순수 TS**. Vitest로 테스트한다.
+  - `src/core/` 게임 규칙. 성향 계산, 호감도, 진행 상태. **Three.js·DOM을 import하지 않는 순수 TS**. Vitest로 테스트한다.
   - `src/narrative/` inkjs 연동. 대사·선택지 태그 해석.
   - `src/ui/` 대사창, 선택지 버튼, 결과 카드.
   - `src/net/` 서버 API 호출. 응답은 런타임 검증 후 사용.
