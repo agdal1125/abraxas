@@ -23,6 +23,7 @@ assets/_generated/**/*.webp
 # agent local state
 .claude/settings.local.json
 .claude/skills
+.claude/worktrees/
 
 # os / editor
 .DS_Store
