@@ -9,6 +9,8 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   preload(): void {
+    for (const name of ["village", "festival", "gate"]) this.load.svg(`bg_${name}`, `assets/bg/${name}.svg`);
+    for (const name of ["lumi", "moka", "echo", "or"]) this.load.svg(`char_${name}`, `assets/char/${name}.svg`);
     this.cameras.main.setBackgroundColor("#FFF6E9");
 
     const centerX = this.scale.width / 2;
