@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 1280" fill="none">
+  <metadata>Created for Abraxas prototype. Licensed under CC0 1.0 Public Domain Dedication.</metadata>
+  <!-- Mystical Pastel Sky -->
+  <rect width="720" height="520" fill="#BFE3F2" />
+  <circle cx="360" cy="430" r="290" fill="#FFF6E9" opacity="0.55" />
+  <circle cx="360" cy="430" r="210" fill="#F4A7B9" opacity="0.25" />
+  <!-- Soft Sanctuary Hills -->
+  <ellipse cx="150" cy="520" rx="280" ry="110" fill="#95C590" />
+  <ellipse cx="570" cy="520" rx="280" ry="110" fill="#95C590" />
+  <!-- Ground (Quarter-view lawn, clean bottom 1/4 for dialogue/result) -->
+  <rect y="500" width="720" height="780" fill="#A8D5A2" />
+  <!-- Stone & Dirt Sanctuary Plaza & Stepping Path -->
+  <ellipse cx="360" cy="600" rx="220" ry="95" fill="#E8C49A" />
+  <ellipse cx="360" cy="600" rx="185" ry="76" fill="#FFF6E9" opacity="0.7" />
+  <ellipse cx="360" cy="745" rx="65" ry="24" fill="#E8C49A" />
+  <ellipse cx="360" cy="815" rx="55" ry="20" fill="#E8C49A" />
+  <ellipse cx="360" cy="875" rx="45" ry="16" fill="#E8C49A" />
+  <!-- Mystical Glow Behind the Gate -->
+  <ellipse cx="360" cy="435" rx="135" ry="175" fill="#FFF6E9" opacity="0.85" />
+  <ellipse cx="360" cy="445" rx="95" ry="135" fill="#BFE3F2" opacity="0.65" />
+  <!-- The Gate of Memory (Eggshell Motif Arch & Cracked Shell Monolith) -->
+  <!-- Left Eggshell Pillar -->
+  <path d="M 225 590 C 205 450 255 280 350 250 L 345 310 L 320 335 L 335 370 C 285 410 270 500 285 590 Z" fill="#FFF6E9" stroke="#E8C49A" stroke-width="6" stroke-linejoin="round" />
+  <!-- Right Eggshell Pillar -->
+  <path d="M 495 590 C 515 450 465 280 370 250 L 375 310 L 400 335 L 385 370 C 435 410 450 500 435 590 Z" fill="#FFF6E9" stroke="#E8C49A" stroke-width="6" stroke-linejoin="round" />
+  <!-- Floating Cracked Eggshell Fragments & Central Light -->
+  <polygon points="360,195 342,225 360,218 378,225" fill="#FFF6E9" stroke="#E8C49A" stroke-width="3" />
+  <polygon points="205,340 225,325 220,350" fill="#FFF6E9" />
+  <polygon points="515,340 495,325 500,350" fill="#FFF6E9" />
+  <!-- Central Shimmering Egg / Memory Core inside the Gate -->
+  <path d="M 360 365 C 395 365 415 415 415 455 C 415 495 390 520 360 520 C 330 520 305 495 305 455 C 305 415 325 365 360 365 Z" fill="#FFF6E9" />
+  <!-- Gentle Eggshell Crack Line on Core -->
+  <path d="M 312 450 L 340 435 L 362 458 L 385 438 L 408 452" stroke="#F4A7B9" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <!-- Soft Floating Light Orbs & Pastel Flowers -->
+  <g fill="#FFF6E9" opacity="0.9">
+    <circle cx="260" cy="270" r="8" />
+    <circle cx="460" cy="260" r="7" />
+    <circle cx="180" cy="440" r="6" />
+    <circle cx="540" cy="430" r="6" />
+    <circle cx="360" cy="325" r="9" />
+  </g>
+  <g fill="#F4A7B9">
+    <circle cx="195" cy="610" r="9" />
+    <circle cx="215" cy="628" r="7" />
+    <circle cx="525" cy="610" r="9" />
+    <circle cx="505" cy="628" r="7" />
+    <circle cx="285" cy="665" r="8" />
+    <circle cx="435" cy="665" r="8" />
+  </g>
+</svg>

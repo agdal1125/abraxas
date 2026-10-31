@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 1280" fill="none">
+  <metadata>Created for Abraxas prototype. Licensed under CC0 1.0 Public Domain Dedication.</metadata>
+  <!-- Sky -->
+  <rect width="720" height="420" fill="#BFE3F2" />
+  <circle cx="140" cy="110" r="45" fill="#FFF6E9" opacity="0.9" />
+  <!-- Clouds -->
+  <g fill="#FFF6E9" opacity="0.85">
+    <rect x="420" y="90" width="160" height="48" rx="24" />
+    <circle cx="465" cy="90" r="32" />
+    <circle cx="515" cy="82" r="38" />
+    <rect x="180" y="180" width="120" height="36" rx="18" />
+  </g>
+  <!-- Far Hills -->
+  <ellipse cx="180" cy="410" rx="280" ry="120" fill="#95C590" />
+  <ellipse cx="560" cy="400" rx="300" ry="130" fill="#9FD09A" />
+  <!-- Main Grass Field (Including clean bottom 1/4 for dialogue box) -->
+  <rect y="380" width="720" height="900" fill="#A8D5A2" />
+  <!-- Winding Dirt Road & Village Square (Quarter-view) -->
+  <path d="M 360 380 Q 330 470 360 580 L 410 580 Q 380 470 400 380 Z" fill="#E8C49A" />
+  <ellipse cx="360" cy="650" rx="210" ry="115" fill="#E8C49A" />
+  <ellipse cx="360" cy="650" rx="185" ry="98" fill="#F0D2AE" />
+  <path d="M 310 740 Q 290 980 260 1280 L 450 1280 Q 420 980 410 740 Z" fill="#E8C49A" />
+  <!-- Center Fountain / Well in Square -->
+  <ellipse cx="360" cy="645" rx="52" ry="30" fill="#FFF6E9" />
+  <ellipse cx="360" cy="640" rx="40" ry="22" fill="#BFE3F2" />
+  <!-- House 1 (Left - Bakery vibe) -->
+  <g transform="translate(65, 420)">
+    <ellipse cx="85" cy="145" rx="80" ry="22" fill="#8EBC88" />
+    <rect x="20" y="60" width="130" height="85" rx="10" fill="#FFF6E9" />
+    <path d="M 5 68 L 85 10 L 165 68 Z" fill="#E59872" stroke="#E59872" stroke-width="10" stroke-linejoin="round" />
+    <rect x="68" y="98" width="34" height="47" rx="6" fill="#C69C72" />
+    <rect x="34" y="80" width="22" height="22" rx="4" fill="#BFE3F2" />
+    <rect x="114" y="80" width="22" height="22" rx="4" fill="#BFE3F2" />
+  </g>
+  <!-- House 2 (Right - Library vibe) -->
+  <g transform="translate(510, 400)">
+    <ellipse cx="80" cy="155" rx="75" ry="20" fill="#8EBC88" />
+    <rect x="15" y="65" width="130" height="90" rx="10" fill="#FFF6E9" />
+    <path d="M 0 72 L 80 12 L 160 72 Z" fill="#B8A3E0" stroke="#B8A3E0" stroke-width="10" stroke-linejoin="round" />
+    <rect x="65" y="105" width="32" height="50" rx="6" fill="#A68972" />
+    <circle cx="80" cy="52" r="12" fill="#FFF6E9" />
+  </g>
+  <!-- House 3 (Center-Back - Smithy/Town Hall vibe) -->
+  <g transform="translate(210, 295)">
+    <rect x="15" y="45" width="95" height="65" rx="8" fill="#FFF6E9" />
+    <path d="M 4 50 L 62 8 L 120 50 Z" fill="#F4A7B9" stroke="#F4A7B9" stroke-width="8" stroke-linejoin="round" />
+    <rect x="52" y="75" width="22" height="35" rx="4" fill="#C69C72" />
+  </g>
+  <!-- Chunky Rounded Trees -->
+  <g>
+    <rect x="48" y="660" width="18" height="32" rx="4" fill="#B88E68" />
+    <circle cx="57" cy="640" r="38" fill="#7FB878" />
+    <circle cx="45" cy="630" r="28" fill="#95CC8E" />
+
+    <rect x="635" y="640" width="18" height="32" rx="4" fill="#B88E68" />
+    <circle cx="644" cy="620" r="40" fill="#7FB878" />
+    <circle cx="632" cy="610" r="30" fill="#95CC8E" />
+
+    <rect x="448" y="345" width="14" height="24" rx="3" fill="#B88E68" />
+    <circle cx="455" cy="330" r="28" fill="#7FB878" />
+  </g>
+  <!-- Pastel Flowers (#F4A7B9 & #FFF6E9) -->
+  <g fill="#F4A7B9">
+    <circle cx="150" cy="730" r="9" />
+    <circle cx="170" cy="745" r="7" />
+    <circle cx="550" cy="740" r="9" />
+    <circle cx="530" cy="760" r="7" />
+    <circle cx="240" cy="840" r="8" />
+    <circle cx="490" cy="830" r="8" />
+  </g>
+  <g fill="#FFF6E9">
+    <circle cx="162" cy="722" r="6" />
+    <circle cx="565" cy="752" r="6" />
+  </g>
+</svg>

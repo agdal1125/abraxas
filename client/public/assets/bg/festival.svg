@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 1280" fill="none">
+  <metadata>Created for Abraxas prototype. Licensed under CC0 1.0 Public Domain Dedication.</metadata>
+  <!-- Night Festival Sky (Soft Pastel Dusk/Night) -->
+  <rect width="720" height="420" fill="#3B4268" />
+  <!-- Stars & Moon -->
+  <circle cx="560" cy="110" r="42" fill="#FFF6E9" />
+  <g fill="#FFF6E9" opacity="0.8">
+    <circle cx="120" cy="80" r="3" />
+    <circle cx="240" cy="140" r="4" />
+    <circle cx="380" cy="70" r="3" />
+    <circle cx="460" cy="160" r="2.5" />
+    <circle cx="650" cy="190" r="3.5" />
+    <circle cx="90" cy="210" r="3" />
+  </g>
+  <!-- Far Hills (Evening tint) -->
+  <ellipse cx="180" cy="410" rx="280" ry="120" fill="#6F9B78" />
+  <ellipse cx="560" cy="400" rx="300" ry="130" fill="#7BA882" />
+  <!-- Main Grass Field (Softened for evening, bottom 1/4 clean) -->
+  <rect y="380" width="720" height="900" fill="#88B888" />
+  <rect y="380" width="720" height="900" fill="#A8D5A2" opacity="0.55" />
+  <!-- Winding Dirt Road & Village Square -->
+  <path d="M 360 380 Q 330 470 360 580 L 410 580 Q 380 470 400 380 Z" fill="#E8C49A" />
+  <ellipse cx="360" cy="650" rx="210" ry="115" fill="#E8C49A" />
+  <ellipse cx="360" cy="650" rx="185" ry="98" fill="#FFF6E9" opacity="0.65" />
+  <path d="M 310 740 Q 290 980 260 1280 L 450 1280 Q 420 980 410 740 Z" fill="#E8C49A" />
+  <!-- Center Festival Stage / Fountain -->
+  <ellipse cx="360" cy="645" rx="56" ry="32" fill="#FFF6E9" />
+  <ellipse cx="360" cy="640" rx="42" ry="23" fill="#BFE3F2" />
+  <!-- Houses with Warm Lit Windows -->
+  <g transform="translate(65, 420)">
+    <rect x="20" y="60" width="130" height="85" rx="10" fill="#FFF6E9" />
+    <path d="M 5 68 L 85 10 L 165 68 Z" fill="#F4A7B9" stroke="#F4A7B9" stroke-width="10" stroke-linejoin="round" />
+    <rect x="68" y="98" width="34" height="47" rx="6" fill="#C69C72" />
+    <rect x="34" y="80" width="22" height="22" rx="4" fill="#FFD97D" />
+    <rect x="114" y="80" width="22" height="22" rx="4" fill="#FFD97D" />
+  </g>
+  <g transform="translate(510, 400)">
+    <rect x="15" y="65" width="130" height="90" rx="10" fill="#FFF6E9" />
+    <path d="M 0 72 L 80 12 L 160 72 Z" fill="#BFE3F2" stroke="#BFE3F2" stroke-width="10" stroke-linejoin="round" />
+    <rect x="65" y="105" width="32" height="50" rx="6" fill="#A68972" />
+    <circle cx="80" cy="52" r="12" fill="#FFD97D" />
+  </g>
+  <!-- Festival Bunting Flags & String Lights across the Square -->
+  <path d="M 130 480 Q 360 560 590 470" stroke="#FFF6E9" stroke-width="3" fill="none" />
+  <path d="M 80 590 Q 360 670 640 580" stroke="#FFF6E9" stroke-width="3" fill="none" />
+  <!-- Flags (Row 1) -->
+  <polygon points="190,502 210,507 200,530" fill="#F4A7B9" />
+  <polygon points="260,516 280,520 270,544" fill="#BFE3F2" />
+  <polygon points="330,523 350,524 340,548" fill="#FFF6E9" />
+  <polygon points="400,522 420,520 410,545" fill="#A8D5A2" />
+  <polygon points="470,512 490,507 480,534" fill="#F4A7B9" />
+  <!-- Flags (Row 2) -->
+  <polygon points="150,612 172,617 161,642" fill="#BFE3F2" />
+  <polygon points="240,628 262,632 251,656" fill="#F4A7B9" />
+  <polygon points="350,635 372,635 361,660" fill="#FFF6E9" />
+  <polygon points="460,628 482,624 471,650" fill="#F4A7B9" />
+  <polygon points="550,610 572,604 561,632" fill="#BFE3F2" />
+  <!-- Glowing Festival Lanterns -->
+  <g>
+    <circle cx="225" cy="515" r="22" fill="#FFD97D" opacity="0.35" />
+    <circle cx="225" cy="515" r="11" fill="#FFF6E9" />
+    <circle cx="365" cy="528" r="22" fill="#FFD97D" opacity="0.35" />
+    <circle cx="365" cy="528" r="11" fill="#FFF6E9" />
+    <circle cx="515" cy="505" r="22" fill="#FFD97D" opacity="0.35" />
+    <circle cx="515" cy="505" r="11" fill="#FFF6E9" />
+
+    <circle cx="205" cy="626" r="24" fill="#F4A7B9" opacity="0.4" />
+    <circle cx="205" cy="626" r="12" fill="#FFF6E9" />
+    <circle cx="305" cy="636" r="24" fill="#FFD97D" opacity="0.4" />
+    <circle cx="305" cy="636" r="12" fill="#FFF6E9" />
+    <circle cx="415" cy="634" r="24" fill="#FFD97D" opacity="0.4" />
+    <circle cx="415" cy="634" r="12" fill="#FFF6E9" />
+    <circle cx="515" cy="620" r="24" fill="#F4A7B9" opacity="0.4" />
+    <circle cx="515" cy="620" r="12" fill="#FFF6E9" />
+  </g>
+  <!-- Standing Lantern Posts along the path -->
+  <g>
+    <rect x="195" y="750" width="8" height="45" rx="3" fill="#6E5544" />
+    <circle cx="199" cy="745" r="22" fill="#FFD97D" opacity="0.4" />
+    <circle cx="199" cy="745" r="11" fill="#FFF6E9" />
+
+    <rect x="515" y="750" width="8" height="45" rx="3" fill="#6E5544" />
+    <circle cx="519" cy="745" r="22" fill="#FFD97D" opacity="0.4" />
+    <circle cx="519" cy="745" r="11" fill="#FFF6E9" />
+  </g>
+</svg>
