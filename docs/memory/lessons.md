@@ -17,3 +17,5 @@
 - 클라이언트 · KayKit 팩마다 모델 축척이 다름(medieval 집 0.93, restaurant 상자 2.0, furniture 램프 2.5) → 팩별 기본 축척(medieval 1, city 0.6, furniture 0.25, restaurant 0.12), 캐릭터 0.4배 (2026-10-31)
 - 검증 · 3D 화면은 좌표 탭 자동화가 어려움 → 개발 모드 전용 `window.__abraxas` 훅으로 상호작용을 호출하고 DOM 오버레이 버튼은 JS로 클릭. 탭 이동은 CDP `Input.dispatchTouchEvent`로 따로 확인 (2026-10-31)
 - 에셋 · Kenney 사이트 zip 링크 자동 추출은 봇 차단 우회로 막힘 → 공식 GitHub(KayKit-Game-Assets 등) 배포본을 sparse checkout (2026-10-31)
+- 에이전트 · `codex exec -i a.png -i b.png "프롬프트"`에서 프롬프트가 이미지 인자로 먹혀 "No prompt provided"로 종료 → `-i`가 여러 값을 받는 옵션 → 프롬프트를 파일로 두고 표준 입력(`< prompt.md`)으로 넘긴다 (2026-11-01)
+- 클라이언트 · 줌인하면 KayKit 헥스 타일 테두리가 격자로 도드라짐 → 풀·길 타일은 걷기 데이터로만 쓰고 연속 땅 평면 + 코드 생성 텍스처로 렌더, 땅 바탕색은 KayKit 풀 색을 텍스처에서 읽어 맞춤 (2026-11-01)
