@@ -1,0 +1,228 @@
+{
+  "name": "second",
+  "note": "측정 문항은 모두 b, 타이브레이커는 a(+3). 주축 0이라 타이브레이커가 OHVG를 정한다. first와 NPC 결과만 다르다.",
+  "playId": "second",
+  "log": [
+    {
+      "id": "gate_a",
+      "pick": "a"
+    },
+    {
+      "id": "gate_b",
+      "pick": "a"
+    },
+    {
+      "id": "gate_c",
+      "pick": "a"
+    },
+    {
+      "id": "gate_d",
+      "pick": "a"
+    },
+    {
+      "id": "prologue_01",
+      "pick": "b"
+    },
+    {
+      "id": "prologue_02",
+      "pick": "b"
+    },
+    {
+      "id": "prologue_03",
+      "pick": "b"
+    },
+    {
+      "id": "lumi_01",
+      "pick": "b"
+    },
+    {
+      "id": "lumi_02",
+      "pick": "b"
+    },
+    {
+      "id": "lumi_03",
+      "pick": "b"
+    },
+    {
+      "id": "lumi_04",
+      "pick": "b"
+    },
+    {
+      "id": "lumi_05",
+      "pick": "b"
+    },
+    {
+      "id": "lumi_06",
+      "pick": "b"
+    },
+    {
+      "id": "interlude_1_01",
+      "pick": "b"
+    },
+    {
+      "id": "interlude_1_02",
+      "pick": "b"
+    },
+    {
+      "id": "moka_01",
+      "pick": "b"
+    },
+    {
+      "id": "moka_02",
+      "pick": "b"
+    },
+    {
+      "id": "moka_03",
+      "pick": "b"
+    },
+    {
+      "id": "moka_04",
+      "pick": "b"
+    },
+    {
+      "id": "moka_05",
+      "pick": "b"
+    },
+    {
+      "id": "moka_06",
+      "pick": "b"
+    },
+    {
+      "id": "interlude_2_01",
+      "pick": "b"
+    },
+    {
+      "id": "interlude_2_02",
+      "pick": "b"
+    },
+    {
+      "id": "echo_01",
+      "pick": "b"
+    },
+    {
+      "id": "echo_02",
+      "pick": "b"
+    },
+    {
+      "id": "echo_03",
+      "pick": "b"
+    },
+    {
+      "id": "echo_04",
+      "pick": "b"
+    },
+    {
+      "id": "echo_05",
+      "pick": "b"
+    },
+    {
+      "id": "echo_06",
+      "pick": "b"
+    },
+    {
+      "id": "interlude_3_01",
+      "pick": "b"
+    },
+    {
+      "id": "interlude_3_02",
+      "pick": "b"
+    },
+    {
+      "id": "or_01",
+      "pick": "b"
+    },
+    {
+      "id": "or_02",
+      "pick": "b"
+    },
+    {
+      "id": "or_03",
+      "pick": "b"
+    },
+    {
+      "id": "or_04",
+      "pick": "b"
+    },
+    {
+      "id": "or_05",
+      "pick": "b"
+    },
+    {
+      "id": "or_06",
+      "pick": "b"
+    },
+    {
+      "id": "festival_01",
+      "pick": "b"
+    },
+    {
+      "id": "festival_02",
+      "pick": "b"
+    },
+    {
+      "id": "festival_03",
+      "pick": "b"
+    },
+    {
+      "id": "festival_04",
+      "pick": "b"
+    },
+    {
+      "id": "festival_05",
+      "pick": "b"
+    }
+  ],
+  "expect": {
+    "s": {
+      "A": 3,
+      "B": 3,
+      "C": 3,
+      "D": 3,
+      "E": 0
+    },
+    "type": "OHVG",
+    "modifier": "between",
+    "npcs": {
+      "lumi": {
+        "s": {
+          "A": 50,
+          "B": 30,
+          "C": 10,
+          "D": 30,
+          "E": 30
+        },
+        "affinity": 56
+      },
+      "moka": {
+        "s": {
+          "A": 30,
+          "B": 50,
+          "C": -30,
+          "D": -50,
+          "E": 30
+        },
+        "affinity": 68
+      },
+      "echo": {
+        "s": {
+          "A": -30,
+          "B": -50,
+          "C": 50,
+          "D": -30,
+          "E": -30
+        },
+        "affinity": 68
+      },
+      "or": {
+        "s": {
+          "A": -10,
+          "B": -30,
+          "C": -30,
+          "D": 10,
+          "E": -30
+        },
+        "affinity": 44
+      }
+    }
+  }
+}

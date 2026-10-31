@@ -1,0 +1,9 @@
+{
+  "scoreLimit": 100,
+  "tieThreshold": 10,
+  "npcStep": 20,
+  "affinityStart": 20,
+  "affinityGain": 12,
+  "affinityMin": 0,
+  "affinityMax": 100
+}

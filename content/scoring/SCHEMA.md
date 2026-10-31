@@ -55,3 +55,10 @@
 ```
 
 - `start`의 A~D는 `game-design-policy.md` 값과 같아야 한다. E는 설계에서 정하고 근거를 `docs/design/`에 적는다.
+
+## `rules.json`
+
+정책 수치를 코드 대신 데이터로 둔다. 값은 `game-design-policy.md`와 같아야 하고 `check-scoring.mjs`가 확인한다.
+
+- `scoreLimit`: 플레이어·NPC 성향 범위(±100), `tieThreshold`: 경계 구간과 수식어 기준(10)
+- `npcStep`: NPC 성향 이동 폭(20), `affinityStart`·`affinityGain`·`affinityMin`·`affinityMax`: 호감도 시작(20)·일치 시 증가(+12)·범위(0~100)
