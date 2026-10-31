@@ -47,9 +47,30 @@ export class Village {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); app.append(this.renderer.domElement);
     for (const prop of map.props) this.walking.delete(key(prop));
     const sea = new THREE.Mesh(new THREE.PlaneGeometry(500, 500), new THREE.MeshBasicMaterial({ color: 0x5bc0f8 })); sea.rotation.x = -Math.PI / 2; sea.position.y = -.2; this.scene.add(sea);
-    for (const tile of map.tiles) if (!tile.model.includes("hex_water")) this.placeModel(tile.model, tile, 0, 1, false, tile.model.includes("hex_grass"));
+    void this.loader.loadAsync("./assets/kaykit/medieval/hex_grass.gltf").then(gltf => {
+      gltf.scene.traverse(object => {
+        if (!(object instanceof THREE.Mesh) || !(object.material instanceof THREE.MeshStandardMaterial) || !object.material.map) return;
+        const texture = this.brightTexture(object.material.map), uv = object.geometry.getAttribute("uv"), normal = object.geometry.getAttribute("normal");
+        for (let i = 0; i < normal.count; i++) if (normal.getY(i) > .9) {
+          const image = texture.image as HTMLCanvasElement, pixel = image.getContext("2d")!.getImageData(Math.floor(uv.getX(i) * image.width), Math.floor(uv.getY(i) * image.height), 1, 1).data;
+          this.addGround(`rgb(${pixel[0]},${pixel[1]},${pixel[2]})`); this.dirty = true; break;
+        }
+      });
+    }).catch(() => { this.addGround("#5cc96b"); this.dirty = true; });
+    for (const tile of map.tiles) if (!tile.model.includes("hex_water") && tile.model !== "medieval/hex_grass" && !tile.model.startsWith("medieval/hex_road_")) this.placeModel(tile.model, tile);
     for (const prop of map.props) this.placeModel(prop.model, prop, prop.rot, prop.scale, true);
-    addDecor(this.scene, map.decor ?? [], world, entry => this.placeModel(entry.kind.slice(6), entry, entry.rot, entry.scale, true, false, entry.dx, entry.dz));
+    const vegetation: Decor[] = [];
+    let seed = 1937; const random = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296);
+    const protectedCenters = [...map.tiles.filter(t => t.model.startsWith("medieval/hex_road_")), ...map.actors.flatMap(a => { const h = a.zone ? map.zones[a.zone] : a.q !== undefined && a.r !== undefined ? { q: a.q, r: a.r } : undefined; return h ? [h] : []; })].map(world);
+    for (const tile of map.tiles) if (tile.model === "medieval/hex_grass" && this.walking.has(key(tile))) {
+      const origin = world(tile), grass = 4 + Math.floor(random() * 4), flowers = Math.floor(random() * 3);
+      for (let i = 0; i < grass + flowers; i++) {
+        let dx: number, dz: number;
+        do { dx = (random() * 2 - 1) * .8; dz = (random() * 2 - 1) * .7; } while (protectedCenters.some(p => (p.x - origin.x - dx) ** 2 + (p.z - origin.z - dz) ** 2 < .35 ** 2));
+        vegetation.push({ ...tile, kind: i < grass ? "grass_tuft" : ["flowers_white", "flowers_yellow", "flowers_pink"][Math.floor(random() * 3)]!, dx, dz, rot: random() * Math.PI * 2, scale: i < grass ? .65 + random() * .3 : .25 + random() * .15 });
+      }
+    }
+    addDecor(this.scene, [...(map.decor ?? []), ...vegetation], world, entry => this.placeModel(entry.kind.slice(6), entry, entry.rot, entry.scale, true, false, entry.dx, entry.dz));
     this.player.position.copy(world(this.position)); this.cameraTarget.copy(this.player.position); this.scene.add(this.player); this.addShadow(this.player);
     this.ripple.rotation.x = -Math.PI / 2; this.ripple.visible = false; this.scene.add(this.ripple);
     for (const actor of map.actors) {
@@ -71,6 +92,34 @@ export class Village {
   }
   setEnabled(value: boolean): void { this.enabled = value; if (value) this.talking = undefined; else { this.path = []; this.moving = false; this.afterMove = undefined; } this.dirty = true; }
   setAvailable(ids: string[]): void { for (const [id, actor] of this.actors) actor.marker.visible = ids.includes(id); this.dirty = true; }
+  private addGround(grassColor: string): void {
+    const land = map.tiles.filter(t => !t.model.includes("hex_water")); if (!land.length) return;
+    const points = land.map(world), minX = Math.min(...points.map(p => p.x)) - 1, maxX = Math.max(...points.map(p => p.x)) + 1, minZ = Math.min(...points.map(p => p.z)) - HEX, maxZ = Math.max(...points.map(p => p.z)) + HEX;
+    const canvas = document.createElement("canvas"); const span = Math.max(maxX - minX, maxZ - minZ); canvas.width = Math.round(2048 * (maxX - minX) / span); canvas.height = Math.round(2048 * (maxZ - minZ) / span); const ctx = canvas.getContext("2d")!;
+    const x = (n: number) => (n - minX) / (maxX - minX) * canvas.width, z = (n: number) => (n - minZ) / (maxZ - minZ) * canvas.height, unit = canvas.width / (maxX - minX);
+    ctx.beginPath(); for (const p of points) { for (let i = 0; i < 6; i++) { const a = Math.PI / 3 * i; const px = x(p.x + Math.sin(a) * HEX), pz = z(p.z + Math.cos(a) * HEX); if (!i) ctx.moveTo(px, pz); else ctx.lineTo(px, pz); } ctx.closePath(); } ctx.clip();
+    ctx.fillStyle = grassColor; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    let seed = 7123; const random = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296);
+    for (let i = 0; i < 180; i++) { const px = random() * canvas.width, pz = random() * canvas.height, radius = (1 + random() * 2) * unit; const gradient = ctx.createRadialGradient(px, pz, 0, px, pz, radius); gradient.addColorStop(0, i % 2 ? "rgba(255,255,255,.09)" : "rgba(0,0,0,.08)"); gradient.addColorStop(1, "rgba(255,255,255,0)"); ctx.fillStyle = gradient; ctx.fillRect(px - radius, pz - radius, radius * 2, radius * 2); }
+    for (let i = 0; i < 9000; i++) { const px = random() * canvas.width, pz = random() * canvas.height; ctx.strokeStyle = i % 2 ? "rgba(0,0,0,.16)" : "rgba(255,255,255,.18)"; ctx.lineWidth = 1 + random() * 2; ctx.beginPath(); ctx.moveTo(px, pz); ctx.lineTo(px + (random() - .5) * 5, pz - 3 - random() * 7); ctx.stroke(); }
+    const roads = map.tiles.filter(t => t.model.startsWith("medieval/hex_road_")), roadKeys = new Set(roads.map(key));
+    ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#e8b46a"; ctx.fillStyle = "#e8b46a"; ctx.shadowColor = "#e8b46a"; ctx.shadowBlur = unit * .22; ctx.lineWidth = unit * .55;
+    const edge = (a: Hex, b: Hex) => [key(a), key(b)].sort().join("|");
+    for (const road of roads) for (const [dq, dr] of dirs.slice(0, 3)) {
+      const next = { q: road.q + dq, r: road.r + dr }; if (!roadKeys.has(key(next))) continue;
+      const currentEdge = edge(road, next);
+      const omit = dirs.some(([q, r]) => {
+        const third = { q: road.q + q, r: road.r + r };
+        return roadKeys.has(key(third)) && dirs.some(([nq, nr]) => next.q + nq === third.q && next.r + nr === third.r)
+          && currentEdge > edge(road, third) && currentEdge > edge(next, third);
+      });
+      if (omit) continue;
+      const p = world(road), n = world(next); ctx.beginPath(); ctx.moveTo(x(p.x), z(p.z)); ctx.lineTo(x(n.x), z(n.z)); ctx.stroke();
+    }
+    ctx.shadowBlur = 0; for (const road of roads) { const p = world(road); for (let i = 0; i < 5; i++) { ctx.fillStyle = i % 2 ? "rgba(130,100,73,.32)" : "rgba(255,240,201,.55)"; ctx.beginPath(); ctx.ellipse(x(p.x + (random() - .5) * .65), z(p.z + (random() - .5) * .65), 1 + random() * 2, 1 + random() * 1.5, 0, 0, Math.PI * 2); ctx.fill(); } }
+    const texture = new THREE.CanvasTexture(canvas); texture.colorSpace = THREE.SRGBColorSpace;
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(maxX - minX, maxZ - minZ), new THREE.MeshStandardMaterial({ map: texture, transparent: true, roughness: 1 })); ground.rotation.x = -Math.PI / 2; ground.position.set((minX + maxX) / 2, 0, (minZ + maxZ) / 2); this.scene.add(ground);
+  }
   private label(text: string, y: number): THREE.Sprite {
     const canvas = document.createElement("canvas"); canvas.width = text === "!" ? 128 : 512; canvas.height = 128; const ctx = canvas.getContext("2d")!;
     ctx.fillStyle = text === "!" ? "#FFD23F" : "#ffffff"; ctx.beginPath(); if (text === "!") ctx.arc(64, 64, 60, 0, Math.PI * 2); else ctx.roundRect(0, 0, 512, 128, 24); ctx.fill();
