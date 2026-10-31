@@ -16,7 +16,8 @@
 - [x] 성향 데이터 형식(`content/scoring/SCHEMA.md`) + 검증 스크립트(`npm run check:scoring`)
 - [x] T001 측정 문항 설계 — 담당 agy, 검수 Claude (`docs/tasks/T001-measurement-items.md`) · 승인, main 병합(#5)
 - [x] T005 성향 계산 코어 + 골든 테스트 (TS·Go 일치) — 담당 Codex, 검수 Claude (`docs/reviews/T005-review.md`)
-- [ ] 수직 슬라이스: 프롤로그 + 에피소드 1개 + 결과 카드
+- [x] 첫 로컬 프로토타입: Title(KO/EN) → 프롤로그 → 허브 → 에피소드 4·막간 3 → 축제 → 기억의 문 → 결과 (`npm --prefix client run dev`, 계약서 `docs/design/prototype-contract.md`). ink는 프롤로그·루미만, 나머지는 items.json 일반 문항 장면
+- [ ] 다음: 모카·에코·오르·막간·축제 ink 대사, 결과 화면 레이아웃(배경과 글자 겹침), 고백 장면, 서버 연동(결과 저장)
 
 ## 열린 질문
 

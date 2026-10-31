@@ -8,3 +8,8 @@
 - 서버 · `go 1.27.0` + `toolchain go1.27.0`에서 `govulncheck`가 표준 라이브러리 `net/http` 취약점 5건(GO-2026-6603 등)으로 실패하고 `go mod tidy`가 동일 버전 `toolchain` 줄을 제거함 → Go 1.27.0 표준 라이브러리 취약점이 1.27.2 이상에서 수정됨 → `go.mod`에 `go 1.27.0`과 `toolchain go1.27.3`을 함께 명시해 패치 툴체인을 고정하고 `govulncheck` 통과
 - 에이전트 · `agy -p`(headless)로 작업을 맡기면 명령·파일 쓰기가 전부 자동 거부되어 아무것도 안 하고 끝남 → 이 계정은 `--mode auto` 불가, 허용 규칙 `command(...)`은 **명령 문자열 정확 일치**만 통과(`command(go)`·`command(go *)` 불가), 셸 연산자(`&&`,`|`)는 별도 안전 검사로 차단 → `--settings <json>`에 실행할 명령을 정확한 문자열로 나열하고, 파일 쓰기는 `write_file(C:/절대/경로/디렉터리)`(슬래시, 디렉터리 접두 일치)로 허용. 프롬프트에 허용 명령 목록과 `go -C server ...` 형식을 명시하고, 커밋은 검수자가 한다 (2026-10-31 확인)
 - 에이전트 · Codex가 Windows에서 쓴 한국어가 파일에 `?`로 저장됨 → PowerShell 기본 인코딩(ANSI)으로 파일을 씀 → Codex 지시문에 "파일은 UTF-8로, PowerShell `Set-Content`/`Out-File` 대신 패치 도구로 쓴다"를 넣고, 검수 때 `grep -rl "???"`로 확인한다 (2026-10-31)
+- 대사 · ink 측정 선택지 태그가 런타임에서 빈 배열 → `* [문구] # tag`처럼 대괄호 뒤에 둔 태그는 inkjs가 선택지 태그로 읽지 않음 → `* [문구 # item:x # pick:a]`처럼 대괄호 안에 둔다. `compile-ink.mjs`가 잘못된 위치를 오류로 막는다 (2026-10-31)
+- 클라이언트 · SVG 배경·초상이 검게 그려지고 콘솔에 `texImage2D: bad image data` → SVG에 width/height 속성이 없음(viewBox만) → `this.load.svg(key, url, { width, height })`로 크기 지정 (2026-10-31)
+- 클라이언트 · 대사 중 빈 곳을 누르면 타이틀로 돌아감 → `children.removeAll(true)` 뒤에도 이전 화면 버튼의 `once(pointerdown)`이 실행됨 → 화면을 그릴 때마다 token을 올리고 핸들러는 같은 token일 때만 실행 (2026-10-31)
+- 에이전트 · im-not-ai `--copy` 설치 시 `$humanize-korean` 스크립트가 `~/scripts/...`를 찾다 실패 → 스킬 안 스크립트가 저장소 루트 스크립트를 상대 경로로 부르는 shim → `~/tools/im-not-ai` 클론을 `~/.codex/skills/humanize-korean`에 Windows junction으로 연결 (2026-10-31)
+- 검증 · 로컬 화면 자동 확인은 헤드리스 Edge + CDP(Node 내장 WebSocket)로 가능. 프로필은 절대 경로 `--user-data-dir`, 클릭 전 `mouseMoved`, 클릭 간격 300ms 이상 (2026-10-31)

@@ -19,9 +19,11 @@ for (const language of languages.filter((entry) => entry.isDirectory())) {
     if (!file.isFile() || !file.name.endsWith(".ink")) continue;
     const input = join(directory, file.name);
     try {
-      const compiler = new Compiler(await readFile(input, "utf8"));
+      const sourceText = await readFile(input, "utf8");
+      const compiler = new Compiler(sourceText);
       const story = compiler.Compile();
       if (compiler.errors.length) throw new Error(compiler.errors.join("\n"));
+      if (/\]\s*#[^\r\n]*\bitem\s*:/m.test(sourceText)) throw new Error("Item tag must be inside choice brackets");
       const output = join(client, "public/ink", language.name, `${file.name.slice(0, -4)}.json`);
       await mkdir(dirname(output), { recursive: true });
       await writeFile(output, story.ToJson(), "utf8");
