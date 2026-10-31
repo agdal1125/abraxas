@@ -21,6 +21,10 @@
 
 ## 작업 방식
 
+- 역할: 코딩은 Codex CLI(`gpt-6.1-terra`), 디자인·아트는 agy(`gemini-4-argon-medium`), 지휘·검수·병합·최종 판단은 Claude. 절차는 `.agents/rules/delegation.md` (ADR-0004).
+- 작업마다 브랜치·worktree를 나눠 병렬로 진행하고 각각 PR로 올린다.
+- 테스트는 핵심만(계산 규칙, 신뢰 경계, 실제 회귀). 요청 범위 밖 추상화를 만들지 않는다.
+
 - 큰 변경은 구현 전에 계획을 먼저 보여주고 확인받는다.
 - 하나의 PR에는 하나의 목적만 담는다.
 - 끝났다고 말하기 전에: 클라이언트 `npm run typecheck && npm test`, 서버 `go vet ./... && go test ./... && govulncheck ./...`.

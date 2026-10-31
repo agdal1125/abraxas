@@ -27,5 +27,5 @@
 - 2026-10-31 · 서버 · Go(표준 라이브러리 중심) · 보안(메모리 안전, 적은 의존성) 우선, Rust 대비 검토 비용 · ADR-0001
 - 2026-10-31 · 인프라 · Firebase Hosting + Anonymous Auth + Firestore + Cloud Run · ADR-0001
 - 2026-10-31 · 에이전트 · 규칙·스킬 원본은 `.agents/`, 공유 메모리 원본은 `docs/memory/` · ADR-0002
-- 2026-10-31 · 역할 · 설계는 로컬 에이전트(agy), 검수·리뷰는 Claude, 최종 승인은 사람 · 사용자 지시 · 대화
+- 2026-10-31 · 역할 · 코딩은 Codex CLI(`gpt-6.1-terra`, 난이도별 effort, ponytail), 디자인·아트는 agy(argon → 한도 시 gemini-3.8), 지휘·검수·PR 병합·최종 판단은 Claude(Opus). 병렬 worktree·PR 단위 진행, 핵심 테스트만 · 사용자 지시 · ADR-0004
 - 2026-10-31 · 작업 환경 · macOS·Windows 병행 지원, 저장소 스크립트는 Node로 통일, ink 컴파일은 inkjs 내장 컴파일러 · 병행 비용이 작음 · ADR-0003

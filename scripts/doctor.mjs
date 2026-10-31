@@ -31,6 +31,8 @@ const checks = [
   { name: "git", required: true, get: () => run("git", ["--version"])?.match(/(\d+\.\d+(\.\d+)?)/)?.[1] },
   { name: "go", required: true, min: "1.27", get: () => run("go", ["version"])?.match(/go(\d+\.\d+(\.\d+)?)/)?.[1] },
   { name: "agy (Antigravity CLI)", required: true, get: () => run("agy", ["--version"])?.match(/(\d+\.\d+(\.\d+)?)/)?.[1] },
+  { name: "codex (Codex CLI)", required: true, get: () => run("codex", ["--version"])?.match(/(\d+\.\d+(\.\d+)?)/)?.[1] },
+  { name: "gh (GitHub CLI)", required: true, get: () => run("gh", ["--version"])?.match(/(\d+\.\d+(\.\d+)?)/)?.[1] },
   { name: "firebase", required: false, get: () => run("firebase", ["--version"])?.match(/(\d+\.\d+(\.\d+)?)/)?.[1] },
   { name: "gcloud", required: false, get: () => run("gcloud", ["--version"])?.match(/Google Cloud SDK (\d+\.\d+(\.\d+)?)/)?.[1] },
 ];
