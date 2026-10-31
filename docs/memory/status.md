@@ -10,10 +10,10 @@
 - [x] macOS·Windows 병행 작업 세팅 (ADR-0003)
 - [ ] 개발 환경 세팅: Node 22+, Go 1.27, agy → `npm run setup` (Firebase CLI·gcloud는 배포 단계에서)
 - [ ] Phaser 공식 스킬 설치 (`npx skills add phaserjs/phaser`)
-- [ ] 클라이언트 뼈대 (`npm create @phaserjs/game@latest`, TypeScript + Vite)
+- [ ] T004 클라이언트 뼈대 — 담당 agy, 검수 Claude (`docs/tasks/T004-client-skeleton.md`) · 상태: 검수 승인, PR 대기
 - [ ] 서버 뼈대 (Go, `/healthz`, 토큰 검증 미들웨어)
 - [x] 성향 데이터 형식(`content/scoring/SCHEMA.md`) + 검증 스크립트(`npm run check:scoring`)
-- [ ] T001 측정 문항 설계 — 담당 agy, 검수 Claude (`docs/tasks/T001-measurement-items.md`) · 상태: 검수 대기
+- [x] T001 측정 문항 설계 — 담당 agy, 검수 Claude (`docs/tasks/T001-measurement-items.md`) · 승인, main 병합(#5)
 - [ ] 성향 계산 코어 + 골든 테스트
 - [ ] 수직 슬라이스: 프롤로그 + 에피소드 1개 + 결과 카드
 
