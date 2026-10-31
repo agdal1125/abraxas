@@ -21,35 +21,35 @@
     }
   },
   "lumi_01": {
-    "situation": "Lumi welcomes you to the festival tent and asks where you would like to help.",
+    "situation": "A welcomes you to the festival tent and asks where you would like to help.",
     "picks": {
       "a": "Tie ribbons quietly at a table",
       "b": "Join the group weaving flower garlands"
     }
   },
   "lumi_02": {
-    "situation": "Lumi lays out two ideas for the festival’s main stage.",
+    "situation": "A lays out two ideas for the festival’s main stage.",
     "picks": {
       "a": "Put on a new colorful shadow play",
       "b": "Continue the traditional lantern play"
     }
   },
   "lumi_03": {
-    "situation": "The village needs to hear when the festival starts. Lumi offers notices and a megaphone.",
+    "situation": "The village needs to hear when the festival starts. A offers notices and a megaphone.",
     "picks": {
       "a": "Tell villagers in the market streets",
       "b": "Post notices on boards and mailboxes"
     }
   },
   "lumi_04": {
-    "situation": "One garland is missing from the stage. Lumi asks how to replace it.",
+    "situation": "One garland is missing from the stage. A asks how to replace it.",
     "picks": {
       "a": "Fetch familiar ribbons from storage",
       "b": "Weave something new from leaves and pinecones"
     }
   },
   "lumi_05": {
-    "situation": "It is time to welcome festival guests. Lumi asks how you would like to greet them.",
+    "situation": "It is time to welcome festival guests. A asks how you would like to greet them.",
     "picks": {
       "a": "Hand out welcome cards by the entrance",
       "b": "Call out greetings from the square"
@@ -77,7 +77,7 @@
     }
   },
   "moka_01": {
-    "situation": "Moka hands you a basket of warm walnut pastries to deliver.",
+    "situation": "B hands you a basket of warm walnut pastries to deliver.",
     "picks": {
       "a": "Run to deliver them while they are warm",
       "b": "Walk carefully to keep them intact"
@@ -105,14 +105,14 @@
     }
   },
   "moka_05": {
-    "situation": "Moka asks how many special festival pies to bake.",
+    "situation": "B asks how many special festival pies to bake.",
     "picks": {
       "a": "Bake extra for a possible rush",
       "b": "Bake the reserved amount to avoid waste"
     }
   },
   "moka_06": {
-    "situation": "Moka asks what you think of some slightly crooked flower cookies.",
+    "situation": "B asks what you think of some slightly crooked flower cookies.",
     "picks": {
       "a": "Point out what may have caused the tilt",
       "b": "Praise the care and delicious aroma"
@@ -133,7 +133,7 @@
     }
   },
   "echo_01": {
-    "situation": "A returned picture book has a tea stain. Echo asks what to tell the borrower.",
+    "situation": "A returned picture book has a tea stain. C asks what to tell the borrower.",
     "picks": {
       "a": "Reassure them that it is all right",
       "b": "Include the library’s borrowing rules"
@@ -147,28 +147,28 @@
     }
   },
   "echo_03": {
-    "situation": "A neighbor donated a worn recipe notebook. Echo asks where to put it.",
+    "situation": "A neighbor donated a worn recipe notebook. C asks where to put it.",
     "picks": {
       "a": "File it with cookbooks by category",
       "b": "Display it by the entrance with its story"
     }
   },
   "echo_04": {
-    "situation": "Before sorting the shelves, Echo asks how the books should be arranged.",
+    "situation": "Before sorting the shelves, C asks how the books should be arranged.",
     "picks": {
       "a": "Make new groups by color and theme",
       "b": "Keep the familiar library arrangement"
     }
   },
   "echo_05": {
-    "situation": "You and Echo read an old story found after sorting the shelves.",
+    "situation": "You and C read an old story found after sorting the shelves.",
     "picks": {
       "a": "Remember how the characters comforted each other",
       "b": "Admire how the clues fit together"
     }
   },
   "echo_06": {
-    "situation": "The last page of a village legend is blank. Echo asks how to display it.",
+    "situation": "The last page of a village legend is blank. C asks how to display it.",
     "picks": {
       "a": "Preserve the book behind glass",
       "b": "Let readers add their own endings"
@@ -189,14 +189,14 @@
     }
   },
   "or_01": {
-    "situation": "Or heats bronze for a festival bell and asks how strong the fire should be.",
+    "situation": "D heats bronze for a festival bell and asks how strong the fire should be.",
     "picks": {
       "a": "Use a strong fire for a clearer, farther ring",
       "b": "Use a gentle fire to reduce the risk of cracks"
     }
   },
   "or_02": {
-    "situation": "Or needs fine sand and gives you a bucket and a map of the stream.",
+    "situation": "D needs fine sand and gives you a bucket and a map of the stream.",
     "picks": {
       "a": "Use the map and search alone",
       "b": "Ask the fishers and merchants on the bridge"
@@ -210,7 +210,7 @@
     }
   },
   "or_04": {
-    "situation": "Or asks how to approach a complicated gear diagram.",
+    "situation": "D asks how to approach a complicated gear diagram.",
     "picks": {
       "a": "Talk through it together",
       "b": "Study it quietly on your own first"

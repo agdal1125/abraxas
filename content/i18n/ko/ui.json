@@ -9,10 +9,10 @@
     "prompt": "누구를 만나러 갈까?"
   },
   "npc": {
-    "lumi": "루미",
-    "moka": "모카",
-    "echo": "에코",
-    "or": "오르"
+    "lumi": "A",
+    "moka": "B",
+    "echo": "C",
+    "or": "D"
   },
   "segment": {
     "interlude": "잠깐, 혼자만의 시간",
