@@ -24,11 +24,14 @@ try {
   ws = new WebSocket(target.webSocketDebuggerUrl);
   await new Promise((resolve, reject) => { ws.onopen = resolve; ws.onerror = reject; });
   let id = 0, bytes = 0;
+  const inFlight = new Set();
   const pending = new Map();
   ws.onclose = event => { for (const { reject } of pending.values()) reject(new Error(`CDP closed: ${event.code} ${event.reason}`)); pending.clear(); };
   ws.onmessage = ({ data }) => {
     const message = JSON.parse(data);
+    if (message.method === 'Network.requestWillBeSent' && /\.(glb|wasm|js|json|css)(?:\?|$)/.test(message.params.request.url)) inFlight.add(message.params.requestId);
     if (message.method === 'Network.loadingFinished') bytes += message.params.encodedDataLength;
+    if (message.method === 'Network.loadingFinished' || message.method === 'Network.loadingFailed') inFlight.delete(message.params.requestId);
     if (message.id && pending.has(message.id)) {
       const { resolve, reject } = pending.get(message.id); pending.delete(message.id);
       message.error ? reject(new Error(message.error.message)) : resolve(message.result);
@@ -49,25 +52,28 @@ try {
   await call('Page.navigate', { url: `http://localhost:${port}/` });
   let ready = false;
   for (let i = 0; i < 1200; i++) {
-    ready = await evaluate(`Boolean(window.__abraxas?.village?.ready && document.querySelector('.game-controls:not([hidden])'))`);
-    if (ready) break;
+    ready = await evaluate(`Boolean(document.querySelector('.game-controls:not([hidden])') && document.querySelector('canvas') && performance.getEntriesByType('resource').some(e => e.name.endsWith('.glb'))) `);
+    if (ready && inFlight.size === 0) break;
+    ready = false;
     await evaluate(`(() => { const title = document.querySelector('.title-controls button:first-child'); const next = document.querySelector('.continue, .choices button:first-child'); if (title) title.click(); else if (next) next.click(); })()`);
     await delay(100);
   }
   assert(ready, 'World did not become playable');
   const playableMs = performance.now() - start, transfer = bytes;
   const paint = await evaluate(`performance.getEntriesByType('paint').find(e => e.name === 'first-contentful-paint')?.startTime ?? null`);
-  const before = await evaluate(`({x: window.__abraxas.village.player.position.x, z: window.__abraxas.village.player.position.z})`);
+  // The production build deliberately excludes the development-only position hook.
+  await delay(5000);
+  const before = (await call('Page.captureScreenshot', { format: 'png' })).data;
   const pad = await evaluate(`(() => { const r = document.querySelector('.move-pad').getBoundingClientRect(); return {x:r.x+r.width/2, y:r.y+r.height/2}; })()`);
   await call('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: pad.x + 30, y: pad.y }] });
   const frames = await evaluate(`new Promise(resolve => { let n=0, start; function frame(t) { start ??= t; n++; if(t-start >= 10000) resolve({n, elapsed:t-start}); else requestAnimationFrame(frame); } requestAnimationFrame(frame); })`);
   await call('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-  const after = await evaluate(`({x: window.__abraxas.village.player.position.x, z: window.__abraxas.village.player.position.z})`);
-  assert(Math.hypot(after.x - before.x, after.z - before.z) > 0.01, 'Touch input did not move player');
+  const after = (await call('Page.captureScreenshot', { format: 'png' })).data;
+  assert.notEqual(after, before, 'Screen did not change during touch input');
   const metrics = (await call('Performance.getMetrics')).metrics;
   const heap = metrics.find(metric => metric.name === 'JSHeapUsedSize').value;
-  const table = `| 항목 | 측정값 |\n| --- | ---: |\n| 첫 콘텐츠 표시 (FCP) | ${paint === null ? '측정 불가' : (paint / 1000).toFixed(2) + '초'} |\n| 시작부터 마을 조작 가능까지 | ${(playableMs / 1000).toFixed(2)}초 |\n| 조작 가능까지 전송량 | ${(transfer / 1024 / 1024).toFixed(2)} MiB (${Math.round(transfer).toLocaleString('en-US')} bytes) |\n| 이동 중 평균 FPS (10초) | ${(frames.n * 1000 / frames.elapsed).toFixed(1)} |\n| 이동 후 JS 힙 사용량 | ${(heap / 1024 / 1024).toFixed(2)} MiB |`;
-  const report = `# 모바일 에뮬레이션 성능 측정 — 2026-11-01\n\n실제 폰 측정이 아닌 이 컴퓨터의 Edge 헤드리스 CDP 에뮬레이션 결과다. 개발 서버와 빈 브라우저 프로필을 사용했다. 390×844, DPR 2, 터치, CPU 4배 감속, Fast 3G 수준(지연 150ms, 다운로드 1.6Mbps, 업로드 750Kbps)으로 측정했다. 렌더러는 모바일에서 자체적으로 픽셀 비율을 1.5로 제한한다. GPU 프로세스가 실행 환경에서 종료되어 SwiftShader 소프트웨어 렌더링을 사용했으므로 FPS는 실제 모바일 GPU 성능을 나타내지 않는다.\n\n첫 화면은 브라우저 FCP다. 조작 가능 시간은 타이틀부터 프롤로그를 자동 클릭하고 마을 자산 로드 및 이동 UI 준비까지의 시간으로, 자동 클릭 간격과 이야기 길이를 포함한다. 전송량은 그 시점까지 완료된 요청의 CDP encodedDataLength 합계다. FPS는 터치 이동 입력을 유지한 10초의 requestAnimationFrame 횟수이며 실제 위치 변화도 확인했다. 힙은 이동 직후 CDP JSHeapUsedSize다. 개발 서버의 모듈 전송량은 배포 빌드와 다르다.\n\n${table}\n\n실행: \`npm --prefix client run dev\` 후 \`node client/scripts/perf-mobile.mjs 5173\`.\n`;
+  const table = `| 항목 | 측정값 |\n| --- | ---: |\n| 첫 콘텐츠 표시 (FCP) | ${paint === null ? '측정 불가' : (paint / 1000).toFixed(2) + '초'} |\n| 시작부터 마을 UI와 자산 요청 완료까지 | ${(playableMs / 1000).toFixed(2)}초 |\n| 해당 시점까지 전송량 | ${(transfer / 1024 / 1024).toFixed(2)} MiB (${Math.round(transfer).toLocaleString('en-US')} bytes) |\n| 이동 입력 중 평균 FPS (10초) | ${(frames.n * 1000 / frames.elapsed).toFixed(1)} |\n| 이동 입력 후 JS 힙 사용량 | ${(heap / 1024 / 1024).toFixed(2)} MiB |`;
+  const report = `# 모바일 에뮬레이션 성능 측정 — 2026-11-01\n\n실제 폰 측정이 아닌 이 컴퓨터의 Edge 헤드리스 CDP 에뮬레이션 결과다. 배포 빌드를 Vite preview로 제공하고 빈 브라우저 프로필을 사용했다. 390×844, DPR 2, 터치, CPU 4배 감속, Fast 3G 수준(지연 150ms, 다운로드 1.6Mbps, 업로드 750Kbps)이다. 렌더러는 모바일 픽셀 비율을 1.5로 제한한다. SwiftShader 소프트웨어 렌더링을 사용했으므로 FPS는 실제 모바일 GPU 성능을 나타내지 않는다.\n\nFCP는 브라우저의 첫 콘텐츠 표시다. 마을 UI 및 자산 요청 완료 시간은 타이틀과 프롤로그 자동 클릭, 이동 UI 표시와 시작된 자산 요청 완료까지 포함한다. 내부 자산 준비 상태를 직접 확인한 값은 아니다. 전송량은 해당 시점까지 완료된 요청의 CDP encodedDataLength 합계다. FPS는 터치 이동 입력을 유지한 10초의 requestAnimationFrame 횟수이며 화면 변화를 확인했다. 배포 빌드에는 개발용 위치 훅이 없어 위치 변화는 직접 검증하지 않았다. 힙은 이동 입력 직후 CDP JSHeapUsedSize다.\n\n${table}\n\n이전 개발 서버 참고값: FCP 39.55초, 마을 조작 가능 44.59초, 전송량 8.57 MiB, FPS 21.9, JS 힙 33.06 MiB. 준비 판정이 달라 직접 비교에는 주의한다.\n\n실행: \`npm --prefix client run build\` 후 client 디렉터리에서 \`npx vite preview --host 127.0.0.1 --port 4173\`, 별도 터미널에서 저장소 루트 기준 \`node client/scripts/perf-mobile.mjs 4173\`.\n`;
   await writeFile('docs/reviews/perf-mobile-2026-11-01.md', report, 'utf8');
   console.log(table);
 } finally {
