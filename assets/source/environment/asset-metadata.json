@@ -2,12 +2,12 @@
   "version": 1,
   "blenderVersion": "5.2.3 LTS",
   "phase1Only": false,
-  "buildTerrain": false,
+  "buildTerrain": true,
   "summary": {
-    "assetCount": 32,
-    "totalTriangles": 14138,
-    "totalBytes": 267728,
-    "totalKiB": 261.45
+    "assetCount": 33,
+    "totalTriangles": 29042,
+    "totalBytes": 323836,
+    "totalKiB": 316.25
   },
   "assets": {
     "entrance-house": {
@@ -892,6 +892,30 @@
       "dracoCompressed": true,
       "concept": "assets/source/concepts/environment/life-props.png",
       "preview": "assets/source/previews/environment/log.png"
+    },
+    "terrain": {
+      "path": "assets/abraxas/environment/terrain.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 14904,
+      "bytes": 56108,
+      "maxTriangles": 30000,
+      "maxBytes": 1048576,
+      "bounds": {
+        "width": 38,
+        "depth": 33.4864,
+        "height": 0.35,
+        "minX": -19,
+        "maxX": 19,
+        "minY": -0.35,
+        "maxY": 0,
+        "minZ": -16.7432,
+        "maxZ": 16.7432
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "preview": "assets/source/previews/environment/terrain.png"
     }
   }
 }
