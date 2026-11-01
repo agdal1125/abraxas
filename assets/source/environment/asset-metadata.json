@@ -4,12 +4,12 @@
   "paletteVersion": "dream-v2",
   "colorSpaceNote": "몽환 팔레트 v2(2026-11-01): sRGB 팔레트 v2 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
   "phase1Only": false,
-  "buildTerrain": true,
+  "buildTerrain": false,
   "summary": {
     "assetCount": 40,
-    "totalTriangles": 34360,
-    "totalBytes": 359468,
-    "totalKiB": 351.04
+    "totalTriangles": 35016,
+    "totalBytes": 367588,
+    "totalKiB": 358.97
   },
   "assets": {
     "entrance-house": {
@@ -388,8 +388,8 @@
           "halfZ": 0.65
         }
       ],
-      "triangles": 1284,
-      "bytes": 17800,
+      "triangles": 1864,
+      "bytes": 25060,
       "maxTriangles": 5000,
       "maxBytes": 184320,
       "bounds": {
@@ -399,12 +399,13 @@
         "minY": 0.0,
         "maxY": 1.5
       },
-      "materials": 1,
+      "materials": 2,
       "vertexColorAttribute": "COLOR_0",
       "colorAttributeType": "FLOAT_COLOR",
       "dracoCompressed": true,
       "concept": "assets/source/concepts/environment/buildings-part1.png",
       "preview": "assets/source/previews/environment/bakery.png",
+      "revisionAuthor": "Codex gpt-6.1-terra (agy 한도로 대체)",
       "colorVerification": {
         "ink": {
           "paletteHex": "#564863",
@@ -433,6 +434,21 @@
             0.3325,
             0.1878,
             0.117
+          ],
+          "maxDiff255": 0.0
+        },
+        "stone_dark": {
+          "paletteHex": "#A99CC4",
+          "measuredHex": "#A99CC4",
+          "measuredSrgb255": [
+            169.0,
+            156.0,
+            196.0
+          ],
+          "measuredLinear": [
+            0.3968,
+            0.3325,
+            0.552
           ],
           "maxDiff255": 0.0
         },
@@ -493,6 +509,21 @@
             0.7379,
             0.305,
             0.2384
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_light": {
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
+          "measuredSrgb255": [
+            223.0,
+            185.0,
+            158.0
+          ],
+          "measuredLinear": [
+            0.7379,
+            0.4851,
+            0.3419
           ],
           "maxDiff255": 0.0
         },
@@ -1040,8 +1071,8 @@
           "radius": 0.16
         }
       ],
-      "triangles": 436,
-      "bytes": 7784,
+      "triangles": 492,
+      "bytes": 8588,
       "maxTriangles": 1200,
       "maxBytes": 61440,
       "bounds": {
@@ -1057,6 +1088,7 @@
       "dracoCompressed": true,
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/tree-round.png",
+      "revisionAuthor": "Codex gpt-6.1-terra (agy 한도로 대체)",
       "colorVerification": {
         "grass_dark": {
           "paletteHex": "#64AD8E",
@@ -1085,6 +1117,21 @@
             0.2086,
             0.552,
             0.3813
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_dark": {
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
+          "measuredSrgb255": [
+            156.0,
+            120.0,
+            96.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },
@@ -1374,8 +1421,8 @@
           "radius": 0.22
         }
       ],
-      "triangles": 240,
-      "bytes": 5496,
+      "triangles": 260,
+      "bytes": 5552,
       "maxTriangles": 500,
       "maxBytes": 30720,
       "bounds": {
@@ -1391,6 +1438,7 @@
       "dracoCompressed": true,
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/bush.png",
+      "revisionAuthor": "Codex gpt-6.1-terra (agy 한도로 대체)",
       "colorVerification": {
         "grass_dark": {
           "paletteHex": "#64AD8E",
@@ -1419,6 +1467,21 @@
             0.2086,
             0.552,
             0.3813
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_dark": {
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
+          "measuredSrgb255": [
+            156.0,
+            120.0,
+            96.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },

@@ -345,8 +345,19 @@ def build_char_a_parts():
         hip_x=0.054,
         segs=12,
     )
+    for part in parts:
+        if part.name.startswith("foot_"):
+            for item in part.data.color_attributes["COLOR_0"].data:
+                item.color = hex_to_linear_rgba(PALETTE["wood"])
+    for side, suffix in ((-1, "r"), (1, "l")):
+        cuff = make_beveled_cylinder(0.031, 0.031, 0.018, (side * 0.13, 0.0, 0.231), segs=8, bevel_width=0.002, tilt_euler=(0.0, -side * 0.38, 0.0))
+        parts.append(finish_part_mesh(cuff, f"cuff_{suffix}", PALETTE["cream"], {f"arm_{suffix}": 1.0}))
     bm_torso = make_ellipsoid(0.132, 0.122, 0.122, (0.0, 0.0, 0.222), u_seg=16, v_seg=12, taper_top=0.04)
     parts.append(finish_part_mesh(bm_torso, "torso", PALETTE["a"], {"body": 1.0}))
+    hem = make_torus(0.099, 0.008, (0.0, 0.0, 0.137), major_seg=12, minor_seg=4, scale_xyz=(1.0, 0.93, 1.0))
+    parts.append(finish_part_mesh(hem, "hem", PALETTE["cream"], {"body": 1.0}))
+    pocket = make_beveled_box(0.065, 0.012, 0.052, (0.035, -0.119, 0.205), bevel_width=0.004)
+    parts.append(finish_part_mesh(pocket, "pocket", PALETTE["cream"], {"body": 1.0}))
 
     bm_collar = make_torus(0.078, 0.015, (0.0, 0.0, 0.340), major_seg=16, minor_seg=8, scale_xyz=(1.0, 0.94, 0.85))
     parts.append(finish_part_mesh(bm_collar, "collar", PALETTE["cream"], {"body": 0.5, "head": 0.5}))
@@ -1296,9 +1307,13 @@ def main():
         "colorSpaceNote": "색공간 수정(2026-11-01): sRGB 팔레트 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
         "assets": {},
     }
+    with open(f"{SOURCE_DIR}/asset-metadata.json", "r", encoding="utf-8") as f:
+        metadata["assets"] = json.load(f)["assets"]
     all_temp_paths = {}
 
     for key, height, builder_fn, sx, sz, hx, col_r, max_tri, max_kib in specs:
+        if key != "char-a":
+            continue
         reset_scene()
         parts = builder_fn()
         mesh_obj = join_and_fit_height(parts, key, height)
@@ -1312,12 +1327,16 @@ def main():
 
         if key == "char-a":
             render_action_strips(arm_obj, key)
+        for path in tpaths.values():
+            if os.path.exists(path):
+                os.remove(path)
 
         entry = {
             "path": f"assets/abraxas/characters/{key}.glb",
             "scale": 1,
             "collision": [{"type": "circle", "x": 0, "z": 0, "radius": col_r}],
             "clips": ["idle", "walk", "talk"],
+            "revisionAuthor": "Codex gpt-6.1-terra (agy 한도로 대체)",
             "budget": {
                 "maxTriangles": max_tri,
                 "maxKiB": max_kib,
@@ -1328,7 +1347,6 @@ def main():
             entry["sharedBy"] = ["s1j2", "s2j2", "s3j2", "s4j2"]
         metadata["assets"][key] = entry
 
-    stitch_lineup_sheets(all_temp_paths)
     save_combined_blend_file(specs)
 
     meta_path = f"{SOURCE_DIR}/asset-metadata.json"
