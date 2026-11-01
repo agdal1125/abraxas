@@ -1,0 +1,9 @@
+{
+  "name": "Abraxas",
+  "short_name": "Abraxas",
+  "start_url": ".",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#fff8ec",
+  "theme_color": "#fff8ec"
+}
