@@ -29,8 +29,8 @@ export class Village {
   private characters: Character[] = [];
   private player = new THREE.Group();
   private cameraTarget = new THREE.Vector3();
-  private viewHalfHeight = 1.75;
-  private cameraHalfHeight = 1.75;
+  private viewHalfHeight = 1.55;
+  private cameraHalfHeight = 1.55;
   private viewAspect = 1;
   private playerCharacter?: Character;
   private enabled = false;
@@ -200,7 +200,7 @@ export class Village {
   private resize(): void {
     const w = this.renderer.domElement.parentElement!.clientWidth, h = this.renderer.domElement.parentElement!.clientHeight;
     if (!w || !h) return;
-    this.viewAspect = w / h; this.viewHalfHeight = 1.75 * Math.max(1, Math.min(1.2, 1.6 / this.viewAspect));
+    this.viewAspect = w / h; this.viewHalfHeight = 1.55 * Math.max(1, h / 390) * Math.max(1, Math.min(1.2, 1.6 / this.viewAspect));
     const mobile = navigator.maxTouchPoints > 0 || Math.min(w, h) < 600, shadowSize = mobile ? 1024 : 2048;
     const shadowExtent = Math.max(4, this.viewHalfHeight * (this.viewAspect + 1) * 1.1);
     this.light.shadow.camera.left = this.light.shadow.camera.bottom = -shadowExtent;
