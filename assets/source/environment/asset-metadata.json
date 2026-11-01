@@ -16,8 +16,8 @@
       "collision": [
         {
           "type": "box",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "halfX": 0.65,
           "halfZ": 0.55
         }
@@ -30,7 +30,7 @@
         "width": 1.4,
         "depth": 1.2,
         "height": 1.4,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 1.4
       },
       "materials": 1,
@@ -45,8 +45,8 @@
       "collision": [
         {
           "type": "box",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "halfX": 0.85,
           "halfZ": 0.7
         }
@@ -59,7 +59,7 @@
         "width": 1.8,
         "depth": 1.5,
         "height": 1.6,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 1.6
       },
       "materials": 1,
@@ -74,8 +74,8 @@
       "collision": [
         {
           "type": "box",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "halfX": 0.75,
           "halfZ": 0.65
         }
@@ -88,7 +88,7 @@
         "width": 1.6,
         "depth": 1.4,
         "height": 1.5,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 1.5
       },
       "materials": 1,
@@ -103,8 +103,8 @@
       "collision": [
         {
           "type": "box",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "halfX": 0.85,
           "halfZ": 0.7
         }
@@ -117,7 +117,7 @@
         "width": 1.8,
         "depth": 1.5,
         "height": 1.8,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 1.8
       },
       "materials": 1,
@@ -132,8 +132,8 @@
       "collision": [
         {
           "type": "box",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "halfX": 0.85,
           "halfZ": 0.65
         }
@@ -146,7 +146,7 @@
         "width": 1.8,
         "depth": 1.4,
         "height": 1.5,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 1.5
       },
       "materials": 1,
@@ -161,8 +161,8 @@
       "collision": [
         {
           "type": "box",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "halfX": 0.75,
           "halfZ": 0.65
         }
@@ -175,7 +175,7 @@
         "width": 1.6,
         "depth": 1.4,
         "height": 1.4,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 1.4
       },
       "materials": 1,
@@ -190,8 +190,8 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "radius": 0.16
         }
       ],
@@ -203,7 +203,7 @@
         "width": 1.02,
         "depth": 1.02,
         "height": 1.5,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 1.5
       },
       "materials": 1,
@@ -218,8 +218,8 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "radius": 0.2
         }
       ],
@@ -231,7 +231,7 @@
         "width": 1.1,
         "depth": 1.1,
         "height": 1.8,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 1.8
       },
       "materials": 1,
@@ -246,8 +246,8 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "radius": 0.16
         }
       ],
@@ -259,7 +259,7 @@
         "width": 0.7,
         "depth": 0.7,
         "height": 1.6,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 1.6
       },
       "materials": 1,
@@ -274,8 +274,8 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "radius": 0.12
         }
       ],
@@ -287,7 +287,7 @@
         "width": 0.66,
         "depth": 0.66,
         "height": 1.2,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 1.2
       },
       "materials": 1,
@@ -302,8 +302,8 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "radius": 0.22
         }
       ],
@@ -315,7 +315,7 @@
         "width": 0.6,
         "depth": 0.5,
         "height": 0.4,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.4
       },
       "materials": 1,
@@ -336,7 +336,7 @@
         "width": 0.7,
         "depth": 0.5,
         "height": 0.25,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.25
       },
       "materials": 1,
@@ -357,7 +357,7 @@
         "width": 0.22,
         "depth": 0.2,
         "height": 0.18,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.18
       },
       "materials": 1,
@@ -378,7 +378,7 @@
         "width": 0.24,
         "depth": 0.22,
         "height": 0.2,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.2
       },
       "materials": 1,
@@ -399,7 +399,7 @@
         "width": 0.26,
         "depth": 0.24,
         "height": 0.06,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.06
       },
       "materials": 1,
@@ -414,8 +414,8 @@
       "collision": [
         {
           "type": "box",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "halfX": 0.5,
           "halfZ": 0.06
         }
@@ -425,10 +425,10 @@
       "maxTriangles": 400,
       "maxBytes": 25600,
       "bounds": {
-        "width": 1.0,
+        "width": 1,
         "depth": 0.12,
         "height": 0.45,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.45
       },
       "materials": 1,
@@ -443,8 +443,8 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "radius": 0.18
         }
       ],
@@ -456,7 +456,7 @@
         "width": 0.4,
         "depth": 0.36,
         "height": 0.28,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.28
       },
       "materials": 1,
@@ -471,8 +471,8 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "radius": 0.36
         }
       ],
@@ -484,7 +484,7 @@
         "width": 0.8,
         "depth": 0.72,
         "height": 0.52,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.52
       },
       "materials": 1,
@@ -499,8 +499,8 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "radius": 0.1
         }
       ],
@@ -511,9 +511,9 @@
       "bounds": {
         "width": 0.34,
         "depth": 0.22,
-        "height": 1.0,
-        "minY": 0.0,
-        "maxY": 1.0
+        "height": 1,
+        "minY": 0,
+        "maxY": 1
       },
       "materials": 1,
       "vertexColorAttribute": "COLOR_0",
@@ -527,8 +527,8 @@
       "collision": [
         {
           "type": "box",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "halfX": 0.4,
           "halfZ": 0.18
         }
@@ -541,7 +541,7 @@
         "width": 0.8,
         "depth": 0.35,
         "height": 0.45,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.45
       },
       "materials": 1,
@@ -556,8 +556,8 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "radius": 0.38
         }
       ],
@@ -569,7 +569,7 @@
         "width": 0.8,
         "depth": 0.8,
         "height": 0.8,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.8
       },
       "materials": 1,
@@ -584,8 +584,8 @@
       "collision": [
         {
           "type": "box",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "halfX": 0.9,
           "halfZ": 0.6
         }
@@ -597,9 +597,9 @@
       "bounds": {
         "width": 1.8,
         "depth": 1.2,
-        "height": 1.0,
-        "minY": 0.0,
-        "maxY": 1.0
+        "height": 1,
+        "minY": 0,
+        "maxY": 1
       },
       "materials": 1,
       "vertexColorAttribute": "COLOR_0",
@@ -614,14 +614,14 @@
         {
           "type": "box",
           "x": -0.55,
-          "z": 0.0,
+          "z": 0,
           "halfX": 0.15,
           "halfZ": 0.25
         },
         {
           "type": "box",
           "x": 0.55,
-          "z": 0.0,
+          "z": 0,
           "halfX": 0.15,
           "halfZ": 0.25
         }
@@ -634,7 +634,7 @@
         "width": 1.4,
         "depth": 0.5,
         "height": 1.6,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 1.6
       },
       "materials": 1,
@@ -650,16 +650,16 @@
         {
           "type": "box",
           "x": -0.48,
-          "z": 0.0,
+          "z": 0,
           "halfX": 0.05,
-          "halfZ": 1.0
+          "halfZ": 1
         },
         {
           "type": "box",
           "x": 0.48,
-          "z": 0.0,
+          "z": 0,
           "halfX": 0.05,
-          "halfZ": 1.0
+          "halfZ": 1
         }
       ],
       "triangles": 836,
@@ -667,8 +667,8 @@
       "maxTriangles": 1800,
       "maxBytes": 81920,
       "bounds": {
-        "width": 1.0,
-        "depth": 2.0,
+        "width": 1,
+        "depth": 2,
         "height": 0.35,
         "minY": -0.025,
         "maxY": 0.325
@@ -691,7 +691,7 @@
         "width": 0.26,
         "depth": 0.24,
         "height": 0.35,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.35
       },
       "materials": 1,
@@ -712,7 +712,7 @@
         "width": 0.28,
         "depth": 0.26,
         "height": 0.12,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.12
       },
       "materials": 1,
@@ -727,8 +727,8 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "radius": 0.08
         }
       ],
@@ -740,7 +740,7 @@
         "width": 0.24,
         "depth": 0.24,
         "height": 0.5,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.5
       },
       "materials": 1,
@@ -755,8 +755,8 @@
       "collision": [
         {
           "type": "box",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "halfX": 0.18,
           "halfZ": 0.14
         }
@@ -769,7 +769,7 @@
         "width": 0.36,
         "depth": 0.28,
         "height": 0.26,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.26
       },
       "materials": 1,
@@ -784,8 +784,8 @@
       "collision": [
         {
           "type": "box",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "halfX": 0.18,
           "halfZ": 0.14
         }
@@ -798,7 +798,7 @@
         "width": 0.36,
         "depth": 0.28,
         "height": 0.3,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.3
       },
       "materials": 1,
@@ -813,8 +813,8 @@
       "collision": [
         {
           "type": "box",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "halfX": 0.28,
           "halfZ": 0.16
         }
@@ -827,7 +827,7 @@
         "width": 0.56,
         "depth": 0.32,
         "height": 0.55,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.55
       },
       "materials": 1,
@@ -842,8 +842,8 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "radius": 0.15
         }
       ],
@@ -855,7 +855,7 @@
         "width": 0.3,
         "depth": 0.3,
         "height": 0.42,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.42
       },
       "materials": 1,
@@ -870,8 +870,8 @@
       "collision": [
         {
           "type": "box",
-          "x": 0.0,
-          "z": 0.0,
+          "x": 0,
+          "z": 0,
           "halfX": 0.3,
           "halfZ": 0.1
         }
@@ -884,7 +884,7 @@
         "width": 0.6,
         "depth": 0.2,
         "height": 0.22,
-        "minY": 0.0,
+        "minY": 0,
         "maxY": 0.22
       },
       "materials": 1,
@@ -916,6 +916,132 @@
       "vertexColorAttribute": "COLOR_0",
       "dracoCompressed": true,
       "preview": "assets/source/previews/environment/terrain.png"
+    },
+    "flower-cluster-red": {
+      "path": "assets/abraxas/environment/flower-cluster-red.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 280,
+      "bytes": 7356,
+      "maxTriangles": 300,
+      "maxBytes": 20000,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.16,
+        "minY": 0,
+        "maxY": 0.16
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
+    },
+    "flower-cluster-yellow": {
+      "path": "assets/abraxas/environment/flower-cluster-yellow.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 280,
+      "bytes": 7376,
+      "maxTriangles": 300,
+      "maxBytes": 20000,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.15,
+        "minY": 0,
+        "maxY": 0.15
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
+    },
+    "flower-cluster-white": {
+      "path": "assets/abraxas/environment/flower-cluster-white.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 280,
+      "bytes": 7432,
+      "maxTriangles": 300,
+      "maxBytes": 20000,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.14,
+        "minY": 0,
+        "maxY": 0.14
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
+    },
+    "flower-cluster-pink": {
+      "path": "assets/abraxas/environment/flower-cluster-pink.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 280,
+      "bytes": 7388,
+      "maxTriangles": 300,
+      "maxBytes": 20000,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.16,
+        "minY": 0,
+        "maxY": 0.16
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
+    },
+    "flower-cluster-purple": {
+      "path": "assets/abraxas/environment/flower-cluster-purple.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 280,
+      "bytes": 7384,
+      "maxTriangles": 300,
+      "maxBytes": 20000,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.17,
+        "minY": 0,
+        "maxY": 0.17
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
+    },
+    "grass-small": {
+      "path": "assets/abraxas/environment/grass-small.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 112,
+      "bytes": 3632,
+      "maxTriangles": 120,
+      "maxBytes": 15360,
+      "bounds": {
+        "width": 0.18,
+        "depth": 0.18,
+        "height": 0.1,
+        "minY": 0,
+        "maxY": 0.1
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
     }
   }
 }
