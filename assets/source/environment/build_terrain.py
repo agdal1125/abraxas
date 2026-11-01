@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 """
 Abraxas Continuous Terrain Builder for Blender 5.2+
-Reads content/world/village.json (v2: bounds.outer, bounds.holes, bounds.bridges, paths)
+Reads content/world/village.json (v2: bounds.outer, bounds.holes, bounds.bridges, paths, coast: organic-v1)
 and generates a single continuous low-poly diorama island mesh (terrain.glb):
 - World coordinates match village.json (x -> X, z -> Z in Three.js after +Y-up glTF export).
 - Origin at (0, 0, 0), top surface at y = 0.0, island thickness 0.35m (minY = -0.35m)
-  with rounded bevel edge and warm earth/stone cliff cross-section.
+  with rounded bevel edge, subdivided organic coastline, and warm earth/stone cliff cross-section.
 - Inland pond holes lowered to water level y = -0.08m with beveled banks.
-- Paths colored via vertex colors (COLOR_0) with width = path.width and soft feathered edges.
-- Grass brightness variation matching the environment kit palette and subtle self-AO.
+- Paths colored via vertex colors (COLOR_0, FLOAT_COLOR) with width = path.width and soft feathered edges.
+- sRGB palette hex values are converted to Linear-sRGB once, and AO is multiplied once in linear space.
+- Verifies exported GLB vertex colors (grass #5CC96B family, path #F2B35E family within ±6/255).
 - No external ocean plane (rendered by engine).
 """
 
@@ -16,6 +17,7 @@ import bpy
 import bmesh
 import math
 import os
+import sys
 import json
 import struct
 from mathutils import Vector, Euler
@@ -32,7 +34,7 @@ MAX_TRIANGLES = 30000
 MAX_BYTES = 1024 * 1024  # 1 MiB
 
 # -----------------------------------------------------------------------------
-# Palette & Color Utilities (sRGB -> Linear sRGB, matching build_environment.py)
+# Palette & Color Utilities (sRGB -> Linear sRGB once, matching build_environment.py)
 # -----------------------------------------------------------------------------
 PALETTE = {
     "cream": "#FFF8EC",
@@ -59,11 +61,34 @@ PALETTE = {
     "teal": "#14B8A6",
 }
 
+HEX_TO_PALETTE_NAME = {v: k for k, v in PALETTE.items()}
+
+TERRAIN_VERIFY_HEX_LIST = [
+    PALETTE["grass"],
+    PALETTE["grass_dark"],
+    PALETTE["grass_light"],
+    PALETTE["path"],
+    PALETTE["path_center"],
+    PALETTE["path_edge"],
+]
+
 
 def srgb_to_linear(c: float) -> float:
     if c <= 0.04045:
         return c / 12.92
     return ((c + 0.055) / 1.055) ** 2.4
+
+
+def linear_to_srgb(c: float) -> float:
+    c = max(0.0, min(1.0, c))
+    if c <= 0.0031308:
+        return c * 12.92
+    return 1.055 * (c ** (1.0 / 2.4)) - 0.055
+
+
+def hex_to_srgb_255(hex_str: str):
+    h = hex_str.lstrip("#")
+    return (int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16))
 
 
 def hex_to_linear_rgb(hex_str: str, tint: float = 1.0):
@@ -149,9 +174,9 @@ def ensure_positive_area_xz(poly):
     return list(poly)
 
 
-def smooth_hex_boundary_xz(poly, passes=2, weight=0.26, preserve_bbox=True):
+def smooth_hex_boundary_xz(poly, passes=2, weight=0.20, preserve_bbox=True):
     """
-    Softens the 60-degree hex staircase corners into a smooth diorama coastline
+    Smooths polygon vertices into a continuous organic coastline curve
     while optionally preserving the exact bounding box of the original polygon.
     """
     orig_xs = [p[0] for p in poly]
@@ -366,7 +391,7 @@ def build_smoothed_path_primitives(raw_paths):
     junction_triangles = []
     triangle_nodes = set()
     nodes_sorted = sorted(adj.keys())
-    for i, u in enumerate(nodes_sorted):
+    for u in nodes_sorted:
         for v in sorted(adj[u]):
             if v <= u:
                 continue
@@ -382,7 +407,6 @@ def build_smoothed_path_primitives(raw_paths):
     for (u, v), hw in edge_width.items():
         pu = node_coords[u]
         pv = node_coords[v]
-        # Keep core segment shortened slightly if endpoints are degree-2 bends
         t_start = 0.35 if (len(adj[u]) == 2 and u not in triangle_nodes) else 0.0
         t_end = 0.65 if (len(adj[v]) == 2 and v not in triangle_nodes) else 1.0
         ax = pu[0] + (pv[0] - pu[0]) * t_start
@@ -428,7 +452,7 @@ def world_to_blender(x: float, y: float, z: float) -> Vector:
 
 
 # -----------------------------------------------------------------------------
-# Color & Self-AO Evaluators for Terrain Surface, Paths, Pond, and Cliff
+# Color & Self-AO Evaluators (Linear-sRGB once, Linear AO once)
 # -----------------------------------------------------------------------------
 class TerrainColorEvaluator:
     def __init__(self, outer_poly, holes_polys, path_segments, junction_triangles):
@@ -437,6 +461,7 @@ class TerrainColorEvaluator:
         self.path_segments = path_segments
         self.junction_triangles = junction_triangles
 
+        # Single sRGB -> Linear-sRGB conversion for each palette color
         self.c_grass = hex_to_linear_rgb(PALETTE["grass"])
         self.c_grass_dark = hex_to_linear_rgb(PALETTE["grass_dark"])
         self.c_grass_light = hex_to_linear_rgb(PALETTE["grass_light"])
@@ -453,25 +478,30 @@ class TerrainColorEvaluator:
         self.c_sea_shallow = hex_to_linear_rgb(PALETTE["sea_shallow"])
         self.c_sea_deep = hex_to_linear_rgb(PALETTE["sea_deep"])
 
-        # Precompute 5 golden-angle wave directions for isotropic, non-striped meadow patches
+        # Precompute 5 golden-angle wave directions for isotropic meadow patches
         self.wave_dirs = [
             (math.cos(i * 2.39996), math.sin(i * 2.39996), 0.21 + 0.04 * (i % 3), i * 1.7)
             for i in range(5)
         ]
 
     def grass_rgb_at(self, x: float, z: float):
-        # Isotropic sum of 5 rotated waves -> organic round meadow patches, zero stripes
+        """
+        Isotropic sum of 5 rotated waves -> organic round meadow patches:
+        - Near meadow == 0: exact PALETTE["grass"] (#5CC96B)
+        - At sunny wave peaks: reaches PALETTE["grass_light"] (#7EE089)
+        - At shaded wave troughs: reaches PALETTE["grass_dark"] (#3A9E57)
+        """
         acc = 0.0
         for dx, dz, freq, phase in self.wave_dirs:
             acc += math.sin((x * dx + z * dz) * freq + phase)
         meadow = acc / 5.0
 
         if meadow >= 0.0:
-            col = lerp_rgb(self.c_grass, self.c_grass_light, min(0.42, meadow * 0.52))
+            t_light = smoothstep(0.04, 0.58, meadow)
+            return lerp_rgb(self.c_grass, self.c_grass_light, t_light)
         else:
-            col = lerp_rgb(self.c_grass, self.c_grass_dark, min(0.38, -meadow * 0.48))
-
-        return col
+            t_dark = smoothstep(0.04, 0.58, -meadow)
+            return lerp_rgb(self.c_grass, self.c_grass_dark, t_dark)
 
     def path_blend_and_rgb_at(self, x: float, z: float):
         if not self.path_segments and not self.junction_triangles:
@@ -488,28 +518,42 @@ class TerrainColorEvaluator:
             if d < min_norm_d:
                 min_norm_d = d
 
-        # Feathered edge centered around d = 1.0 * half_width (width = path.width = 0.9m)
-        path_weight = 1.0 - smoothstep(0.64, 1.28, min_norm_d)
+        # Feathered edge around d = 1.0 * half_width (width = path.width = 0.9m)
+        path_weight = 1.0 - smoothstep(0.62, 1.26, min_norm_d)
         if path_weight <= 1e-4:
             return 0.0, self.c_path
 
-        # Warm golden-ochre center blending into slightly richer earth toward the edge
-        center_t = 1.0 - smoothstep(0.0, 0.75, min_norm_d)
-        p_col = lerp_rgb(self.c_path, self.c_path_center, center_t * 0.45)
-        edge_t = smoothstep(0.55, 1.15, min_norm_d)
-        p_col = lerp_rgb(p_col, self.c_path_edge, edge_t * 0.30)
+        # Along path centerline (min_norm_d ~ 0.0), alternate smoothly between
+        # pure PALETTE["path"] (#F2B35E) and PALETTE["path_center"] (#F5C276);
+        # at shoulder (min_norm_d ~ 0.55), transition between #F2B35E and PALETTE["path_edge"] (#D99B4E).
+        center_wave = 0.5 + 0.5 * math.sin(x * 0.45 + z * 0.38)
+        edge_wave = 0.5 + 0.5 * math.cos(x * 0.42 - z * 0.47)
+
+        center_t = (1.0 - smoothstep(0.0, 0.42, min_norm_d)) * smoothstep(0.25, 0.78, center_wave)
+        edge_t = smoothstep(0.32, 0.54, min_norm_d) * smoothstep(0.25, 0.78, edge_wave)
+
+        p_col = lerp_rgb(self.c_path, self.c_path_center, center_t)
+        p_col = lerp_rgb(p_col, self.c_path_edge, edge_t)
         return path_weight, p_col
 
-    def top_surface_rgba(self, x: float, z: float):
-        grass_col = self.grass_rgb_at(x, z)
-        path_w, path_col = self.path_blend_and_rgb_at(x, z)
-        base_col = lerp_rgb(grass_col, path_col, path_w)
-
+    def _distances_to_boundaries(self, x: float, z: float):
         d_outer = dist_point_to_poly_edges_xz(x, z, self.outer_poly)
         d_hole = min(
             (dist_point_to_poly_edges_xz(x, z, h) for h in self.holes_polys),
             default=1e9,
         )
+        return d_outer, d_hole
+
+    def top_surface_base_rgb(self, x: float, z: float, d_outer=None, d_hole=None):
+        """
+        Computes unshaded linear RGB on the top surface (without AO).
+        """
+        if d_outer is None or d_hole is None:
+            d_outer, d_hole = self._distances_to_boundaries(x, z)
+
+        grass_col = self.grass_rgb_at(x, z)
+        path_w, path_col = self.path_blend_and_rgb_at(x, z)
+        base_col = lerp_rgb(grass_col, path_col, path_w)
 
         if d_outer < 1.0 and path_w < 0.8:
             edge_t = (1.0 - smoothstep(0.05, 1.0, d_outer)) * (1.0 - path_w)
@@ -519,14 +563,22 @@ class TerrainColorEvaluator:
             bank_t = (1.0 - smoothstep(0.05, 0.85, d_hole)) * (1.0 - path_w)
             base_col = lerp_rgb(base_col, self.c_grass_dark, bank_t * 0.35)
 
+        return base_col
+
+    def top_surface_ao(self, d_outer: float, d_hole: float) -> float:
         ao_outer = 0.93 + 0.07 * smoothstep(0.0, 0.9, d_outer)
         ao_hole = 0.91 + 0.09 * smoothstep(0.0, 0.7, d_hole)
-        ao = max(0.85, min(1.0, ao_outer * ao_hole))
+        return max(0.85, min(1.0, ao_outer * ao_hole))
+
+    def top_surface_rgba(self, x: float, z: float):
+        d_outer, d_hole = self._distances_to_boundaries(x, z)
+        base_col = self.top_surface_base_rgb(x, z, d_outer, d_hole)
+        ao = self.top_surface_ao(d_outer, d_hole)
         return (base_col[0] * ao, base_col[1] * ao, base_col[2] * ao, 1.0)
 
     def outer_rim_rgba(self, x: float, z: float, ring_idx: int, nx: float, nz: float):
         """
-        6-ring cushion/diorama cliff cross-section:
+        6-ring cushion/diorama cliff cross-section (single linear AO multiplication):
         0: inner grass lip (y = 0.00)
         1: rounded grass bevel upper (y = -0.025)
         2: rounded grass bevel lower / turf lip (y = -0.070)
@@ -534,15 +586,16 @@ class TerrainColorEvaluator:
         4: mid warm dirt/stone cliff (y = -0.255)
         5: bottom beveled base (y = -0.350)
         """
-        sun_boost = 1.0 + 0.05 * (nx * 0.6 + nz * 0.8)
-        strata = 0.5 + 0.5 * math.sin(x * 0.45 - z * 0.38)
-
         if ring_idx == 0:
             return self.top_surface_rgba(x, z)
-        elif ring_idx == 1:
-            top_c = self.top_surface_rgba(x, z)[:3]
-            col = lerp_rgb(top_c, self.c_grass_dark, 0.32)
-            ao = 0.95 * sun_boost
+
+        sun_boost = 1.0 + 0.04 * (nx * 0.6 + nz * 0.8)
+        strata = 0.5 + 0.5 * math.sin(x * 0.45 - z * 0.38)
+
+        if ring_idx == 1:
+            top_base = self.top_surface_base_rgb(x, z)
+            col = lerp_rgb(top_base, self.c_grass_dark, 0.32)
+            ao = 0.94 * sun_boost
         elif ring_idx == 2:
             col = lerp_rgb(self.c_grass_dark, self.c_wood_light, 0.38)
             ao = 0.91 * sun_boost
@@ -556,11 +609,11 @@ class TerrainColorEvaluator:
             col = lerp_rgb(self.c_wood_dark, self.c_stone_dark, 0.45)
             ao = 0.78 * sun_boost
 
-        ao = max(0.76, min(1.06, ao))
+        ao = max(0.78, min(1.0, ao))
         return (
-            min(1.0, col[0] * ao),
-            min(1.0, col[1] * ao),
-            min(1.0, col[2] * ao),
+            col[0] * ao,
+            col[1] * ao,
+            col[2] * ao,
             1.0,
         )
 
@@ -568,9 +621,9 @@ class TerrainColorEvaluator:
         if ring_idx == 0:
             return self.top_surface_rgba(x, z)
         elif ring_idx == 1:
-            top_c = self.top_surface_rgba(x, z)[:3]
-            col = lerp_rgb(top_c, self.c_grass_dark, 0.42)
-            ao = 0.93
+            top_base = self.top_surface_base_rgb(x, z)
+            col = lerp_rgb(top_base, self.c_grass_dark, 0.42)
+            ao = 0.92
         elif ring_idx == 2:
             col = lerp_rgb(self.c_wood_light, self.c_stone_light, 0.52)
             ao = 0.88
@@ -585,11 +638,12 @@ class TerrainColorEvaluator:
         col = lerp_rgb(self.c_sea_shallow, self.c_sea, min(1.0, t_depth * 1.25))
         if t_depth > 0.55:
             col = lerp_rgb(col, self.c_sea_deep, (t_depth - 0.55) * 0.50)
-        ao = 0.92 + 0.07 * smoothstep(0.0, 0.6, d_bank)
+        ao = 0.92 + 0.08 * smoothstep(0.0, 0.6, d_bank)
+        ao = max(0.78, min(1.0, ao))
         return (
-            min(1.0, col[0] * ao),
-            min(1.0, col[1] * ao),
-            min(1.0, col[2] * ao),
+            col[0] * ao,
+            col[1] * ao,
+            col[2] * ao,
             1.0,
         )
 
@@ -630,32 +684,32 @@ def build_terrain_object():
 
     assert village.get("version") == 2 and "bounds" in village, "village.json must be v2 with bounds"
     bounds_data = village["bounds"]
+    coast_tag = village.get("coast", "organic-v1")
 
     outer_raw = [(float(p["x"]), float(p["z"])) for p in bounds_data["outer"]]
     outer_raw = ensure_positive_area_xz(outer_raw)
-    # Soften hex staircase teeth while preserving exact outer bounding box
-    outer_smoothed = smooth_hex_boundary_xz(outer_raw, passes=2, weight=0.26, preserve_bbox=True)
+    # Gently smooth the 160-vertex organic coastline while preserving exact bounding box
+    outer_smoothed = smooth_hex_boundary_xz(outer_raw, passes=1, weight=0.18, preserve_bbox=True)
 
     holes_raw = []
     for h in bounds_data.get("holes", []):
         h_pts = [(float(p["x"]), float(p["z"])) for p in h]
         h_pts = ensure_positive_area_xz(h_pts)
-        holes_raw.append(smooth_hex_boundary_xz(h_pts, passes=2, weight=0.24, preserve_bbox=True))
+        holes_raw.append(smooth_hex_boundary_xz(h_pts, passes=1, weight=0.16, preserve_bbox=True))
 
     path_segments, junction_triangles = build_smoothed_path_primitives(village.get("paths", []))
 
-    # Subdivide each edge into 3 segments (~0.38m) and smooth 1 light pass
+    # Subdivide outer coastline (160 -> 480 vertices, ~0.24m segment length) and smooth 2 passes
+    # so the organic shoreline curves cleanly without faceted kinks
     outer_sub = smooth_hex_boundary_xz(
         subdivide_polygon_xz(outer_smoothed, subdivisions=3),
-        passes=1,
-        weight=0.16,
+        passes=2,
+        weight=0.20,
         preserve_bbox=True,
     )
     outer_miters = compute_inward_miter_normals_xz(outer_sub, smooth_passes=3)
 
     # 6-ring cushion/diorama profile for outer island bevel & 0.35m dirt cliff cross-section:
-    # Expanding from +0.16m inward at y=0.0 out to 0.00m at y=-0.255 so the rounded grass
-    # bevel and warm dirt cliff cross-section are clearly visible from quarter-view!
     outer_profile = [
         (0.160, 0.000, 0.16),   # Ring 0: inner grass top at y = 0.00
         (0.090, -0.025, 0.12),  # Ring 1: rounded bevel upper shoulder
@@ -679,10 +733,11 @@ def build_terrain_object():
     holes_sub_list = []
     holes_rings_xz = []
     for h_smoothed in holes_raw:
+        # Subdivide 88-vertex rounded pond into 176 vertices (~0.125m segment length)
         h_sub = smooth_hex_boundary_xz(
-            subdivide_polygon_xz(h_smoothed, subdivisions=3),
+            subdivide_polygon_xz(h_smoothed, subdivisions=2),
             passes=1,
-            weight=0.15,
+            weight=0.16,
             preserve_bbox=True,
         )
         h_miters = compute_inward_miter_normals_xz(h_sub, smooth_passes=3)
@@ -754,8 +809,6 @@ def build_terrain_object():
 
     # Seed vertices inside 3-way junction triangles
     for tri_a, tri_b, tri_c, _hw in junction_triangles:
-        cx = (tri_a[0] + tri_b[0] + tri_c[0]) / 3.0
-        cz = (tri_a[1] + tri_b[1] + tri_c[1]) / 3.0
         for w0, w1, w2 in ((1 / 3, 1 / 3, 1 / 3), (0.5, 0.25, 0.25), (0.25, 0.5, 0.25), (0.25, 0.25, 0.5)):
             px = w0 * tri_a[0] + w1 * tri_b[0] + w2 * tri_c[0]
             pz = w0 * tri_a[1] + w1 * tri_b[1] + w2 * tri_c[1]
@@ -1017,21 +1070,24 @@ def build_terrain_object():
                     is_smooth=True,
                 )
 
-    col_layer = bm.loops.layers.color.new("COLOR_0")
-    for f, loop_cols in face_records:
-        if f.is_valid:
-            for loop, rgba in zip(f.loops, loop_cols):
-                loop[col_layer] = rgba
-
     bm.normal_update()
+
+    valid_face_loop_cols = [loop_cols for f, loop_cols in face_records if f.is_valid]
 
     mesh = bpy.data.meshes.new("terrain")
     bm.to_mesh(mesh)
     bm.free()
 
-    if "COLOR_0" in mesh.color_attributes:
-        mesh.color_attributes.active_color = mesh.color_attributes["COLOR_0"]
-        mesh.color_attributes.render_color_index = 0
+    # Write linear RGBA colors directly to FLOAT_COLOR corner attribute COLOR_0
+    # (prevents BYTE_COLOR double sRGB->Linear gamma conversion on glTF export)
+    col_attr = mesh.color_attributes.new(name="COLOR_0", type='FLOAT_COLOR', domain='CORNER')
+    mesh.color_attributes.active_color = col_attr
+    mesh.color_attributes.render_color_index = 0
+
+    for poly_idx, poly in enumerate(mesh.polygons):
+        loop_cols = valid_face_loop_cols[poly_idx]
+        for loop_idx, rgba in zip(poly.loop_indices, loop_cols):
+            col_attr.data[loop_idx].color = rgba
 
     mat = get_or_create_diorama_material("AbraxasEnvMat", roughness=0.88)
     mesh.materials.append(mat)
@@ -1040,12 +1096,14 @@ def build_terrain_object():
     obj.location = Vector((0.0, 0.0, 0.0))
     obj.rotation_euler = Euler((0.0, 0.0, 0.0), 'XYZ')
     obj.scale = Vector((1.0, 1.0, 1.0))
+    obj["coast"] = coast_tag
+    obj["used_palette_colors"] = list(TERRAIN_VERIFY_HEX_LIST)
     bpy.context.collection.objects.link(obj)
     return obj
 
 
 # -----------------------------------------------------------------------------
-# GLB Export & GLB Accessor Verification
+# GLB Export, Position Bounds & Color Verification
 # -----------------------------------------------------------------------------
 def export_terrain_glb(obj):
     os.makedirs(PUBLIC_ENV_DIR, exist_ok=True)
@@ -1095,6 +1153,88 @@ def inspect_glb_position_bounds(glb_path: str):
     return acc["min"], acc["max"], acc["count"]
 
 
+def verify_glb_colors(glb_path: str, key: str, expected_hex_list: list):
+    """
+    Re-imports the exported GLB, reads COLOR_0 linear values, converts them back
+    to sRGB 0..255, and verifies each expected palette color (grass #5CC96B family,
+    path #F2B35E family) matches within ±6/255. Exits with code 1 on failure.
+    """
+    prev_objs = set(bpy.data.objects)
+    prev_meshes = set(bpy.data.meshes)
+    prev_mats = set(bpy.data.materials)
+    prev_active = bpy.context.view_layer.objects.active
+    prev_sel = [o for o in bpy.data.objects if o.select_get()]
+
+    bpy.ops.import_scene.gltf(filepath=glb_path)
+
+    new_objs = set(bpy.data.objects) - prev_objs
+    imp_mesh_objs = [o for o in new_objs if o.type == "MESH" and len(o.data.color_attributes) > 0]
+    if not imp_mesh_objs:
+        print(f"[COLOR VERIFY FAIL] COLOR_0 missing on imported mesh in {glb_path}")
+        sys.exit(1)
+
+    linear_colors = []
+    for mo in imp_mesh_objs:
+        ca = mo.data.color_attributes.get("COLOR_0") or mo.data.color_attributes[0]
+        for item in ca.data:
+            c = item.color
+            linear_colors.append((c[0], c[1], c[2]))
+
+    for o in new_objs:
+        bpy.data.objects.remove(o, do_unlink=True)
+    for m in set(bpy.data.meshes) - prev_meshes:
+        bpy.data.meshes.remove(m, do_unlink=True)
+    for mat in set(bpy.data.materials) - prev_mats:
+        bpy.data.materials.remove(mat, do_unlink=True)
+
+    bpy.ops.object.select_all(action='DESELECT')
+    for o in prev_sel:
+        if o.name in bpy.data.objects:
+            o.select_set(True)
+    if prev_active and prev_active.name in bpy.data.objects:
+        bpy.context.view_layer.objects.active = prev_active
+
+    results = {}
+    for hex_str in expected_hex_list:
+        label = HEX_TO_PALETTE_NAME.get(hex_str, hex_str)
+        exp_rl, exp_gl, exp_bl, _ = hex_to_linear_rgba(hex_str, 1.0)
+        exp_r, exp_g, exp_b = hex_to_srgb_255(hex_str)
+
+        best_lin = min(
+            linear_colors,
+            key=lambda c: (c[0] - exp_rl) ** 2 + (c[1] - exp_gl) ** 2 + (c[2] - exp_bl) ** 2,
+        )
+        srgb_r_f = linear_to_srgb(best_lin[0]) * 255.0
+        srgb_g_f = linear_to_srgb(best_lin[1]) * 255.0
+        srgb_b_f = linear_to_srgb(best_lin[2]) * 255.0
+        meas_r = int(round(srgb_r_f))
+        meas_g = int(round(srgb_g_f))
+        meas_b = int(round(srgb_b_f))
+        meas_hex = f"#{meas_r:02X}{meas_g:02X}{meas_b:02X}"
+
+        max_diff = max(
+            abs(srgb_r_f - exp_r),
+            abs(srgb_g_f - exp_g),
+            abs(srgb_b_f - exp_b),
+        )
+        print(
+            f"[COLOR VERIFY] {key:16s} | {label:14s} | palette={hex_str} ({exp_r:3d},{exp_g:3d},{exp_b:3d}) "
+            f"| measured={meas_hex} ({srgb_r_f:6.2f},{srgb_g_f:6.2f},{srgb_b_f:6.2f}) "
+            f"| linear=({best_lin[0]:.4f},{best_lin[1]:.4f},{best_lin[2]:.4f}) | max_diff={max_diff:.2f}/255"
+        )
+        if max_diff > 6.0:
+            print(f"[COLOR VERIFY FAIL] {key} ({label}): max_diff {max_diff:.2f}/255 exceeds ±6/255")
+            sys.exit(1)
+        results[label] = {
+            "paletteHex": hex_str,
+            "measuredHex": meas_hex,
+            "measuredSrgb255": [round(srgb_r_f, 2), round(srgb_g_f, 2), round(srgb_b_f, 2)],
+            "measuredLinear": [round(best_lin[0], 4), round(best_lin[1], 4), round(best_lin[2], 4)],
+            "maxDiff255": round(max_diff, 2),
+        }
+    return results
+
+
 # -----------------------------------------------------------------------------
 # Quarter-View Preview Render (assets/source/previews/environment/terrain.png)
 # -----------------------------------------------------------------------------
@@ -1120,7 +1260,7 @@ def render_terrain_quarter_view(terrain_obj):
     cam_data.type = 'ORTHO'
     cam_data.clip_start = 0.1
     cam_data.clip_end = 200.0
-    cam_data.ortho_scale = 41.5
+    cam_data.ortho_scale = 42.5
     cam_obj = bpy.data.objects.new("TerrainPreviewCam", cam_data)
     bpy.context.collection.objects.link(cam_obj)
     scene.camera = cam_obj
@@ -1158,9 +1298,11 @@ def render_terrain_quarter_view(terrain_obj):
 def main():
     print(f"[INFO] Running build_terrain.py on Blender {bpy.app.version_string}")
     bpy.ops.wm.read_factory_settings(use_empty=True)
+    bpy.context.preferences.filepaths.save_version = 0
 
     terrain_obj = build_terrain_object()
     glb_path = export_terrain_glb(terrain_obj)
+    color_verify = verify_glb_colors(glb_path, "terrain", list(terrain_obj.get("used_palette_colors", TERRAIN_VERIFY_HEX_LIST)))
     preview_path = render_terrain_quarter_view(terrain_obj)
 
     tri_count = len(terrain_obj.data.polygons)
@@ -1182,8 +1324,12 @@ def main():
         "maxZ": max_z,
     }
 
-    assert tri_count <= MAX_TRIANGLES, f"terrain exceeded tri budget: {tri_count} > {MAX_TRIANGLES}"
-    assert byte_size <= MAX_BYTES, f"terrain exceeded byte budget: {byte_size} > {MAX_BYTES}"
+    if tri_count > MAX_TRIANGLES:
+        print(f"[BUDGET FAIL] terrain exceeded tri budget: {tri_count} > {MAX_TRIANGLES}")
+        sys.exit(1)
+    if byte_size > MAX_BYTES:
+        print(f"[BUDGET FAIL] terrain exceeded byte budget: {byte_size} > {MAX_BYTES}")
+        sys.exit(1)
 
     # Update assets/source/environment/asset-metadata.json
     meta_path = os.path.join(SOURCE_ENV_DIR, "asset-metadata.json")
@@ -1194,6 +1340,7 @@ def main():
         meta_doc = {
             "version": 1,
             "blenderVersion": bpy.app.version_string,
+            "colorSpaceNote": "색공간 수정(2026-11-01): sRGB 팔레트 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
             "phase1Only": False,
             "buildTerrain": True,
             "summary": {},
@@ -1201,10 +1348,12 @@ def main():
         }
 
     meta_doc["blenderVersion"] = bpy.app.version_string
+    meta_doc["colorSpaceNote"] = "색공간 수정(2026-11-01): sRGB 팔레트 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용"
     meta_doc["buildTerrain"] = True
     meta_doc.setdefault("assets", {})["terrain"] = {
         "path": "assets/abraxas/environment/terrain.glb",
         "scale": 1,
+        "coast": str(terrain_obj.get("coast", "organic-v1")),
         "collision": [],
         "triangles": tri_count,
         "bytes": byte_size,
@@ -1213,8 +1362,10 @@ def main():
         "bounds": bounds,
         "materials": len(terrain_obj.data.materials),
         "vertexColorAttribute": "COLOR_0",
+        "colorAttributeType": "FLOAT_COLOR",
         "dracoCompressed": True,
         "preview": "assets/source/previews/environment/terrain.png",
+        "colorVerification": color_verify,
     }
 
     all_assets = meta_doc["assets"]
@@ -1229,13 +1380,19 @@ def main():
 
     with open(meta_path, "w", encoding="utf-8") as f:
         json.dump(meta_doc, f, indent=2, ensure_ascii=False)
+        f.write("\n")
 
     blend_path = os.path.join(SOURCE_ENV_DIR, "terrain.blend")
+    blend1_path = os.path.join(SOURCE_ENV_DIR, "terrain.blend1")
+    if os.path.exists(blend_path):
+        os.remove(blend_path)
     bpy.ops.wm.save_as_mainfile(filepath=blend_path)
+    if os.path.exists(blend1_path):
+        os.remove(blend1_path)
 
     print(
-        f"[OK] terrain | tri={tri_count}/{MAX_TRIANGLES} | gltf_verts={gltf_vert_count} "
-        f"| bytes={byte_size}/{MAX_BYTES} ({round(byte_size/1024.0, 2)} KiB) "
+        f"[OK] terrain | coast={terrain_obj.get('coast', 'organic-v1')} | tri={tri_count}/{MAX_TRIANGLES} "
+        f"| gltf_verts={gltf_vert_count} | bytes={byte_size}/{MAX_BYTES} ({round(byte_size/1024.0, 2)} KiB) "
         f"| bounds={bounds} | preview={preview_path}"
     )
 

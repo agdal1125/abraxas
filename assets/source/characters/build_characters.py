@@ -4,16 +4,17 @@ import math
 import json
 import struct
 import os
+import sys
 from mathutils import Vector, Matrix, Euler
 
-WORKSPACE = "C:/Users/jake1/Desktop/abraxas/.claude/worktrees/overhaul-characters"
+WORKSPACE = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 ARTIFACT_DIR = "C:/Users/jake1/.gemini/antigravity-cli/brain/101c2ff1-b0d8-495b-baac-4c63174efa87"
 SOURCE_DIR = f"{WORKSPACE}/assets/source/characters"
 CONCEPT_DIR = f"{WORKSPACE}/assets/source/concepts/characters"
 PREVIEW_DIR = f"{WORKSPACE}/assets/source/previews/characters"
 EXPORT_DIR = f"{WORKSPACE}/client/public/assets/abraxas/characters"
 
-for d in [SOURCE_DIR, CONCEPT_DIR, PREVIEW_DIR, EXPORT_DIR]:
+for d in [SOURCE_DIR, PREVIEW_DIR, EXPORT_DIR]:
     os.makedirs(d, exist_ok=True)
 
 
@@ -23,12 +24,24 @@ def srgb_to_linear(c: float) -> float:
     return ((c + 0.055) / 1.055) ** 2.4
 
 
+def linear_to_srgb(c: float) -> float:
+    c = max(0.0, min(1.0, c))
+    if c <= 0.0031308:
+        return c * 12.92
+    return 1.055 * (c ** (1.0 / 2.4)) - 0.055
+
+
 def hex_to_linear_rgba(hex_str: str, alpha: float = 1.0):
     h = hex_str.lstrip("#")
     r = srgb_to_linear(int(h[0:2], 16) / 255.0)
     g = srgb_to_linear(int(h[2:4], 16) / 255.0)
     b = srgb_to_linear(int(h[4:6], 16) / 255.0)
     return (r, g, b, alpha)
+
+
+def hex_to_srgb_255(hex_str: str):
+    h = hex_str.lstrip("#")
+    return (int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16))
 
 
 PALETTE = {
@@ -93,10 +106,12 @@ def finish_part_mesh(bm, name: str, color_hex: str, weight_map: dict, smooth: bo
     for poly in mesh.polygons:
         poly.use_smooth = smooth
 
-    col_attr = mesh.color_attributes.new(name="COLOR_0", type="BYTE_COLOR", domain="CORNER")
+    col_attr = mesh.color_attributes.new(name="COLOR_0", type="FLOAT_COLOR", domain="CORNER")
     rgba = hex_to_linear_rgba(color_hex, 1.0)
     for i in range(len(col_attr.data)):
         col_attr.data[i].color = rgba
+    mesh.color_attributes.active_color = col_attr
+    mesh.color_attributes.render_color_index = 0
 
     obj = bpy.data.objects.new(name, mesh)
     bpy.context.collection.objects.link(obj)
@@ -568,14 +583,12 @@ def bake_ao_into_vertex_color(mesh_obj, char_key: str):
         px = min(511, max(0, int(uv.x * 511.0)))
         py = min(511, max(0, int(uv.y * 511.0)))
         ao_val = pixels[(py * 512 + px) * 4]
-        v_idx = mesh.loops[loop_idx].vertex_index
-        z_norm = max(0.0, min(1.0, mesh.vertices[v_idx].co.z / 0.60))
-        shade = (0.80 + 0.20 * max(0.40, min(1.0, ao_val))) * (0.94 + 0.06 * z_norm)
+        ao = 0.82 + 0.18 * max(0.0, min(1.0, ao_val))
         c = col_attr[loop_idx].color
         col_attr[loop_idx].color = (
-            min(1.0, c[0] * shade),
-            min(1.0, c[1] * shade),
-            min(1.0, c[2] * shade),
+            min(1.0, c[0] * ao),
+            min(1.0, c[1] * ao),
+            min(1.0, c[2] * ao),
             1.0,
         )
 
@@ -769,7 +782,123 @@ def export_character_glb(arm_obj, mesh_obj, char_key: str) -> str:
     return out_path
 
 
-def inspect_glb(glb_path: str, mesh_obj, max_tri: int, max_kib: int):
+CHAR_REP_COLORS = {
+    "player": [
+        ("warm_body", PALETTE["warm_body"]),
+        ("cream", PALETTE["cream"]),
+        ("eggshell", PALETTE["eggshell"]),
+    ],
+    "char-a": [
+        ("a", PALETTE["a"]),
+        ("cream", PALETTE["cream"]),
+        ("wood", PALETTE["wood"]),
+    ],
+    "char-b": [
+        ("b", PALETTE["b"]),
+        ("cream", PALETTE["cream"]),
+    ],
+    "char-c": [
+        ("c", PALETTE["c"]),
+        ("cream", PALETTE["cream"]),
+        ("ink", PALETTE["ink"]),
+    ],
+    "char-d": [
+        ("d", PALETTE["d"]),
+        ("cream", PALETTE["cream"]),
+        ("wood", PALETTE["wood"]),
+        ("stone", PALETTE["stone"]),
+    ],
+    "quest-npc": [
+        ("gray_body", PALETTE["gray_body"]),
+        ("gray_cap", PALETTE["gray_cap"]),
+        ("cream", PALETTE["cream"]),
+    ],
+}
+
+
+def verify_glb_colors(glb_path: str, char_key: str):
+    prev_objs = set(bpy.data.objects)
+    prev_meshes = set(bpy.data.meshes)
+    prev_mats = set(bpy.data.materials)
+    prev_arms = set(bpy.data.armatures)
+    prev_actions = set(bpy.data.actions)
+    prev_active = bpy.context.view_layer.objects.active
+    prev_sel = [o for o in bpy.data.objects if o.select_get()]
+
+    bpy.ops.import_scene.gltf(filepath=glb_path)
+
+    new_objs = set(bpy.data.objects) - prev_objs
+    imp_mesh_objs = [o for o in new_objs if o.type == "MESH" and len(o.data.color_attributes) > 0]
+    if not imp_mesh_objs:
+        print(f"[COLOR VERIFY FAIL] COLOR_0 missing on imported mesh in {glb_path}")
+        sys.exit(1)
+
+    linear_colors = []
+    for mo in imp_mesh_objs:
+        ca = mo.data.color_attributes.get("COLOR_0") or mo.data.color_attributes[0]
+        for item in ca.data:
+            c = item.color
+            linear_colors.append((c[0], c[1], c[2]))
+
+    for o in new_objs:
+        bpy.data.objects.remove(o, do_unlink=True)
+    for m in set(bpy.data.meshes) - prev_meshes:
+        bpy.data.meshes.remove(m, do_unlink=True)
+    for mat in set(bpy.data.materials) - prev_mats:
+        bpy.data.materials.remove(mat, do_unlink=True)
+    for arm in set(bpy.data.armatures) - prev_arms:
+        bpy.data.armatures.remove(arm, do_unlink=True)
+    for act in set(bpy.data.actions) - prev_actions:
+        bpy.data.actions.remove(act, do_unlink=True)
+
+    bpy.ops.object.select_all(action="DESELECT")
+    for o in prev_sel:
+        if o.name in bpy.data.objects:
+            o.select_set(True)
+    if prev_active and prev_active.name in bpy.data.objects:
+        bpy.context.view_layer.objects.active = prev_active
+
+    results = {}
+    for label, hex_str in CHAR_REP_COLORS.get(char_key, []):
+        exp_rl, exp_gl, exp_bl, _ = hex_to_linear_rgba(hex_str, 1.0)
+        exp_r, exp_g, exp_b = hex_to_srgb_255(hex_str)
+
+        best_lin = min(
+            linear_colors,
+            key=lambda c: (c[0] - exp_rl) ** 2 + (c[1] - exp_gl) ** 2 + (c[2] - exp_bl) ** 2,
+        )
+        srgb_r_f = linear_to_srgb(best_lin[0]) * 255.0
+        srgb_g_f = linear_to_srgb(best_lin[1]) * 255.0
+        srgb_b_f = linear_to_srgb(best_lin[2]) * 255.0
+        meas_r = int(round(srgb_r_f))
+        meas_g = int(round(srgb_g_f))
+        meas_b = int(round(srgb_b_f))
+        meas_hex = f"#{meas_r:02X}{meas_g:02X}{meas_b:02X}"
+
+        max_diff = max(
+            abs(srgb_r_f - exp_r),
+            abs(srgb_g_f - exp_g),
+            abs(srgb_b_f - exp_b),
+        )
+        print(
+            f"[COLOR VERIFY] {char_key:9s} | {label:9s} | palette={hex_str} ({exp_r:3d},{exp_g:3d},{exp_b:3d}) "
+            f"| measured={meas_hex} ({srgb_r_f:6.2f},{srgb_g_f:6.2f},{srgb_b_f:6.2f}) "
+            f"| linear=({best_lin[0]:.4f},{best_lin[1]:.4f},{best_lin[2]:.4f}) | max_diff={max_diff:.2f}/255"
+        )
+        if max_diff > 6.0:
+            print(f"[COLOR VERIFY FAIL] {char_key} ({label}): max_diff {max_diff:.2f}/255 exceeds ±6/255")
+            sys.exit(1)
+        results[label] = {
+            "paletteHex": hex_str,
+            "measuredHex": meas_hex,
+            "measuredSrgb255": [round(srgb_r_f, 2), round(srgb_g_f, 2), round(srgb_b_f, 2)],
+            "measuredLinear": [round(best_lin[0], 4), round(best_lin[1], 4), round(best_lin[2], 4)],
+            "maxDiff255": round(max_diff, 2),
+        }
+    return results
+
+
+def inspect_glb(glb_path: str, mesh_obj, char_key: str, max_tri: int, max_kib: int):
     file_bytes = os.path.getsize(glb_path)
     with open(glb_path, "rb") as f:
         magic, version, length = struct.unpack("<4sII", f.read(12))
@@ -805,6 +934,8 @@ def inspect_glb(glb_path: str, mesh_obj, max_tri: int, max_kib: int):
     assert has_color0, f"COLOR_0 missing in {glb_path}"
     assert "KHR_draco_mesh_compression" in extensions_used, f"Draco missing in {glb_path}"
 
+    color_verify = verify_glb_colors(glb_path, char_key)
+
     info = {
         "bytes": file_bytes,
         "kib": kib,
@@ -814,6 +945,7 @@ def inspect_glb(glb_path: str, mesh_obj, max_tri: int, max_kib: int):
         "joints": joint_count,
         "clips": anim_names,
         "hasColor0": has_color0,
+        "colorAttributeType": "FLOAT_COLOR",
         "draco": True,
         "bounds": {
             "min": [round(min(xs), 4), round(min(ys), 4), round(min(zs), 4)],
@@ -824,6 +956,7 @@ def inspect_glb(glb_path: str, mesh_obj, max_tri: int, max_kib: int):
                 round(max(zs) - min(zs), 4),
             ],
         },
+        "colorVerification": color_verify,
     }
     print(f"[GLB VERIFY] {os.path.basename(glb_path)} -> {json.dumps(info)}")
     return info
@@ -1118,6 +1251,7 @@ def stitch_lineup_sheets(all_temp_paths: dict):
 
 def save_combined_blend_file(specs):
     reset_scene()
+    bpy.context.preferences.filepaths.save_version = 0
     for idx, (key, height, builder_fn, sx, sz, hx, _, _, _) in enumerate(specs):
         col = bpy.data.collections.new(key)
         bpy.context.scene.collection.children.link(col)
@@ -1134,14 +1268,18 @@ def save_combined_blend_file(specs):
             col.objects.link(obj)
 
     blend_path = f"{SOURCE_DIR}/characters.blend"
+    blend1_path = f"{SOURCE_DIR}/characters.blend1"
+    if os.path.exists(blend_path):
+        os.remove(blend_path)
     bpy.ops.wm.save_as_mainfile(filepath=blend_path, compress=True)
+    if os.path.exists(blend1_path):
+        os.remove(blend1_path)
     print(f"[BLEND] Saved {blend_path}")
 
 
 def main():
     blender_ver = bpy.app.version_string
     print(f"[BLENDER] Running Blender {blender_ver}")
-    copy_concepts_to_png()
 
     specs = [
         ("player", 0.58, build_player_parts, 0.078, 0.295, 0.048, 0.18, 2000, 120),
@@ -1155,6 +1293,7 @@ def main():
     metadata = {
         "version": 1,
         "generator": f"Blender {blender_ver}",
+        "colorSpaceNote": "색공간 수정(2026-11-01): sRGB 팔레트 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
         "assets": {},
     }
     all_temp_paths = {}
@@ -1167,7 +1306,7 @@ def main():
         arm_obj = create_armature_and_bind(mesh_obj, key, shoulder_x=sx, shoulder_z=sz, hip_x=hx)
         bake_three_actions(arm_obj, key)
         glb_path = export_character_glb(arm_obj, mesh_obj, key)
-        info = inspect_glb(glb_path, mesh_obj, max_tri=max_tri, max_kib=max_kib)
+        info = inspect_glb(glb_path, mesh_obj, key, max_tri=max_tri, max_kib=max_kib)
         tpaths = render_character_preview(arm_obj, mesh_obj, key)
         all_temp_paths[key] = tpaths
 

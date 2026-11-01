@@ -10,6 +10,7 @@ import bpy
 import bmesh
 import math
 import os
+import sys
 import json
 from mathutils import Vector, Euler
 
@@ -107,6 +108,18 @@ def srgb_to_linear(c: float) -> float:
     return ((c + 0.055) / 1.055) ** 2.4
 
 
+def linear_to_srgb(c: float) -> float:
+    c = max(0.0, min(1.0, c))
+    if c <= 0.0031308:
+        return c * 12.92
+    return 1.055 * (c ** (1.0 / 2.4)) - 0.055
+
+
+def hex_to_srgb_255(hex_str: str):
+    h = hex_str.lstrip("#")
+    return (int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16))
+
+
 def hex_to_linear_rgba(hex_str: str, tint: float = 1.0):
     h = hex_str.lstrip("#")
     r = int(h[0:2], 16) / 255.0
@@ -179,31 +192,8 @@ class PartBuilder:
         for poly in final_mesh.polygons:
             poly.use_smooth = smooth
 
-        col_attr = final_mesh.color_attributes.new(name="COLOR_0", type='BYTE_COLOR', domain='CORNER')
-        base_rgba = hex_to_linear_rgba(color_hex, 1.0)
-
-        zs = [v.co.z for v in final_mesh.vertices] or [0.0]
-        z_min, z_max = min(zs), max(zs)
-        z_span = max(0.04, z_max - z_min)
-
-        for poly in final_mesh.polygons:
-            nz = poly.normal.z
-            ny = -poly.normal.y
-            normal_boost = 1.0 + 0.05 * nz + 0.025 * ny
-            for loop_idx in poly.loop_indices:
-                v_idx = final_mesh.loops[loop_idx].vertex_index
-                vz = final_mesh.vertices[v_idx].co.z
-                t_z = (vz - z_min) / z_span
-                height_boost = (1.0 - shade_gradient * 0.5) + shade_gradient * t_z
-                factor = max(0.80, min(1.08, normal_boost * height_boost))
-                col_attr.data[loop_idx].color = (
-                    min(1.0, base_rgba[0] * factor),
-                    min(1.0, base_rgba[1] * factor),
-                    min(1.0, base_rgba[2] * factor),
-                    1.0,
-                )
-
-        self.parts.append(final_mesh)
+        # Store raw sRGB palette hex per part; COLOR_0 (FLOAT_COLOR) is written once in build_combined_object.
+        self.parts.append((final_mesh, color_hex.upper(), shade_gradient))
 
     def add_box(self, size, center, color_hex, rot_euler=(0.0, 0.0, 0.0), bevel=0.0, segments=0, smooth=False, taper_top=(1.0, 1.0)):
         bm = bmesh.new()
@@ -321,12 +311,13 @@ class PartBuilder:
 
     def build_combined_object(self, key: str, target_dims, lock_x_bounds=False, z_ground_offset=0.0):
         bm = bmesh.new()
-        col_layer = bm.loops.layers.color.new("COLOR_0")
+        part_id_layer = bm.faces.layers.int.new("part_id")
+        palette_list = []
 
-        for part_mesh in self.parts:
+        for part_idx, (part_mesh, color_hex, shade_grad) in enumerate(self.parts):
+            palette_list.append(color_hex)
             part_bm = bmesh.new()
             part_bm.from_mesh(part_mesh)
-            p_col = part_bm.loops.layers.color.get("COLOR_0")
 
             vert_map = {}
             for v in part_bm.verts:
@@ -337,9 +328,7 @@ class PartBuilder:
                 try:
                     new_f = bm.faces.new([vert_map[v.index] for v in f.verts])
                     new_f.smooth = f.smooth
-                    if p_col is not None:
-                        for l_src, l_dst in zip(f.loops, new_f.loops):
-                            l_dst[col_layer] = l_src[p_col]
+                    new_f[part_id_layer] = part_idx
                 except ValueError:
                     pass
             part_bm.free()
@@ -374,30 +363,58 @@ class PartBuilder:
             v.co.y = (v.co.y - cy) * sy
             v.co.z = (v.co.z - min_z) * sz + z_ground_offset
 
-        for f in bm.faces:
-            for loop in f.loops:
-                v = loop.vert
-                h_norm = max(0.0, min(1.0, (v.co.z - z_ground_offset) / max(0.08, th)))
-                radial = math.sqrt((v.co.x / max(0.08, tw * 0.5)) ** 2 + (v.co.y / max(0.08, td * 0.5)) ** 2)
-                # Subtle self-AO at the base while keeping top blossoms bright and clean
-                ground_ao = 0.82 + 0.18 * (h_norm ** 0.45)
-                cavity_ao = 0.90 + 0.10 * min(1.0, radial)
-                ao = max(0.78, min(1.0, ground_ao * cavity_ao))
-                c = loop[col_layer]
-                loop[col_layer] = (c[0] * ao, c[1] * ao, c[2] * ao, 1.0)
+        bm.faces.ensure_lookup_table()
+        face_part_ids = [f[part_id_layer] for f in bm.faces]
 
         mesh = bpy.data.meshes.new(key)
         bm.to_mesh(mesh)
         bm.free()
 
-        if "COLOR_0" in mesh.color_attributes:
-            mesh.color_attributes.active_color = mesh.color_attributes["COLOR_0"]
-            mesh.color_attributes.render_color_index = 0
+        # Single sRGB -> Linear-sRGB conversion & single linear AO pass written to FLOAT_COLOR
+        col_attr = mesh.color_attributes.new(name="COLOR_0", type='FLOAT_COLOR', domain='CORNER')
+        mesh.color_attributes.active_color = col_attr
+        mesh.color_attributes.render_color_index = 0
+
+        part_z_bounds = {}
+        for poly_idx, poly in enumerate(mesh.polygons):
+            pid = face_part_ids[poly_idx]
+            for loop_idx in poly.loop_indices:
+                vz = mesh.vertices[mesh.loops[loop_idx].vertex_index].co.z
+                if pid not in part_z_bounds:
+                    part_z_bounds[pid] = [vz, vz]
+                else:
+                    if vz < part_z_bounds[pid][0]:
+                        part_z_bounds[pid][0] = vz
+                    if vz > part_z_bounds[pid][1]:
+                        part_z_bounds[pid][1] = vz
+
+        linear_palette = [hex_to_linear_rgba(h, 1.0) for h in palette_list]
+
+        for poly_idx, poly in enumerate(mesh.polygons):
+            pid = face_part_ids[poly_idx]
+            base_r, base_g, base_b, _ = linear_palette[pid]
+            pz_min, pz_max = part_z_bounds.get(pid, (0.0, 1.0))
+            pz_span = max(0.02, pz_max - pz_min)
+            nz = poly.normal.z
+            normal_ao = 0.96 + 0.04 * max(0.0, nz)
+            for loop_idx in poly.loop_indices:
+                v = mesh.vertices[mesh.loops[loop_idx].vertex_index]
+                t_part = max(0.0, min(1.0, (v.co.z - pz_min) / pz_span))
+                # Single linear AO: top of each part reaches 1.0 (exact palette color), base has subtle grounding AO
+                part_ao = 0.84 + 0.16 * (t_part ** 0.55)
+                ao = max(0.78, min(1.0, part_ao * normal_ao))
+                col_attr.data[loop_idx].color = (
+                    base_r * ao,
+                    base_g * ao,
+                    base_b * ao,
+                    1.0,
+                )
 
         mat = get_or_create_diorama_material("AbraxasEnvMat", roughness=0.85)
         mesh.materials.append(mat)
 
         obj = bpy.data.objects.new(key, mesh)
+        obj["used_palette_colors"] = sorted(list(set(palette_list)))
         bpy.context.collection.objects.link(obj)
         return obj
 
@@ -544,6 +561,64 @@ def export_asset_glb(obj, key: str):
         export_draco_color_quantization=12,
     )
     return glb_path
+
+
+def verify_glb_colors(glb_path: str, key: str, expected_hex_list: list):
+    """Re-imports exported GLB and verifies representative COLOR_0 linear values convert back to sRGB within +-6/255."""
+    before_objs = set(bpy.data.objects)
+    bpy.ops.import_scene.gltf(filepath=glb_path)
+    new_objs = [o for o in bpy.data.objects if o not in before_objs]
+    mesh_objs = [o for o in new_objs if o.type == "MESH" and len(o.data.color_attributes) > 0]
+    if not mesh_objs:
+        print(f"[COLOR VERIFY FAIL] No mesh with color_attributes found in {glb_path}")
+        sys.exit(1)
+
+    sampled_srgb = []
+    for mo in mesh_objs:
+        col_attr = mo.data.color_attributes.get("COLOR_0") or mo.data.color_attributes[0]
+        for item in col_attr.data:
+            c = item.color
+            sr = linear_to_srgb(c[0]) * 255.0
+            sg = linear_to_srgb(c[1]) * 255.0
+            sb = linear_to_srgb(c[2]) * 255.0
+            sampled_srgb.append((sr, sg, sb, c[0], c[1], c[2]))
+
+    results = {}
+    for hex_str in expected_hex_list:
+        tr, tg, tb = hex_to_srgb_255(hex_str)
+        best_diff = 999.0
+        best_sample = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        for sr, sg, sb, lr, lg, lb in sampled_srgb:
+            diff = max(abs(sr - tr), abs(sg - tg), abs(sb - tb))
+            if diff < best_diff:
+                best_diff = diff
+                best_sample = (sr, sg, sb, lr, lg, lb)
+
+        sr, sg, sb, lr, lg, lb = best_sample
+        meas_hex = f"#{int(round(sr)):02X}{int(round(sg)):02X}{int(round(sb)):02X}"
+        print(
+            f"[COLOR VERIFY] {key:22s} | target={hex_str} ({tr:3d},{tg:3d},{tb:3d}) | "
+            f"measured={meas_hex} ({sr:5.1f},{sg:5.1f},{sb:5.1f}) linear=({lr:.4f},{lg:.4f},{lb:.4f}) | "
+            f"max_diff={best_diff:.2f}/255"
+        )
+        if best_diff > 6.0:
+            print(f"[COLOR VERIFY FAIL] {key} ({hex_str}) max_diff={best_diff:.2f} > 6.0/255")
+            sys.exit(1)
+        results[hex_str] = {
+            "paletteHex": hex_str,
+            "measuredHex": meas_hex,
+            "measuredSrgb255": [round(sr, 2), round(sg, 2), round(sb, 2)],
+            "measuredLinear": [round(lr, 4), round(lg, 4), round(lb, 4)],
+            "maxDiff255": round(best_diff, 2),
+        }
+
+    for o in new_objs:
+        mesh_data = o.data if o.type == "MESH" else None
+        bpy.data.objects.remove(o, do_unlink=True)
+        if mesh_data and mesh_data.users == 0:
+            bpy.data.meshes.remove(mesh_data)
+
+    return results
 
 
 def setup_preview_studio():
@@ -700,6 +775,7 @@ def update_asset_metadata(new_entries: dict):
 
     total_tris = sum(item["triangles"] for item in assets_map.values())
     total_bytes = sum(item["bytes"] for item in assets_map.values())
+    meta_doc["colorSpaceNote"] = "색공간 수정(2026-11-01): sRGB 팔레트 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용"
     meta_doc["assets"] = assets_map
     meta_doc["summary"] = {
         "assetCount": len(assets_map),
@@ -732,6 +808,8 @@ def main():
         built_objects[key] = obj
 
         glb_path = export_asset_glb(obj, key)
+        used_colors = list(obj.get("used_palette_colors", []))
+        color_verify = verify_glb_colors(glb_path, key, used_colors)
         tri_count = len(obj.data.polygons)
         byte_size = os.path.getsize(glb_path)
 
@@ -760,9 +838,11 @@ def main():
             "bounds": bounds,
             "materials": len(obj.data.materials),
             "vertexColorAttribute": "COLOR_0",
+            "colorAttributeType": "FLOAT_COLOR",
             "dracoCompressed": True,
             "concept": f"assets/source/concepts/environment/{spec['concept_sheet']}",
             "preview": "assets/source/previews/environment/flowers.png",
+            "colorVerification": color_verify,
         }
         print(f"[OK] {key:22s} | tri={tri_count:3d}/{spec['max_tri']:3d} | bytes={byte_size:5d}/{spec['max_bytes']:5d} | bounds={bounds['width']}x{bounds['depth']}x{bounds['height']}")
 

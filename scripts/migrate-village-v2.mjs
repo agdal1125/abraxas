@@ -4,9 +4,7 @@ const [input, output] = process.argv.slice(2);
 if (!input || !output || process.argv.length !== 4) throw new Error('Usage: node scripts/migrate-village-v2.mjs <input> <output>');
 const source = readFileSync(input, 'utf8');
 const v1 = JSON.parse(source);
-if (v1.version === 2) {
-  writeFileSync(output, source, 'utf8');
-} else {
+if (v1.version !== 2) {
   if (v1.version !== 1) throw new Error(`Unsupported version: ${v1.version}`);
   const assets = {
     'medieval/building_well_blue': 'well', 'medieval/building_stage_A': 'festival-stage',
@@ -111,5 +109,115 @@ if (v1.version === 2) {
     return { id, asset: /^[ABCD]$/.test(id) ? `char-${id.toLowerCase()}` : 'quest-npc', ...(zone ? { zone } : {}), ...(zone ? zones[zone] : point(pos)) };
   });
   const v2 = { version: 2, spawn: zones.entrance, terrain: { asset: 'terrain', x: 0, z: 0, rot: 0, scale: 1 }, bounds: { outer, holes, bridges }, zones, paths, actors, props };
-  writeFileSync(output, `${JSON.stringify(v2, null, 2)}\n`, 'utf8');
+  Object.assign(v1, v2);
+}
+
+organic(v1);
+writeFileSync(output, v1.coast === 'organic-v1' && JSON.parse(source).coast === 'organic-v1' ? source : `${JSON.stringify(v1, null, 2)}\n`, 'utf8');
+
+function organic(map) {
+  if (map.coast === 'organic-v1') return;
+  if (map.coast) throw new Error(`Unsupported coastline: ${map.coast}`);
+  const manifest = JSON.parse(readFileSync(new URL('../content/assets/manifest.json', import.meta.url), 'utf8')).assets;
+  const points = [map.spawn, ...Object.values(map.zones), ...map.actors,
+    ...map.props.filter(p => {
+      if (!manifest[p.asset]) throw new Error(`Missing asset: ${p.asset}`);
+      return manifest[p.asset].collision.length;
+    }), ...map.paths.flatMap(path => path.points)];
+  const smooth = (polygon, rounds) => {
+    for (let n = 0; n < rounds; n++) polygon = polygon.flatMap((a, i) => {
+      const b = polygon[(i + 1) % polygon.length];
+      return [0.25, 0.75].map(t => ({ x: a.x * (1 - t) + b.x * t, z: a.z * (1 - t) + b.z * t }));
+    });
+    return polygon;
+  };
+  const inside = (p, polygon) => {
+    let result = false;
+    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+      const a = polygon[i], b = polygon[j];
+      if ((a.z > p.z) !== (b.z > p.z) && p.x < (b.x - a.x) * (p.z - a.z) / (b.z - a.z) + a.x) result = !result;
+    }
+    return result;
+  };
+  const distance = (p, a, b) => {
+    const dx = b.x - a.x, dz = b.z - a.z;
+    const t = Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.z - a.z) * dz) / (dx * dx + dz * dz)));
+    return Math.hypot(p.x - a.x - t * dx, p.z - a.z - t * dz);
+  };
+  const resample = (polygon, count) => {
+    const lengths = polygon.map((p, i) => Math.hypot(p.x - polygon[(i + 1) % polygon.length].x, p.z - polygon[(i + 1) % polygon.length].z));
+    const total = lengths.reduce((a, b) => a + b, 0);
+    let edge = 0, start = 0;
+    return Array.from({ length: count }, (_, i) => {
+      const target = total * i / count;
+      while (start + lengths[edge] < target) start += lengths[edge++];
+      const a = polygon[edge], b = polygon[(edge + 1) % polygon.length], t = (target - start) / lengths[edge];
+      return { x: a.x + (b.x - a.x) * t, z: a.z + (b.z - a.z) * t };
+    });
+  };
+  const cross = (a, b, c) => (b.x - a.x) * (c.z - a.z) - (b.z - a.z) * (c.x - a.x);
+  const intersects = (a, b, c, d) => cross(a, b, c) * cross(a, b, d) <= 0 && cross(c, d, a) * cross(c, d, b) <= 0
+    && Math.max(Math.min(a.x, b.x), Math.min(c.x, d.x)) <= Math.min(Math.max(a.x, b.x), Math.max(c.x, d.x))
+    && Math.max(Math.min(a.z, b.z), Math.min(c.z, d.z)) <= Math.min(Math.max(a.z, b.z), Math.max(c.z, d.z));
+  const simple = polygon => polygon.every((a, i) => polygon.every((c, j) => {
+    if (i === j || (i + 1) % polygon.length === j || (j + 1) % polygon.length === i) return true;
+    return !intersects(a, polygon[(i + 1) % polygon.length], c, polygon[(j + 1) % polygon.length]);
+  }));
+  const base = resample(smooth(map.bounds.outer, 3), 160);
+  const center = base.reduce((a, p) => ({ x: a.x + p.x / base.length, z: a.z + p.z / base.length }), { x: 0, z: 0 });
+  const holes = map.bounds.holes.map(h => smooth(h, 2));
+  if (holes.some(h => !simple(h))) throw new Error('A smoothed hole is not a simple polygon');
+  if (points.some(p => holes.some(h => inside(p, h)))) throw new Error('A required point is inside a smoothed hole');
+  for (const bridge of map.bounds.bridges) {
+    const touches = holes.some(h => bridge.points.some((a, i) => h.some((c, j) => intersects(a, bridge.points[(i + 1) % bridge.points.length], c, h[(j + 1) % h.length]))));
+    if (!touches) throw new Error(`Bridge ${bridge.propId} no longer meets a hole`);
+  }
+  const outer = base.map((p, i) => {
+    const dx = p.x - center.x, dz = p.z - center.z, radius = Math.hypot(dx, dz);
+    const noise = 0.6 * Math.sin(4 * 2 * Math.PI * i / base.length + 1.2345);
+    return { x: p.x + dx / radius * noise, z: p.z + dz / radius * noise };
+  });
+  const clearance = (p, polygon) => (inside(p, polygon) ? 1 : -1) * Math.min(...polygon.map((a, i) => distance(p, a, polygon[(i + 1) % polygon.length])));
+  const moved = new Set();
+  let removed = 0;
+  const cleanDecor = () => { map.props = map.props.filter(p => {
+    if (manifest[p.asset].collision.length || clearance(p, outer) >= 0.8) return true;
+    const original = { x: p.x, z: p.z };
+    for (let step = 1; step <= 200; step++) {
+      const fraction = step / 200;
+      p.x = original.x + (center.x - original.x) * fraction;
+      p.z = original.z + (center.z - original.z) * fraction;
+      if (clearance(p, outer) >= 0.8 && !holes.some(h => inside(p, h))) { moved.add(p.id); return true; }
+    }
+    removed++;
+    return false;
+  }); };
+  cleanDecor();
+  const expanded = new Set();
+  const area = outer.reduce((sum, p, i) => sum + p.x * outer[(i + 1) % outer.length].z - outer[(i + 1) % outer.length].x * p.z, 0);
+  for (let iteration = 0; iteration < 2000; iteration++) {
+    const p = points.find(point => clearance(point, outer) < 0.801);
+    if (!p) break;
+    let edge = 0;
+    for (let i = 1; i < outer.length; i++) if (distance(p, outer[i], outer[(i + 1) % outer.length]) < distance(p, outer[edge], outer[(edge + 1) % outer.length])) edge = i;
+    const a = outer[edge], b = outer[(edge + 1) % outer.length];
+    const length = Math.hypot(b.x - a.x, b.z - a.z);
+    const nx = Math.sign(area) * (b.z - a.z) / length, nz = -Math.sign(area) * (b.x - a.x) / length;
+    const amount = Math.min(1, 0.82 - clearance(p, outer));
+    for (let i = 0; i < outer.length; i++) {
+      const delta = Math.min((i - edge + outer.length) % outer.length, (edge + 1 - i + outer.length) % outer.length);
+      if (delta > 8) continue;
+      const weight = (1 + Math.cos(Math.PI * delta / 9)) / 2;
+      outer[i].x += nx * amount * weight;
+      outer[i].z += nz * amount * weight;
+      expanded.add(i);
+    }
+  }
+  if (!simple(outer) || points.some(p => clearance(p, outer) < 0.8)) throw new Error('Cannot preserve 0.8m clearance with the expanded coastline');
+  cleanDecor();
+  const minimum = Math.min(...[...points, ...map.props.filter(p => !manifest[p.asset].collision.length)].map(p => clearance(p, outer)));
+  map.bounds.outer = outer;
+  map.bounds.holes = holes;
+  map.coast = 'organic-v1';
+  console.log(`Coast: ${outer.length} vertices, expanded ${expanded.size} vertices, moved ${moved.size}, removed ${removed}, minimum clearance ${minimum.toFixed(3)}m`);
 }
