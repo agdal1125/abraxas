@@ -8,6 +8,7 @@
 - **소스 스크립트**: `assets/source/environment/build_environment.py`
 - **Blender 작업 원본**: `assets/source/environment/environment_kit.blend`
 - **메타데이터**: `assets/source/environment/asset-metadata.json`
+- **색공간 수정(2026-11-01)**: `build_environment.py`(32종)와 `build_flowers.py`(6종)에서 기존 `BYTE_COLOR`/`bm.loops.layers.color` 경유 시 발생하던 이중 음영·비선형 AO 곱을 제거하고, sRGB 팔레트 hex(`#RRGGBB`)를 Linear-sRGB로 정확히 **한 번만** 변환하여 `COLOR_0`(`FLOAT_COLOR`, `CORNER`)에 기록하며, AO 곱도 선형 공간에서 **한 번만**(`ao = max(0.78, min(1.0, part_ao * normal_ao))`) 적용하도록 수정했다. 내보낸 GLB 38종을 다시 읽어 대표 정점(풀 `#5CC96B`, 흙길 `#F2B35E`, 캐릭터 대표색 및 건물·식생 팔레트)의 `COLOR_0` 선형값을 sRGB로 되돌렸을 때 팔레트 hex와 `0.00/255` 오차(`±6/255` 이내)로 일치함을 검증했다.
 
 ## 2. 독자적 디자인 원칙 및 원본 근거
 

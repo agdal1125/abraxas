@@ -8,6 +8,7 @@
 - **제작 스크립트**: `assets/source/characters/build_characters.py`
 - **Blender 소스 파일**: `assets/source/characters/characters.blend`
 - **자체 AO 베이크 소스**: `assets/source/characters/ao_<key>.png` (Cycles 32 samples, 512×512, 여백 8px, 선형 공간에서 `COLOR_0` 버텍스 컬러에 약하게 곱한 뒤 내보내기 시 텍스처 노드를 제거해 순수 `COLOR_0` 정점 컬러로 경량화)
+- **색공간 수정(2026-11-01)**: sRGB 팔레트 hex(`#RRGGBB`)를 Linear-sRGB로 정확히 **한 번만** 변환하여 `COLOR_0`(`FLOAT_COLOR`, `CORNER`)에 기록하고, Cycles AO 곱도 선형 공간에서 **한 번만**(`0.82 + 0.18 * ao`) 적용하도록 수정했다. 내보낸 GLB를 다시 읽어 대표 정점의 `COLOR_0` 선형값을 sRGB로 되돌렸을 때 모든 대표색이 팔레트 hex와 `0.00/255` 오차(`±6/255` 이내)로 일치함을 검증했다.
 - **GLB 압축**: glTF 2.0 binary (`.glb`) + `KHR_draco_mesh_compression` (level 6, position 14bit, normal 10bit, color 12bit, +Y up)
 
 ---

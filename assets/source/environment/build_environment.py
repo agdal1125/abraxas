@@ -11,6 +11,7 @@ import bpy
 import bmesh
 import math
 import os
+import sys
 import json
 from mathutils import Vector, Euler
 
@@ -93,6 +94,13 @@ def srgb_to_linear(c: float) -> float:
     return ((c + 0.055) / 1.055) ** 2.4
 
 
+def linear_to_srgb(c: float) -> float:
+    c = max(0.0, min(1.0, c))
+    if c <= 0.0031308:
+        return c * 12.92
+    return 1.055 * (c ** (1.0 / 2.4)) - 0.055
+
+
 def hex_to_linear_rgba(hex_str: str, tint: float = 1.0):
     h = hex_str.lstrip("#")
     r = int(h[0:2], 16) / 255.0
@@ -102,6 +110,11 @@ def hex_to_linear_rgba(hex_str: str, tint: float = 1.0):
     gl = max(0.0, min(1.0, srgb_to_linear(g) * tint))
     bl = max(0.0, min(1.0, srgb_to_linear(b) * tint))
     return (rl, gl, bl, 1.0)
+
+
+def hex_to_srgb_255(hex_str: str):
+    h = hex_str.lstrip("#")
+    return (int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16))
 
 
 # -----------------------------------------------------------------------------
@@ -432,31 +445,7 @@ class PartBuilder:
         for poly in final_mesh.polygons:
             poly.use_smooth = smooth
 
-        col_attr = final_mesh.color_attributes.new(name="COLOR_0", type='BYTE_COLOR', domain='CORNER')
-        base_rgba = hex_to_linear_rgba(color_hex, 1.0)
-
-        zs = [v.co.z for v in final_mesh.vertices] or [0.0]
-        z_min, z_max = min(zs), max(zs)
-        z_span = max(0.05, z_max - z_min)
-
-        for poly in final_mesh.polygons:
-            nz = poly.normal.z
-            ny = -poly.normal.y
-            normal_boost = 1.0 + 0.06 * nz + 0.03 * ny
-            for loop_idx in poly.loop_indices:
-                v_idx = final_mesh.loops[loop_idx].vertex_index
-                vz = final_mesh.vertices[v_idx].co.z
-                t_z = (vz - z_min) / z_span
-                height_boost = (1.0 - shade_gradient * 0.6) + shade_gradient * t_z
-                factor = max(0.75, min(1.12, normal_boost * height_boost))
-                col_attr.data[loop_idx].color = (
-                    min(1.0, base_rgba[0] * factor),
-                    min(1.0, base_rgba[1] * factor),
-                    min(1.0, base_rgba[2] * factor),
-                    1.0,
-                )
-
-        self.parts.append(final_mesh)
+        self.parts.append((final_mesh, color_hex))
 
     def add_box(self, size, center, color_hex, rot_euler=(0.0, 0.0, 0.0), bevel=0.015, segments=1, smooth=False, taper_top=(1.0, 1.0)):
         bm = bmesh.new()
@@ -553,12 +542,15 @@ class PartBuilder:
 
     def build_combined_object(self, key: str, target_dims, lock_x_bounds=False, z_ground_offset=0.0):
         bm = bmesh.new()
-        col_layer = bm.loops.layers.color.new("COLOR_0")
+        pal_layer = bm.faces.layers.int.new("pal_idx")
+        palette_list = []
 
-        for part_mesh in self.parts:
+        for part_mesh, color_hex in self.parts:
+            pal_idx = len(palette_list)
+            palette_list.append(color_hex)
+
             part_bm = bmesh.new()
             part_bm.from_mesh(part_mesh)
-            p_col = part_bm.loops.layers.color.get("COLOR_0")
 
             vert_map = {}
             for v in part_bm.verts:
@@ -569,9 +561,7 @@ class PartBuilder:
                 try:
                     new_f = bm.faces.new([vert_map[v.index] for v in f.verts])
                     new_f.smooth = f.smooth
-                    if p_col is not None:
-                        for l_src, l_dst in zip(f.loops, new_f.loops):
-                            l_dst[col_layer] = l_src[p_col]
+                    new_f[pal_layer] = pal_idx
                 except ValueError:
                     pass
             part_bm.free()
@@ -606,30 +596,55 @@ class PartBuilder:
             v.co.y = (v.co.y - cy) * sy
             v.co.z = (v.co.z - min_z) * sz + z_ground_offset
 
-        for f in bm.faces:
-            for loop in f.loops:
-                v = loop.vert
-                h_norm = max(0.0, min(1.0, (v.co.z - z_ground_offset) / max(0.1, th)))
-                radial = math.sqrt((v.co.x / max(0.1, tw * 0.5)) ** 2 + (v.co.y / max(0.1, td * 0.5)) ** 2)
-                ground_ao = 0.82 + 0.18 * math.sqrt(h_norm)
-                cavity_ao = 0.88 + 0.12 * min(1.0, radial)
-                ao = max(0.76, min(1.0, ground_ao * cavity_ao))
-                c = loop[col_layer]
-                loop[col_layer] = (c[0] * ao, c[1] * ao, c[2] * ao, 1.0)
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        face_part_indices = [f[pal_layer] for f in bm.faces]
+        bm.faces.layers.int.remove(pal_layer)
 
         mesh = bpy.data.meshes.new(key)
         bm.to_mesh(mesh)
         bm.free()
 
-        if "COLOR_0" in mesh.color_attributes:
-            mesh.color_attributes.active_color = mesh.color_attributes["COLOR_0"]
-            mesh.color_attributes.render_color_index = 0
+        part_min_z = {}
+        part_max_z = {}
+        for poly in mesh.polygons:
+            p_idx = face_part_indices[poly.index]
+            for v_idx in poly.vertices:
+                vz = mesh.vertices[v_idx].co.z
+                if p_idx not in part_min_z or vz < part_min_z[p_idx]:
+                    part_min_z[p_idx] = vz
+                if p_idx not in part_max_z or vz > part_max_z[p_idx]:
+                    part_max_z[p_idx] = vz
+
+        col_attr = mesh.color_attributes.new(name="COLOR_0", type='FLOAT_COLOR', domain='CORNER')
+        mesh.color_attributes.active_color = col_attr
+        mesh.color_attributes.render_color_index = 0
+
+        for poly in mesh.polygons:
+            p_idx = face_part_indices[poly.index]
+            color_hex = palette_list[p_idx]
+            base_r, base_g, base_b, _ = hex_to_linear_rgba(color_hex, 1.0)
+            normal_ao = 0.88 + 0.12 * max(0.0, min(1.0, poly.normal.z + 1.0))
+            p_min = part_min_z[p_idx]
+            p_span = max(1e-4, part_max_z[p_idx] - p_min)
+            for loop_idx in poly.loop_indices:
+                v_idx = mesh.loops[loop_idx].vertex_index
+                vz = mesh.vertices[v_idx].co.z
+                t_part_z = max(0.0, min(1.0, (vz - p_min) / p_span))
+                part_ao = 0.85 + 0.15 * min(1.0, t_part_z / 0.45)
+                ao = max(0.78, min(1.0, part_ao * normal_ao))
+                col_attr.data[loop_idx].color = (
+                    base_r * ao,
+                    base_g * ao,
+                    base_b * ao,
+                    1.0,
+                )
 
         mat = get_or_create_diorama_material("AbraxasEnvMat", roughness=0.85)
         mesh.materials.append(mat)
 
         obj = bpy.data.objects.new(key, mesh)
         bpy.context.collection.objects.link(obj)
+        obj["used_palette_colors"] = sorted(list(set(palette_list)))
         return obj
 
 
@@ -1080,6 +1095,86 @@ def export_asset_glb(obj, key: str):
     return glb_path
 
 
+HEX_TO_PALETTE_NAME = {v: k for k, v in PALETTE.items()}
+
+
+def verify_glb_colors(glb_path: str, key: str, expected_hex_list: list):
+    prev_objs = set(bpy.data.objects)
+    prev_meshes = set(bpy.data.meshes)
+    prev_mats = set(bpy.data.materials)
+    prev_active = bpy.context.view_layer.objects.active
+    prev_sel = [o for o in bpy.data.objects if o.select_get()]
+
+    bpy.ops.import_scene.gltf(filepath=glb_path)
+
+    new_objs = set(bpy.data.objects) - prev_objs
+    imp_mesh_objs = [o for o in new_objs if o.type == "MESH" and len(o.data.color_attributes) > 0]
+    if not imp_mesh_objs:
+        print(f"[COLOR VERIFY FAIL] COLOR_0 missing on imported mesh in {glb_path}")
+        sys.exit(1)
+
+    linear_colors = []
+    for mo in imp_mesh_objs:
+        ca = mo.data.color_attributes.get("COLOR_0") or mo.data.color_attributes[0]
+        for item in ca.data:
+            c = item.color
+            linear_colors.append((c[0], c[1], c[2]))
+
+    for o in new_objs:
+        bpy.data.objects.remove(o, do_unlink=True)
+    for m in set(bpy.data.meshes) - prev_meshes:
+        bpy.data.meshes.remove(m, do_unlink=True)
+    for mat in set(bpy.data.materials) - prev_mats:
+        bpy.data.materials.remove(mat, do_unlink=True)
+
+    bpy.ops.object.select_all(action='DESELECT')
+    for o in prev_sel:
+        if o.name in bpy.data.objects:
+            o.select_set(True)
+    if prev_active and prev_active.name in bpy.data.objects:
+        bpy.context.view_layer.objects.active = prev_active
+
+    results = {}
+    for hex_str in expected_hex_list:
+        label = HEX_TO_PALETTE_NAME.get(hex_str, hex_str)
+        exp_rl, exp_gl, exp_bl, _ = hex_to_linear_rgba(hex_str, 1.0)
+        exp_r, exp_g, exp_b = hex_to_srgb_255(hex_str)
+
+        best_lin = min(
+            linear_colors,
+            key=lambda c: (c[0] - exp_rl) ** 2 + (c[1] - exp_gl) ** 2 + (c[2] - exp_bl) ** 2,
+        )
+        srgb_r_f = linear_to_srgb(best_lin[0]) * 255.0
+        srgb_g_f = linear_to_srgb(best_lin[1]) * 255.0
+        srgb_b_f = linear_to_srgb(best_lin[2]) * 255.0
+        meas_r = int(round(srgb_r_f))
+        meas_g = int(round(srgb_g_f))
+        meas_b = int(round(srgb_b_f))
+        meas_hex = f"#{meas_r:02X}{meas_g:02X}{meas_b:02X}"
+
+        max_diff = max(
+            abs(srgb_r_f - exp_r),
+            abs(srgb_g_f - exp_g),
+            abs(srgb_b_f - exp_b),
+        )
+        print(
+            f"[COLOR VERIFY] {key:16s} | {label:14s} | palette={hex_str} ({exp_r:3d},{exp_g:3d},{exp_b:3d}) "
+            f"| measured={meas_hex} ({srgb_r_f:6.2f},{srgb_g_f:6.2f},{srgb_b_f:6.2f}) "
+            f"| linear=({best_lin[0]:.4f},{best_lin[1]:.4f},{best_lin[2]:.4f}) | max_diff={max_diff:.2f}/255"
+        )
+        if max_diff > 6.0:
+            print(f"[COLOR VERIFY FAIL] {key} ({label}): max_diff {max_diff:.2f}/255 exceeds ±6/255")
+            sys.exit(1)
+        results[label] = {
+            "paletteHex": hex_str,
+            "measuredHex": meas_hex,
+            "measuredSrgb255": [round(srgb_r_f, 2), round(srgb_g_f, 2), round(srgb_b_f, 2)],
+            "measuredLinear": [round(best_lin[0], 4), round(best_lin[1], 4), round(best_lin[2], 4)],
+            "maxDiff255": round(max_diff, 2),
+        }
+    return results
+
+
 # -----------------------------------------------------------------------------
 # Preview Sheet Rendering (4-up 1024x1024: Front, Side, 3/4 Game, Silhouette + Origin & 1m Ruler)
 # -----------------------------------------------------------------------------
@@ -1322,8 +1417,8 @@ def build_terrain_from_v2_map():
 def main():
     print(f"[INFO] Running build_environment.py on Blender {bpy.app.version_string}")
     bpy.ops.wm.read_factory_settings(use_empty=True)
+    bpy.context.preferences.filepaths.save_version = 0
 
-    sync_concept_images()
     studio = setup_preview_studio()
 
     keys_to_build = PHASE1_KEYS if PHASE1_ONLY else list(ASSET_SPECS.keys())
@@ -1347,6 +1442,7 @@ def main():
 
         save_ao_diagnostic_map(key)
         glb_path = export_asset_glb(obj, key)
+        color_verify = verify_glb_colors(glb_path, key, list(obj.get("used_palette_colors", [])))
         render_4up_preview(obj, key, spec["dims"], studio)
 
         tri_count = len(obj.data.polygons)
@@ -1379,9 +1475,11 @@ def main():
             "bounds": bounds,
             "materials": len(obj.data.materials),
             "vertexColorAttribute": "COLOR_0",
+            "colorAttributeType": "FLOAT_COLOR",
             "dracoCompressed": True,
             "concept": f"assets/source/concepts/environment/{spec['concept_sheet']}",
             "preview": f"assets/source/previews/environment/{key}.png",
+            "colorVerification": color_verify,
         }
         print(f"[OK] {key:16s} | tri={tri_count:4d}/{spec['max_tri']:4d} | bytes={byte_size:6d}/{spec['max_kib']*1024:6d} | bounds={bounds['width']}x{bounds['depth']}x{bounds['height']}")
 
@@ -1392,26 +1490,49 @@ def main():
     render_kit_overview(built_objects, studio, "preview-kit-overview.png")
 
     os.makedirs(SOURCE_ENV_DIR, exist_ok=True)
+    meta_path = os.path.join(SOURCE_ENV_DIR, "asset-metadata.json")
+    existing_assets = {}
+    if os.path.exists(meta_path):
+        try:
+            with open(meta_path, "r", encoding="utf-8") as f:
+                old_doc = json.load(f)
+                existing_assets = old_doc.get("assets", {})
+        except Exception:
+            existing_assets = {}
+
+    merged_assets = dict(existing_assets)
+    for k, v in metadata_assets.items():
+        merged_assets[k] = v
+
+    all_tris = sum(int(item.get("triangles", 0)) for item in merged_assets.values())
+    all_bytes = sum(int(item.get("bytes", 0)) for item in merged_assets.values())
+
     metadata_doc = {
         "version": 1,
         "blenderVersion": bpy.app.version_string,
+        "colorSpaceNote": "색공간 수정(2026-11-01): sRGB 팔레트 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
         "phase1Only": PHASE1_ONLY,
         "buildTerrain": BUILD_TERRAIN,
         "summary": {
-            "assetCount": len(metadata_assets),
-            "totalTriangles": total_tris,
-            "totalBytes": total_bytes,
-            "totalKiB": round(total_bytes / 1024.0, 2),
+            "assetCount": len(merged_assets),
+            "totalTriangles": all_tris,
+            "totalBytes": all_bytes,
+            "totalKiB": round(all_bytes / 1024.0, 2),
         },
-        "assets": metadata_assets,
+        "assets": merged_assets,
     }
-    meta_path = os.path.join(SOURCE_ENV_DIR, "asset-metadata.json")
     with open(meta_path, "w", encoding="utf-8") as f:
         json.dump(metadata_doc, f, indent=2, ensure_ascii=False)
+        f.write("\n")
 
     blend_path = os.path.join(SOURCE_ENV_DIR, "environment_kit.blend")
+    blend1_path = os.path.join(SOURCE_ENV_DIR, "environment_kit.blend1")
+    if os.path.exists(blend_path):
+        os.remove(blend_path)
     bpy.ops.wm.save_as_mainfile(filepath=blend_path)
-    print(f"[INFO] Completed {len(metadata_assets)} assets (total {total_tris} tris, {round(total_bytes/1024.0, 2)} KiB). Saved {meta_path} and {blend_path}")
+    if os.path.exists(blend1_path):
+        os.remove(blend1_path)
+    print(f"[INFO] Completed {len(metadata_assets)} kit assets (total {total_tris} tris, {round(total_bytes/1024.0, 2)} KiB). Saved {meta_path} and {blend_path}")
 
 
 if __name__ == "__main__":
