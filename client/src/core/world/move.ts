@@ -94,6 +94,18 @@ function distanceToSegment(p: Vec2, edge: Segment): number {
   return length(sub(p, add(edge.a, mul(d, t))));
 }
 
+export function walkable(colliders: Collider[], bounds: Bounds, radius = 0.18): (a: Vec2, b: Vec2) => boolean {
+  const edges = boundaries(bounds), boxes = colliders.filter((c): c is Extract<Collider, { type: 'box' }> => c.type === 'box').map(boxEdges);
+  const circles = colliders.filter((c): c is Extract<Collider, { type: 'circle' }> => c.type === 'circle');
+  const allEdges = [...edges, ...boxes.flat()];
+  return (a, b) => allowed(b, bounds)
+    && edges.every(edge => distanceToSegment(b, edge) >= radius - EPS)
+    && circles.every(c => length(sub(b, c)) >= radius + c.radius - EPS)
+    && boxes.every(box => !inside(b, box.map(edge => edge.a)) && box.every(edge => distanceToSegment(b, edge) >= radius - EPS))
+    && allEdges.every(edge => !segmentHit(a, sub(b, a), edge, radius))
+    && circles.every(c => !circleHit(a, sub(b, a), c, radius + c.radius));
+}
+
 export function step(pos: Vec2, input: Vec2, dt: number, colliders: Collider[], bounds: Bounds, opts?: { speed?: number; radius?: number }): Vec2 {
   const radius = opts?.radius ?? 0.18, speed = opts?.speed ?? 1.4;
   const edges = boundaries(bounds), boxes = colliders.filter((c): c is Extract<Collider, { type: 'box' }> => c.type === 'box').map(boxEdges);

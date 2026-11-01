@@ -24,6 +24,7 @@
     "thinking": ["Huh, I never thought of it that way...", "Hm, I can see that too."]
   },
   "next": "Next",
+  "pathBlocked": "You can't get there from here.",
   "result": {
     "title": "Who you are beyond the shell",
     "poles": {

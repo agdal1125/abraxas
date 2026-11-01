@@ -3,7 +3,7 @@ import { GLTFLoader, type GLTF } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { clone } from "three/addons/utils/SkeletonUtils.js";
 import { step } from "../core/world/move";
-import { autowalk } from "../core/world/autowalk";
+import { findPath, followPath } from "../core/world/autowalk";
 import { nearest } from "../core/world/nearby";
 import type { Bounds, Collider, Vec2 } from "../core/world/types";
 import { translations } from "../content";
@@ -44,13 +44,14 @@ export class Village {
   private available = new Set<string>();
   private ready = false;
   readonly whenReady: Promise<void>;
-  private auto?: { id: string; best: number; stalled: number };
+  private auto?: { id: string; path: Vec2[]; best: number; stalled: number };
   private nearbyMarker = this.label();
   private portrait = false;
   onNearbyChange: (target: { id: string; available: boolean; examine?: boolean } | null) => void = () => {};
   private lastTime = 0;
   private frame = 0;
   onInteract: (id: string) => void = () => {};
+  onPathBlocked: () => void = () => {};
 
   constructor(app: HTMLElement) {
     performance.mark("village:start");
@@ -130,8 +131,8 @@ export class Village {
       this.colliderOwners.push(owner);
     }
   }
-  private visible(id: string, target: THREE.Vector3): boolean {
-    const start = this.player.position, dx = target.x - start.x, dz = target.z - start.z;
+  private visible(id: string, target: THREE.Vector3, start: Vec2 = this.player.position): boolean {
+    const dx = target.x - start.x, dz = target.z - start.z;
     return !this.colliders.some((shape, index) => {
       const owner = this.colliderOwners[index];
       if (owner === id || (owner && this.actors.get(owner)?.object.position.distanceToSquared(target) === 0)) return false;
@@ -175,11 +176,16 @@ export class Village {
     const actorAtTarget = this.actors.get(id);
     if (actorAtTarget && !this.available.has(id) && [...this.actors].some(([otherId, other]) => this.available.has(otherId) && other.object.position.distanceToSquared(actorAtTarget.object.position) < 1e-8)) return;
     const playerPosition = this.player.position;
-    if (!nearest(playerPosition, [{ id, ...target }])) {
-      this.input = { x: 0, z: 0 }; this.auto = { id, best: Math.hypot(target.x - playerPosition.x, target.z - playerPosition.z), stalled: 0 }; return;
+    const targetPosition = new THREE.Vector3(target.x, 0, target.z);
+    if (!nearest(playerPosition, [{ id, ...target }]) || !this.visible(id, targetPosition)) {
+      this.input = { x: 0, z: 0 };
+      const path = findPath(playerPosition, target, this.colliders, map.bounds, position => this.visible(id, targetPosition, position));
+      this.auto = path ? { id, path, best: Infinity, stalled: 0 } : undefined;
+      if (!path) this.onPathBlocked();
+      return;
     }
     this.auto = undefined;
-    if (!this.visible(id, new THREE.Vector3(target.x, 0, target.z))) return;
+    if (!this.visible(id, targetPosition)) return;
     const actor = this.actors.get(id); const prop = this.props.get(id); const position = actor?.object.position ?? prop!; const dx = position.x - this.player.position.x, dz = position.z - this.player.position.z;
     this.input = { x: 0, z: 0 }; if (dx || dz) { this.player.rotation.y = Math.atan2(dx, dz); if (actor?.character) actor.object.rotation.y = Math.atan2(-dx, -dz); }
     this.talking = id; this.onInteract(prop ? `examine:${prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset}` : id);
@@ -301,12 +307,12 @@ export class Village {
       const target = this.target(this.auto.id);
       if (!target) this.auto = undefined;
       else {
-        const result = autowalk({ position: { x: this.player.position.x, z: this.player.position.z }, best: this.auto.best, stalled: this.auto.stalled, status: "walking" }, target, this.colliders, map.bounds, elapsed);
+        const result = followPath({ position: { x: this.player.position.x, z: this.player.position.z }, path: this.auto.path, best: this.auto.best, stalled: this.auto.stalled, status: "walking" }, target, this.colliders, map.bounds, elapsed);
         const dx = result.position.x - this.player.position.x, dz = result.position.z - this.player.position.z;
         distance = Math.hypot(dx, dz); moving = distance > 1e-6;
         if (moving) { this.player.rotation.y = Math.atan2(dx, dz); this.player.position.set(result.position.x, 0, result.position.z); }
-        this.auto.best = result.best; this.auto.stalled = result.stalled;
-        if (result.status !== "walking") { const id = this.auto.id; this.auto = undefined; if (result.status === "arrived") this.interactTarget(id); }
+        this.auto.path = result.path; this.auto.best = result.best; this.auto.stalled = result.stalled;
+        if (result.status !== "walking") { const id = this.auto.id; this.auto = undefined; if (result.status === "arrived") this.interactTarget(id); else this.onPathBlocked(); }
       }
     } else if (this.enabled && this.ready && !this.portrait && (this.input.x || this.input.z)) {
       const before = this.player.position, next = step({ x: before.x, z: before.z }, this.input, dt, this.colliders, map.bounds);

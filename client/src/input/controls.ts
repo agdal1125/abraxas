@@ -47,7 +47,7 @@ export class Controls {
       event.stopPropagation();
       const pointer = this.pointer; if (!pointer || event.pointerId !== pointer.id) return;
       const distance = Math.max(pointer.distance, Math.hypot(event.clientX - pointer.x, event.clientY - pointer.y));
-      const tap = name === "pointerup" && !pointer.owned && distance < 10 && event.timeStamp - pointer.time < 300;
+      const tap = name === "pointerup" && !pointer.owned && distance < 10 && event.timeStamp - pointer.time < 1200;
       this.releasePointer();
       if (tap && this.active && !this.blocked) { const id = this.village.hitTargetAt?.(event.clientX, event.clientY); if (id) this.village.interactTarget?.(id); }
     }, true);

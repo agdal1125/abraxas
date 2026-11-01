@@ -30,8 +30,14 @@ it("interacts on a short tap but not a drag or a long press", () => {
   pointer("pointerdown", 700, 200, 0); pointer("pointerup", 705, 200, 100);
   expect(village.interactTarget).toHaveBeenCalledExactlyOnceWith("target");
   pointer("pointerdown", 700, 200, 200); pointer("pointermove", 720, 200, 220); pointer("pointerup", 700, 200, 250);
-  pointer("pointerdown", 700, 200, 300); pointer("pointerup", 700, 200, 600);
+  pointer("pointerdown", 700, 200, 300); pointer("pointerup", 700, 200, 1600);
   expect(village.interactTarget).toHaveBeenCalledTimes(1);
+});
+
+it("accepts a stationary touch delayed by a busy rendering thread", () => {
+  const { pointer, village } = setup();
+  pointer("pointerdown", 890, 40, 0); pointer("pointerup", 890, 40, 890);
+  expect(village.interactTarget).toHaveBeenCalledExactlyOnceWith("target");
 });
 
 it("releases the floating joystick without triggering a tap", () => {

@@ -23,14 +23,18 @@ export class Game {
   private episodeLimit = 6;
   private largeText = false;
   private controls: Controls;
+  private notice = document.createElement("div");
+  private noticeTimer = 0;
   constructor(app: HTMLElement, private village: Village) {
     this.controls = new Controls(app, village as Village & VillageInput);
     try { this.largeText = localStorage.getItem("abraxas-large-text") === "true"; } catch { /* Continue in memory if storage is unavailable. */ }
     document.documentElement.style.setProperty("--body-size", this.largeText ? "18px" : "15px");
     this.overlay.className = "overlay"; app.append(this.overlay);
+    this.notice.className = "world-notice"; this.notice.setAttribute("role", "status"); app.append(this.notice);
     let saved: Save | null = null; try { saved = JSON.parse(localStorage.getItem(storageKey) || "null") as Save | null; } catch { /* Storage may be unavailable. */ }
     this.state = saved?.playId && Array.isArray(saved.log) && Array.isArray(saved.completed) ? saved : { lang: "ko", playId: this.newId(), log: [], completed: [], segment: "title" };
     village.onInteract = id => this.interact(id);
+    village.onPathBlocked = () => { this.notice.textContent = this.ui.pathBlocked; window.clearTimeout(this.noticeTimer); this.noticeTimer = window.setTimeout(() => { this.notice.textContent = ""; }, 2400); };
     if (saved?.playId && this.state.segment !== "title") { this.resumed = true; this.world(); } else this.title();
   }
   private newId(): string { return globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random()}`; }

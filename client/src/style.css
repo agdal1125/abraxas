@@ -13,6 +13,7 @@ button{min-width:48px;min-height:48px}
 .title p,.disclaimer{font-size:var(--body-size)}
 .title-controls button:first-child,.result button,.modifier{color:var(--ink)}
 .game-controls{position:absolute;inset:0;pointer-events:none}.game-controls[hidden]{display:none}
+.world-notice{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);padding:6px 14px;border-radius:var(--radius-pill);background:var(--paper);box-shadow:var(--shadow);pointer-events:none;text-align:center}.world-notice:empty{display:none}
 #app{position:fixed;display:block}
 .rotate-notice{position:fixed;z-index:100;display:grid;place-items:center;padding:24px;background:var(--paper);color:var(--ink);font-size:1.2rem;text-align:center}
 .rotate-notice[hidden]{display:none}
