@@ -6,6 +6,8 @@ const manifest = JSON.parse(readFileSync(new URL('../content/assets/manifest.jso
 const source = readFileSync(new URL('../client/src/core/world/move.ts', import.meta.url), 'utf8');
 const module = await import(`data:text/javascript,${encodeURIComponent(stripTypeScriptTypes(source) + '\nexport { inside, allowed, boundaries, boxEdges, distanceToSegment };')}`);
 const { inside, allowed, boundaries, boxEdges, distanceToSegment } = module;
+const nearbySource = readFileSync(new URL('../client/src/core/world/nearby.ts', import.meta.url), 'utf8');
+const { nearest } = await import(`data:text/javascript,${encodeURIComponent(stripTypeScriptTypes(nearbySource))}`);
 const colliders = [...map.props, ...map.actors].flatMap(p => {
   const asset = manifest[p.asset];
   if (!asset) throw new Error(`Missing asset: ${p.asset}`);
@@ -31,7 +33,8 @@ const segmentDistance = (a, b, e) => intersects(a, b, e.a, e.b) ? 0 : Math.min(d
 const canMove = (a, b) => safe(b) && edges.every(e => segmentDistance(a, b, e) >= radius - eps)
   && circles.every(c => distanceToSegment(c, { a, b }) >= radius + c.radius - eps)
   && boxes.every(box => box.edges.every(e => segmentDistance(a, b, e) >= radius - eps));
-const targets = [...map.actors, ...['lake', 'plaza', 'gate'].map(id => ({ id, ...map.zones[id] }))];
+const coreTargets = [...map.actors, ...['lake', 'plaza', 'gate'].map(id => ({ id, ...map.zones[id] }))];
+const targets = [...coreTargets, ...map.props.filter(p => p.asset === 'signboard').map(p => ({ ...p, colliders: colliders.filter(c => c.owner === p.id) }))];
 const visible = (p, target) => colliders.every(c => {
   if (c.owner === target.id || map.actors.some(a => a.id === c.owner && a.x === target.x && a.z === target.z)) return true;
   if (c.type === 'circle') return distanceToSegment(c, { a: p, b: target }) >= c.radius;
@@ -42,7 +45,7 @@ if (!safe(map.spawn)) throw new Error('Spawn lacks 0.3m clearance');
 const queue = [[0, 0]], visited = new Set(['0,0']), found = new Map();
 for (let head = 0; head < queue.length; head++) {
   const [x, z] = queue[head], p = { x: map.spawn.x + x * spacing, z: map.spawn.z + z * spacing };
-  for (const target of targets) if (!found.has(target.id) && Math.hypot(p.x - target.x, p.z - target.z) <= 0.85 && visible(p, target)) found.set(target.id, p);
+  for (const target of targets) if (!found.has(target.id) && nearest(p, [target]) && visible(p, target)) found.set(target.id, p);
   for (const [dx, dz] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
     const nx = x + dx, nz = z + dz, key = `${nx},${nz}`;
     if (visited.has(key)) continue;
@@ -52,5 +55,5 @@ for (let head = 0; head < queue.length; head++) {
   }
 }
 const missing = targets.filter(t => !found.has(t.id)).map(t => t.id);
-console.log(`Reachable: ${found.size}/${targets.length}, grid ${spacing}m, corridor ${radius * 2}m, visited ${queue.length}`);
+console.log(`Reachable: ${coreTargets.filter(t => found.has(t.id)).length}/${coreTargets.length}; including signboards: ${found.size}/${targets.length}, grid ${spacing}m, corridor ${radius * 2}m, visited ${queue.length}`);
 if (missing.length) throw new Error(`Unreachable: ${missing.join(', ')}`);

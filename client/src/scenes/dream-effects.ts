@@ -15,14 +15,18 @@ export class DreamEffects {
       texture.colorSpace = THREE.SRGBColorSpace;
       const geometry = new THREE.BufferGeometry();
       geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(count * 3), 3));
-      const points = new THREE.Points(geometry, new THREE.PointsMaterial({ map: texture, size, sizeAttenuation: false, transparent: true, opacity: name === "mist" ? .18 : name === "glow" ? .32 : .75, depthWrite: false, blending }));
+      const points = new THREE.Points(geometry, new THREE.PointsMaterial({ map: texture, size, sizeAttenuation: false, transparent: true, opacity: name === "mist" ? .08 : name === "glow" ? .16 : .75, depthWrite: false, blending }));
       points.frustumCulled = false; scene.add(points); return points;
     };
     this.particles = [make("petal", 30, 14), make("firefly", 30, 12, THREE.AdditiveBlending)];
-    this.mist = make("mist", 4, 150);
+    this.mist = make("mist", lake ? 2 : 0, 80);
+    if (lake) {
+      const mistPositions = this.mist.geometry.getAttribute("position") as THREE.BufferAttribute;
+      mistPositions.setXYZ(0, lake.x - 1, .15, lake.z); mistPositions.setXYZ(1, lake.x + 1, .15, lake.z + 1); mistPositions.needsUpdate = true;
+    }
     const spots = props.filter(p => p.asset === "streetlight" || p.asset === "well");
     if (lake) spots.push({ asset: "lake", ...lake });
-    this.glow = make("glow", spots.length, 100, THREE.AdditiveBlending);
+    this.glow = make("glow", spots.length, 55, THREE.AdditiveBlending);
     const positions = this.glow.geometry.getAttribute("position") as THREE.BufferAttribute;
     spots.forEach((spot, i) => positions.setXYZ(i, spot.x, spot.asset === "streetlight" ? 1.4 : .5, spot.z));
     positions.needsUpdate = true;
@@ -30,7 +34,7 @@ export class DreamEffects {
 
   resize(mobile: boolean, pixelRatio: number): void {
     this.particles.forEach(points => points.geometry.setDrawRange(0, mobile ? 15 : 30));
-    [...this.particles, this.mist, this.glow].forEach((points, i) => { (points.material as THREE.PointsMaterial).size = [14, 12, 150, 100][i]! * pixelRatio; });
+    [...this.particles, this.mist, this.glow].forEach((points, i) => { (points.material as THREE.PointsMaterial).size = [14, 12, 80, 55][i]! * pixelRatio; });
   }
 
   update(dt: number, player: THREE.Vector3, camera: THREE.OrthographicCamera): void {
@@ -47,8 +51,5 @@ export class DreamEffects {
       positions.needsUpdate = true;
       (points.material as THREE.PointsMaterial).opacity = kind ? .55 + .18 * Math.sin(this.time * .8) : .75;
     });
-    const positions = this.mist.geometry.getAttribute("position") as THREE.BufferAttribute;
-    for (let i = 0; i < positions.count; i++) positions.setXYZ(i, player.x + (i - 1.5) * 1.5 + Math.sin(this.time * .08 + i) * .5, .2, player.z + (i % 2 ? 2 : -2));
-    positions.needsUpdate = true;
   }
 }
