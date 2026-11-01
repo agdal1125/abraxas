@@ -142,19 +142,7 @@ export class Village {
   private load(key: string): Promise<GLTF> {
     const asset = manifest[key];
     if (!asset || !/^assets\/abraxas\/[\w/-]+\.glb$/.test(asset.path) || asset.path.includes("..")) return Promise.reject(new Error(`Invalid asset: ${key}`));
-    if (!this.models.has(key)) this.models.set(key, this.loader.loadAsync(`${import.meta.env.BASE_URL}${asset.path}`).then(gltf => {
-      if (asset.path.startsWith("assets/abraxas/environment/")) gltf.scene.traverse(child => {
-        if (!(child instanceof THREE.Mesh)) return;
-        const colors = child.geometry.getAttribute("color"); if (!colors) return;
-        const color = new THREE.Color();
-        for (let i = 0; i < colors.count; i++) {
-          color.setRGB(colors.getX(i), colors.getY(i), colors.getZ(i)).convertLinearToSRGB();
-          colors.setXYZ(i, color.r, color.g, color.b);
-        }
-        colors.needsUpdate = true;
-      });
-      return gltf;
-    }));
+    if (!this.models.has(key)) this.models.set(key, this.loader.loadAsync(`${import.meta.env.BASE_URL}${asset.path}`));
     return this.models.get(key)!;
   }
   private async place(placement: Placement): Promise<void> {
