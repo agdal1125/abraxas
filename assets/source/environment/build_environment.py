@@ -697,8 +697,13 @@ class PartBuilder:
                     1.0,
                 )
 
-        mat = get_or_create_diorama_material("AbraxasEnvMat", roughness=0.85)
+        mat = get_or_create_diorama_material("AbraxasBakeryMat" if key == "bakery" else "AbraxasEnvMat", roughness=0.93 if key == "bakery" else 0.85)
         mesh.materials.append(mat)
+        if key == "bakery":
+            mesh.materials.append(get_or_create_diorama_material("AbraxasLampShade", roughness=0.75))
+            for poly in mesh.polygons:
+                if palette_list[face_part_indices[poly.index]] == PALETTE["ink"]:
+                    poly.material_index = 1
 
         obj = bpy.data.objects.new(key, mesh)
         bpy.context.collection.objects.link(obj)
@@ -787,6 +792,23 @@ def build_bakery(pb: PartBuilder):
     pb.add_box((0.32, 0.08, 0.54), (0.36, -0.59, 0.38), PALETTE["wood"], bevel=0.01)
     pb.add_box((0.20, 0.05, 0.05), (0.72, -0.45, 0.72), PALETTE["ink"], bevel=0.006)
     pb.add_cylinder(0.11, 0.11, 0.05, (0.74, -0.45, 0.56), PALETTE["gold"], vertices=10, rot_euler=(math.pi * 0.5, 0.0, 0.0), bevel=0.008)
+    pb.add_box((0.15, 0.10, 0.045), (0.72, -0.45, 0.65), PALETTE["ink"], bevel=0.008)
+    # Recessed glazing, door boards and structural joints use the existing palette.
+    for x in (-0.45, 0.09):
+        pb.add_box((0.045, 0.10, 0.42), (x, -0.64, 0.44), PALETTE["wood_light"], bevel=0.004)
+    for z in (0.25, 0.63):
+        pb.add_box((0.58, 0.10, 0.04), (-0.18, -0.64, z), PALETTE["wood_light"], bevel=0.004)
+    pb.add_box((0.035, 0.09, 0.31), (-0.18, -0.64, 0.44), PALETTE["wood"], bevel=0.003)
+    for x in (0.23, 0.36, 0.49):
+        pb.add_box((0.016, 0.025, 0.45), (x, -0.643, 0.38), PALETTE["wood_dark"], bevel=0.0)
+    pb.add_box((0.025, 0.025, 0.025), (0.46, -0.662, 0.38), PALETTE["gold"], bevel=0.003)
+    pb.add_box((1.37, 0.035, 0.045), (0.04, -0.605, 0.875), PALETTE["wood_dark"], bevel=0.0)
+    pb.add_box((1.36, 0.025, 0.028), (0.04, -0.598, 0.13), PALETTE["stone_dark"], bevel=0.0)
+    for x in (-0.61, 0.69):
+        pb.add_box((0.14, 0.13, 0.07), (x, -0.58, 0.16), PALETTE["stone_dark"], bevel=0.004)
+        pb.add_box((0.15, 0.13, 0.055), (x, -0.58, 0.89), PALETTE["wood_dark"], bevel=0.004)
+    for x in (-0.40, 0.0, 0.40):
+        pb.add_box((0.018, 0.02, 0.10), (x, -0.668, 0.06), PALETTE["stone_dark"], bevel=0.0)
 
 
 def build_library(pb: PartBuilder):
@@ -839,10 +861,12 @@ def build_lake_pavilion(pb: PartBuilder):
 
 def build_tree_round(pb: PartBuilder):
     pb.add_cylinder(0.15, 0.11, 0.68, (0.0, 0.0, 0.34), PALETTE["wood"], vertices=10, bevel=0.01)
-    pb.add_sphere(0.46, (0.0, 0.0, 1.02), PALETTE["grass"], subdivisions=2, scale=(1.05, 1.05, 0.95))
-    pb.add_sphere(0.32, (-0.22, -0.14, 0.92), PALETTE["grass_dark"], subdivisions=2)
-    pb.add_sphere(0.30, (0.24, 0.12, 0.96), PALETTE["grass_light"], subdivisions=2)
-    pb.add_sphere(0.28, (0.0, -0.20, 1.22), PALETTE["grass_light"], subdivisions=2)
+    pb.add_cylinder(0.065, 0.035, 0.46, (-0.16, -0.03, 0.70), PALETTE["wood_dark"], vertices=8, rot_euler=(0, -0.65, 0), bevel=0.0)
+    pb.add_cylinder(0.06, 0.03, 0.42, (0.16, 0.08, 0.76), PALETTE["wood"], vertices=8, rot_euler=(0, 0.70, 0), bevel=0.0)
+    pb.add_sphere(0.31, (-0.23, -0.07, 1.02), PALETTE["grass_dark"], subdivisions=2, scale=(1.15, 1.0, 0.90))
+    pb.add_sphere(0.32, (0.17, 0.10, 1.13), PALETTE["grass"], subdivisions=2, scale=(1.0, 1.05, 0.95))
+    pb.add_sphere(0.25, (-0.02, -0.18, 1.34), PALETTE["grass_light"], subdivisions=2)
+    pb.add_sphere(0.22, (0.33, -0.08, 0.91), PALETTE["grass_light"], subdivisions=2)
 
 
 def build_tree_layered(pb: PartBuilder):
@@ -866,9 +890,10 @@ def build_tree_young(pb: PartBuilder):
 
 
 def build_bush(pb: PartBuilder):
-    pb.add_sphere(0.24, (0.0, 0.0, 0.20), PALETTE["grass"], subdivisions=2, scale=(1.2, 1.0, 0.85))
-    pb.add_sphere(0.18, (-0.14, -0.05, 0.16), PALETTE["grass_dark"], subdivisions=2)
-    pb.add_sphere(0.17, (0.15, 0.04, 0.18), PALETTE["grass_light"], subdivisions=2)
+    pb.add_cylinder(0.035, 0.02, 0.19, (0.0, 0.0, 0.095), PALETTE["wood_dark"], vertices=6, bevel=0.0)
+    pb.add_sphere(0.19, (-0.13, 0.02, 0.19), PALETTE["grass_dark"], subdivisions=2, scale=(1.0, 0.95, 0.9))
+    pb.add_sphere(0.18, (0.10, 0.05, 0.24), PALETTE["grass"], subdivisions=2)
+    pb.add_sphere(0.13, (0.22, -0.06, 0.14), PALETTE["grass_light"], subdivisions=2)
 
 
 def build_flower_bed(pb: PartBuilder):
@@ -2007,6 +2032,9 @@ def main():
         obj = pb.build_combined_object(key, spec["dims"], lock_x_bounds=lock_x, z_ground_offset=z_offset)
         built_objects[key] = obj
 
+        if key not in ("bakery", "tree-round", "bush"):
+            continue
+
         for other_k, other_obj in built_objects.items():
             other_obj.hide_render = (other_k != key)
 
@@ -2049,6 +2077,7 @@ def main():
             "dracoCompressed": True,
             "concept": f"assets/source/concepts/environment/{spec['concept_sheet']}",
             "preview": f"assets/source/previews/environment/{key}.png",
+            "revisionAuthor": "Codex gpt-6.1-terra (agy 한도로 대체)",
             "colorVerification": color_verify,
         }
         print(f"[OK] {key:16s} | tri={tri_count:4d}/{spec['max_tri']:4d} | bytes={byte_size:6d}/{spec['max_kib']*1024:6d} | bounds={bounds['width']}x{bounds['depth']}x{bounds['height']}")
@@ -2056,9 +2085,6 @@ def main():
     if BUILD_TERRAIN:
         build_terrain_from_v2_map()
 
-    render_zone_showcase(built_objects, studio, "preview-zone-entrance-plaza.png")
-    render_dream_v2_previews_and_metadata(built_objects, studio, metadata_assets)
-    render_kit_overview(built_objects, studio, "preview-kit-overview.png")
 
     os.makedirs(SOURCE_ENV_DIR, exist_ok=True)
     meta_path = os.path.join(SOURCE_ENV_DIR, "asset-metadata.json")
@@ -2104,7 +2130,7 @@ def main():
     bpy.ops.wm.save_as_mainfile(filepath=blend_path)
     if os.path.exists(blend1_path):
         os.remove(blend1_path)
-    for d in (SOURCE_ENV_DIR, os.path.join(ROOT_DIR, "assets", "source", "dream")):
+    for d in (SOURCE_ENV_DIR,):
         if os.path.exists(d):
             for fname in os.listdir(d):
                 if fname.endswith(".blend1"):
