@@ -478,6 +478,36 @@
           "halfZ": 1
         }
       ]
+    },
+    "flower-cluster-red": {
+      "path": "assets/abraxas/environment/flower-cluster-red.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "flower-cluster-yellow": {
+      "path": "assets/abraxas/environment/flower-cluster-yellow.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "flower-cluster-white": {
+      "path": "assets/abraxas/environment/flower-cluster-white.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "flower-cluster-pink": {
+      "path": "assets/abraxas/environment/flower-cluster-pink.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "flower-cluster-purple": {
+      "path": "assets/abraxas/environment/flower-cluster-purple.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "grass-small": {
+      "path": "assets/abraxas/environment/grass-small.glb",
+      "scale": 1,
+      "collision": []
     }
   }
 }

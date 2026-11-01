@@ -2225,46 +2225,6 @@
       "scale": 1
     },
     {
-      "id": "prop-112",
-      "asset": "flower-bed",
-      "x": -0.52,
-      "z": -0.45,
-      "rot": 0.4,
-      "scale": 1
-    },
-    {
-      "id": "prop-113",
-      "asset": "flower-bed",
-      "x": 0.52,
-      "z": -0.45,
-      "rot": 1.2,
-      "scale": 1
-    },
-    {
-      "id": "prop-114",
-      "asset": "grass-tuft",
-      "x": -0.55,
-      "z": 0.42,
-      "rot": 2.1,
-      "scale": 1
-    },
-    {
-      "id": "prop-115",
-      "asset": "pebbles",
-      "x": 0.48,
-      "z": 0.46,
-      "rot": 0.8,
-      "scale": 1
-    },
-    {
-      "id": "prop-116",
-      "asset": "flower-bed",
-      "x": -1.48,
-      "z": -1.9820508075688772,
-      "rot": 0.5,
-      "scale": 1
-    },
-    {
       "id": "prop-117",
       "asset": "flower-bed",
       "x": -1.48,
@@ -2281,14 +2241,6 @@
       "scale": 1
     },
     {
-      "id": "prop-119",
-      "asset": "flower-bed",
-      "x": -0.52,
-      "z": -1.4820508075688772,
-      "rot": 0.9,
-      "scale": 1
-    },
-    {
       "id": "prop-120",
       "asset": "flower-bed",
       "x": 0.54,
@@ -2297,27 +2249,11 @@
       "scale": 1
     },
     {
-      "id": "prop-121",
-      "asset": "flower-bed",
-      "x": 1.46,
-      "z": 1.9320508075688771,
-      "rot": 2.8,
-      "scale": 1
-    },
-    {
       "id": "prop-122",
       "asset": "pebbles",
       "x": 0.5,
       "z": 2.0820508075688773,
       "rot": 0.3,
-      "scale": 1
-    },
-    {
-      "id": "prop-123",
-      "asset": "flower-bed",
-      "x": 0.65,
-      "z": -2.132050807568877,
-      "rot": 0.2,
       "scale": 1
     },
     {
@@ -2346,7 +2282,7 @@
     },
     {
       "id": "prop-127",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 1,
       "z": -1.7320508075688772,
       "rot": 1.9,
@@ -2354,7 +2290,7 @@
     },
     {
       "id": "prop-128",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 1.35,
       "z": -1.7320508075688772,
       "rot": 3.1,
@@ -2362,7 +2298,7 @@
     },
     {
       "id": "prop-129",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 0.65,
       "z": -1.3320508075688773,
       "rot": 1.1,
@@ -2370,7 +2306,7 @@
     },
     {
       "id": "prop-130",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 1,
       "z": -1.3320508075688773,
       "rot": 2.3,
@@ -2378,7 +2314,7 @@
     },
     {
       "id": "prop-131",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 1.35,
       "z": -1.3320508075688773,
       "rot": 3.5,
@@ -2386,23 +2322,15 @@
     },
     {
       "id": "prop-132",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 0.48,
       "z": -2.232050807568877,
       "rot": 0.4,
       "scale": 1
     },
     {
-      "id": "prop-133",
-      "asset": "grass-tuft",
-      "x": 1.52,
-      "z": -1.2320508075688772,
-      "rot": 2.2,
-      "scale": 1
-    },
-    {
       "id": "prop-134",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -1.35,
       "z": 1.3520508075688773,
       "rot": 0.6,
@@ -2410,7 +2338,7 @@
     },
     {
       "id": "prop-135",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -1,
       "z": 1.3520508075688773,
       "rot": 1.8,
@@ -2418,7 +2346,7 @@
     },
     {
       "id": "prop-136",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -0.65,
       "z": 1.3520508075688773,
       "rot": 3,
@@ -2426,7 +2354,7 @@
     },
     {
       "id": "prop-137",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -1.35,
       "z": 1.7320508075688772,
       "rot": 0.9,
@@ -2434,23 +2362,15 @@
     },
     {
       "id": "prop-138",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -1,
       "z": 1.7320508075688772,
       "rot": 2.1,
       "scale": 1
     },
     {
-      "id": "prop-139",
-      "asset": "flower-bed",
-      "x": -0.65,
-      "z": 1.7320508075688772,
-      "rot": 3.3,
-      "scale": 1
-    },
-    {
       "id": "prop-140",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": -1.35,
       "z": 2.112050807568877,
       "rot": 1.3,
@@ -2458,7 +2378,7 @@
     },
     {
       "id": "prop-141",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": -1,
       "z": 2.112050807568877,
       "rot": 2.5,
@@ -2466,7 +2386,7 @@
     },
     {
       "id": "prop-142",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": -0.65,
       "z": 2.112050807568877,
       "rot": 3.7,
@@ -2481,16 +2401,8 @@
       "scale": 1
     },
     {
-      "id": "prop-144",
-      "asset": "flower-bed",
-      "x": 2.62,
-      "z": 1.382050807568877,
-      "rot": 0.5,
-      "scale": 1
-    },
-    {
       "id": "prop-145",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 3.38,
       "z": 1.382050807568877,
       "rot": 1.6,
@@ -2498,23 +2410,15 @@
     },
     {
       "id": "prop-146",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": 2.62,
       "z": 2.0820508075688773,
       "rot": 2.7,
       "scale": 1
     },
     {
-      "id": "prop-147",
-      "asset": "grass-tuft",
-      "x": 3.42,
-      "z": 2.112050807568877,
-      "rot": 0.8,
-      "scale": 1
-    },
-    {
       "id": "prop-148",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -3.45,
       "z": -1.382050807568877,
       "rot": 1.2,
@@ -2522,42 +2426,10 @@
     },
     {
       "id": "prop-149",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -2.55,
       "z": -1.382050807568877,
       "rot": 2.4,
-      "scale": 1
-    },
-    {
-      "id": "prop-150",
-      "asset": "grass-tuft",
-      "x": -3.48,
-      "z": -2.112050807568877,
-      "rot": 0.3,
-      "scale": 1
-    },
-    {
-      "id": "prop-151",
-      "asset": "pebbles",
-      "x": -2.58,
-      "z": -2.152050807568877,
-      "rot": 1.9,
-      "scale": 1
-    },
-    {
-      "id": "prop-152",
-      "asset": "flower-bed",
-      "x": -0.45,
-      "z": -3.1141016151377543,
-      "rot": 0.7,
-      "scale": 1
-    },
-    {
-      "id": "prop-153",
-      "asset": "flower-bed",
-      "x": 0.45,
-      "z": -3.8141016151377545,
-      "rot": 1.8,
       "scale": 1
     },
     {
@@ -2569,67 +2441,11 @@
       "scale": 1
     },
     {
-      "id": "prop-155",
-      "asset": "flower-bed",
-      "x": 1.5,
-      "z": -3.0441016151377545,
-      "rot": 0.4,
-      "scale": 1
-    },
-    {
-      "id": "prop-156",
-      "asset": "flower-bed",
-      "x": 1.85,
-      "z": -2.9841016151377544,
-      "rot": 1.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-157",
-      "asset": "flower-bed",
-      "x": 2.2,
-      "z": -2.9841016151377544,
-      "rot": 2.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-158",
-      "asset": "flower-bed",
-      "x": 2.5,
-      "z": -3.0441016151377545,
-      "rot": 3.7,
-      "scale": 1
-    },
-    {
       "id": "prop-159",
       "asset": "bread-crate",
       "x": 2.52,
       "z": -3.8841016151377543,
       "rot": 0.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-160",
-      "asset": "flower-bed",
-      "x": -3.42,
-      "z": 1.3520508075688773,
-      "rot": 1,
-      "scale": 1
-    },
-    {
-      "id": "prop-161",
-      "asset": "flower-bed",
-      "x": -2.58,
-      "z": 2.112050807568877,
-      "rot": 2.1,
-      "scale": 1
-    },
-    {
-      "id": "prop-162",
-      "asset": "grass-tuft",
-      "x": -3.45,
-      "z": 2.112050807568877,
-      "rot": 3.2,
       "scale": 1
     },
     {
@@ -2650,31 +2466,15 @@
     },
     {
       "id": "prop-165",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 4.38,
       "z": -0.35,
       "rot": 0.4,
       "scale": 1
     },
     {
-      "id": "prop-166",
-      "asset": "grass-tuft",
-      "x": 4.42,
-      "z": 0.35,
-      "rot": 2.2,
-      "scale": 1
-    },
-    {
-      "id": "prop-167",
-      "asset": "flower-bed",
-      "x": 4.62,
-      "z": 1.4120508075688771,
-      "rot": 0.8,
-      "scale": 1
-    },
-    {
       "id": "prop-168",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 5.35,
       "z": 2.0820508075688773,
       "rot": 1.9,
@@ -2682,39 +2482,15 @@
     },
     {
       "id": "prop-169",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 4.6,
       "z": 2.112050807568877,
       "rot": 3,
       "scale": 1
     },
     {
-      "id": "prop-170",
-      "asset": "flower-bed",
-      "x": -0.35,
-      "z": 3.1141016151377543,
-      "rot": 0.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-171",
-      "asset": "flower-bed",
-      "x": 0.35,
-      "z": 3.8141016151377545,
-      "rot": 1.7,
-      "scale": 1
-    },
-    {
-      "id": "prop-172",
-      "asset": "grass-tuft",
-      "x": 0.38,
-      "z": 3.1141016151377543,
-      "rot": 2.8,
-      "scale": 1
-    },
-    {
       "id": "prop-173",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-red",
       "x": -5.35,
       "z": -2.0820508075688773,
       "rot": 0.3,
@@ -2722,7 +2498,7 @@
     },
     {
       "id": "prop-174",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": -5,
       "z": -2.0820508075688773,
       "rot": 1.4,
@@ -2730,23 +2506,15 @@
     },
     {
       "id": "prop-175",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -4.65,
       "z": -2.0820508075688773,
       "rot": 2.5,
       "scale": 1
     },
     {
-      "id": "prop-176",
-      "asset": "flower-bed",
-      "x": -5.35,
-      "z": -1.4820508075688772,
-      "rot": 0.9,
-      "scale": 1
-    },
-    {
       "id": "prop-177",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-purple",
       "x": -4.65,
       "z": -1.4820508075688772,
       "rot": 2,
@@ -2762,7 +2530,7 @@
     },
     {
       "id": "prop-179",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": -2.48,
       "z": -0.46,
       "rot": 0.7,
@@ -2778,7 +2546,7 @@
     },
     {
       "id": "prop-181",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-red",
       "x": 1.52,
       "z": -0.46,
       "rot": 1.2,
@@ -2794,39 +2562,15 @@
     },
     {
       "id": "prop-183",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 5.48,
       "z": 9.972304845413264,
       "rot": 0.5,
       "scale": 1
     },
     {
-      "id": "prop-184",
-      "asset": "flower-bed",
-      "x": 6.52,
-      "z": 9.972304845413264,
-      "rot": 1.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-185",
-      "asset": "grass-tuft",
-      "x": 5.46,
-      "z": 10.832304845413264,
-      "rot": 2.7,
-      "scale": 1
-    },
-    {
-      "id": "prop-186",
-      "asset": "pebbles",
-      "x": 6.5,
-      "z": 10.852304845413265,
-      "rot": 0.9,
-      "scale": 1
-    },
-    {
       "id": "prop-187",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 6.5,
       "z": 11.774355652982141,
       "rot": 0.3,
@@ -2834,7 +2578,7 @@
     },
     {
       "id": "prop-188",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": 7.5,
       "z": 11.774355652982141,
       "rot": 1.4,
@@ -2842,7 +2586,7 @@
     },
     {
       "id": "prop-189",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 6.52,
       "z": 12.504355652982142,
       "rot": 2.5,
@@ -2850,58 +2594,26 @@
     },
     {
       "id": "prop-190",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 7.48,
       "z": 12.504355652982142,
       "rot": 3.6,
       "scale": 1
     },
     {
-      "id": "prop-191",
-      "asset": "flower-bed",
-      "x": 4.5,
-      "z": 8.460254037844386,
-      "rot": 0.8,
-      "scale": 1
-    },
-    {
       "id": "prop-192",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 5.5,
       "z": 8.860254037844385,
       "rot": 1.9,
       "scale": 1
     },
     {
-      "id": "prop-193",
-      "asset": "pebbles",
-      "x": 4.52,
-      "z": 9.080254037844385,
-      "rot": 3,
-      "scale": 1
-    },
-    {
       "id": "prop-194",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 3.52,
       "z": 6.548203230275509,
       "rot": 1.1,
-      "scale": 1
-    },
-    {
-      "id": "prop-195",
-      "asset": "grass-tuft",
-      "x": 4.48,
-      "z": 7.308203230275509,
-      "rot": 2.2,
-      "scale": 1
-    },
-    {
-      "id": "prop-196",
-      "asset": "flower-bed",
-      "x": 3.5,
-      "z": 4.776152422706632,
-      "rot": 0.4,
       "scale": 1
     },
     {
@@ -2913,24 +2625,8 @@
       "scale": 1
     },
     {
-      "id": "prop-198",
-      "asset": "flower-bed",
-      "x": 1.5,
-      "z": 3.0441016151377545,
-      "rot": 2.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-199",
-      "asset": "grass-tuft",
-      "x": 2.5,
-      "z": 3.8841016151377543,
-      "rot": 0.7,
-      "scale": 1
-    },
-    {
       "id": "prop-200",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 3.65,
       "z": 10.042304845413264,
       "rot": 0.2,
@@ -2938,7 +2634,7 @@
     },
     {
       "id": "prop-201",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 4.1,
       "z": 10.012304845413263,
       "rot": 1.3,
@@ -2946,7 +2642,7 @@
     },
     {
       "id": "prop-202",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": 4.38,
       "z": 10.492304845413264,
       "rot": 2.4,
@@ -2954,18 +2650,10 @@
     },
     {
       "id": "prop-203",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 3.62,
       "z": 10.742304845413264,
       "rot": 3.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-204",
-      "asset": "pebbles",
-      "x": 4.25,
-      "z": 10.792304845413264,
-      "rot": 0.9,
       "scale": 1
     },
     {
@@ -2978,7 +2666,7 @@
     },
     {
       "id": "prop-206",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 7.6,
       "z": 10.012304845413263,
       "rot": 0.6,
@@ -2986,7 +2674,7 @@
     },
     {
       "id": "prop-207",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 8.4,
       "z": 10.772304845413265,
       "rot": 1.8,
@@ -2994,7 +2682,7 @@
     },
     {
       "id": "prop-208",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 7.58,
       "z": 10.772304845413265,
       "rot": 2.9,
@@ -3010,42 +2698,10 @@
     },
     {
       "id": "prop-210",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 9.38,
       "z": 11.774355652982141,
       "rot": 1.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-211",
-      "asset": "grass-tuft",
-      "x": 9.35,
-      "z": 12.504355652982142,
-      "rot": 2.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-212",
-      "asset": "pebbles",
-      "x": 8.65,
-      "z": 12.524355652982141,
-      "rot": 3.7,
-      "scale": 1
-    },
-    {
-      "id": "prop-213",
-      "asset": "flower-bed",
-      "x": 4.62,
-      "z": 12.504355652982142,
-      "rot": 0.8,
-      "scale": 1
-    },
-    {
-      "id": "prop-214",
-      "asset": "grass-tuft",
-      "x": 5.38,
-      "z": 11.74435565298214,
-      "rot": 1.9,
       "scale": 1
     },
     {
@@ -3054,14 +2710,6 @@
       "x": 3.45,
       "z": 12.504355652982142,
       "rot": 0.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-216",
-      "asset": "grass-tuft",
-      "x": 2.55,
-      "z": 12.524355652982141,
-      "rot": 1.6,
       "scale": 1
     },
     {
@@ -3074,7 +2722,7 @@
     },
     {
       "id": "prop-218",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 8.55,
       "z": 8.240254037844386,
       "rot": 0.3,
@@ -3082,23 +2730,15 @@
     },
     {
       "id": "prop-219",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 8.55,
       "z": 9.080254037844385,
       "rot": 1.4,
       "scale": 1
     },
     {
-      "id": "prop-220",
-      "asset": "grass-tuft",
-      "x": 9.48,
-      "z": 9.060254037844386,
-      "rot": 2.5,
-      "scale": 1
-    },
-    {
       "id": "prop-221",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 5.65,
       "z": 6.628203230275509,
       "rot": 0.7,
@@ -3106,26 +2746,10 @@
     },
     {
       "id": "prop-222",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 6.25,
       "z": 6.578203230275509,
       "rot": 1.8,
-      "scale": 1
-    },
-    {
-      "id": "prop-223",
-      "asset": "flower-bed",
-      "x": 6,
-      "z": 7.178203230275509,
-      "rot": 2.9,
-      "scale": 1
-    },
-    {
-      "id": "prop-224",
-      "asset": "grass-tuft",
-      "x": 5.62,
-      "z": 7.278203230275508,
-      "rot": 0.4,
       "scale": 1
     },
     {
@@ -3138,7 +2762,7 @@
     },
     {
       "id": "prop-226",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 4.68,
       "z": 4.876152422706632,
       "rot": 1,
@@ -3146,7 +2770,7 @@
     },
     {
       "id": "prop-227",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 5.35,
       "z": 5.476152422706632,
       "rot": 2.1,
@@ -3162,7 +2786,7 @@
     },
     {
       "id": "prop-229",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 6.5,
       "z": 4.746152422706632,
       "rot": 0.6,
@@ -3178,23 +2802,15 @@
     },
     {
       "id": "prop-231",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 7.65,
       "z": 6.628203230275509,
       "rot": 0.9,
       "scale": 1
     },
     {
-      "id": "prop-232",
-      "asset": "flower-bed",
-      "x": 8.3,
-      "z": 6.678203230275509,
-      "rot": 2,
-      "scale": 1
-    },
-    {
       "id": "prop-233",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 7.75,
       "z": 7.278203230275508,
       "rot": 3.1,
@@ -3210,23 +2826,15 @@
     },
     {
       "id": "prop-235",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 7.65,
       "z": 13.556406460551017,
       "rot": 0.4,
       "scale": 1
     },
     {
-      "id": "prop-236",
-      "asset": "flower-bed",
-      "x": 8.35,
-      "z": 13.606406460551018,
-      "rot": 1.5,
-      "scale": 1
-    },
-    {
       "id": "prop-237",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 7.6,
       "z": 14.156406460551018,
       "rot": 2.6,
@@ -3249,16 +2857,8 @@
       "scale": 1
     },
     {
-      "id": "prop-240",
-      "asset": "flower-bed",
-      "x": 5.7,
-      "z": 14.056406460551017,
-      "rot": 0.7,
-      "scale": 1
-    },
-    {
       "id": "prop-241",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 6.3,
       "z": 13.606406460551018,
       "rot": 1.8,
@@ -3273,64 +2873,24 @@
       "scale": 1
     },
     {
-      "id": "prop-243",
-      "asset": "flower-bed",
-      "x": 10.25,
-      "z": 13.606406460551018,
-      "rot": 0.3,
-      "scale": 1
-    },
-    {
       "id": "prop-244",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 9.7,
       "z": 14.156406460551018,
       "rot": 1.4,
       "scale": 1
     },
     {
-      "id": "prop-245",
-      "asset": "pebbles",
-      "x": 10.35,
-      "z": 14.206406460551017,
-      "rot": 2.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-246",
-      "asset": "flower-bed",
-      "x": 7.5,
-      "z": -3.9141016151377546,
-      "rot": 0.4,
-      "scale": 1
-    },
-    {
-      "id": "prop-247",
-      "asset": "flower-bed",
-      "x": 8.5,
-      "z": -3.9141016151377546,
-      "rot": 1.5,
-      "scale": 1
-    },
-    {
       "id": "prop-248",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 7.5,
       "z": -3.014101615137754,
       "rot": 2.6,
       "scale": 1
     },
     {
-      "id": "prop-249",
-      "asset": "flower-bed",
-      "x": 6.62,
-      "z": -5.546152422706632,
-      "rot": 0.2,
-      "scale": 1
-    },
-    {
       "id": "prop-250",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-red",
       "x": 7,
       "z": -5.546152422706632,
       "rot": 1.3,
@@ -3338,47 +2898,23 @@
     },
     {
       "id": "prop-251",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-red",
       "x": 7.38,
       "z": -5.546152422706632,
       "rot": 2.4,
       "scale": 1
     },
     {
-      "id": "prop-252",
-      "asset": "flower-bed",
-      "x": 6.62,
-      "z": -5.096152422706632,
-      "rot": 0.8,
-      "scale": 1
-    },
-    {
       "id": "prop-253",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 7,
       "z": -5.096152422706632,
       "rot": 1.9,
       "scale": 1
     },
     {
-      "id": "prop-254",
-      "asset": "flower-bed",
-      "x": 7.38,
-      "z": -5.096152422706632,
-      "rot": 3,
-      "scale": 1
-    },
-    {
-      "id": "prop-255",
-      "asset": "grass-tuft",
-      "x": 6.58,
-      "z": -4.776152422706632,
-      "rot": 0.5,
-      "scale": 1
-    },
-    {
       "id": "prop-256",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 7.42,
       "z": -4.776152422706632,
       "rot": 1.6,
@@ -3394,7 +2930,7 @@
     },
     {
       "id": "prop-258",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 8.65,
       "z": -5.546152422706632,
       "rot": 0.6,
@@ -3402,7 +2938,7 @@
     },
     {
       "id": "prop-259",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 9,
       "z": -5.546152422706632,
       "rot": 1.7,
@@ -3410,26 +2946,10 @@
     },
     {
       "id": "prop-260",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 9.35,
       "z": -5.546152422706632,
       "rot": 2.8,
-      "scale": 1
-    },
-    {
-      "id": "prop-261",
-      "asset": "flower-bed",
-      "x": 8.65,
-      "z": -5.046152422706632,
-      "rot": 1.1,
-      "scale": 1
-    },
-    {
-      "id": "prop-262",
-      "asset": "flower-bed",
-      "x": 9.35,
-      "z": -5.046152422706632,
-      "rot": 2.2,
       "scale": 1
     },
     {
@@ -3441,48 +2961,16 @@
       "scale": 1
     },
     {
-      "id": "prop-264",
-      "asset": "grass-tuft",
-      "x": 8.55,
-      "z": -4.776152422706632,
-      "rot": 3.3,
-      "scale": 1
-    },
-    {
-      "id": "prop-265",
-      "asset": "flower-bed",
-      "x": 4.6,
-      "z": -5.576152422706632,
-      "rot": 0.9,
-      "scale": 1
-    },
-    {
-      "id": "prop-266",
-      "asset": "flower-bed",
-      "x": 5.4,
-      "z": -4.816152422706632,
-      "rot": 2,
-      "scale": 1
-    },
-    {
       "id": "prop-267",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 4.58,
       "z": -4.846152422706632,
       "rot": 3.1,
       "scale": 1
     },
     {
-      "id": "prop-268",
-      "asset": "pebbles",
-      "x": 5.38,
-      "z": -5.576152422706632,
-      "rot": 0.4,
-      "scale": 1
-    },
-    {
       "id": "prop-269",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-red",
       "x": 3.6,
       "z": -3.0841016151377545,
       "rot": 1.2,
@@ -3490,7 +2978,7 @@
     },
     {
       "id": "prop-270",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 4.4,
       "z": -3.8441016151377543,
       "rot": 2.3,
@@ -3498,58 +2986,26 @@
     },
     {
       "id": "prop-271",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 3.62,
       "z": -3.8441016151377543,
       "rot": 3.4,
       "scale": 1
     },
     {
-      "id": "prop-272",
-      "asset": "flower-bed",
-      "x": 5.52,
-      "z": -3.9141016151377546,
-      "rot": 0.7,
-      "scale": 1
-    },
-    {
       "id": "prop-273",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 6.48,
       "z": -3.014101615137754,
       "rot": 1.8,
       "scale": 1
     },
     {
-      "id": "prop-274",
-      "asset": "flower-bed",
-      "x": 8.65,
-      "z": -2.052050807568877,
-      "rot": 0.3,
-      "scale": 1
-    },
-    {
       "id": "prop-275",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 9,
       "z": -2.052050807568877,
       "rot": 1.4,
-      "scale": 1
-    },
-    {
-      "id": "prop-276",
-      "asset": "flower-bed",
-      "x": 9.35,
-      "z": -2.052050807568877,
-      "rot": 2.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-277",
-      "asset": "grass-tuft",
-      "x": 8.62,
-      "z": -1.382050807568877,
-      "rot": 3.6,
       "scale": 1
     },
     {
@@ -3562,7 +3018,7 @@
     },
     {
       "id": "prop-279",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 6.68,
       "z": -2.012050807568877,
       "rot": 1,
@@ -3570,7 +3026,7 @@
     },
     {
       "id": "prop-280",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 7.32,
       "z": -1.4520508075688772,
       "rot": 2.1,
@@ -3594,34 +3050,18 @@
     },
     {
       "id": "prop-283",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-red",
       "x": 9.52,
       "z": -3.9041016151377543,
       "rot": 1.3,
       "scale": 1
     },
     {
-      "id": "prop-284",
-      "asset": "grass-tuft",
-      "x": 10.48,
-      "z": -3.0241016151377544,
-      "rot": 2.4,
-      "scale": 1
-    },
-    {
       "id": "prop-285",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 10.52,
       "z": -1.2920508075688772,
       "rot": 0.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-286",
-      "asset": "pebbles",
-      "x": 11.48,
-      "z": -2.172050807568877,
-      "rot": 1.7,
       "scale": 1
     },
     {
@@ -3634,23 +3074,15 @@
     },
     {
       "id": "prop-288",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 12.4,
       "z": -3.8441016151377543,
       "rot": 2,
       "scale": 1
     },
     {
-      "id": "prop-289",
-      "asset": "grass-tuft",
-      "x": 12.42,
-      "z": -3.0841016151377545,
-      "rot": 3.1,
-      "scale": 1
-    },
-    {
       "id": "prop-290",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 12.5,
       "z": -2.152050807568877,
       "rot": 0.4,
@@ -3665,24 +3097,8 @@
       "scale": 1
     },
     {
-      "id": "prop-292",
-      "asset": "flower-bed",
-      "x": 13.5,
-      "z": 0.45,
-      "rot": 2.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-293",
-      "asset": "pebbles",
-      "x": 14.5,
-      "z": -0.45,
-      "rot": 0.7,
-      "scale": 1
-    },
-    {
       "id": "prop-294",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-red",
       "x": 14.68,
       "z": 1.4320508075688771,
       "rot": 1.1,
@@ -3690,18 +3106,10 @@
     },
     {
       "id": "prop-295",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 15.32,
       "z": 1.4820508075688772,
       "rot": 2.2,
-      "scale": 1
-    },
-    {
-      "id": "prop-296",
-      "asset": "grass-tuft",
-      "x": 14.7,
-      "z": 2.0820508075688773,
-      "rot": 3.3,
       "scale": 1
     },
     {
@@ -3714,23 +3122,15 @@
     },
     {
       "id": "prop-298",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 11.65,
       "z": -0.3,
       "rot": 0.8,
       "scale": 1
     },
     {
-      "id": "prop-299",
-      "asset": "flower-bed",
-      "x": 12.3,
-      "z": 0.25,
-      "rot": 1.9,
-      "scale": 1
-    },
-    {
       "id": "prop-300",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 11.7,
       "z": 0.35,
       "rot": 3,
@@ -3738,47 +3138,23 @@
     },
     {
       "id": "prop-301",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 13.62,
       "z": -3.8141016151377545,
       "rot": 0.2,
       "scale": 1
     },
     {
-      "id": "prop-302",
-      "asset": "grass-tuft",
-      "x": 14.38,
-      "z": -3.1141016151377543,
-      "rot": 1.3,
-      "scale": 1
-    },
-    {
-      "id": "prop-303",
-      "asset": "flower-bed",
-      "x": 14.7,
-      "z": -1.9820508075688772,
-      "rot": 2.4,
-      "scale": 1
-    },
-    {
       "id": "prop-304",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 15.3,
       "z": -1.4820508075688772,
       "rot": 3.5,
       "scale": 1
     },
     {
-      "id": "prop-305",
-      "asset": "grass-tuft",
-      "x": 14.65,
-      "z": -1.382050807568877,
-      "rot": 0.9,
-      "scale": 1
-    },
-    {
       "id": "prop-306",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 1.65,
       "z": -7.228203230275509,
       "rot": 0.6,
@@ -3786,7 +3162,7 @@
     },
     {
       "id": "prop-307",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 2.32,
       "z": -7.208203230275509,
       "rot": 1.7,
@@ -3794,7 +3170,7 @@
     },
     {
       "id": "prop-308",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 2,
       "z": -6.578203230275509,
       "rot": 2.8,
@@ -3802,23 +3178,15 @@
     },
     {
       "id": "prop-309",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 0.5,
       "z": -9.110254037844385,
       "rot": 0.4,
       "scale": 1
     },
     {
-      "id": "prop-310",
-      "asset": "pebbles",
-      "x": 1.5,
-      "z": -8.210254037844386,
-      "rot": 1.5,
-      "scale": 1
-    },
-    {
       "id": "prop-311",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 2.68,
       "z": -8.940254037844385,
       "rot": 2.1,
@@ -3826,23 +3194,15 @@
     },
     {
       "id": "prop-312",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": 3.32,
       "z": -8.380254037844386,
       "rot": 3.2,
       "scale": 1
     },
     {
-      "id": "prop-313",
-      "asset": "grass-tuft",
-      "x": 2.65,
-      "z": -8.340254037844385,
-      "rot": 0.7,
-      "scale": 1
-    },
-    {
       "id": "prop-314",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-red",
       "x": 4.65,
       "z": -8.410254037844386,
       "rot": 1.2,
@@ -3850,31 +3210,15 @@
     },
     {
       "id": "prop-315",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 5.35,
       "z": -8.910254037844386,
       "rot": 2.3,
       "scale": 1
     },
     {
-      "id": "prop-316",
-      "asset": "mushroom",
-      "x": 5.25,
-      "z": -8.310254037844386,
-      "rot": 3.4,
-      "scale": 1
-    },
-    {
-      "id": "prop-317",
-      "asset": "flower-bed",
-      "x": -11.5,
-      "z": -2.1820508075688774,
-      "rot": 0.3,
-      "scale": 1
-    },
-    {
       "id": "prop-318",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-purple",
       "x": -10.5,
       "z": -2.1820508075688774,
       "rot": 1.4,
@@ -3882,7 +3226,7 @@
     },
     {
       "id": "prop-319",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -11.5,
       "z": -1.2820508075688772,
       "rot": 2.5,
@@ -3890,23 +3234,15 @@
     },
     {
       "id": "prop-320",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -12.38,
       "z": -3.8141016151377545,
       "rot": 0.5,
       "scale": 1
     },
     {
-      "id": "prop-321",
-      "asset": "flower-bed",
-      "x": -12,
-      "z": -3.8141016151377545,
-      "rot": 1.6,
-      "scale": 1
-    },
-    {
       "id": "prop-322",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -11.62,
       "z": -3.8141016151377545,
       "rot": 2.7,
@@ -3914,7 +3250,7 @@
     },
     {
       "id": "prop-323",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-purple",
       "x": -12.35,
       "z": -3.2141016151377544,
       "rot": 0.9,
@@ -3922,23 +3258,15 @@
     },
     {
       "id": "prop-324",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -11.65,
       "z": -3.2141016151377544,
       "rot": 2,
       "scale": 1
     },
     {
-      "id": "prop-325",
-      "asset": "grass-tuft",
-      "x": -12,
-      "z": -3.0641016151377545,
-      "rot": 3.1,
-      "scale": 1
-    },
-    {
       "id": "prop-326",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-purple",
       "x": -14.42,
       "z": -3.8441016151377543,
       "rot": 0.4,
@@ -3946,23 +3274,15 @@
     },
     {
       "id": "prop-327",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -13.58,
       "z": -3.0841016151377545,
       "rot": 1.5,
       "scale": 1
     },
     {
-      "id": "prop-328",
-      "asset": "grass-tuft",
-      "x": -14.42,
-      "z": -3.0841016151377545,
-      "rot": 2.6,
-      "scale": 1
-    },
-    {
       "id": "prop-329",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -10.35,
       "z": -3.7841016151377542,
       "rot": 0.7,
@@ -3970,18 +3290,10 @@
     },
     {
       "id": "prop-330",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-purple",
       "x": -9.65,
       "z": -3.7841016151377542,
       "rot": 1.8,
-      "scale": 1
-    },
-    {
-      "id": "prop-331",
-      "asset": "grass-tuft",
-      "x": -10.35,
-      "z": -3.1441016151377545,
-      "rot": 2.9,
       "scale": 1
     },
     {
@@ -3994,7 +3306,7 @@
     },
     {
       "id": "prop-333",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-purple",
       "x": -11.4,
       "z": -4.816152422706632,
       "rot": 1.2,
@@ -4002,34 +3314,18 @@
     },
     {
       "id": "prop-334",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -10.6,
       "z": -5.576152422706632,
       "rot": 2.3,
       "scale": 1
     },
     {
-      "id": "prop-335",
-      "asset": "grass-tuft",
-      "x": -11.4,
-      "z": -5.576152422706632,
-      "rot": 3.4,
-      "scale": 1
-    },
-    {
       "id": "prop-336",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -8.4,
       "z": -3.8441016151377543,
       "rot": 0.8,
-      "scale": 1
-    },
-    {
-      "id": "prop-337",
-      "asset": "flower-bed",
-      "x": -7.6,
-      "z": -3.0841016151377545,
-      "rot": 1.9,
       "scale": 1
     },
     {
@@ -4042,7 +3338,7 @@
     },
     {
       "id": "prop-339",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-purple",
       "x": -13.35,
       "z": -2.052050807568877,
       "rot": 0.2,
@@ -4050,23 +3346,15 @@
     },
     {
       "id": "prop-340",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -12.65,
       "z": -2.052050807568877,
       "rot": 1.3,
       "scale": 1
     },
     {
-      "id": "prop-341",
-      "asset": "flower-bed",
-      "x": -13,
-      "z": -1.4520508075688772,
-      "rot": 2.4,
-      "scale": 1
-    },
-    {
       "id": "prop-342",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -13.4,
       "z": -1.382050807568877,
       "rot": 3.5,
@@ -4081,43 +3369,11 @@
       "scale": 1
     },
     {
-      "id": "prop-344",
-      "asset": "flower-bed",
-      "x": -15.42,
-      "z": -2.112050807568877,
-      "rot": 0.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-345",
-      "asset": "flower-bed",
-      "x": -14.58,
-      "z": -1.3520508075688773,
-      "rot": 1.6,
-      "scale": 1
-    },
-    {
       "id": "prop-346",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -15.42,
       "z": -1.3520508075688773,
       "rot": 2.7,
-      "scale": 1
-    },
-    {
-      "id": "prop-347",
-      "asset": "flower-bed",
-      "x": -14.4,
-      "z": -0.38,
-      "rot": 1.1,
-      "scale": 1
-    },
-    {
-      "id": "prop-348",
-      "asset": "flower-bed",
-      "x": -13.6,
-      "z": 0.38,
-      "rot": 2.2,
       "scale": 1
     },
     {
@@ -4129,48 +3385,8 @@
       "scale": 1
     },
     {
-      "id": "prop-350",
-      "asset": "flower-bed",
-      "x": -10.35,
-      "z": -0.3,
-      "rot": 0.4,
-      "scale": 1
-    },
-    {
-      "id": "prop-351",
-      "asset": "flower-bed",
-      "x": -9.65,
-      "z": -0.3,
-      "rot": 1.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-352",
-      "asset": "grass-tuft",
-      "x": -10.32,
-      "z": 0.32,
-      "rot": 2.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-353",
-      "asset": "pebbles",
-      "x": -9.68,
-      "z": 0.32,
-      "rot": 3.7,
-      "scale": 1
-    },
-    {
-      "id": "prop-354",
-      "asset": "flower-bed",
-      "x": -8.35,
-      "z": -0.3,
-      "rot": 0.9,
-      "scale": 1
-    },
-    {
       "id": "prop-355",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -7.7,
       "z": 0.28,
       "rot": 2,
@@ -4178,7 +3394,7 @@
     },
     {
       "id": "prop-356",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -8.3,
       "z": 0.35,
       "rot": 3.1,
@@ -4186,7 +3402,7 @@
     },
     {
       "id": "prop-357",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -13.35,
       "z": 1.4320508075688771,
       "rot": 0.6,
@@ -4194,7 +3410,7 @@
     },
     {
       "id": "prop-358",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-purple",
       "x": -12.68,
       "z": 1.4820508075688772,
       "rot": 1.7,
@@ -4202,7 +3418,7 @@
     },
     {
       "id": "prop-359",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -13.3,
       "z": 2.0820508075688773,
       "rot": 2.8,
@@ -4218,7 +3434,7 @@
     },
     {
       "id": "prop-361",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -12.5,
       "z": 3.014101615137754,
       "rot": 1.2,
@@ -4226,7 +3442,7 @@
     },
     {
       "id": "prop-362",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-purple",
       "x": -11.5,
       "z": 3.9141016151377546,
       "rot": 2.3,
@@ -4234,7 +3450,7 @@
     },
     {
       "id": "prop-363",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-purple",
       "x": -10.35,
       "z": 3.184101615137754,
       "rot": 0.3,
@@ -4242,7 +3458,7 @@
     },
     {
       "id": "prop-364",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -9.65,
       "z": 3.7441016151377546,
       "rot": 1.4,
@@ -4257,24 +3473,8 @@
       "scale": 1
     },
     {
-      "id": "prop-366",
-      "asset": "mushroom",
-      "x": -9.68,
-      "z": 3.1441016151377545,
-      "rot": 3.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-367",
-      "asset": "flower-bed",
-      "x": -15.32,
-      "z": -4.916152422706632,
-      "rot": 0.8,
-      "scale": 1
-    },
-    {
       "id": "prop-368",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-purple",
       "x": -14.68,
       "z": -5.476152422706632,
       "rot": 1.9,
@@ -4289,35 +3489,11 @@
       "scale": 1
     },
     {
-      "id": "prop-370",
-      "asset": "pebbles",
-      "x": 11.5,
-      "z": 6.478203230275509,
-      "rot": 0.5,
-      "scale": 1
-    },
-    {
       "id": "prop-371",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 12.5,
       "z": 6.478203230275509,
       "rot": 1.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-372",
-      "asset": "pebbles",
-      "x": 11.5,
-      "z": 7.378203230275509,
-      "rot": 2.7,
-      "scale": 1
-    },
-    {
-      "id": "prop-373",
-      "asset": "pebbles",
-      "x": 10.65,
-      "z": 4.876152422706632,
-      "rot": 0.3,
       "scale": 1
     },
     {
@@ -4330,18 +3506,10 @@
     },
     {
       "id": "prop-375",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 10.65,
       "z": 5.516152422706632,
       "rot": 2.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-376",
-      "asset": "pebbles",
-      "x": 11.35,
-      "z": 5.516152422706632,
-      "rot": 3.6,
       "scale": 1
     },
     {
@@ -4353,16 +3521,8 @@
       "scale": 1
     },
     {
-      "id": "prop-378",
-      "asset": "pebbles",
-      "x": 13.35,
-      "z": 4.896152422706632,
-      "rot": 1.8,
-      "scale": 1
-    },
-    {
       "id": "prop-379",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 12.65,
       "z": 5.516152422706632,
       "rot": 2.9,
@@ -4377,27 +3537,11 @@
       "scale": 1
     },
     {
-      "id": "prop-381",
-      "asset": "pebbles",
-      "x": 13.62,
-      "z": 6.578203230275509,
-      "rot": 1.1,
-      "scale": 1
-    },
-    {
       "id": "prop-382",
       "asset": "log",
       "x": 14.35,
       "z": 6.6482032302755085,
       "rot": 2.2,
-      "scale": 1
-    },
-    {
-      "id": "prop-383",
-      "asset": "grass-tuft",
-      "x": 13.68,
-      "z": 7.278203230275508,
-      "rot": 3.3,
       "scale": 1
     },
     {
@@ -4414,30 +3558,6 @@
       "x": 12.65,
       "z": 8.360254037844385,
       "rot": 0.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-386",
-      "asset": "pebbles",
-      "x": 13.35,
-      "z": 8.360254037844385,
-      "rot": 1.7,
-      "scale": 1
-    },
-    {
-      "id": "prop-387",
-      "asset": "grass-tuft",
-      "x": 12.68,
-      "z": 9.010254037844385,
-      "rot": 2.8,
-      "scale": 1
-    },
-    {
-      "id": "prop-388",
-      "asset": "flower-bed",
-      "x": 13.35,
-      "z": 9.010254037844385,
-      "rot": 3.9,
       "scale": 1
     },
     {
@@ -4489,51 +3609,11 @@
       "scale": 1
     },
     {
-      "id": "prop-395",
-      "asset": "grass-tuft",
-      "x": 12.38,
-      "z": 3.8441016151377543,
-      "rot": 2.7,
-      "scale": 1
-    },
-    {
       "id": "prop-396",
       "asset": "pebbles",
       "x": 7.68,
       "z": 3.184101615137754,
       "rot": 0.8,
-      "scale": 1
-    },
-    {
-      "id": "prop-397",
-      "asset": "grass-tuft",
-      "x": 8.32,
-      "z": 3.7441016151377546,
-      "rot": 1.9,
-      "scale": 1
-    },
-    {
-      "id": "prop-398",
-      "asset": "flower-bed",
-      "x": 7.7,
-      "z": 3.7841016151377542,
-      "rot": 3,
-      "scale": 1
-    },
-    {
-      "id": "prop-399",
-      "asset": "pebbles",
-      "x": 9.58,
-      "z": 3.0841016151377545,
-      "rot": 0.2,
-      "scale": 1
-    },
-    {
-      "id": "prop-400",
-      "asset": "grass-tuft",
-      "x": 10.42,
-      "z": 3.8441016151377543,
-      "rot": 1.3,
       "scale": 1
     },
     {
@@ -4553,48 +3633,16 @@
       "scale": 1
     },
     {
-      "id": "prop-403",
-      "asset": "grass-tuft",
-      "x": 12.7,
-      "z": 2.0820508075688773,
-      "rot": 0.7,
-      "scale": 1
-    },
-    {
       "id": "prop-404",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -3.5,
       "z": 8.210254037844386,
       "rot": 0.4,
       "scale": 1
     },
     {
-      "id": "prop-405",
-      "asset": "grass-tuft",
-      "x": -2.5,
-      "z": 8.210254037844386,
-      "rot": 1.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-406",
-      "asset": "mushroom",
-      "x": -3.5,
-      "z": 9.110254037844385,
-      "rot": 2.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-407",
-      "asset": "flower-bed",
-      "x": -4.35,
-      "z": 6.6082032302755085,
-      "rot": 0.3,
-      "scale": 1
-    },
-    {
       "id": "prop-408",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -3.75,
       "z": 6.628203230275509,
       "rot": 1.4,
@@ -4602,7 +3650,7 @@
     },
     {
       "id": "prop-409",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -4.38,
       "z": 7.228203230275509,
       "rot": 2.5,
@@ -4626,26 +3674,10 @@
     },
     {
       "id": "prop-412",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -2.35,
       "z": 6.6482032302755085,
       "rot": 0.7,
-      "scale": 1
-    },
-    {
-      "id": "prop-413",
-      "asset": "flower-bed",
-      "x": -1.68,
-      "z": 6.6482032302755085,
-      "rot": 1.8,
-      "scale": 1
-    },
-    {
-      "id": "prop-414",
-      "asset": "grass-tuft",
-      "x": -2.32,
-      "z": 7.278203230275508,
-      "rot": 2.9,
       "scale": 1
     },
     {
@@ -4657,16 +3689,8 @@
       "scale": 1
     },
     {
-      "id": "prop-416",
-      "asset": "flower-bed",
-      "x": -1.5,
-      "z": 8.220254037844386,
-      "rot": 1.2,
-      "scale": 1
-    },
-    {
       "id": "prop-417",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -0.5,
       "z": 9.100254037844385,
       "rot": 2.3,
@@ -4674,18 +3698,10 @@
     },
     {
       "id": "prop-418",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -6.42,
       "z": 6.548203230275509,
       "rot": 0.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-419",
-      "asset": "grass-tuft",
-      "x": -5.58,
-      "z": 7.308203230275509,
-      "rot": 1.6,
       "scale": 1
     },
     {
@@ -4705,14 +3721,6 @@
       "scale": 1
     },
     {
-      "id": "prop-422",
-      "asset": "flower-bed",
-      "x": -7.6,
-      "z": 7.278203230275508,
-      "rot": 1.9,
-      "scale": 1
-    },
-    {
       "id": "prop-423",
       "asset": "grass-tuft",
       "x": -8.38,
@@ -4722,23 +3730,15 @@
     },
     {
       "id": "prop-424",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -9.35,
       "z": 8.360254037844385,
       "rot": 0.2,
       "scale": 1
     },
     {
-      "id": "prop-425",
-      "asset": "mushroom",
-      "x": -8.65,
-      "z": 8.380254037844386,
-      "rot": 1.3,
-      "scale": 1
-    },
-    {
       "id": "prop-426",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -9.32,
       "z": 9.010254037844385,
       "rot": 2.4,
@@ -4754,50 +3754,26 @@
     },
     {
       "id": "prop-428",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -10.32,
       "z": 6.6482032302755085,
       "rot": 0.9,
       "scale": 1
     },
     {
-      "id": "prop-429",
-      "asset": "flower-bed",
-      "x": -9.68,
-      "z": 7.208203230275509,
-      "rot": 2,
-      "scale": 1
-    },
-    {
       "id": "prop-430",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -10.35,
       "z": 7.248203230275509,
       "rot": 3.1,
       "scale": 1
     },
     {
-      "id": "prop-431",
-      "asset": "mushroom",
-      "x": -9.65,
-      "z": 6.6082032302755085,
-      "rot": 0.6,
-      "scale": 1
-    },
-    {
       "id": "prop-432",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 0.5800000000000001,
       "z": 8.280254037844385,
       "rot": 1.1,
-      "scale": 1
-    },
-    {
-      "id": "prop-433",
-      "asset": "grass-tuft",
-      "x": 1.42,
-      "z": 9.040254037844386,
-      "rot": 2.2,
       "scale": 1
     },
     {
@@ -4818,47 +3794,23 @@
     },
     {
       "id": "prop-436",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 0.35,
       "z": 10.042304845413264,
       "rot": 1.5,
       "scale": 1
     },
     {
-      "id": "prop-437",
-      "asset": "pebbles",
-      "x": 0,
-      "z": 9.992304845413264,
-      "rot": 2.6,
-      "scale": 1
-    },
-    {
       "id": "prop-438",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -2.35,
       "z": 10.042304845413264,
       "rot": 0.7,
       "scale": 1
     },
     {
-      "id": "prop-439",
-      "asset": "mushroom",
-      "x": -1.65,
-      "z": 10.042304845413264,
-      "rot": 1.8,
-      "scale": 1
-    },
-    {
-      "id": "prop-440",
-      "asset": "grass-tuft",
-      "x": -7.35,
-      "z": 8.310254037844386,
-      "rot": 2.9,
-      "scale": 1
-    },
-    {
       "id": "prop-441",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -6.65,
       "z": 8.310254037844386,
       "rot": 0.3,
@@ -4866,7 +3818,7 @@
     },
     {
       "id": "prop-442",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 1.68,
       "z": 13.576406460551018,
       "rot": 1.4,
@@ -4874,7 +3826,7 @@
     },
     {
       "id": "prop-443",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 2.32,
       "z": 14.136406460551017,
       "rot": 2.5,
@@ -4890,7 +3842,7 @@
     },
     {
       "id": "prop-445",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 3.65,
       "z": 13.606406460551018,
       "rot": 0.8,
@@ -4898,7 +3850,7 @@
     },
     {
       "id": "prop-446",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 4.35,
       "z": 14.106406460551018,
       "rot": 1.9,
@@ -4914,7 +3866,7 @@
     },
     {
       "id": "prop-448",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -8.5,
       "z": -14.306406460551017,
       "rot": 0.2,
@@ -4922,7 +3874,7 @@
     },
     {
       "id": "prop-449",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -7.5,
       "z": -14.306406460551017,
       "rot": 1.3,
@@ -4945,16 +3897,8 @@
       "scale": 1
     },
     {
-      "id": "prop-452",
-      "asset": "flower-bed",
-      "x": -7.5,
-      "z": -12.424355652982142,
-      "rot": 0.6,
-      "scale": 1
-    },
-    {
       "id": "prop-453",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -6.5,
       "z": -12.424355652982142,
       "rot": 1.7,
@@ -4977,16 +3921,8 @@
       "scale": 1
     },
     {
-      "id": "prop-456",
-      "asset": "flower-bed",
-      "x": -6.5,
-      "z": -10.392304845413264,
-      "rot": 0.4,
-      "scale": 1
-    },
-    {
       "id": "prop-457",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -5.5,
       "z": -10.392304845413264,
       "rot": 1.5,
@@ -4994,103 +3930,39 @@
     },
     {
       "id": "prop-458",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -5.5,
       "z": -9.010254037844385,
       "rot": 2.6,
       "scale": 1
     },
     {
-      "id": "prop-459",
-      "asset": "pebbles",
-      "x": -4.5,
-      "z": -8.310254037844386,
-      "rot": 0.7,
-      "scale": 1
-    },
-    {
-      "id": "prop-460",
-      "asset": "flower-bed",
-      "x": -4.5,
-      "z": -7.348203230275509,
-      "rot": 1.8,
-      "scale": 1
-    },
-    {
-      "id": "prop-461",
-      "asset": "pebbles",
-      "x": -3.5,
-      "z": -6.508203230275509,
-      "rot": 2.9,
-      "scale": 1
-    },
-    {
       "id": "prop-462",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -3.5,
       "z": -4.776152422706632,
       "rot": 0.5,
       "scale": 1
     },
     {
-      "id": "prop-463",
-      "asset": "flower-bed",
-      "x": -1.5,
-      "z": -3.8841016151377543,
-      "rot": 1.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-464",
-      "asset": "flower-bed",
-      "x": -9.4,
-      "z": -12.504355652982142,
-      "rot": 0.3,
-      "scale": 1
-    },
-    {
       "id": "prop-465",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -8.6,
       "z": -11.74435565298214,
       "rot": 1.4,
       "scale": 1
     },
     {
-      "id": "prop-466",
-      "asset": "pebbles",
-      "x": -9.4,
-      "z": -11.74435565298214,
-      "rot": 2.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-467",
-      "asset": "flower-bed",
-      "x": -6.4,
-      "z": -13.476406460551017,
-      "rot": 0.8,
-      "scale": 1
-    },
-    {
       "id": "prop-468",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -5.6,
       "z": -14.236406460551018,
       "rot": 1.9,
       "scale": 1
     },
     {
-      "id": "prop-469",
-      "asset": "pebbles",
-      "x": -5.6,
-      "z": -13.476406460551017,
-      "rot": 3,
-      "scale": 1
-    },
-    {
       "id": "prop-470",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -5.35,
       "z": -12.444355652982141,
       "rot": 0.4,
@@ -5098,7 +3970,7 @@
     },
     {
       "id": "prop-471",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -4.65,
       "z": -12.444355652982141,
       "rot": 1.5,
@@ -5113,14 +3985,6 @@
       "scale": 1
     },
     {
-      "id": "prop-473",
-      "asset": "grass-tuft",
-      "x": -4.65,
-      "z": -11.80435565298214,
-      "rot": 3.7,
-      "scale": 1
-    },
-    {
       "id": "prop-474",
       "asset": "rock-large",
       "x": -5,
@@ -5130,23 +3994,15 @@
     },
     {
       "id": "prop-475",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -8.4,
       "z": -10.772304845413265,
       "rot": 0.9,
       "scale": 1
     },
     {
-      "id": "prop-476",
-      "asset": "pebbles",
-      "x": -7.6,
-      "z": -10.012304845413263,
-      "rot": 2,
-      "scale": 1
-    },
-    {
       "id": "prop-477",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -7.35,
       "z": -8.960254037844386,
       "rot": 0.2,
@@ -5154,23 +4010,15 @@
     },
     {
       "id": "prop-478",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-purple",
       "x": -6.65,
       "z": -8.960254037844386,
       "rot": 1.3,
       "scale": 1
     },
     {
-      "id": "prop-479",
-      "asset": "pebbles",
-      "x": -7.35,
-      "z": -8.340254037844385,
-      "rot": 2.4,
-      "scale": 1
-    },
-    {
       "id": "prop-480",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -6.65,
       "z": -8.340254037844385,
       "rot": 3.5,
@@ -5178,26 +4026,10 @@
     },
     {
       "id": "prop-481",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -10.32,
       "z": -10.672304845413263,
       "rot": 0.7,
-      "scale": 1
-    },
-    {
-      "id": "prop-482",
-      "asset": "pebbles",
-      "x": -9.68,
-      "z": -10.112304845413265,
-      "rot": 1.8,
-      "scale": 1
-    },
-    {
-      "id": "prop-483",
-      "asset": "grass-tuft",
-      "x": -10.3,
-      "z": -10.072304845413264,
-      "rot": 2.9,
       "scale": 1
     },
     {
@@ -5209,14 +4041,6 @@
       "scale": 1
     },
     {
-      "id": "prop-485",
-      "asset": "flower-bed",
-      "x": -3.35,
-      "z": -12.424355652982142,
-      "rot": 1.1,
-      "scale": 1
-    },
-    {
       "id": "prop-486",
       "asset": "pebbles",
       "x": -2.65,
@@ -5225,27 +4049,11 @@
       "scale": 1
     },
     {
-      "id": "prop-487",
-      "asset": "grass-tuft",
-      "x": -3.32,
-      "z": -11.80435565298214,
-      "rot": 3.3,
-      "scale": 1
-    },
-    {
       "id": "prop-488",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -2.32,
       "z": -10.112304845413265,
       "rot": 0.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-489",
-      "asset": "flower-bed",
-      "x": -1.68,
-      "z": -10.672304845413263,
-      "rot": 1.6,
       "scale": 1
     },
     {
@@ -5258,42 +4066,18 @@
     },
     {
       "id": "prop-491",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -16.3,
       "z": -0.25,
       "rot": 0.4,
       "scale": 1
     },
     {
-      "id": "prop-492",
-      "asset": "flower-bed",
-      "x": -15.7,
-      "z": 0.25,
-      "rot": 1.5,
-      "scale": 1
-    },
-    {
       "id": "prop-493",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -15.32,
       "z": 2.012050807568877,
       "rot": 2.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-494",
-      "asset": "flower-bed",
-      "x": -14.68,
-      "z": 1.4520508075688772,
-      "rot": 3.7,
-      "scale": 1
-    },
-    {
-      "id": "prop-495",
-      "asset": "grass-tuft",
-      "x": -14.35,
-      "z": 3.1641016151377546,
-      "rot": 0.8,
       "scale": 1
     },
     {
@@ -5306,7 +4090,7 @@
     },
     {
       "id": "prop-497",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -13.3,
       "z": 4.946152422706632,
       "rot": 3,
@@ -5329,30 +4113,6 @@
       "scale": 1
     },
     {
-      "id": "prop-500",
-      "asset": "grass-tuft",
-      "x": -11.68,
-      "z": 6.6482032302755085,
-      "rot": 2.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-501",
-      "asset": "flower-bed",
-      "x": -11.35,
-      "z": 8.360254037844385,
-      "rot": 3.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-502",
-      "asset": "grass-tuft",
-      "x": -10.65,
-      "z": 8.960254037844386,
-      "rot": 0.9,
-      "scale": 1
-    },
-    {
       "id": "prop-503",
       "asset": "mushroom",
       "x": -10.3,
@@ -5362,7 +4122,7 @@
     },
     {
       "id": "prop-504",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -9.7,
       "z": 10.642304845413264,
       "rot": 3.1,
@@ -5370,7 +4130,7 @@
     },
     {
       "id": "prop-505",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -8.32,
       "z": 14.136406460551017,
       "rot": 0.5,
@@ -5394,63 +4154,31 @@
     },
     {
       "id": "prop-508",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-purple",
       "x": -11.32,
       "z": 4.916152422706632,
       "rot": 0.4,
       "scale": 1
     },
     {
-      "id": "prop-509",
-      "asset": "grass-tuft",
-      "x": -10.68,
-      "z": 5.476152422706632,
-      "rot": 1.5,
-      "scale": 1
-    },
-    {
       "id": "prop-510",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -9.35,
       "z": 5.446152422706632,
       "rot": 2.6,
       "scale": 1
     },
     {
-      "id": "prop-511",
-      "asset": "grass-tuft",
-      "x": -8.65,
-      "z": 4.946152422706632,
-      "rot": 3.7,
-      "scale": 1
-    },
-    {
       "id": "prop-512",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -13.45,
       "z": -4.796152422706632,
       "rot": 0.8,
       "scale": 1
     },
     {
-      "id": "prop-513",
-      "asset": "flower-bed",
-      "x": -12.55,
-      "z": -4.796152422706632,
-      "rot": 1.9,
-      "scale": 1
-    },
-    {
-      "id": "prop-514",
-      "asset": "flower-bed",
-      "x": -9.32,
-      "z": 1.4520508075688772,
-      "rot": 3,
-      "scale": 1
-    },
-    {
       "id": "prop-515",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -8.68,
       "z": 2.012050807568877,
       "rot": 0.3,
@@ -5458,23 +4186,15 @@
     },
     {
       "id": "prop-516",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-purple",
       "x": -12.35,
       "z": -7.228203230275509,
       "rot": 1.4,
       "scale": 1
     },
     {
-      "id": "prop-517",
-      "asset": "grass-tuft",
-      "x": -11.65,
-      "z": -6.628203230275509,
-      "rot": 2.5,
-      "scale": 1
-    },
-    {
       "id": "prop-518",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -5.3,
       "z": 5.476152422706632,
       "rot": 3.6,
@@ -5489,184 +4209,64 @@
       "scale": 1
     },
     {
-      "id": "prop-520",
-      "asset": "flower-bed",
-      "x": -11.32,
-      "z": -8.940254037844385,
-      "rot": 2,
-      "scale": 1
-    },
-    {
-      "id": "prop-521",
-      "asset": "pebbles",
-      "x": -10.68,
-      "z": -8.380254037844386,
-      "rot": 3.1,
-      "scale": 1
-    },
-    {
-      "id": "prop-522",
-      "asset": "flower-bed",
-      "x": -9.35,
-      "z": -4.916152422706632,
-      "rot": 0.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-523",
-      "asset": "grass-tuft",
-      "x": -8.65,
-      "z": -5.476152422706632,
-      "rot": 1.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-524",
-      "asset": "flower-bed",
-      "x": -4.32,
-      "z": 3.184101615137754,
-      "rot": 2.7,
-      "scale": 1
-    },
-    {
       "id": "prop-525",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -3.68,
       "z": 3.7441016151377546,
       "rot": 3.8,
       "scale": 1
     },
     {
-      "id": "prop-526",
-      "asset": "flower-bed",
-      "x": -8.35,
-      "z": -7.228203230275509,
-      "rot": 0.4,
-      "scale": 1
-    },
-    {
       "id": "prop-527",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -7.65,
       "z": -6.628203230275509,
       "rot": 1.5,
       "scale": 1
     },
     {
-      "id": "prop-528",
-      "asset": "flower-bed",
-      "x": -2.4,
-      "z": 3.0841016151377545,
-      "rot": 2.6,
-      "scale": 1
-    },
-    {
       "id": "prop-529",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -1.6,
       "z": 3.8441016151377543,
       "rot": 3.7,
       "scale": 1
     },
     {
-      "id": "prop-530",
-      "asset": "flower-bed",
-      "x": 2.6,
-      "z": 8.280254037844385,
-      "rot": 0.8,
-      "scale": 1
-    },
-    {
       "id": "prop-531",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 3.4,
       "z": 9.040254037844386,
       "rot": 1.9,
       "scale": 1
     },
     {
-      "id": "prop-532",
-      "asset": "flower-bed",
-      "x": -2.48,
-      "z": -7.378203230275509,
-      "rot": 3,
-      "scale": 1
-    },
-    {
-      "id": "prop-533",
-      "asset": "pebbles",
-      "x": -1.52,
-      "z": -6.478203230275509,
-      "rot": 0.3,
-      "scale": 1
-    },
-    {
       "id": "prop-534",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -1.32,
       "z": -8.940254037844385,
       "rot": 1.4,
       "scale": 1
     },
     {
-      "id": "prop-535",
-      "asset": "grass-tuft",
-      "x": -0.6799999999999999,
-      "z": -8.380254037844386,
-      "rot": 2.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-536",
-      "asset": "flower-bed",
-      "x": -0.48,
-      "z": -6.478203230275509,
-      "rot": 3.6,
-      "scale": 1
-    },
-    {
       "id": "prop-537",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -1.35,
       "z": -12.424355652982142,
       "rot": 0.9,
       "scale": 1
     },
     {
-      "id": "prop-538",
-      "asset": "pebbles",
-      "x": -0.65,
-      "z": -11.82435565298214,
-      "rot": 2,
-      "scale": 1
-    },
-    {
-      "id": "prop-539",
-      "asset": "grass-tuft",
-      "x": -0.32,
-      "z": -10.112304845413265,
-      "rot": 3.1,
-      "scale": 1
-    },
-    {
       "id": "prop-540",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 0.32,
       "z": -10.672304845413263,
       "rot": 0.5,
       "scale": 1
     },
     {
-      "id": "prop-541",
-      "asset": "pebbles",
-      "x": 11.6,
-      "z": 10.012304845413263,
-      "rot": 1.6,
-      "scale": 1
-    },
-    {
       "id": "prop-542",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 12.4,
       "z": 10.772304845413265,
       "rot": 2.7,
@@ -5674,31 +4274,15 @@
     },
     {
       "id": "prop-543",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 0.65,
       "z": -12.424355652982142,
       "rot": 3.8,
       "scale": 1
     },
     {
-      "id": "prop-544",
-      "asset": "grass-tuft",
-      "x": 1.35,
-      "z": -11.82435565298214,
-      "rot": 0.4,
-      "scale": 1
-    },
-    {
-      "id": "prop-545",
-      "asset": "flower-bed",
-      "x": 1.68,
-      "z": -10.112304845413265,
-      "rot": 1.5,
-      "scale": 1
-    },
-    {
       "id": "prop-546",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 2.32,
       "z": -10.672304845413263,
       "rot": 2.6,
@@ -5706,7 +4290,7 @@
     },
     {
       "id": "prop-547",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 2.65,
       "z": -12.424355652982142,
       "rot": 3.7,
@@ -5722,39 +4306,23 @@
     },
     {
       "id": "prop-549",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 4.68,
       "z": -12.40435565298214,
       "rot": 1.9,
       "scale": 1
     },
     {
-      "id": "prop-550",
-      "asset": "grass-tuft",
-      "x": 5.32,
-      "z": -11.844355652982141,
-      "rot": 3,
-      "scale": 1
-    },
-    {
       "id": "prop-551",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-red",
       "x": 6.65,
       "z": -8.380254037844386,
       "rot": 0.3,
       "scale": 1
     },
     {
-      "id": "prop-552",
-      "asset": "grass-tuft",
-      "x": 7.35,
-      "z": -8.940254037844385,
-      "rot": 1.4,
-      "scale": 1
-    },
-    {
       "id": "prop-553",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 7.68,
       "z": -10.672304845413263,
       "rot": 2.5,
@@ -5762,79 +4330,31 @@
     },
     {
       "id": "prop-554",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 8.32,
       "z": -10.112304845413265,
       "rot": 3.6,
       "scale": 1
     },
     {
-      "id": "prop-555",
-      "asset": "flower-bed",
-      "x": 8.65,
-      "z": -8.960254037844386,
-      "rot": 0.9,
-      "scale": 1
-    },
-    {
-      "id": "prop-556",
-      "asset": "grass-tuft",
-      "x": 9.35,
-      "z": -8.360254037844385,
-      "rot": 2,
-      "scale": 1
-    },
-    {
-      "id": "prop-557",
-      "asset": "flower-bed",
-      "x": 9.68,
-      "z": -6.6482032302755085,
-      "rot": 3.1,
-      "scale": 1
-    },
-    {
-      "id": "prop-558",
-      "asset": "flower-bed",
-      "x": 10.32,
-      "z": -7.208203230275509,
-      "rot": 0.5,
-      "scale": 1
-    },
-    {
       "id": "prop-559",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 10.65,
       "z": -8.960254037844386,
       "rot": 1.6,
       "scale": 1
     },
     {
-      "id": "prop-560",
-      "asset": "pebbles",
-      "x": 11.35,
-      "z": -8.360254037844385,
-      "rot": 2.7,
-      "scale": 1
-    },
-    {
       "id": "prop-561",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 11.68,
       "z": -6.6482032302755085,
       "rot": 3.8,
       "scale": 1
     },
     {
-      "id": "prop-562",
-      "asset": "grass-tuft",
-      "x": 12.32,
-      "z": -7.208203230275509,
-      "rot": 0.4,
-      "scale": 1
-    },
-    {
       "id": "prop-563",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 15.65,
       "z": -0.3,
       "rot": 1.5,
@@ -5842,7 +4362,7 @@
     },
     {
       "id": "prop-564",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 16.35,
       "z": 0.3,
       "rot": 2.6,
@@ -5850,31 +4370,15 @@
     },
     {
       "id": "prop-565",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 5.52,
       "z": 3.014101615137754,
       "rot": 0.7,
       "scale": 1
     },
     {
-      "id": "prop-566",
-      "asset": "pebbles",
-      "x": 6.48,
-      "z": 3.9141016151377546,
-      "rot": 1.8,
-      "scale": 1
-    },
-    {
-      "id": "prop-567",
-      "asset": "flower-bed",
-      "x": 4.52,
-      "z": -2.1820508075688774,
-      "rot": 2.9,
-      "scale": 1
-    },
-    {
       "id": "prop-568",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 5.48,
       "z": -1.2820508075688772,
       "rot": 0.4,
@@ -5882,7 +4386,7 @@
     },
     {
       "id": "prop-569",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 2.52,
       "z": -1.2820508075688772,
       "rot": 1.5,
@@ -5890,7 +4394,7 @@
     },
     {
       "id": "prop-570",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 3.52,
       "z": 3.014101615137754,
       "rot": 2.6,
@@ -5898,31 +4402,15 @@
     },
     {
       "id": "prop-571",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-purple",
       "x": -4.48,
       "z": -0.45,
       "rot": 3.7,
       "scale": 1
     },
     {
-      "id": "prop-572",
-      "asset": "flower-bed",
-      "x": -5.52,
-      "z": 0.45,
-      "rot": 0.8,
-      "scale": 1
-    },
-    {
-      "id": "prop-573",
-      "asset": "flower-bed",
-      "x": -7.48,
-      "z": -1.2820508075688772,
-      "rot": 1.9,
-      "scale": 1
-    },
-    {
       "id": "prop-574",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -8.52,
       "z": -2.1820508075688774,
       "rot": 3,
@@ -5930,23 +4418,15 @@
     },
     {
       "id": "prop-575",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-purple",
       "x": -12.48,
       "z": -0.45,
       "rot": 0.3,
       "scale": 1
     },
     {
-      "id": "prop-576",
-      "asset": "flower-bed",
-      "x": -10.52,
-      "z": 2.1820508075688774,
-      "rot": 1.4,
-      "scale": 1
-    },
-    {
       "id": "prop-577",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 0.52,
       "z": 4.746152422706632,
       "rot": 2.5,
@@ -5954,7 +4434,7 @@
     },
     {
       "id": "prop-578",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": 0.48,
       "z": 7.378203230275509,
       "rot": 3.6,
@@ -6017,27 +4497,11 @@
       "scale": 1
     },
     {
-      "id": "prop-586",
-      "asset": "grass-tuft",
-      "x": -2.3,
-      "z": 14.156406460551018,
-      "rot": 0.6,
-      "scale": 1
-    },
-    {
       "id": "prop-587",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -1.7,
       "z": 14.156406460551018,
       "rot": 1.7,
-      "scale": 1
-    },
-    {
-      "id": "prop-588",
-      "asset": "grass-tuft",
-      "x": -0.3,
-      "z": 14.156406460551018,
-      "rot": 2.8,
       "scale": 1
     },
     {
@@ -6066,7 +4530,7 @@
     },
     {
       "id": "prop-592",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -6.32,
       "z": 14.176406460551018,
       "rot": 2.7,
@@ -6074,23 +4538,15 @@
     },
     {
       "id": "prop-593",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -5.68,
       "z": 14.176406460551018,
       "rot": 3.8,
       "scale": 1
     },
     {
-      "id": "prop-594",
-      "asset": "flower-bed",
-      "x": -7.4,
-      "z": 2.112050807568877,
-      "rot": 0.4,
-      "scale": 1
-    },
-    {
       "id": "prop-595",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -6.6,
       "z": 1.3520508075688773,
       "rot": 1.5,
@@ -6098,7 +4554,7 @@
     },
     {
       "id": "prop-596",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -6.42,
       "z": 3.0841016151377545,
       "rot": 2.6,
@@ -6106,7 +4562,7 @@
     },
     {
       "id": "prop-597",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -5.58,
       "z": 3.8441016151377543,
       "rot": 3.7,
@@ -6114,7 +4570,7 @@
     },
     {
       "id": "prop-598",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -5.38,
       "z": 1.382050807568877,
       "rot": 0.8,
@@ -6122,7 +4578,7 @@
     },
     {
       "id": "prop-599",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -4.62,
       "z": 2.0820508075688773,
       "rot": 1.9,
@@ -6130,55 +4586,31 @@
     },
     {
       "id": "prop-600",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": -7.42,
       "z": -4.816152422706632,
       "rot": 3,
       "scale": 1
     },
     {
-      "id": "prop-601",
-      "asset": "flower-bed",
-      "x": -6.58,
-      "z": -5.576152422706632,
-      "rot": 0.3,
-      "scale": 1
-    },
-    {
       "id": "prop-602",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -6.42,
       "z": -7.308203230275509,
       "rot": 1.4,
       "scale": 1
     },
     {
-      "id": "prop-603",
-      "asset": "grass-tuft",
-      "x": -5.58,
-      "z": -6.548203230275509,
-      "rot": 2.5,
-      "scale": 1
-    },
-    {
       "id": "prop-604",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-red",
       "x": 0.5800000000000001,
       "z": -5.576152422706632,
       "rot": 3.6,
       "scale": 1
     },
     {
-      "id": "prop-605",
-      "asset": "flower-bed",
-      "x": 1.42,
-      "z": -4.816152422706632,
-      "rot": 0.9,
-      "scale": 1
-    },
-    {
       "id": "prop-606",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 8.58,
       "z": 1.3520508075688773,
       "rot": 2,
@@ -6186,55 +4618,23 @@
     },
     {
       "id": "prop-607",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 9.42,
       "z": 2.112050807568877,
       "rot": 3.1,
       "scale": 1
     },
     {
-      "id": "prop-608",
-      "asset": "flower-bed",
-      "x": 6.62,
-      "z": 2.0820508075688773,
-      "rot": 0.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-609",
-      "asset": "pebbles",
-      "x": 7.38,
-      "z": 1.382050807568877,
-      "rot": 1.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-610",
-      "asset": "flower-bed",
-      "x": -6.4,
-      "z": -3.0841016151377545,
-      "rot": 0.7,
-      "scale": 1
-    },
-    {
       "id": "prop-611",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -5.6,
       "z": -3.8441016151377543,
       "rot": 1.8,
       "scale": 1
     },
     {
-      "id": "prop-612",
-      "asset": "mushroom",
-      "x": -5.38,
-      "z": -5.546152422706632,
-      "rot": 2.9,
-      "scale": 1
-    },
-    {
       "id": "prop-613",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -4.62,
       "z": -4.846152422706632,
       "rot": 0.4,
@@ -6257,16 +4657,8 @@
       "scale": 1
     },
     {
-      "id": "prop-616",
-      "asset": "flower-bed",
-      "x": -9.38,
-      "z": -9.010254037844385,
-      "rot": 3.7,
-      "scale": 1
-    },
-    {
       "id": "prop-617",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -8.62,
       "z": -8.310254037844386,
       "rot": 0.8,
@@ -6274,7 +4666,7 @@
     },
     {
       "id": "prop-618",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -4.4,
       "z": -10.772304845413265,
       "rot": 1.9,
@@ -6290,7 +4682,7 @@
     },
     {
       "id": "prop-620",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -3.38,
       "z": -8.310254037844386,
       "rot": 0.3,
@@ -6298,7 +4690,7 @@
     },
     {
       "id": "prop-621",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -2.62,
       "z": -9.010254037844385,
       "rot": 1.4,
@@ -6306,31 +4698,15 @@
     },
     {
       "id": "prop-622",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": -1.38,
       "z": -5.546152422706632,
       "rot": 2.5,
       "scale": 1
     },
     {
-      "id": "prop-623",
-      "asset": "grass-tuft",
-      "x": -0.62,
-      "z": -4.846152422706632,
-      "rot": 3.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-624",
-      "asset": "flower-bed",
-      "x": 2.62,
-      "z": -4.846152422706632,
-      "rot": 0.9,
-      "scale": 1
-    },
-    {
       "id": "prop-625",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 3.38,
       "z": -5.546152422706632,
       "rot": 2,
@@ -6342,14 +4718,6 @@
       "x": 3.62,
       "z": -7.278203230275508,
       "rot": 3.1,
-      "scale": 1
-    },
-    {
-      "id": "prop-627",
-      "asset": "grass-tuft",
-      "x": 4.38,
-      "z": -6.578203230275509,
-      "rot": 0.5,
       "scale": 1
     },
     {
@@ -6369,16 +4737,8 @@
       "scale": 1
     },
     {
-      "id": "prop-630",
-      "asset": "pebbles",
-      "x": 5.62,
-      "z": -10.742304845413264,
-      "rot": 3.8,
-      "scale": 1
-    },
-    {
       "id": "prop-631",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 6.38,
       "z": -10.042304845413264,
       "rot": 0.4,
@@ -6386,7 +4746,7 @@
     },
     {
       "id": "prop-632",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 5.62,
       "z": -0.35,
       "rot": 1.5,
@@ -6394,23 +4754,15 @@
     },
     {
       "id": "prop-633",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 6.38,
       "z": 0.35,
       "rot": 2.6,
       "scale": 1
     },
     {
-      "id": "prop-634",
-      "asset": "mushroom",
-      "x": 7.62,
-      "z": 0.35,
-      "rot": 3.7,
-      "scale": 1
-    },
-    {
       "id": "prop-635",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 8.38,
       "z": -0.35,
       "rot": 0.8,
@@ -6425,14 +4777,6 @@
       "scale": 1
     },
     {
-      "id": "prop-637",
-      "asset": "grass-tuft",
-      "x": 10.4,
-      "z": 0.35,
-      "rot": 3,
-      "scale": 1
-    },
-    {
       "id": "prop-638",
       "asset": "pebbles",
       "x": 10.62,
@@ -6442,7 +4786,7 @@
     },
     {
       "id": "prop-639",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 11.38,
       "z": 1.382050807568877,
       "rot": 1.4,
@@ -6457,24 +4801,8 @@
       "scale": 1
     },
     {
-      "id": "prop-641",
-      "asset": "pebbles",
-      "x": 14.4,
-      "z": 3.8441016151377543,
-      "rot": 3.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-642",
-      "asset": "flower-bed",
-      "x": -1.38,
-      "z": 4.846152422706632,
-      "rot": 0.9,
-      "scale": 1
-    },
-    {
       "id": "prop-643",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -0.62,
       "z": 5.546152422706632,
       "rot": 2,
@@ -6497,59 +4825,11 @@
       "scale": 1
     },
     {
-      "id": "prop-646",
-      "asset": "pebbles",
-      "x": -7.38,
-      "z": 4.846152422706632,
-      "rot": 1.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-647",
-      "asset": "flower-bed",
-      "x": -6.62,
-      "z": 5.546152422706632,
-      "rot": 2.7,
-      "scale": 1
-    },
-    {
       "id": "prop-648",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 1.62,
       "z": 7.278203230275508,
       "rot": 3.8,
-      "scale": 1
-    },
-    {
-      "id": "prop-649",
-      "asset": "grass-tuft",
-      "x": 2.38,
-      "z": 6.578203230275509,
-      "rot": 0.4,
-      "scale": 1
-    },
-    {
-      "id": "prop-650",
-      "asset": "mushroom",
-      "x": 1.6,
-      "z": 10.012304845413263,
-      "rot": 1.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-651",
-      "asset": "grass-tuft",
-      "x": 2.4,
-      "z": 10.772304845413265,
-      "rot": 2.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-652",
-      "asset": "flower-bed",
-      "x": 6.62,
-      "z": 8.310254037844386,
-      "rot": 3.7,
       "scale": 1
     },
     {
@@ -6562,7 +4842,7 @@
     },
     {
       "id": "prop-654",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -16.75,
       "z": 1.5320508075688772,
       "rot": 0.4,
@@ -6570,7 +4850,7 @@
     },
     {
       "id": "prop-655",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -17.25,
       "z": 1.9820508075688772,
       "rot": 1.5,
@@ -6578,18 +4858,10 @@
     },
     {
       "id": "prop-656",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -14.72,
       "z": 5.416152422706632,
       "rot": 2.6,
-      "scale": 1
-    },
-    {
-      "id": "prop-657",
-      "asset": "mushroom",
-      "x": -15.28,
-      "z": 4.976152422706632,
-      "rot": 3.7,
       "scale": 1
     },
     {
@@ -6602,135 +4874,31 @@
     },
     {
       "id": "prop-659",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-pink",
       "x": -13.25,
       "z": 8.910254037844386,
       "rot": 1.9,
       "scale": 1
     },
     {
-      "id": "prop-660",
-      "asset": "grass-tuft",
-      "x": -10.7,
-      "z": 12.32435565298214,
-      "rot": 3,
-      "scale": 1
-    },
-    {
-      "id": "prop-661",
-      "asset": "pebbles",
-      "x": -11.3,
-      "z": 11.924355652982142,
-      "rot": 0.3,
-      "scale": 1
-    },
-    {
-      "id": "prop-662",
-      "asset": "grass-tuft",
-      "x": -16.75,
-      "z": -1.4820508075688772,
-      "rot": 1.4,
-      "scale": 1
-    },
-    {
-      "id": "prop-663",
-      "asset": "flower-bed",
-      "x": -17.25,
-      "z": -1.9820508075688772,
-      "rot": 2.5,
-      "scale": 1
-    },
-    {
       "id": "prop-664",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -6.72,
       "z": 15.338457268119894,
       "rot": 3.6,
       "scale": 1
     },
     {
-      "id": "prop-665",
-      "asset": "grass-tuft",
-      "x": -3.2800000000000002,
-      "z": 15.338457268119894,
-      "rot": 0.9,
-      "scale": 1
-    },
-    {
-      "id": "prop-666",
-      "asset": "flower-bed",
-      "x": -2.7199999999999998,
-      "z": 15.838457268119894,
-      "rot": 2,
-      "scale": 1
-    },
-    {
-      "id": "prop-667",
-      "asset": "grass-tuft",
-      "x": 0.75,
-      "z": 15.838457268119894,
-      "rot": 3.1,
-      "scale": 1
-    },
-    {
-      "id": "prop-668",
-      "asset": "pebbles",
-      "x": 1.25,
-      "z": 15.338457268119894,
-      "rot": 0.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-669",
-      "asset": "grass-tuft",
-      "x": 3.25,
-      "z": 15.338457268119894,
-      "rot": 1.6,
-      "scale": 1
-    },
-    {
       "id": "prop-670",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 6.75,
       "z": 15.338457268119894,
       "rot": 2.7,
       "scale": 1
     },
     {
-      "id": "prop-671",
-      "asset": "grass-tuft",
-      "x": 7.25,
-      "z": 15.838457268119894,
-      "rot": 3.8,
-      "scale": 1
-    },
-    {
-      "id": "prop-672",
-      "asset": "flower-bed",
-      "x": -7.4,
-      "z": -15.208457268119894,
-      "rot": 0.4,
-      "scale": 1
-    },
-    {
-      "id": "prop-673",
-      "asset": "pebbles",
-      "x": -6.6,
-      "z": -15.208457268119894,
-      "rot": 1.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-674",
-      "asset": "grass-tuft",
-      "x": -3.25,
-      "z": -15.338457268119894,
-      "rot": 2.6,
-      "scale": 1
-    },
-    {
       "id": "prop-675",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-white",
       "x": -2.2800000000000002,
       "z": -14.106406460551018,
       "rot": 3.7,
@@ -6738,7 +4906,7 @@
     },
     {
       "id": "prop-676",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -1.72,
       "z": -13.606406460551018,
       "rot": 0.8,
@@ -6746,7 +4914,7 @@
     },
     {
       "id": "prop-677",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": -0.25,
       "z": -13.606406460551018,
       "rot": 1.9,
@@ -6762,7 +4930,7 @@
     },
     {
       "id": "prop-679",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 1.72,
       "z": -14.106406460551018,
       "rot": 0.3,
@@ -6770,7 +4938,7 @@
     },
     {
       "id": "prop-680",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 2.2800000000000002,
       "z": -13.606406460551018,
       "rot": 1.4,
@@ -6786,7 +4954,7 @@
     },
     {
       "id": "prop-682",
-      "asset": "flower-bed",
+      "asset": "flower-cluster-yellow",
       "x": 6.25,
       "z": -13.606406460551018,
       "rot": 3.6,
@@ -6794,7 +4962,7 @@
     },
     {
       "id": "prop-683",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 6.72,
       "z": -12.37435565298214,
       "rot": 0.9,
@@ -6810,7 +4978,7 @@
     },
     {
       "id": "prop-685",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 7.75,
       "z": -13.606406460551018,
       "rot": 3.1,
@@ -6825,14 +4993,6 @@
       "scale": 1
     },
     {
-      "id": "prop-687",
-      "asset": "grass-tuft",
-      "x": 9.28,
-      "z": -11.87435565298214,
-      "rot": 1.6,
-      "scale": 1
-    },
-    {
       "id": "prop-688",
       "asset": "mushroom",
       "x": 9.75,
@@ -6842,50 +5002,26 @@
     },
     {
       "id": "prop-689",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 10.25,
       "z": -10.642304845413264,
       "rot": 3.8,
       "scale": 1
     },
     {
-      "id": "prop-690",
-      "asset": "grass-tuft",
-      "x": 9.75,
-      "z": -13.606406460551018,
-      "rot": 0.4,
-      "scale": 1
-    },
-    {
       "id": "prop-691",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 11.75,
       "z": -10.642304845413264,
       "rot": 1.5,
       "scale": 1
     },
     {
-      "id": "prop-692",
-      "asset": "grass-tuft",
-      "x": 13.75,
-      "z": -6.678203230275509,
-      "rot": 2.6,
-      "scale": 1
-    },
-    {
       "id": "prop-693",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 15.75,
       "z": -3.7141016151377544,
       "rot": 3.7,
-      "scale": 1
-    },
-    {
-      "id": "prop-694",
-      "asset": "pebbles",
-      "x": 14.55,
-      "z": 4.796152422706632,
-      "rot": 0.8,
       "scale": 1
     },
     {
@@ -6897,16 +5033,8 @@
       "scale": 1
     },
     {
-      "id": "prop-696",
-      "asset": "pebbles",
-      "x": 9.62,
-      "z": 10.742304845413264,
-      "rot": 3,
-      "scale": 1
-    },
-    {
       "id": "prop-697",
-      "asset": "grass-tuft",
+      "asset": "grass-small",
       "x": 10.38,
       "z": 10.042304845413264,
       "rot": 0.3,
