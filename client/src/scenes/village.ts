@@ -29,6 +29,9 @@ export class Village {
   private characters: Character[] = [];
   private player = new THREE.Group();
   private cameraTarget = new THREE.Vector3();
+  private viewHalfHeight = 1.75;
+  private cameraHalfHeight = 1.75;
+  private viewAspect = 1;
   private playerCharacter?: Character;
   private enabled = false;
   private input: Vec2 = { x: 0, z: 0 };
@@ -83,7 +86,7 @@ export class Village {
       console.error("Village assets failed to load", error); this.enabled = false;
       const message = document.createElement("div"); message.textContent = "마을을 불러오지 못했어요. 새로고침해 주세요."; message.setAttribute("role", "alert"); Object.assign(message.style, { position: "fixed", inset: "0", display: "grid", placeItems: "center", background: "#fff8ec", color: "#3b2a22", zIndex: "1000" }); app.append(message);
     });
-    this.resize(); window.addEventListener("resize", () => this.resize());
+    this.resize(); window.addEventListener("abraxas:viewport", () => this.resize());
     document.addEventListener("visibilitychange", () => {
       cancelAnimationFrame(this.frame);
       if (!document.hidden) { this.lastTime = 0; this.frame = requestAnimationFrame(() => this.tick()); }
@@ -191,14 +194,16 @@ export class Village {
     const marker = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true })); marker.scale.set(.25, .25, 1); marker.position.y = .95; return marker;
   }
   private resize(): void {
-    const w = window.innerWidth, h = window.innerHeight, halfHeight = 2.4, halfWidth = halfHeight * w / h;
+    const w = this.renderer.domElement.parentElement!.clientWidth, h = this.renderer.domElement.parentElement!.clientHeight;
+    if (!w || !h) return;
+    this.viewAspect = w / h; this.viewHalfHeight = 1.75 * Math.max(1, Math.min(1.2, 1.6 / this.viewAspect));
     const mobile = navigator.maxTouchPoints > 0 || Math.min(w, h) < 600, shadowSize = mobile ? 512 : 1024;
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2));
     if (this.light.shadow.mapSize.x !== shadowSize) {
       this.light.shadow.mapSize.set(shadowSize, shadowSize); this.light.shadow.map?.dispose(); this.light.shadow.map = null;
     }
     this.effects?.resize(mobile, this.renderer.getPixelRatio());
-    this.camera.left = -halfWidth; this.camera.right = halfWidth; this.camera.top = halfHeight; this.camera.bottom = -halfHeight; this.camera.near = .1; this.camera.far = 100; this.camera.updateProjectionMatrix(); this.renderer.setSize(w, h);
+    this.camera.near = .1; this.camera.far = 100; this.renderer.setSize(w, h);
   }
   private tick(): void {
     if (document.hidden) return;
@@ -215,7 +220,15 @@ export class Village {
     const nearby = this.enabled && this.ready ? this.findNearby(this.nearby) : null;
     if (nearby !== this.nearby) { this.nearby = nearby; this.onNearbyChange(nearby ? { id: nearby, available: true, examine: this.props.has(nearby) } : null); }
     for (const character of this.characters) character.mixer.update(dt);
-    this.cameraTarget.lerp(this.player.position, 1 - Math.exp(-10 * dt));
+    const actor = this.talking ? this.actors.get(this.talking)?.object.position : undefined;
+    const prop = this.talking ? this.props.get(this.talking) : undefined;
+    const focus = this.player.position.clone();
+    if (!this.enabled && actor) focus.lerp(actor, .5);
+    else if (!this.enabled && prop) focus.lerp(new THREE.Vector3(prop.x, 0, prop.z), .35);
+    else if (this.enabled) focus.add(new THREE.Vector3(this.input.x, 0, this.input.z).multiplyScalar(.25));
+    this.cameraTarget.lerp(focus, 1 - Math.exp(-5 * dt));
+    this.cameraHalfHeight += (this.viewHalfHeight * (!this.enabled && this.talking ? .88 : 1) - this.cameraHalfHeight) * (1 - Math.exp(-5 * dt));
+    this.camera.left = -this.cameraHalfHeight * this.viewAspect; this.camera.right = -this.camera.left; this.camera.top = this.cameraHalfHeight; this.camera.bottom = -this.cameraHalfHeight; this.camera.updateProjectionMatrix();
     const target = this.cameraTarget.clone().add(new THREE.Vector3(1, -Math.sqrt(2) / Math.tan(THREE.MathUtils.degToRad(35)), 1).normalize().multiplyScalar(this.camera.top * .2));
     this.camera.position.copy(target).add(new THREE.Vector3(10, 10 * Math.tan(THREE.MathUtils.degToRad(35)) * Math.sqrt(2), 10)); this.camera.lookAt(target);
     this.light.target.position.copy(this.player.position); this.light.position.copy(this.player.position).add(new THREE.Vector3(4, 10, 5));

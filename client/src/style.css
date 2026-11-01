@@ -13,3 +13,16 @@ button{min-width:48px;min-height:48px}
 .title p,.disclaimer{font-size:var(--body-size)}
 .title-controls button:first-child,.result button,.modifier{color:var(--ink)}
 .game-controls{position:absolute;inset:0;pointer-events:none}.game-controls[hidden],.nearby-hint[hidden]{display:none}.move-pad,.talk-button{position:absolute;bottom:calc(16px + env(safe-area-inset-bottom,0px));pointer-events:auto;touch-action:none;user-select:none}.move-pad{left:calc(16px + env(safe-area-inset-left,0px));width:144px;height:144px;display:grid;place-items:center;border:2px solid var(--line);border-radius:50%;box-sizing:border-box;background:#fff8ecaa;color:var(--ink);font-size:48px}.talk-button{right:calc(16px + env(safe-area-inset-right,0px));min-width:72px;min-height:72px;padding:10px;background:var(--paper)}.nearby-hint{position:absolute;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(96px + env(safe-area-inset-bottom,0px));padding:4px 8px;border-radius:12px;background:var(--paper);font-size:var(--body-size)}
+#app{position:fixed;display:block}
+.rotate-notice{position:fixed;z-index:100;display:grid;place-items:center;padding:24px;background:var(--paper);color:var(--ink);font-size:1.2rem;text-align:center}
+.rotate-notice[hidden]{display:none}
+.move-pad{left:calc(4px + env(safe-area-inset-left,0px));bottom:calc(4px + env(safe-area-inset-bottom,0px));width:120px;height:120px;border:0;background:none;font-size:36px;isolation:isolate}
+.move-pad::before{content:"";position:absolute;width:96px;height:96px;border:2px solid var(--line);border-radius:50%;background:#fff8ecaa;z-index:-1}
+.dialogue.has-choices{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-content:end;align-items:end;gap:12px}
+.dialogue.has-choices .panel,.dialogue.has-choices .choices{width:100%;max-width:none;max-height:50%;min-height:0}
+.dialogue.has-choices .panel{max-height:calc(50vh - 12px);overflow:auto}
+.dialogue.has-choices .panel p{max-height:none;overflow:visible}
+.dialogue.has-choices .speaker{position:static;display:inline-block;margin-bottom:6px}
+.dialogue.has-choices .choices{max-height:calc(50vh - 12px);grid-auto-rows:auto;overflow-y:auto}
+.title{justify-content:center;gap:16px;padding:calc(12px + env(safe-area-inset-top,0px)) calc(12px + env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) calc(12px + env(safe-area-inset-left,0px));overflow-y:auto;pointer-events:auto}
+.title .panel{margin:0}.title-controls{flex-wrap:wrap;justify-content:center}
