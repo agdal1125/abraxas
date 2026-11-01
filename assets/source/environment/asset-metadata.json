@@ -3,12 +3,12 @@
   "blenderVersion": "5.2.3 LTS",
   "colorSpaceNote": "색공간 수정(2026-11-01): sRGB 팔레트 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
   "phase1Only": false,
-  "buildTerrain": false,
+  "buildTerrain": true,
   "summary": {
     "assetCount": 39,
-    "totalTriangles": 30554,
-    "totalBytes": 309476,
-    "totalKiB": 302.22
+    "totalTriangles": 32858,
+    "totalBytes": 349700,
+    "totalKiB": 341.5
   },
   "assets": {
     "entrance-house": {
@@ -3198,26 +3198,120 @@
     "terrain": {
       "path": "assets/abraxas/environment/terrain.glb",
       "scale": 1,
+      "coast": "organic-v1",
       "collision": [],
-      "triangles": 14904,
-      "bytes": 56108,
+      "triangles": 17208,
+      "bytes": 96332,
       "maxTriangles": 30000,
       "maxBytes": 1048576,
       "bounds": {
-        "width": 38,
-        "depth": 33.4864,
+        "width": 39.0778,
+        "depth": 34.3814,
         "height": 0.35,
-        "minX": -19,
-        "maxX": 19,
+        "minX": -19.5389,
+        "maxX": 19.5389,
         "minY": -0.35,
         "maxY": 0,
-        "minZ": -16.7432,
-        "maxZ": 16.7432
+        "minZ": -17.1907,
+        "maxZ": 17.1907
       },
       "materials": 1,
       "vertexColorAttribute": "COLOR_0",
+      "colorAttributeType": "FLOAT_COLOR",
       "dracoCompressed": true,
-      "preview": "assets/source/previews/environment/terrain.png"
+      "preview": "assets/source/previews/environment/terrain.png",
+      "colorVerification": {
+        "grass": {
+          "paletteHex": "#5CC96B",
+          "measuredHex": "#5CC96B",
+          "measuredSrgb255": [
+            92.0,
+            201.0,
+            107.0
+          ],
+          "measuredLinear": [
+            0.107,
+            0.5841,
+            0.147
+          ],
+          "maxDiff255": 0.0
+        },
+        "grass_dark": {
+          "paletteHex": "#3A9E57",
+          "measuredHex": "#3B9F58",
+          "measuredSrgb255": [
+            59.0,
+            159.0,
+            88.0
+          ],
+          "measuredLinear": [
+            0.0437,
+            0.3467,
+            0.0976
+          ],
+          "maxDiff255": 1.0
+        },
+        "grass_light": {
+          "paletteHex": "#7EE089",
+          "measuredHex": "#7EE089",
+          "measuredSrgb255": [
+            126.0,
+            224.0,
+            137.0
+          ],
+          "measuredLinear": [
+            0.2086,
+            0.7454,
+            0.2502
+          ],
+          "maxDiff255": 0.0
+        },
+        "path": {
+          "paletteHex": "#F2B35E",
+          "measuredHex": "#F2B35E",
+          "measuredSrgb255": [
+            242.0,
+            179.0,
+            94.0
+          ],
+          "measuredLinear": [
+            0.8879,
+            0.4508,
+            0.1119
+          ],
+          "maxDiff255": 0.0
+        },
+        "path_center": {
+          "paletteHex": "#F5C276",
+          "measuredHex": "#F5C276",
+          "measuredSrgb255": [
+            245.0,
+            194.0,
+            118.0
+          ],
+          "measuredLinear": [
+            0.9131,
+            0.5395,
+            0.1812
+          ],
+          "maxDiff255": 0.0
+        },
+        "path_edge": {
+          "paletteHex": "#D99B4E",
+          "measuredHex": "#D99B4E",
+          "measuredSrgb255": [
+            217.0,
+            155.0,
+            78.0
+          ],
+          "measuredLinear": [
+            0.6939,
+            0.3278,
+            0.0762
+          ],
+          "maxDiff255": 0.0
+        }
+      }
     },
     "flower-cluster-red": {
       "path": "assets/abraxas/environment/flower-cluster-red.glb",
