@@ -17,6 +17,7 @@ type Character = { object: THREE.Object3D; mixer: THREE.AnimationMixer; actions:
 export class Village {
   private scene = new THREE.Scene();
   private camera = new THREE.OrthographicCamera();
+  private light = new THREE.DirectionalLight(0xffe5c4, 1.1);
   private renderer = new THREE.WebGLRenderer({ antialias: true });
   private loader = new GLTFLoader();
   private models = new Map<string, Promise<GLTF>>();
@@ -42,9 +43,14 @@ export class Village {
     const draco = new DRACOLoader();
     draco.setDecoderPath(`${import.meta.env.BASE_URL}assets/abraxas/decoders/`); draco.setWorkerLimit(1); this.loader.setDRACOLoader(draco);
     this.scene.background = new THREE.Color("#5bc0f8");
-    this.scene.add(new THREE.HemisphereLight(0xffffff, 0xb3c4a3, 1.25));
-    const light = new THREE.DirectionalLight(0xffffff, 1.1); light.position.set(4, 10, 5); this.scene.add(light);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); app.append(this.renderer.domElement);
+    this.scene.add(new THREE.HemisphereLight(0xc5e5ff, 0xb3c4a3, .7));
+    this.light.castShadow = true; this.light.shadow.camera.left = -4; this.light.shadow.camera.right = 4;
+    this.light.shadow.camera.top = 4; this.light.shadow.camera.bottom = -4; this.light.shadow.camera.near = .1; this.light.shadow.camera.far = 25;
+    this.light.shadow.bias = -.0001; this.light.shadow.normalBias = .02;
+    this.scene.add(this.light, this.light.target);
+    this.renderer.shadowMap.enabled = true; this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.outputColorSpace = THREE.SRGBColorSpace; this.renderer.toneMapping = THREE.NoToneMapping;
+    app.append(this.renderer.domElement);
     const sea = new THREE.Mesh(new THREE.PlaneGeometry(500, 500), new THREE.MeshBasicMaterial({ color: "#5bc0f8" })); sea.rotation.x = -Math.PI / 2; sea.position.y = -.02; this.scene.add(sea);
     const loading: Promise<unknown>[] = [this.ground()];
     this.player.position.set(map.spawn.x, 0, map.spawn.z); this.cameraTarget.copy(this.player.position); this.scene.add(this.player);
@@ -131,7 +137,7 @@ export class Village {
     const shape = new THREE.Shape(polygon(map.bounds.outer));
     for (const hole of map.bounds.holes) shape.holes.push(new THREE.Path(polygon(hole)));
     const ground = new THREE.Mesh(new THREE.ShapeGeometry(shape), new THREE.MeshStandardMaterial({ color: "#6BCB6B", side: THREE.DoubleSide }));
-    ground.rotation.x = -Math.PI / 2; this.scene.add(ground);
+    ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; this.scene.add(ground);
   }
   private load(key: string): Promise<GLTF> {
     const asset = manifest[key];
@@ -141,11 +147,15 @@ export class Village {
   }
   private async place(placement: Placement): Promise<void> {
     const gltf = await this.load(placement.asset); const object = gltf.scene.clone();
+    const terrain = placement.asset === map.terrain.asset;
+    const castsShadow = !terrain && !/^(flower-cluster-|grass-|mushroom$|pebbles$)/.test(placement.asset);
+    object.traverse(child => { if (child instanceof THREE.Mesh) { child.castShadow = castsShadow; child.receiveShadow = terrain; } });
     object.position.set(placement.x, 0, placement.z); object.rotation.y = placement.rot ?? 0;
     object.scale.setScalar(manifest[placement.asset]!.scale * (placement.scale ?? 1)); this.scene.add(object);
   }
   private async character(key: string, parent: THREE.Group): Promise<Character> {
     const gltf = await this.load(key); const object = clone(gltf.scene); object.scale.setScalar(manifest[key]!.scale); parent.add(object);
+    object.traverse(child => { if (child instanceof THREE.Mesh) child.castShadow = true; });
     const mixer = new THREE.AnimationMixer(object), actions = new Map(gltf.animations.map(clip => [clip.name.toLowerCase(), mixer.clipAction(clip)]));
     const character: Character = { object, mixer, actions }; this.characters.push(character); this.animate(character, "idle"); return character;
   }
@@ -163,6 +173,11 @@ export class Village {
   }
   private resize(): void {
     const w = window.innerWidth, h = window.innerHeight, halfHeight = 2.4, halfWidth = halfHeight * w / h;
+    const mobile = navigator.maxTouchPoints > 0 || Math.min(w, h) < 600, shadowSize = mobile ? 512 : 1024;
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2));
+    if (this.light.shadow.mapSize.x !== shadowSize) {
+      this.light.shadow.mapSize.set(shadowSize, shadowSize); this.light.shadow.map?.dispose(); this.light.shadow.map = null;
+    }
     this.camera.left = -halfWidth; this.camera.right = halfWidth; this.camera.top = halfHeight; this.camera.bottom = -halfHeight; this.camera.near = .1; this.camera.far = 100; this.camera.updateProjectionMatrix(); this.renderer.setSize(w, h);
   }
   private tick(): void {
@@ -182,6 +197,7 @@ export class Village {
     this.cameraTarget.lerp(this.player.position, 1 - Math.exp(-10 * dt));
     const target = this.cameraTarget.clone().add(new THREE.Vector3(1, -Math.sqrt(2) / Math.tan(THREE.MathUtils.degToRad(35)), 1).normalize().multiplyScalar(this.camera.top * .2));
     this.camera.position.copy(target).add(new THREE.Vector3(10, 10 * Math.tan(THREE.MathUtils.degToRad(35)) * Math.sqrt(2), 10)); this.camera.lookAt(target);
+    this.light.target.position.copy(this.player.position); this.light.position.copy(this.player.position).add(new THREE.Vector3(4, 10, 5));
     this.renderer.render(this.scene, this.camera); requestAnimationFrame(() => this.tick());
   }
 }
