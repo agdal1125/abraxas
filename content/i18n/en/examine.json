@@ -1,24 +1,118 @@
 {
-  "flower-cluster-red": ["Red petals glimmer in the sunlight."],
-  "flower-cluster-yellow": ["Yellow flowers nod in the breeze."],
-  "flower-cluster-white": ["Dew rests on the white wildflowers."],
-  "flower-cluster-pink": ["Pink petals sway gently."],
-  "flower-cluster-purple": ["A breeze slips between purple flowers."],
-  "flower-bed": ["Sunlight settles on the neat flower bed."],
-  "tree-round": ["The round tree casts a cozy shade."],
-  "tree-layered": ["Light filters through layers of leaves."],
-  "tree-slender": ["The slender tree reaches for the sky."],
-  "tree-young": ["Fresh leaves sprout on the young tree."],
-  "well": ["The sky is reflected in the well."],
-  "streetlight": ["The lamppost holds a little light by day."],
-  "shore-post": ["The breeze lingers by the shore post."],
-  "bench": ["Warm sunlight rests on the bench."],
-  "water-flower": ["Ripples spread beside the water flowers."],
-  "water-reed": ["Reeds sway with the ripples."],
-  "book-stack": ["The pages still hold the afternoon's warmth."],
-  "bread-crate": ["The scent of bread escapes the crate."],
-  "barrel": ["A patch of sunlight rests on the barrel."],
-  "memory-gate": ["A faint breeze drifts through the gate."],
-  "festival-stage": ["Joyful footsteps linger on the stage."],
-  "tool-rack": ["Neat rows of tools await their next task."]
+  "flower-cluster-red": [
+    "Red petals glimmer in the sunlight.",
+    "A warm breeze slips between the red blooms."
+  ],
+  "flower-cluster-yellow": [
+    "Yellow flowers nod in the breeze.",
+    "The yellow blooms gather the light of day."
+  ],
+  "flower-cluster-white": [
+    "Dew rests on the white wildflowers.",
+    "The white petals still hold the quiet of morning."
+  ],
+  "flower-cluster-pink": [
+    "Pink petals sway gently.",
+    "The pink flowers lean gently against one another."
+  ],
+  "flower-cluster-purple": [
+    "A breeze slips between purple flowers.",
+    "Slow shadows drift over the violet petals."
+  ],
+  "flower-bed": [
+    "Sunlight settles on the neat flower bed.",
+    "Light sways slowly over the flower bed."
+  ],
+  "tree-round": [
+    "The round tree casts a cozy shade.",
+    "A lazy afternoon rests beneath the round leaves."
+  ],
+  "tree-layered": [
+    "Light filters through layers of leaves.",
+    "The breeze seems to pause among the leaves."
+  ],
+  "tree-slender": [
+    "The slender tree reaches for the sky.",
+    "Sunlight dances at the tips of slender branches."
+  ],
+  "tree-young": [
+    "Fresh leaves sprout on the young tree.",
+    "Little leaves welcome a new breeze."
+  ],
+  "well": [
+    "The sky is reflected in the well.",
+    "A breeze stirs the sky reflected in the water."
+  ],
+  "streetlight": [
+    "The lamppost holds a little light by day.",
+    "Perhaps a star waits inside for evening."
+  ],
+  "shore-post": [
+    "The breeze lingers by the shore post.",
+    "Soft water sounds reach the post by the shore."
+  ],
+  "bench": [
+    "Warm sunlight rests on the bench.",
+    "Sit here a while, and the breeze might join you."
+  ],
+  "water-flower": [
+    "Ripples spread beside the water flowers.",
+    "Petals float on the water like little clouds."
+  ],
+  "water-reed": [
+    "Reeds sway with the ripples.",
+    "The reeds whisper greetings by the water."
+  ],
+  "book-stack": [
+    "The pages still hold the afternoon's warmth.",
+    "Stories rest quietly between the stacked books."
+  ],
+  "bread-crate": [
+    "The scent of bread escapes the crate.",
+    "The crate carries the warm scent of morning."
+  ],
+  "barrel": [
+    "A patch of sunlight rests on the barrel.",
+    "Old sunlight seems to linger in the wood."
+  ],
+  "memory-gate": [
+    "A faint breeze drifts through the gate.",
+    "At the gate, a forgotten dream feels almost near."
+  ],
+  "festival-stage": [
+    "Joyful footsteps linger on the stage.",
+    "Laughter seems to drift across the empty stage."
+  ],
+  "tool-rack": [
+    "Neat rows of tools await their next task.",
+    "Care lingers on the well-worn tools."
+  ],
+  "signboard.plaza": [
+    "Laughter drifts along the way to the plaza.",
+    "A day in the plaza begins gently here."
+  ],
+  "signboard.bakery": [
+    "Warm aromas drift from the bakery.",
+    "Fresh bread might be waiting down this lane."
+  ],
+  "signboard.library": [
+    "The path to the library feels quiet and cozy.",
+    "Stories await at the end of this path."
+  ],
+  "signboard.smithy": [
+    "A clear hammer ring comes from the smithy.",
+    "Follow this path to the warmth of the forge."
+  ],
+  "signboard.lake": [
+    "Waterlight shimmers along the lakeside path.",
+    "Quiet ripples wait at the end of this path."
+  ],
+  "signboard.entrance": [
+    "A familiar breeze blows from the village entrance.",
+    "This path leads to the first view of the village."
+  ],
+  "signboard.gate": [
+    "The breeze lingers on the way to the memory gate.",
+    "A faint light falls across the path to the gate."
+  ]
 }

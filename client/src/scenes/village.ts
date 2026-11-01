@@ -7,7 +7,7 @@ import { nearest } from "../core/world/nearby";
 import type { Bounds, Collider, Vec2 } from "../core/world/types";
 import { translations } from "../content";
 
-type Placement = Vec2 & { asset: string; rot?: number; scale?: number };
+type Placement = Vec2 & { asset: string; rot?: number; scale?: number; zone?: string };
 type MapData = { spawn: Vec2; terrain: Placement; bounds: Bounds; zones: Record<string, Vec2>; actors: (Placement & { id: string })[]; props: (Placement & { id: string })[] };
 type Asset = { path: string; scale: number; collision: Collider[]; clips?: string[] };
 const map = import.meta.glob<{ default: MapData }>("../../../content/world/village.json", { eager: true })["../../../content/world/village.json"]!.default;
@@ -57,7 +57,11 @@ export class Village {
     const loading: Promise<unknown>[] = [this.ground()];
     this.player.position.set(map.spawn.x, 0, map.spawn.z); this.cameraTarget.copy(this.player.position); this.scene.add(this.player);
     loading.push(this.character("player", this.player).then(character => { this.playerCharacter = character; }));
-    for (const prop of map.props) { this.addColliders(prop, prop.id); if (translations("ko").examine[prop.asset]) this.props.set(prop.id, prop); loading.push(this.place(prop)); }
+    for (const prop of map.props) {
+      const register = () => { this.addColliders(prop, prop.id); if (translations("ko").examine[prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset]) this.props.set(prop.id, prop); };
+      if (prop.asset === "signboard") loading.push(this.place(prop).then(register).catch(error => console.warn(`Village prop failed to load: ${prop.id}`, error)));
+      else { register(); loading.push(this.place(prop)); }
+    }
     for (const actor of map.actors) {
       this.addColliders(actor, actor.id);
       const object = new THREE.Group(); object.position.set(actor.x, 0, actor.z); object.userData.id = actor.id;
@@ -114,7 +118,7 @@ export class Village {
     const pos = { x: this.player.position.x, z: this.player.position.z };
     const actor = nearest(pos, targets, .85, previous);
     if (actor) return actor;
-    const props = [...this.props.values()].filter(prop => this.visible(prop.id, new THREE.Vector3(prop.x, 0, prop.z)));
+    const props = [...this.props.values()].filter(prop => this.visible(prop.id, new THREE.Vector3(prop.x, 0, prop.z))).map(prop => ({ ...prop, colliders: this.colliders.filter((_, index) => this.colliderOwners[index] === prop.id) }));
     return nearest(pos, props, .85, previous);
   }
   interactNearby(): void {
@@ -122,7 +126,7 @@ export class Village {
     const id = this.findNearby(); if (!id) return;
     const actor = this.actors.get(id); const prop = this.props.get(id); const position = actor?.object.position ?? prop!; const dx = position.x - this.player.position.x, dz = position.z - this.player.position.z;
     this.input = { x: 0, z: 0 }; if (dx || dz) { this.player.rotation.y = Math.atan2(dx, dz); if (actor?.character) actor.object.rotation.y = Math.atan2(-dx, -dz); }
-    this.talking = id; this.onInteract(prop ? `examine:${prop.asset}` : id);
+    this.talking = id; this.onInteract(prop ? `examine:${prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset}` : id);
   }
   private tap(event: PointerEvent): void {
     if (!this.enabled) return;
