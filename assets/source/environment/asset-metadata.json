@@ -7,9 +7,9 @@
   "buildTerrain": true,
   "summary": {
     "assetCount": 40,
-    "totalTriangles": 34360,
-    "totalBytes": 359468,
-    "totalKiB": 351.04
+    "totalTriangles": 35212,
+    "totalBytes": 361504,
+    "totalKiB": 353.03
   },
   "assets": {
     "entrance-house": {
@@ -3201,8 +3201,8 @@
       "scale": 1,
       "coast": "organic-v3",
       "collision": [],
-      "triangles": 18246,
-      "bytes": 96900,
+      "triangles": 19098,
+      "bytes": 98936,
       "maxTriangles": 30000,
       "maxBytes": 1048576,
       "bounds": {

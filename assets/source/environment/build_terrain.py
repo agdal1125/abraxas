@@ -348,15 +348,13 @@ def dist_point_to_poly_edges_xz(px: float, pz: float, poly) -> float:
     return best
 
 
-def build_smoothed_path_primitives(raw_paths):
+def build_path_primitives(raw_paths):
     """
     Processes village.json paths to:
     1) Detect 3-cycles of mutually connected road hexes (junction triangles) so
        their interiors are filled cleanly without tiny green holes.
-    2) Smooth degree-2 road bends with quadratic Bezier arcs so hex road turns
-       flow organically while keeping width = path.width.
-    Returns (curved_segments, junction_triangles) where:
-    - curved_segments: [(ax, az, bx, bz, half_width), ...]
+    Returns (raw_segments, junction_triangles) where:
+    - raw_segments: [(ax, az, bx, bz, half_width), ...]
     - junction_triangles: [((ax, az), (bx, bz), (cx, cz), half_width), ...]
     """
     node_coords = {}
@@ -389,7 +387,6 @@ def build_smoothed_path_primitives(raw_paths):
 
     # Find 3-cycles (junction triangles)
     junction_triangles = []
-    triangle_nodes = set()
     nodes_sorted = sorted(adj.keys())
     for u in nodes_sorted:
         for v in sorted(adj[u]):
@@ -400,47 +397,7 @@ def build_smoothed_path_primitives(raw_paths):
                     continue
                 hw = edge_width.get((u, v), 0.45)
                 junction_triangles.append((node_coords[u], node_coords[v], node_coords[w], hw))
-                triangle_nodes.update((u, v, w))
-
-    # Build curved sub-segments: for degree-2 nodes not part of a 3-cycle, round the bend
-    curved_segments = []
-    for (u, v), hw in edge_width.items():
-        pu = node_coords[u]
-        pv = node_coords[v]
-        t_start = 0.35 if (len(adj[u]) == 2 and u not in triangle_nodes) else 0.0
-        t_end = 0.65 if (len(adj[v]) == 2 and v not in triangle_nodes) else 1.0
-        ax = pu[0] + (pv[0] - pu[0]) * t_start
-        az = pu[1] + (pv[1] - pu[1]) * t_start
-        bx = pu[0] + (pv[0] - pu[0]) * t_end
-        bz = pu[1] + (pv[1] - pu[1]) * t_end
-        curved_segments.append((ax, az, bx, bz, hw))
-
-    # Add quadratic Bezier arcs at each degree-2 bend node
-    for k, nbrs in adj.items():
-        if len(nbrs) == 2 and k not in triangle_nodes:
-            n1, n2 = list(nbrs)
-            p0 = node_coords[n1]
-            p1 = node_coords[k]
-            p2 = node_coords[n2]
-            hw = max(
-                edge_width.get((min(k, n1), max(k, n1)), 0.45),
-                edge_width.get((min(k, n2), max(k, n2)), 0.45),
-            )
-            a_pt = (p1[0] + 0.35 * (p0[0] - p1[0]), p1[1] + 0.35 * (p0[1] - p1[1]))
-            c_pt = (p1[0] + 0.35 * (p2[0] - p1[0]), p1[1] + 0.35 * (p2[1] - p1[1]))
-            steps = 5
-            prev = a_pt
-            for s in range(1, steps + 1):
-                t = s / float(steps)
-                omt = 1.0 - t
-                cur = (
-                    omt * omt * a_pt[0] + 2.0 * omt * t * p1[0] + t * t * c_pt[0],
-                    omt * omt * a_pt[1] + 2.0 * omt * t * p1[1] + t * t * c_pt[1],
-                )
-                curved_segments.append((prev[0], prev[1], cur[0], cur[1], hw))
-                prev = cur
-
-    return curved_segments, junction_triangles
+    return raw_segments, junction_triangles
 
 
 def world_to_blender(x: float, y: float, z: float) -> Vector:
@@ -519,7 +476,7 @@ class TerrainColorEvaluator:
                 min_norm_d = d
 
         # Feathered edge around d = 1.0 * half_width (width = path.width = 0.9m)
-        path_weight = 1.0 - smoothstep(0.62, 1.26, min_norm_d)
+        path_weight = 1.0 - smoothstep(0.90, 1.10, min_norm_d)
         if path_weight <= 1e-4:
             return 0.0, self.c_path
 
@@ -697,7 +654,7 @@ def build_terrain_object():
         h_pts = ensure_positive_area_xz(h_pts)
         holes_raw.append(smooth_hex_boundary_xz(h_pts, passes=1, weight=0.16, preserve_bbox=True))
 
-    path_segments, junction_triangles = build_smoothed_path_primitives(village.get("paths", []))
+    path_segments, junction_triangles = build_path_primitives(village.get("paths", []))
 
     # Subdivide outer coastline (160 -> 480 vertices, ~0.24m segment length) and smooth 2 passes
     # so the organic shoreline curves cleanly without faceted kinks
@@ -749,6 +706,11 @@ def build_terrain_object():
         holes_rings_xz.append(h_rings)
 
     color_eval = TerrainColorEvaluator(outer_sub, holes_sub_list, path_segments, junction_triangles)
+    for ax, az, bx, bz, _hw in path_segments:
+        assert color_eval.path_blend_and_rgb_at((ax + bx) / 2, (az + bz) / 2)[0] > 0.99
+    test_eval = TerrainColorEvaluator([], [], [(0, 0, 2, 0, 0.45)], [])
+    assert test_eval.path_blend_and_rgb_at(1, 0.405)[0] > 0.99
+    assert test_eval.path_blend_and_rgb_at(1, 0.495)[0] < 0.01
 
     # -------------------------------------------------------------------------
     # Constrained Delaunay Triangulation for Top Surface (y = 0.0)
@@ -800,10 +762,10 @@ def build_terrain_object():
             t = s_idx / float(steps)
             cx = ax + tx * seg_len * t
             cz = az + tz * seg_len * t
-            for lat in (0.0, -0.55 * hw, 0.55 * hw, -1.12 * hw, 1.12 * hw):
+            for lat in (0.0, -0.90 * hw, 0.90 * hw, -1.10 * hw, 1.10 * hw):
                 px = cx + nx * lat
                 pz = cz + nz * lat
-                if valid_top_interior_pt(px, pz, 0.20) and shash.can_insert(px, pz, 0.20):
+                if valid_top_interior_pt(px, pz, 0.20) and shash.can_insert(px, pz, 0.04):
                     cdt_verts.append((px, pz))
                     shash.insert(px, pz)
 
