@@ -5487,6 +5487,69 @@
       "z": 10.042304845413264,
       "rot": 0.3,
       "scale": 1
+    },
+    {
+      "id": "signboard-plaza",
+      "asset": "signboard",
+      "zone": "plaza",
+      "x": -2,
+      "z": 1,
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "id": "signboard-bakery",
+      "asset": "signboard",
+      "zone": "bakery",
+      "x": 7,
+      "z": -2.5,
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "id": "signboard-library",
+      "asset": "signboard",
+      "zone": "library",
+      "x": -10,
+      "z": -0.8,
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "id": "signboard-smithy",
+      "asset": "signboard",
+      "zone": "smithy",
+      "x": 11,
+      "z": 5.9,
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "id": "signboard-lake",
+      "asset": "signboard",
+      "zone": "lake",
+      "x": -2,
+      "z": 9.6,
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "id": "signboard-entrance",
+      "asset": "signboard",
+      "zone": "entrance",
+      "x": 5,
+      "z": 10.8,
+      "rot": 0,
+      "scale": 1
+    },
+    {
+      "id": "signboard-gate",
+      "asset": "signboard",
+      "zone": "gate",
+      "x": -6.2,
+      "z": -12.6,
+      "rot": 0,
+      "scale": 1
     }
   ],
   "coast": "organic-v3"

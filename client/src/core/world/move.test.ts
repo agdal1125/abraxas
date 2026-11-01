@@ -58,4 +58,11 @@ describe('world movement', () => {
     expect(nearest({ x: 0, z: 0 }, targets, 0.4, 'b')).toBe('b');
     expect(nearest({ x: 0, z: 0 }, targets, 0.39, 'b')).toBeNull();
   });
+
+  it('uses the nearest collision edge for props and the center when there is no collision', () => {
+    const pos = { x: 0, z: 0 };
+    expect(nearest(pos, [{ id: 'circle', x: 2, z: 0, colliders: [{ type: 'circle', x: 2, z: 0, radius: 1.2 }] }])).toBe('circle');
+    expect(nearest(pos, [{ id: 'box', x: 0, z: 2, colliders: [{ type: 'box', x: 0, z: 2, halfX: 1.2, halfZ: 0.2, rot: Math.PI / 2 }] }])).toBe('box');
+    expect(nearest(pos, [{ id: 'plain', x: 2, z: 0, colliders: [] }])).toBeNull();
+  });
 });

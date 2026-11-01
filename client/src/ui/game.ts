@@ -73,6 +73,14 @@ export class Game {
   private showWorld(available: string[]): void { this.token++; this.overlay.replaceChildren(); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
   private answered(segment: string): number { return data.items.filter(item => item.segment === segment && this.state.log.some(entry => entry.id === item.id)).length; }
   private interact(id: string): void {
+    if (id.startsWith("examine:")) {
+      const lines = translations(this.state.lang).examine[id.slice(8)];
+      if (lines?.length) {
+        this.panel(lines[Math.floor(Math.random() * lines.length)]!, [[this.ui.next, () => { this.controls.setActive(true, this.state.lang); this.village.setEnabled(true); this.overlay.replaceChildren(); }]]);
+        this.overlay.querySelector<HTMLElement>(".continue")?.focus();
+      }
+      return;
+    }
     const segment = this.state.segment;
     if (segment === "hub") { const index = "ABCD".indexOf(id); if (index >= 0 && !this.state.completed.includes(ids[index]!)) { void this.open(`ep_${ids[index]}`); return; } }
     else if (segment.startsWith("ep_")) { const index = ids.indexOf(segment.slice(3)); const stage = episodeStage(this.answered(segment)); if (id === (stage === "quest" ? quests[index] : "ABCD"[index])) { void this.open(segment); return; } }

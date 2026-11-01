@@ -5,9 +5,10 @@ import { clone } from "three/addons/utils/SkeletonUtils.js";
 import { step } from "../core/world/move";
 import { nearest } from "../core/world/nearby";
 import type { Bounds, Collider, Vec2 } from "../core/world/types";
+import { translations } from "../content";
 
-type Placement = Vec2 & { asset: string; rot?: number; scale?: number };
-type MapData = { spawn: Vec2; terrain: Placement; bounds: Bounds; zones: Record<string, Vec2>; actors: (Placement & { id: string })[]; props: Placement[] };
+type Placement = Vec2 & { asset: string; rot?: number; scale?: number; zone?: string };
+type MapData = { spawn: Vec2; terrain: Placement; bounds: Bounds; zones: Record<string, Vec2>; actors: (Placement & { id: string })[]; props: (Placement & { id: string })[] };
 type Asset = { path: string; scale: number; collision: Collider[]; clips?: string[] };
 const map = import.meta.glob<{ default: MapData }>("../../../content/world/village.json", { eager: true })["../../../content/world/village.json"]!.default;
 const manifest = import.meta.glob<{ default: { assets: Record<string, Asset> } }>("../../../content/assets/manifest.json", { eager: true })["../../../content/assets/manifest.json"]!.default.assets;
@@ -22,6 +23,7 @@ export class Village {
   private loader = new GLTFLoader();
   private models = new Map<string, Promise<GLTF>>();
   private actors = new Map<string, { object: THREE.Group; marker: THREE.Sprite; character?: Character }>();
+  private props = new Map<string, Placement & { id: string }>();
   private characters: Character[] = [];
   private player = new THREE.Group();
   private cameraTarget = new THREE.Vector3();
@@ -34,7 +36,7 @@ export class Village {
   private talking?: string;
   private available = new Set<string>();
   private ready = false;
-  onNearbyChange: (target: { id: string; available: boolean } | null) => void = () => {};
+  onNearbyChange: (target: { id: string; available: boolean; examine?: boolean } | null) => void = () => {};
   private lastTime = 0;
   onInteract: (id: string) => void = () => {};
 
@@ -55,7 +57,11 @@ export class Village {
     const loading: Promise<unknown>[] = [this.ground()];
     this.player.position.set(map.spawn.x, 0, map.spawn.z); this.cameraTarget.copy(this.player.position); this.scene.add(this.player);
     loading.push(this.character("player", this.player).then(character => { this.playerCharacter = character; }));
-    for (const prop of map.props) { this.addColliders(prop); loading.push(this.place(prop)); }
+    for (const prop of map.props) {
+      const register = () => { this.addColliders(prop, prop.id); if (translations("ko").examine[prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset]) this.props.set(prop.id, prop); };
+      if (prop.asset === "signboard") loading.push(this.place(prop).then(register).catch(error => console.warn(`Village prop failed to load: ${prop.id}`, error)));
+      else { register(); loading.push(this.place(prop)); }
+    }
     for (const actor of map.actors) {
       this.addColliders(actor, actor.id);
       const object = new THREE.Group(); object.position.set(actor.x, 0, actor.z); object.userData.id = actor.id;
@@ -109,14 +115,18 @@ export class Village {
   }
   private findNearby(previous?: string | null): string | null {
     const targets = [...this.actors].filter(([id, actor]) => this.visible(id, actor.object.position) && (this.available.has(id) || ![...this.actors].some(([otherId, other]) => this.available.has(otherId) && other.object.position.distanceToSquared(actor.object.position) < 1e-8))).map(([id, actor]) => ({ id, x: actor.object.position.x, z: actor.object.position.z }));
-    return nearest({ x: this.player.position.x, z: this.player.position.z }, targets, .85, previous);
+    const pos = { x: this.player.position.x, z: this.player.position.z };
+    const actor = nearest(pos, targets, .85, previous);
+    if (actor) return actor;
+    const props = [...this.props.values()].filter(prop => this.visible(prop.id, new THREE.Vector3(prop.x, 0, prop.z))).map(prop => ({ ...prop, colliders: this.colliders.filter((_, index) => this.colliderOwners[index] === prop.id) }));
+    return nearest(pos, props, .85, previous);
   }
   interactNearby(): void {
     if (!this.enabled || !this.ready) return;
     const id = this.findNearby(); if (!id) return;
-    const actor = this.actors.get(id)!; const dx = actor.object.position.x - this.player.position.x, dz = actor.object.position.z - this.player.position.z;
-    this.input = { x: 0, z: 0 }; if (dx || dz) { this.player.rotation.y = Math.atan2(dx, dz); if (actor.character) actor.object.rotation.y = Math.atan2(-dx, -dz); }
-    this.talking = id; this.onInteract(id);
+    const actor = this.actors.get(id); const prop = this.props.get(id); const position = actor?.object.position ?? prop!; const dx = position.x - this.player.position.x, dz = position.z - this.player.position.z;
+    this.input = { x: 0, z: 0 }; if (dx || dz) { this.player.rotation.y = Math.atan2(dx, dz); if (actor?.character) actor.object.rotation.y = Math.atan2(-dx, -dz); }
+    this.talking = id; this.onInteract(prop ? `examine:${prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset}` : id);
   }
   private tap(event: PointerEvent): void {
     if (!this.enabled) return;
@@ -192,7 +202,7 @@ export class Village {
     if (moving && this.playerCharacter) this.playerCharacter.actions.get("walk")?.setEffectiveTimeScale(distance / (1.4 * dt));
     for (const [id, actor] of this.actors) this.animate(actor.character, !this.enabled && this.talking === id ? "talk" : "idle");
     const nearby = this.enabled && this.ready ? this.findNearby(this.nearby) : null;
-    if (nearby !== this.nearby) { this.nearby = nearby; this.onNearbyChange(nearby ? { id: nearby, available: true } : null); }
+    if (nearby !== this.nearby) { this.nearby = nearby; this.onNearbyChange(nearby ? { id: nearby, available: true, examine: this.props.has(nearby) } : null); }
     for (const character of this.characters) character.mixer.update(dt);
     this.cameraTarget.lerp(this.player.position, 1 - Math.exp(-10 * dt));
     const target = this.cameraTarget.clone().add(new THREE.Vector3(1, -Math.sqrt(2) / Math.tan(THREE.MathUtils.degToRad(35)), 1).normalize().multiplyScalar(this.camera.top * .2));

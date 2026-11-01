@@ -1,6 +1,6 @@
 import { Movement, type VillageInput } from "./movement";
 
-const labels = { ko: { move: "이동", talk: "말하기", nearby: "가까이에서 말할 수 있어요" }, en: { move: "Move", talk: "Talk", nearby: "Someone is nearby" } };
+const labels = { ko: { move: "이동", talk: "말하기", nearby: "가까이에서 말할 수 있어요", examine: "살펴보기" }, en: { move: "Move", talk: "Talk", nearby: "Someone is nearby", examine: "Examine" } };
 const directions = new Set(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "KeyW", "KeyA", "KeyS", "KeyD"]);
 
 export class Controls {
@@ -12,10 +12,11 @@ export class Controls {
   private active = false;
   private pointer: number | null = null;
   private nearby = false;
+  private lang: "ko" | "en" = "ko";
   constructor(app: HTMLElement, private village: VillageInput) {
     this.root.className = "game-controls"; this.pad.className = "move-pad"; this.talk.className = "talk-button"; this.hint.className = "nearby-hint";
     this.talk.type = "button"; this.pad.textContent = "✥"; this.root.append(this.pad, this.talk, this.hint); app.append(this.root);
-    village.onNearbyChange = target => { this.nearby = !!target?.available; this.updateHint(); };
+    village.onNearbyChange = target => { this.nearby = !!target?.available; this.talk.textContent = target?.examine ? labels[this.lang].examine : labels[this.lang].talk; this.hint.textContent = target?.examine ? labels[this.lang].examine : labels[this.lang].nearby; this.updateHint(); };
     this.pad.addEventListener("pointerdown", event => { event.preventDefault(); event.stopPropagation(); if (!this.active || this.pointer !== null) return; this.pointer = event.pointerId; this.pad.setPointerCapture(event.pointerId); this.movePad(event); });
     this.pad.addEventListener("pointermove", event => { if (event.pointerId === this.pointer) this.movePad(event); });
     for (const name of ["pointerup", "pointercancel", "lostpointercapture"] as const) this.pad.addEventListener(name, event => { event.stopPropagation(); if (event.pointerId === this.pointer) { this.pointer = null; this.movement.pad = [0, 0]; this.send(); } });
@@ -32,7 +33,7 @@ export class Controls {
     this.setActive(false, "ko");
   }
   setActive(active: boolean, lang: "ko" | "en"): void {
-    this.active = active; this.clear(); this.nearby = false; this.root.hidden = !active;
+    this.active = active; this.lang = lang; this.clear(); this.nearby = false; this.root.hidden = !active;
     this.pad.setAttribute("aria-label", labels[lang].move); this.talk.textContent = labels[lang].talk; this.hint.textContent = labels[lang].nearby; this.updateHint();
   }
   private updateHint(): void { this.hint.hidden = !this.active || !this.nearby; this.talk.disabled = !this.nearby; }
