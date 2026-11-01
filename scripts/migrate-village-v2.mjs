@@ -113,11 +113,13 @@ if (v1.version !== 2) {
 }
 
 organic(v1);
-writeFileSync(output, v1.coast === 'organic-v1' && JSON.parse(source).coast === 'organic-v1' ? source : `${JSON.stringify(v1, null, 2)}\n`, 'utf8');
+writeFileSync(output, JSON.parse(source).coast === 'organic-v3' ? source : `${JSON.stringify(v1, null, 2)}\n`, 'utf8');
 
 function organic(map) {
-  if (map.coast === 'organic-v1') return;
-  if (map.coast) throw new Error(`Unsupported coastline: ${map.coast}`);
+  if (map.coast === 'organic-v3') return;
+  const v3 = map.coast === 'organic-v2';
+  const upgrade = map.coast === 'organic-v1' || v3;
+  if (map.coast && !upgrade) throw new Error(`Unsupported coastline: ${map.coast}`);
   const manifest = JSON.parse(readFileSync(new URL('../content/assets/manifest.json', import.meta.url), 'utf8')).assets;
   const points = [map.spawn, ...Object.values(map.zones), ...map.actors,
     ...map.props.filter(p => {
@@ -163,18 +165,21 @@ function organic(map) {
     if (i === j || (i + 1) % polygon.length === j || (j + 1) % polygon.length === i) return true;
     return !intersects(a, polygon[(i + 1) % polygon.length], c, polygon[(j + 1) % polygon.length]);
   }));
-  const base = resample(smooth(map.bounds.outer, 3), 160);
+  const base = v3 ? resample(smooth(map.bounds.outer, 3), 160) : upgrade ? map.bounds.outer.map(p => ({ ...p })) : resample(smooth(map.bounds.outer, 3), 160);
   const center = base.reduce((a, p) => ({ x: a.x + p.x / base.length, z: a.z + p.z / base.length }), { x: 0, z: 0 });
-  const holes = map.bounds.holes.map(h => smooth(h, 2));
+  const holes = upgrade ? map.bounds.holes : map.bounds.holes.map(h => smooth(h, 2));
   if (holes.some(h => !simple(h))) throw new Error('A smoothed hole is not a simple polygon');
   if (points.some(p => holes.some(h => inside(p, h)))) throw new Error('A required point is inside a smoothed hole');
   for (const bridge of map.bounds.bridges) {
     const touches = holes.some(h => bridge.points.some((a, i) => h.some((c, j) => intersects(a, bridge.points[(i + 1) % bridge.points.length], c, h[(j + 1) % h.length]))));
     if (!touches) throw new Error(`Bridge ${bridge.propId} no longer meets a hole`);
   }
+  const averageRadius = base.reduce((sum, p) => sum + Math.hypot(p.x - center.x, p.z - center.z), 0) / base.length;
   const outer = base.map((p, i) => {
     const dx = p.x - center.x, dz = p.z - center.z, radius = Math.hypot(dx, dz);
-    const noise = 0.6 * Math.sin(4 * 2 * Math.PI * i / base.length + 1.2345);
+    const angle = Math.atan2(dz, dx);
+    if (v3) return { x: p.x, z: p.z + Math.sign(dz) * 2.3 * Math.exp(-((dx / 9) ** 2)) * Math.min(1, (Math.abs(dz) / 15) ** 8) };
+    const noise = upgrade ? Math.max(-3, Math.min(3, averageRadius + 1.5 * Math.cos(2 * angle - 0.5) + 0.7 * Math.cos(3 * angle + 0.8) - radius)) : 0.6 * Math.sin(4 * 2 * Math.PI * i / base.length + 1.2345);
     return { x: p.x + dx / radius * noise, z: p.z + dz / radius * noise };
   });
   const clearance = (p, polygon) => (inside(p, polygon) ? 1 : -1) * Math.min(...polygon.map((a, i) => distance(p, a, polygon[(i + 1) % polygon.length])));
@@ -192,7 +197,7 @@ function organic(map) {
     removed++;
     return false;
   }); };
-  cleanDecor();
+  if (!upgrade) cleanDecor();
   const expanded = new Set();
   const area = outer.reduce((sum, p, i) => sum + p.x * outer[(i + 1) % outer.length].z - outer[(i + 1) % outer.length].x * p.z, 0);
   for (let iteration = 0; iteration < 2000; iteration++) {
@@ -208,8 +213,13 @@ function organic(map) {
       const delta = Math.min((i - edge + outer.length) % outer.length, (edge + 1 - i + outer.length) % outer.length);
       if (delta > 8) continue;
       const weight = (1 + Math.cos(Math.PI * delta / 9)) / 2;
-      outer[i].x += nx * amount * weight;
-      outer[i].z += nz * amount * weight;
+      if (upgrade && !v3) {
+        outer[i].x += (base[i].x - outer[i].x) * weight * 0.25;
+        outer[i].z += (base[i].z - outer[i].z) * weight * 0.25;
+      } else {
+        outer[i].x += nx * amount * weight;
+        outer[i].z += nz * amount * weight;
+      }
       expanded.add(i);
     }
   }
@@ -218,6 +228,23 @@ function organic(map) {
   const minimum = Math.min(...[...points, ...map.props.filter(p => !manifest[p.asset].collision.length)].map(p => clearance(p, outer)));
   map.bounds.outer = outer;
   map.bounds.holes = holes;
-  map.coast = 'organic-v1';
+  if (v3) {
+    const lengths = outer.map((p, i) => Math.hypot(p.x - outer[(i + 1) % outer.length].x, p.z - outer[(i + 1) % outer.length].z));
+    const straight = outer.map((p, i) => {
+      const a = outer[(i + outer.length - 1) % outer.length], b = outer[(i + 1) % outer.length];
+      const angle = Math.atan2(Math.abs(cross(a, p, b)), (p.x - a.x) * (b.x - p.x) + (p.z - a.z) * (b.z - p.z));
+      return angle / ((lengths[(i + outer.length - 1) % outer.length] + lengths[i]) / 2) < 0.01;
+    });
+    let run = 0, longest = 0;
+    for (let i = 0; i < outer.length * 2; i++) {
+      const j = i % outer.length;
+      run = straight[j] ? (run || lengths[(j + outer.length - 1) % outer.length]) + lengths[j] : 0;
+      longest = Math.max(longest, run);
+    }
+    if (longest >= 4) throw new Error(`Nearly straight coast: ${longest.toFixed(3)}m`);
+    console.log(`Longest nearly straight run: ${longest.toFixed(3)}m (curvature < 0.01 rad/m); maximum expansion: ${Math.max(...outer.map((p, i) => Math.hypot(p.x - base[i].x, p.z - base[i].z))).toFixed(3)}m`);
+  }
+  map.coast = v3 ? 'organic-v3' : upgrade ? 'organic-v2' : 'organic-v1';
   console.log(`Coast: ${outer.length} vertices, expanded ${expanded.size} vertices, moved ${moved.size}, removed ${removed}, minimum clearance ${minimum.toFixed(3)}m`);
+  if (!v3) organic(map);
 }
