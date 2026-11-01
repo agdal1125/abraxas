@@ -19,7 +19,21 @@
 - 원점은 바닥 접지면 중앙(`(0, 0, 0)`), 정면은 Blender `-Y` (내보낸 GLB 기준 `+Z`)로 통일했다.
   - `bridge`는 캐릭터 보행 상판이 `y = 0` 부근에 놓이도록 접지 높이를 맞췄고(`minY = -0.025m`, `maxY = 0.325m`), 양옆 난간(`x = ±0.48m`)만 충돌 박스를 두어 중앙 통행을 열었다.
   - `memory-gate`는 좌우 기둥(`x = ±0.55m`, 각 폭 `0.30m`) 사이 중앙 `0.80m` 폭의 통로를 완전히 비워 통과를 막지 않도록 설계했다.
-- 연속 지형(`terrain`)은 지침에 따라 M1의 `content/world/village.json` v2 폴리곤 확정 후 별도 세션에서 생성할 수 있도록 `build_environment.py` 내부 `BUILD_TERRAIN` 플래그(`ABRAXAS_BUILD_TERRAIN=1`)로 분리해 두었다.
+- 연속 지형(`terrain`)은 `content/world/village.json` v2 폴리곤(`bounds.outer`·`holes`·`bridges`, `paths`) 확정 후 전용 스크립트 `assets/source/environment/build_terrain.py`로 생성했다.
+
+## 4. 연속 지형 (`terrain.glb`) 제작 이력
+
+- **소스 스크립트**: `assets/source/environment/build_terrain.py`
+- **Blender 작업 원본**: `assets/source/environment/terrain.blend`
+- **내보낸 런타임 GLB**: `client/public/assets/abraxas/environment/terrain.glb`
+- **미리보기 이미지(쿼터뷰)**: `assets/source/previews/environment/terrain.png`
+- **설계 및 구현 상세**:
+  - `content/world/village.json` v2의 월드 좌표계를 그대로 사용하여 Three.js(+Y Up)로 불러왔을 때 `(x -> X, z -> Z)` 위치가 정확히 일치하도록 변환(`X_b = x`, `Y_b = -z`, `Z_b = y`)하고 원점을 `(0, 0, 0)`으로 고정했다.
+  - `bounds.outer` 다각형을 따라 상판 높이 `y = 0.0m`, 전체 두께 `0.35m`(`minY = -0.35m`, `maxY = 0.0m`)의 두툼한 섬 지면을 생성하고, 외곽 가장자리에는 둥근 잔디 베벨과 따뜻한 흙·돌 단면(`#B88C6A`, `#9B7355`, `#878378`, `#6E4E37`)을 부여했다. 섬 밖 바다는 엔진에서 그리므로 포함하지 않았다.
+  - `bounds.holes` 내부 호수는 부드러운 제방 베벨을 거쳐 수면 높이 `y = -0.08m`로 낮춘 연못 메쉬로 구성하고, 수심에 따른 청록·하늘색(`#7ED3FA` -> `#5BC0F8` -> `#3FA0DF`) 그라데이션과 물가 자체 AO를 버텍스 컬러로 표현했다.
+  - `paths` 배열의 모든 길 구간(폭 `path.width = 0.9m`)과 3방향 교차로 구간을 따라 적응형 Constrained Delaunay 정점을 배치하고, 중심부(`#F5C276`, `#F2B35E`)부터 가장자리(`#D99B4E`)까지 `smoothstep`으로 부드럽게 풀색과 섞이도록 선형 버텍스 컬러(`COLOR_0`)를 입혔다.
+  - 지면 풀색은 환경 키트 식생과 동일한 톤(`#5CC96B`, `#7EE089`, `#3A9E57`)의 등방성 밝기 변화와 해안·연못가 자체 AO(`0.85 ~ 1.0`)를 적용했다.
+  - **실측 예산**: 삼각형 `14,904`개 (상한 `30,000`개 이하), Draco 압축 GLB `56,108` bytes (`54.79 KiB`, 상한 `1 MiB` 이하), bounds `width = 38.0m`, `depth = 33.4864m`, `height = 0.35m` (`minX = -19.0`, `maxX = 19.0`, `minY = -0.35`, `maxY = 0.0`, `minZ = -16.7432`, `maxZ = 16.7432`).
 
 ## 3. 원본 컨셉 시트 목록 및 프롬프트 기록
 
