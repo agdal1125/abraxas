@@ -5,9 +5,11 @@ import { clone } from "three/addons/utils/SkeletonUtils.js";
 import { step } from "../core/world/move";
 import { nearest } from "../core/world/nearby";
 import type { Bounds, Collider, Vec2 } from "../core/world/types";
+import { translations } from "../content";
+import { DreamEffects } from "./dream-effects";
 
-type Placement = Vec2 & { asset: string; rot?: number; scale?: number };
-type MapData = { spawn: Vec2; terrain: Placement; bounds: Bounds; zones: Record<string, Vec2>; actors: (Placement & { id: string })[]; props: Placement[] };
+type Placement = Vec2 & { asset: string; rot?: number; scale?: number; zone?: string };
+type MapData = { spawn: Vec2; terrain: Placement; bounds: Bounds; zones: Record<string, Vec2>; actors: (Placement & { id: string })[]; props: (Placement & { id: string })[] };
 type Asset = { path: string; scale: number; collision: Collider[]; clips?: string[] };
 const map = import.meta.glob<{ default: MapData }>("../../../content/world/village.json", { eager: true })["../../../content/world/village.json"]!.default;
 const manifest = import.meta.glob<{ default: { assets: Record<string, Asset> } }>("../../../content/assets/manifest.json", { eager: true })["../../../content/assets/manifest.json"]!.default.assets;
@@ -17,11 +19,13 @@ type Character = { object: THREE.Object3D; mixer: THREE.AnimationMixer; actions:
 export class Village {
   private scene = new THREE.Scene();
   private camera = new THREE.OrthographicCamera();
-  private light = new THREE.DirectionalLight(0xffffff, 1.4);
-  private renderer = new THREE.WebGLRenderer({ antialias: true });
+  private light = new THREE.DirectionalLight("#fff0df", 1.4);
+  private renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  private effects?: DreamEffects;
   private loader = new GLTFLoader();
   private models = new Map<string, Promise<GLTF>>();
   private actors = new Map<string, { object: THREE.Group; marker: THREE.Sprite; character?: Character }>();
+  private props = new Map<string, Placement & { id: string }>();
   private characters: Character[] = [];
   private player = new THREE.Group();
   private cameraTarget = new THREE.Vector3();
@@ -34,28 +38,34 @@ export class Village {
   private talking?: string;
   private available = new Set<string>();
   private ready = false;
-  onNearbyChange: (target: { id: string; available: boolean } | null) => void = () => {};
+  onNearbyChange: (target: { id: string; available: boolean; examine?: boolean } | null) => void = () => {};
   private lastTime = 0;
+  private frame = 0;
   onInteract: (id: string) => void = () => {};
 
   constructor(app: HTMLElement) {
     if (import.meta.env.DEV) Object.assign(this, { teleport: (x: number, z: number) => { this.player.position.set(x, 0, z); this.cameraTarget.copy(this.player.position); } });
     const draco = new DRACOLoader();
     draco.setDecoderPath(`${import.meta.env.BASE_URL}assets/abraxas/decoders/`); draco.setWorkerLimit(1); this.loader.setDRACOLoader(draco);
-    this.scene.background = new THREE.Color("#5bc0f8");
-    this.scene.add(new THREE.HemisphereLight(0xffffff, 0xffffff, 1.6));
+    this.scene.fog = new THREE.Fog("#eae3f7", 19, 40);
+    this.scene.add(new THREE.HemisphereLight("#fff4ed", "#e8ddf4", 2.5));
     this.light.castShadow = true; this.light.shadow.camera.left = -4; this.light.shadow.camera.right = 4;
     this.light.shadow.camera.top = 4; this.light.shadow.camera.bottom = -4; this.light.shadow.camera.near = .1; this.light.shadow.camera.far = 25;
     this.light.shadow.bias = -.0001; this.light.shadow.normalBias = .02;
     this.scene.add(this.light, this.light.target);
     this.renderer.shadowMap.enabled = true; this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace; this.renderer.toneMapping = THREE.NoToneMapping;
+    this.renderer.domElement.style.background = "linear-gradient(to bottom, #eae3f7 0%, #d8d0f0 38%, #f3d5c5 72%, #94d2cb 100%)";
     app.append(this.renderer.domElement);
-    const sea = new THREE.Mesh(new THREE.PlaneGeometry(500, 500), new THREE.MeshBasicMaterial({ color: "#5bc0f8" })); sea.rotation.x = -Math.PI / 2; sea.position.y = -.02; this.scene.add(sea);
+    this.effects = new DreamEffects(this.scene, map.props, map.zones.lake);
     const loading: Promise<unknown>[] = [this.ground()];
     this.player.position.set(map.spawn.x, 0, map.spawn.z); this.cameraTarget.copy(this.player.position); this.scene.add(this.player);
     loading.push(this.character("player", this.player).then(character => { this.playerCharacter = character; }));
-    for (const prop of map.props) { this.addColliders(prop); loading.push(this.place(prop)); }
+    for (const prop of map.props) {
+      const register = () => { this.addColliders(prop, prop.id); if (translations("ko").examine[prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset]) this.props.set(prop.id, prop); };
+      if (prop.asset === "signboard") loading.push(this.place(prop).then(register).catch(error => console.warn(`Village prop failed to load: ${prop.id}`, error)));
+      else { register(); loading.push(this.place(prop)); }
+    }
     for (const actor of map.actors) {
       this.addColliders(actor, actor.id);
       const object = new THREE.Group(); object.position.set(actor.x, 0, actor.z); object.userData.id = actor.id;
@@ -73,7 +83,12 @@ export class Village {
       console.error("Village assets failed to load", error); this.enabled = false;
       const message = document.createElement("div"); message.textContent = "마을을 불러오지 못했어요. 새로고침해 주세요."; message.setAttribute("role", "alert"); Object.assign(message.style, { position: "fixed", inset: "0", display: "grid", placeItems: "center", background: "#fff8ec", color: "#3b2a22", zIndex: "1000" }); app.append(message);
     });
-    this.resize(); window.addEventListener("resize", () => this.resize()); requestAnimationFrame(() => this.tick());
+    this.resize(); window.addEventListener("resize", () => this.resize());
+    document.addEventListener("visibilitychange", () => {
+      cancelAnimationFrame(this.frame);
+      if (!document.hidden) { this.lastTime = 0; this.frame = requestAnimationFrame(() => this.tick()); }
+    });
+    if (!document.hidden) this.frame = requestAnimationFrame(() => this.tick());
   }
   setEnabled(value: boolean): void { this.enabled = value; if (value) this.talking = undefined; else { this.input = { x: 0, z: 0 }; this.nearby = null; this.onNearbyChange(null); } }
   setAvailable(ids: string[]): void { this.available = new Set(ids); for (const [id, actor] of this.actors) actor.marker.visible = this.available.has(id); }
@@ -109,14 +124,18 @@ export class Village {
   }
   private findNearby(previous?: string | null): string | null {
     const targets = [...this.actors].filter(([id, actor]) => this.visible(id, actor.object.position) && (this.available.has(id) || ![...this.actors].some(([otherId, other]) => this.available.has(otherId) && other.object.position.distanceToSquared(actor.object.position) < 1e-8))).map(([id, actor]) => ({ id, x: actor.object.position.x, z: actor.object.position.z }));
-    return nearest({ x: this.player.position.x, z: this.player.position.z }, targets, .85, previous);
+    const pos = { x: this.player.position.x, z: this.player.position.z };
+    const actor = nearest(pos, targets, .85, previous);
+    if (actor) return actor;
+    const props = [...this.props.values()].filter(prop => this.visible(prop.id, new THREE.Vector3(prop.x, 0, prop.z))).map(prop => ({ ...prop, colliders: this.colliders.filter((_, index) => this.colliderOwners[index] === prop.id) }));
+    return nearest(pos, props, .85, previous);
   }
   interactNearby(): void {
     if (!this.enabled || !this.ready) return;
     const id = this.findNearby(); if (!id) return;
-    const actor = this.actors.get(id)!; const dx = actor.object.position.x - this.player.position.x, dz = actor.object.position.z - this.player.position.z;
-    this.input = { x: 0, z: 0 }; if (dx || dz) { this.player.rotation.y = Math.atan2(dx, dz); if (actor.character) actor.object.rotation.y = Math.atan2(-dx, -dz); }
-    this.talking = id; this.onInteract(id);
+    const actor = this.actors.get(id); const prop = this.props.get(id); const position = actor?.object.position ?? prop!; const dx = position.x - this.player.position.x, dz = position.z - this.player.position.z;
+    this.input = { x: 0, z: 0 }; if (dx || dz) { this.player.rotation.y = Math.atan2(dx, dz); if (actor?.character) actor.object.rotation.y = Math.atan2(-dx, -dz); }
+    this.talking = id; this.onInteract(prop ? `examine:${prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset}` : id);
   }
   private tap(event: PointerEvent): void {
     if (!this.enabled) return;
@@ -178,9 +197,11 @@ export class Village {
     if (this.light.shadow.mapSize.x !== shadowSize) {
       this.light.shadow.mapSize.set(shadowSize, shadowSize); this.light.shadow.map?.dispose(); this.light.shadow.map = null;
     }
+    this.effects?.resize(mobile, this.renderer.getPixelRatio());
     this.camera.left = -halfWidth; this.camera.right = halfWidth; this.camera.top = halfHeight; this.camera.bottom = -halfHeight; this.camera.near = .1; this.camera.far = 100; this.camera.updateProjectionMatrix(); this.renderer.setSize(w, h);
   }
   private tick(): void {
+    if (document.hidden) return;
     const now = performance.now() / 1000, dt = this.lastTime ? Math.min(now - this.lastTime, .05) : 0; this.lastTime = now;
     let moving = false, distance = 0;
     if (this.enabled && this.ready && (this.input.x || this.input.z)) {
@@ -192,12 +213,13 @@ export class Village {
     if (moving && this.playerCharacter) this.playerCharacter.actions.get("walk")?.setEffectiveTimeScale(distance / (1.4 * dt));
     for (const [id, actor] of this.actors) this.animate(actor.character, !this.enabled && this.talking === id ? "talk" : "idle");
     const nearby = this.enabled && this.ready ? this.findNearby(this.nearby) : null;
-    if (nearby !== this.nearby) { this.nearby = nearby; this.onNearbyChange(nearby ? { id: nearby, available: true } : null); }
+    if (nearby !== this.nearby) { this.nearby = nearby; this.onNearbyChange(nearby ? { id: nearby, available: true, examine: this.props.has(nearby) } : null); }
     for (const character of this.characters) character.mixer.update(dt);
     this.cameraTarget.lerp(this.player.position, 1 - Math.exp(-10 * dt));
     const target = this.cameraTarget.clone().add(new THREE.Vector3(1, -Math.sqrt(2) / Math.tan(THREE.MathUtils.degToRad(35)), 1).normalize().multiplyScalar(this.camera.top * .2));
     this.camera.position.copy(target).add(new THREE.Vector3(10, 10 * Math.tan(THREE.MathUtils.degToRad(35)) * Math.sqrt(2), 10)); this.camera.lookAt(target);
     this.light.target.position.copy(this.player.position); this.light.position.copy(this.player.position).add(new THREE.Vector3(4, 10, 5));
-    this.renderer.render(this.scene, this.camera); requestAnimationFrame(() => this.tick());
+    this.effects?.update(dt, this.player.position, this.camera);
+    this.renderer.render(this.scene, this.camera); this.frame = requestAnimationFrame(() => this.tick());
   }
 }

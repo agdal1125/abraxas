@@ -1,0 +1,1205 @@
+{
+  "version": 2,
+  "blenderVersion": "5.2.3 LTS",
+  "colorSpaceNote": "Dream 파스텔 v2 확정 빌드(2026-11-01): 시험판 대비 잔디·나무·흙길·지붕 채도를 +15~25% 보강하고 FLOAT_COLOR COLOR_0에 단일 sRGB->Linear 변환 및 단일 선형 AO 곱을 적용, 재임포트 ±6/255 색 검증 통과.",
+  "characterSignatureColorKept": "#FF7A59",
+  "core9PaletteV2": [
+    {
+      "role_ko": "하늘 (Sky)",
+      "label": "SKY",
+      "hex": "#D8D0F0",
+      "v1Hex": "#DDD8F1",
+      "desc": "안개 라벤더"
+    },
+    {
+      "role_ko": "안개 (Mist)",
+      "label": "MIST",
+      "hex": "#EAE3F7",
+      "v1Hex": "#EDE8F8",
+      "desc": "연보라 안개빛"
+    },
+    {
+      "role_ko": "지면 풀 (Grass)",
+      "label": "GRASS",
+      "hex": "#9CD4B5",
+      "v1Hex": "#B5D9C4",
+      "desc": "파스텔 민트 풀 (+22.7% 채도)"
+    },
+    {
+      "role_ko": "흙길 (Path)",
+      "label": "PATH",
+      "hex": "#EDC9A3",
+      "v1Hex": "#EBD3B9",
+      "desc": "따뜻한 모래 살구 (+21.0% 채도)"
+    },
+    {
+      "role_ko": "건물 벽 (Wall)",
+      "label": "WALL",
+      "hex": "#FFF8EC",
+      "v1Hex": "#FFF8EC",
+      "desc": "따뜻한 크림"
+    },
+    {
+      "role_ko": "지붕 (Roof)",
+      "label": "ROOF",
+      "hex": "#EBA698",
+      "v1Hex": "#E7B6AB",
+      "desc": "복숭아 테라코타 (+21.4% 채도)"
+    },
+    {
+      "role_ko": "나뭇잎 (Leaves)",
+      "label": "LEAVES",
+      "hex": "#7EC4A6",
+      "v1Hex": "#98C9B5",
+      "desc": "세이지 민트 수관 (+19.2% 채도)"
+    },
+    {
+      "role_ko": "물 (Water)",
+      "label": "WATER",
+      "hex": "#94D2CB",
+      "v1Hex": "#A9D8D3",
+      "desc": "맑은 아쿠아 민트"
+    },
+    {
+      "role_ko": "빛 (Light)",
+      "label": "LIGHT",
+      "hex": "#FFE08A",
+      "v1Hex": "#FFE8A3",
+      "desc": "은은한 별빛 앰버"
+    }
+  ],
+  "dreamPaletteV2": {
+    "cream": "#FFF8EC",
+    "cream_warm": "#F7EFE2",
+    "cream_shadow": "#E6D8C0",
+    "ink": "#564863",
+    "wood": "#C69D80",
+    "wood_light": "#DFB99E",
+    "wood_dark": "#9C7860",
+    "stone": "#C8BFE0",
+    "stone_light": "#DDD5F0",
+    "stone_dark": "#A99CC4",
+    "grass": "#7EC4A6",
+    "grass_dark": "#64AD8E",
+    "grass_light": "#9CD4B5",
+    "path": "#EDC9A3",
+    "sea": "#94D2CB",
+    "coral": "#EBA698",
+    "coral_soft": "#F0B8AC",
+    "gold": "#FFE08A",
+    "gold_light": "#FFF0B8",
+    "violet": "#BEA5EB",
+    "violet_muted": "#AA92D6",
+    "violet_slate": "#8A74B5",
+    "teal": "#78CCC0",
+    "teal_muted": "#6FB8AE",
+    "teal_dark": "#56968D",
+    "brick": "#DF9686",
+    "brick_dark": "#C47B6B",
+    "blossom_pink": "#E6A8C7",
+    "blossom_white": "#FAF5FF"
+  },
+  "dreamPaletteV1": {
+    "sky": "#DDD8F1",
+    "mist": "#EDE8F8",
+    "ground_grass": "#B5D9C4",
+    "cream": "#FFF8EC",
+    "cream_warm": "#F7EFE2",
+    "cream_shadow": "#E8DEC8",
+    "ink": "#5A4E66",
+    "wood": "#C8A992",
+    "wood_light": "#DEC3AE",
+    "wood_dark": "#9E8270",
+    "stone": "#CFC8DC",
+    "stone_light": "#E2DCEE",
+    "stone_dark": "#B3AAC4",
+    "grass": "#98C9B5",
+    "grass_dark": "#7EB39D",
+    "grass_light": "#B5D9C4",
+    "path": "#EBD3B9",
+    "sea": "#A9D8D3",
+    "coral": "#E7B6AB",
+    "coral_soft": "#EFC7BE",
+    "gold": "#FFE8A3",
+    "gold_light": "#FFF3C9",
+    "violet": "#C8B6E8",
+    "violet_muted": "#B5A3D6",
+    "violet_slate": "#9585B5",
+    "teal": "#8FD1C8",
+    "teal_muted": "#82BEB6",
+    "teal_dark": "#689E97",
+    "brick": "#E2A89B",
+    "brick_dark": "#C98F82",
+    "blossom_pink": "#E8BDD4",
+    "blossom_white": "#FAF5FF"
+  },
+  "summary": {
+    "showcaseAssetCount": 8,
+    "totalEnvironmentAssetCount": 33,
+    "showcaseTriangles": 4556,
+    "showcaseBytes": 69684,
+    "showcaseKiB": 68.05
+  },
+  "showcaseAssets": {
+    "plaza-hall": {
+      "path": "assets/abraxas/environment/plaza-hall.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0.0,
+          "z": 0.0,
+          "halfX": 0.85,
+          "halfZ": 0.7
+        }
+      ],
+      "triangles": 940,
+      "bytes": 13032,
+      "maxTriangles": 5000,
+      "maxBytes": 184320,
+      "bounds": {
+        "width": 1.8,
+        "depth": 1.5,
+        "height": 1.6,
+        "minY": 0.0,
+        "maxY": 1.6
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "colorAttributeType": "FLOAT_COLOR",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/buildings-part1.png",
+      "preview": "assets/source/previews/environment/plaza-hall.png",
+      "colorVerification": {
+        "wood_dark": {
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
+          "measuredSrgb255": [
+            156.0,
+            120.0,
+            96.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.1878,
+            0.117
+          ],
+          "maxDiff255": 0.0
+        },
+        "stone_dark": {
+          "paletteHex": "#A99CC4",
+          "measuredHex": "#A99CC4",
+          "measuredSrgb255": [
+            169.0,
+            156.0,
+            196.0
+          ],
+          "measuredLinear": [
+            0.3968,
+            0.3325,
+            0.552
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood": {
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
+          "measuredSrgb255": [
+            198.0,
+            157.0,
+            128.0
+          ],
+          "measuredLinear": [
+            0.5647,
+            0.3372,
+            0.2159
+          ],
+          "maxDiff255": 0.0
+        },
+        "stone": {
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
+          "measuredSrgb255": [
+            200.0,
+            191.0,
+            224.0
+          ],
+          "measuredLinear": [
+            0.5776,
+            0.521,
+            0.7454
+          ],
+          "maxDiff255": 0.0
+        },
+        "stone_light": {
+          "paletteHex": "#DDD5F0",
+          "measuredHex": "#DDD5F0",
+          "measuredSrgb255": [
+            221.0,
+            213.0,
+            240.0
+          ],
+          "measuredLinear": [
+            0.7231,
+            0.6654,
+            0.8714
+          ],
+          "maxDiff255": 0.0
+        },
+        "coral": {
+          "paletteHex": "#EBA698",
+          "measuredHex": "#EBA698",
+          "measuredSrgb255": [
+            235.0,
+            166.0,
+            152.0
+          ],
+          "measuredLinear": [
+            0.8308,
+            0.3813,
+            0.314
+          ],
+          "maxDiff255": 0.0
+        },
+        "cream_warm": {
+          "paletteHex": "#F7EFE2",
+          "measuredHex": "#F7EFE2",
+          "measuredSrgb255": [
+            247.0,
+            239.0,
+            226.0
+          ],
+          "measuredLinear": [
+            0.9301,
+            0.8632,
+            0.7605
+          ],
+          "maxDiff255": 0.0
+        },
+        "gold": {
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
+          "measuredSrgb255": [
+            255.0,
+            224.0,
+            138.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.7454,
+            0.2542
+          ],
+          "maxDiff255": 0.0
+        },
+        "gold_light": {
+          "paletteHex": "#FFF0B8",
+          "measuredHex": "#FFF0B8",
+          "measuredSrgb255": [
+            255.0,
+            240.0,
+            184.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.8714,
+            0.4793
+          ],
+          "maxDiff255": 0.0
+        },
+        "cream": {
+          "paletteHex": "#FFF8EC",
+          "measuredHex": "#FFF8EC",
+          "measuredSrgb255": [
+            255.0,
+            248.0,
+            236.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.9387,
+            0.8388
+          ],
+          "maxDiff255": 0.0
+        }
+      }
+    },
+    "bakery": {
+      "path": "assets/abraxas/environment/bakery.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0.0,
+          "z": 0.0,
+          "halfX": 0.75,
+          "halfZ": 0.65
+        }
+      ],
+      "triangles": 1284,
+      "bytes": 17800,
+      "maxTriangles": 5000,
+      "maxBytes": 184320,
+      "bounds": {
+        "width": 1.6,
+        "depth": 1.4,
+        "height": 1.5,
+        "minY": 0.0,
+        "maxY": 1.5
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "colorAttributeType": "FLOAT_COLOR",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/buildings-part1.png",
+      "preview": "assets/source/previews/environment/bakery.png",
+      "colorVerification": {
+        "ink": {
+          "paletteHex": "#564863",
+          "measuredHex": "#564863",
+          "measuredSrgb255": [
+            86.0,
+            72.0,
+            99.0
+          ],
+          "measuredLinear": [
+            0.0931,
+            0.0648,
+            0.1248
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_dark": {
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
+          "measuredSrgb255": [
+            156.0,
+            120.0,
+            96.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.1878,
+            0.117
+          ],
+          "maxDiff255": 0.0
+        },
+        "brick_dark": {
+          "paletteHex": "#C47B6B",
+          "measuredHex": "#C47B6B",
+          "measuredSrgb255": [
+            196.0,
+            123.0,
+            107.0
+          ],
+          "measuredLinear": [
+            0.552,
+            0.1981,
+            0.147
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood": {
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
+          "measuredSrgb255": [
+            198.0,
+            157.0,
+            128.0
+          ],
+          "measuredLinear": [
+            0.5647,
+            0.3372,
+            0.2159
+          ],
+          "maxDiff255": 0.0
+        },
+        "stone": {
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
+          "measuredSrgb255": [
+            200.0,
+            191.0,
+            224.0
+          ],
+          "measuredLinear": [
+            0.5776,
+            0.521,
+            0.7454
+          ],
+          "maxDiff255": 0.0
+        },
+        "brick": {
+          "paletteHex": "#DF9686",
+          "measuredHex": "#DF9686",
+          "measuredSrgb255": [
+            223.0,
+            150.0,
+            134.0
+          ],
+          "measuredLinear": [
+            0.7379,
+            0.305,
+            0.2384
+          ],
+          "maxDiff255": 0.0
+        },
+        "coral": {
+          "paletteHex": "#EBA698",
+          "measuredHex": "#EBA698",
+          "measuredSrgb255": [
+            235.0,
+            166.0,
+            152.0
+          ],
+          "measuredLinear": [
+            0.8308,
+            0.3813,
+            0.314
+          ],
+          "maxDiff255": 0.0
+        },
+        "gold": {
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
+          "measuredSrgb255": [
+            255.0,
+            224.0,
+            138.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.7454,
+            0.2542
+          ],
+          "maxDiff255": 0.0
+        },
+        "gold_light": {
+          "paletteHex": "#FFF0B8",
+          "measuredHex": "#FFF0B8",
+          "measuredSrgb255": [
+            255.0,
+            240.0,
+            184.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.8714,
+            0.4793
+          ],
+          "maxDiff255": 0.0
+        },
+        "cream": {
+          "paletteHex": "#FFF8EC",
+          "measuredHex": "#FFF8EC",
+          "measuredSrgb255": [
+            255.0,
+            248.0,
+            236.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.9387,
+            0.8388
+          ],
+          "maxDiff255": 0.0
+        }
+      }
+    },
+    "well": {
+      "path": "assets/abraxas/environment/well.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0.0,
+          "z": 0.0,
+          "radius": 0.38
+        }
+      ],
+      "triangles": 488,
+      "bytes": 6928,
+      "maxTriangles": 1500,
+      "maxBytes": 71680,
+      "bounds": {
+        "width": 0.8,
+        "depth": 0.8,
+        "height": 0.8,
+        "minY": 0.0,
+        "maxY": 0.8
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "colorAttributeType": "FLOAT_COLOR",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/landmarks-props.png",
+      "preview": "assets/source/previews/environment/well.png",
+      "colorVerification": {
+        "sea": {
+          "paletteHex": "#94D2CB",
+          "measuredHex": "#94D2CB",
+          "measuredSrgb255": [
+            148.0,
+            210.0,
+            203.0
+          ],
+          "measuredLinear": [
+            0.2961,
+            0.6445,
+            0.5972
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_dark": {
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
+          "measuredSrgb255": [
+            156.0,
+            120.0,
+            96.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.1878,
+            0.117
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood": {
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
+          "measuredSrgb255": [
+            198.0,
+            157.0,
+            128.0
+          ],
+          "measuredLinear": [
+            0.5647,
+            0.3372,
+            0.2159
+          ],
+          "maxDiff255": 0.0
+        },
+        "stone": {
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
+          "measuredSrgb255": [
+            200.0,
+            191.0,
+            224.0
+          ],
+          "measuredLinear": [
+            0.5776,
+            0.521,
+            0.7454
+          ],
+          "maxDiff255": 0.0
+        },
+        "stone_light": {
+          "paletteHex": "#DDD5F0",
+          "measuredHex": "#DDD5F0",
+          "measuredSrgb255": [
+            221.0,
+            213.0,
+            240.0
+          ],
+          "measuredLinear": [
+            0.7231,
+            0.6654,
+            0.8714
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_light": {
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
+          "measuredSrgb255": [
+            223.0,
+            185.0,
+            158.0
+          ],
+          "measuredLinear": [
+            0.7379,
+            0.4851,
+            0.3419
+          ],
+          "maxDiff255": 0.0
+        }
+      }
+    },
+    "streetlight": {
+      "path": "assets/abraxas/environment/streetlight.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0.0,
+          "z": 0.0,
+          "radius": 0.1
+        }
+      ],
+      "triangles": 380,
+      "bytes": 5120,
+      "maxTriangles": 650,
+      "maxBytes": 40960,
+      "bounds": {
+        "width": 0.34,
+        "depth": 0.22,
+        "height": 1.0,
+        "minY": 0.0,
+        "maxY": 1.0
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "colorAttributeType": "FLOAT_COLOR",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/landmarks-props.png",
+      "preview": "assets/source/previews/environment/streetlight.png",
+      "colorVerification": {
+        "ink": {
+          "paletteHex": "#564863",
+          "measuredHex": "#564863",
+          "measuredSrgb255": [
+            86.0,
+            72.0,
+            99.0
+          ],
+          "measuredLinear": [
+            0.0931,
+            0.0648,
+            0.1248
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_dark": {
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
+          "measuredSrgb255": [
+            156.0,
+            120.0,
+            96.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.1878,
+            0.117
+          ],
+          "maxDiff255": 0.0
+        },
+        "gold": {
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
+          "measuredSrgb255": [
+            255.0,
+            224.0,
+            138.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.7454,
+            0.2542
+          ],
+          "maxDiff255": 0.0
+        }
+      }
+    },
+    "signboard": {
+      "path": "assets/abraxas/environment/signboard.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0.0,
+          "z": 0.0,
+          "halfX": 0.22,
+          "halfZ": 0.1
+        }
+      ],
+      "triangles": 464,
+      "bytes": 7136,
+      "maxTriangles": 600,
+      "maxBytes": 35840,
+      "bounds": {
+        "width": 0.48,
+        "depth": 0.22,
+        "height": 0.9,
+        "minY": 0.0,
+        "maxY": 0.9
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "colorAttributeType": "FLOAT_COLOR",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/landmarks-props.png",
+      "preview": "assets/source/previews/environment/signboard.png",
+      "colorVerification": {
+        "teal_muted": {
+          "paletteHex": "#6FB8AE",
+          "measuredHex": "#6FB8AE",
+          "measuredSrgb255": [
+            111.0,
+            184.0,
+            174.0
+          ],
+          "measuredLinear": [
+            0.159,
+            0.4793,
+            0.4233
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_dark": {
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
+          "measuredSrgb255": [
+            156.0,
+            120.0,
+            96.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.1878,
+            0.117
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood": {
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
+          "measuredSrgb255": [
+            198.0,
+            157.0,
+            128.0
+          ],
+          "measuredLinear": [
+            0.5647,
+            0.3372,
+            0.2159
+          ],
+          "maxDiff255": 0.0
+        },
+        "stone": {
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
+          "measuredSrgb255": [
+            200.0,
+            191.0,
+            224.0
+          ],
+          "measuredLinear": [
+            0.5776,
+            0.521,
+            0.7454
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_light": {
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
+          "measuredSrgb255": [
+            223.0,
+            185.0,
+            158.0
+          ],
+          "measuredLinear": [
+            0.7379,
+            0.4851,
+            0.3419
+          ],
+          "maxDiff255": 0.0
+        },
+        "coral": {
+          "paletteHex": "#EBA698",
+          "measuredHex": "#EBA698",
+          "measuredSrgb255": [
+            235.0,
+            166.0,
+            152.0
+          ],
+          "measuredLinear": [
+            0.8308,
+            0.3813,
+            0.314
+          ],
+          "maxDiff255": 0.0
+        },
+        "gold": {
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
+          "measuredSrgb255": [
+            255.0,
+            224.0,
+            138.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.7454,
+            0.2542
+          ],
+          "maxDiff255": 0.0
+        },
+        "cream": {
+          "paletteHex": "#FFF8EC",
+          "measuredHex": "#FFF8EC",
+          "measuredSrgb255": [
+            255.0,
+            248.0,
+            236.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.9387,
+            0.8388
+          ],
+          "maxDiff255": 0.0
+        }
+      }
+    },
+    "tree-round": {
+      "path": "assets/abraxas/environment/tree-round.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0.0,
+          "z": 0.0,
+          "radius": 0.16
+        }
+      ],
+      "triangles": 436,
+      "bytes": 7784,
+      "maxTriangles": 1200,
+      "maxBytes": 61440,
+      "bounds": {
+        "width": 1.02,
+        "depth": 1.02,
+        "height": 1.5,
+        "minY": 0.0,
+        "maxY": 1.5
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "colorAttributeType": "FLOAT_COLOR",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/tree-round.png",
+      "colorVerification": {
+        "grass_dark": {
+          "paletteHex": "#64AD8E",
+          "measuredHex": "#64AD8E",
+          "measuredSrgb255": [
+            100.0,
+            173.0,
+            142.0
+          ],
+          "measuredLinear": [
+            0.1274,
+            0.4179,
+            0.2705
+          ],
+          "maxDiff255": 0.0
+        },
+        "grass": {
+          "paletteHex": "#7EC4A6",
+          "measuredHex": "#7EC4A6",
+          "measuredSrgb255": [
+            126.0,
+            196.0,
+            166.0
+          ],
+          "measuredLinear": [
+            0.2086,
+            0.552,
+            0.3813
+          ],
+          "maxDiff255": 0.0
+        },
+        "grass_light": {
+          "paletteHex": "#9CD4B5",
+          "measuredHex": "#9CD4B5",
+          "measuredSrgb255": [
+            156.0,
+            212.0,
+            181.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.6584,
+            0.4621
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood": {
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
+          "measuredSrgb255": [
+            198.0,
+            157.0,
+            128.0
+          ],
+          "measuredLinear": [
+            0.5647,
+            0.3372,
+            0.2159
+          ],
+          "maxDiff255": 0.0
+        }
+      }
+    },
+    "bush": {
+      "path": "assets/abraxas/environment/bush.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0.0,
+          "z": 0.0,
+          "radius": 0.22
+        }
+      ],
+      "triangles": 240,
+      "bytes": 5496,
+      "maxTriangles": 500,
+      "maxBytes": 30720,
+      "bounds": {
+        "width": 0.6,
+        "depth": 0.5,
+        "height": 0.4,
+        "minY": 0.0,
+        "maxY": 0.4
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "colorAttributeType": "FLOAT_COLOR",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/bush.png",
+      "colorVerification": {
+        "grass_dark": {
+          "paletteHex": "#64AD8E",
+          "measuredHex": "#64AD8E",
+          "measuredSrgb255": [
+            100.0,
+            173.0,
+            142.0
+          ],
+          "measuredLinear": [
+            0.1274,
+            0.4179,
+            0.2705
+          ],
+          "maxDiff255": 0.0
+        },
+        "grass": {
+          "paletteHex": "#7EC4A6",
+          "measuredHex": "#7EC4A6",
+          "measuredSrgb255": [
+            126.0,
+            196.0,
+            166.0
+          ],
+          "measuredLinear": [
+            0.2086,
+            0.552,
+            0.3813
+          ],
+          "maxDiff255": 0.0
+        },
+        "grass_light": {
+          "paletteHex": "#9CD4B5",
+          "measuredHex": "#9CD4B5",
+          "measuredSrgb255": [
+            156.0,
+            212.0,
+            181.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.6584,
+            0.4621
+          ],
+          "maxDiff255": 0.0
+        }
+      }
+    },
+    "flower-bed": {
+      "path": "assets/abraxas/environment/flower-bed.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 324,
+      "bytes": 6388,
+      "maxTriangles": 600,
+      "maxBytes": 35840,
+      "bounds": {
+        "width": 0.7,
+        "depth": 0.5,
+        "height": 0.25,
+        "minY": 0.0,
+        "maxY": 0.25
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "colorAttributeType": "FLOAT_COLOR",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flower-bed.png",
+      "colorVerification": {
+        "grass_dark": {
+          "paletteHex": "#64AD8E",
+          "measuredHex": "#64AD8E",
+          "measuredSrgb255": [
+            100.0,
+            173.0,
+            142.0
+          ],
+          "measuredLinear": [
+            0.1274,
+            0.4179,
+            0.2705
+          ],
+          "maxDiff255": 0.0
+        },
+        "violet": {
+          "paletteHex": "#BEA5EB",
+          "measuredHex": "#BEA5EB",
+          "measuredSrgb255": [
+            190.0,
+            165.0,
+            235.0
+          ],
+          "measuredLinear": [
+            0.5149,
+            0.3763,
+            0.8308
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood": {
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
+          "measuredSrgb255": [
+            198.0,
+            157.0,
+            128.0
+          ],
+          "measuredLinear": [
+            0.5647,
+            0.3372,
+            0.2159
+          ],
+          "maxDiff255": 0.0
+        },
+        "blossom_pink": {
+          "paletteHex": "#E6A8C7",
+          "measuredHex": "#E6A8C7",
+          "measuredSrgb255": [
+            230.0,
+            168.0,
+            199.0
+          ],
+          "measuredLinear": [
+            0.7913,
+            0.3916,
+            0.5711
+          ],
+          "maxDiff255": 0.0
+        },
+        "coral": {
+          "paletteHex": "#EBA698",
+          "measuredHex": "#EBA698",
+          "measuredSrgb255": [
+            235.0,
+            166.0,
+            152.0
+          ],
+          "measuredLinear": [
+            0.8308,
+            0.3813,
+            0.314
+          ],
+          "maxDiff255": 0.0
+        },
+        "blossom_white": {
+          "paletteHex": "#FAF5FF",
+          "measuredHex": "#FAF5FF",
+          "measuredSrgb255": [
+            250.0,
+            245.0,
+            255.0
+          ],
+          "measuredLinear": [
+            0.956,
+            0.9131,
+            1.0
+          ],
+          "maxDiff255": 0.0
+        },
+        "gold": {
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
+          "measuredSrgb255": [
+            255.0,
+            224.0,
+            138.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.7454,
+            0.2542
+          ],
+          "maxDiff255": 0.0
+        },
+        "gold_light": {
+          "paletteHex": "#FFF0B8",
+          "measuredHex": "#FFF0B8",
+          "measuredSrgb255": [
+            255.0,
+            240.0,
+            184.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.8714,
+            0.4793
+          ],
+          "maxDiff255": 0.0
+        }
+      }
+    }
+  },
+  "fxSprites": {
+    "fx-petal.png": {
+      "path": "assets/abraxas/fx/fx-petal.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 8101
+    },
+    "fx-firefly.png": {
+      "path": "assets/abraxas/fx/fx-firefly.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 6955
+    },
+    "fx-glow.png": {
+      "path": "assets/abraxas/fx/fx-glow.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 13382
+    },
+    "fx-mist.png": {
+      "path": "assets/abraxas/fx/fx-mist.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 2523
+    }
+  },
+  "concepts": [
+    "assets/source/concepts/dream/dream-plaza-bakery.png",
+    "assets/source/concepts/dream/dream-palette-chips.png"
+  ],
+  "previews": [
+    "assets/source/previews/dream/dream-v2.png",
+    "assets/source/previews/dream/dream-v2-compare.png",
+    "assets/source/previews/dream/dream-test.png",
+    "assets/source/previews/dream/dream-compare.png"
+  ]
+}

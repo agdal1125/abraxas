@@ -508,6 +508,19 @@
       "path": "assets/abraxas/environment/grass-small.glb",
       "scale": 1,
       "collision": []
+    },
+    "signboard": {
+      "path": "assets/abraxas/environment/signboard.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.25,
+          "halfZ": 0.08
+        }
+      ]
     }
   }
 }

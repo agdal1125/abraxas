@@ -1,7 +1,7 @@
 export interface VillageInput {
   setMoveInput?(x: number, y: number): void;
   interactNearby?(): void;
-  onNearbyChange?: (target: { id: string; available: boolean } | null) => void;
+  onNearbyChange?: (target: { id: string; available: boolean; examine?: boolean } | null) => void;
 }
 
 export class Movement {
