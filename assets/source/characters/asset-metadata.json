@@ -1,6 +1,7 @@
 {
   "version": 1,
   "generator": "Blender 5.2.3 LTS",
+  "colorSpaceNote": "색공간 수정(2026-11-01): sRGB 팔레트 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
   "assets": {
     "player": {
       "path": "assets/abraxas/characters/player.glb",
@@ -23,8 +24,8 @@
         "maxKiB": 120
       },
       "measured": {
-        "bytes": 36596,
-        "kib": 35.74,
+        "bytes": 38104,
+        "kib": 37.21,
         "triangles": 1688,
         "primitives": 1,
         "materials": 1,
@@ -35,6 +36,7 @@
           "talk"
         ],
         "hasColor0": true,
+        "colorAttributeType": "FLOAT_COLOR",
         "draco": true,
         "bounds": {
           "min": [
@@ -52,6 +54,53 @@
             0.58,
             0.2574
           ]
+        },
+        "colorVerification": {
+          "warm_body": {
+            "paletteHex": "#EED6B8",
+            "measuredHex": "#EED6B8",
+            "measuredSrgb255": [
+              238.0,
+              214.0,
+              184.0
+            ],
+            "measuredLinear": [
+              0.855,
+              0.6724,
+              0.4793
+            ],
+            "maxDiff255": 0.0
+          },
+          "cream": {
+            "paletteHex": "#FFF8EC",
+            "measuredHex": "#FFF8EC",
+            "measuredSrgb255": [
+              255.0,
+              248.0,
+              236.0
+            ],
+            "measuredLinear": [
+              1.0,
+              0.9387,
+              0.8388
+            ],
+            "maxDiff255": 0.0
+          },
+          "eggshell": {
+            "paletteHex": "#E9D7BB",
+            "measuredHex": "#E9D7BB",
+            "measuredSrgb255": [
+              233.0,
+              215.0,
+              187.0
+            ],
+            "measuredLinear": [
+              0.8148,
+              0.6795,
+              0.4969
+            ],
+            "maxDiff255": 0.0
+          }
         }
       }
     },
@@ -76,8 +125,8 @@
         "maxKiB": 180
       },
       "measured": {
-        "bytes": 39696,
-        "kib": 38.77,
+        "bytes": 41528,
+        "kib": 40.55,
         "triangles": 2268,
         "primitives": 1,
         "materials": 1,
@@ -88,6 +137,7 @@
           "talk"
         ],
         "hasColor0": true,
+        "colorAttributeType": "FLOAT_COLOR",
         "draco": true,
         "bounds": {
           "min": [
@@ -105,6 +155,53 @@
             0.6,
             0.2509
           ]
+        },
+        "colorVerification": {
+          "a": {
+            "paletteHex": "#FF7A59",
+            "measuredHex": "#FF7A59",
+            "measuredSrgb255": [
+              255.0,
+              122.0,
+              89.0
+            ],
+            "measuredLinear": [
+              1.0,
+              0.1946,
+              0.0999
+            ],
+            "maxDiff255": 0.0
+          },
+          "cream": {
+            "paletteHex": "#FFF8EC",
+            "measuredHex": "#FFF8EC",
+            "measuredSrgb255": [
+              255.0,
+              248.0,
+              236.0
+            ],
+            "measuredLinear": [
+              1.0,
+              0.9387,
+              0.8388
+            ],
+            "maxDiff255": 0.0
+          },
+          "wood": {
+            "paletteHex": "#9B7355",
+            "measuredHex": "#9B7355",
+            "measuredSrgb255": [
+              155.0,
+              115.0,
+              85.0
+            ],
+            "measuredLinear": [
+              0.3278,
+              0.1714,
+              0.0908
+            ],
+            "maxDiff255": 0.0
+          }
         }
       }
     },
@@ -129,8 +226,8 @@
         "maxKiB": 180
       },
       "measured": {
-        "bytes": 39444,
-        "kib": 38.52,
+        "bytes": 40860,
+        "kib": 39.9,
         "triangles": 2244,
         "primitives": 1,
         "materials": 1,
@@ -141,6 +238,7 @@
           "talk"
         ],
         "hasColor0": true,
+        "colorAttributeType": "FLOAT_COLOR",
         "draco": true,
         "bounds": {
           "min": [
@@ -158,6 +256,38 @@
             0.6,
             0.2582
           ]
+        },
+        "colorVerification": {
+          "b": {
+            "paletteHex": "#FFB020",
+            "measuredHex": "#FFB020",
+            "measuredSrgb255": [
+              255.0,
+              176.0,
+              32.0
+            ],
+            "measuredLinear": [
+              1.0,
+              0.4342,
+              0.0144
+            ],
+            "maxDiff255": 0.0
+          },
+          "cream": {
+            "paletteHex": "#FFF8EC",
+            "measuredHex": "#FFF8EC",
+            "measuredSrgb255": [
+              255.0,
+              248.0,
+              236.0
+            ],
+            "measuredLinear": [
+              1.0,
+              0.9387,
+              0.8388
+            ],
+            "maxDiff255": 0.0
+          }
         }
       }
     },
@@ -182,8 +312,8 @@
         "maxKiB": 180
       },
       "measured": {
-        "bytes": 40336,
-        "kib": 39.39,
+        "bytes": 44308,
+        "kib": 43.27,
         "triangles": 2468,
         "primitives": 1,
         "materials": 1,
@@ -194,6 +324,7 @@
           "talk"
         ],
         "hasColor0": true,
+        "colorAttributeType": "FLOAT_COLOR",
         "draco": true,
         "bounds": {
           "min": [
@@ -211,6 +342,53 @@
             0.65,
             0.2874
           ]
+        },
+        "colorVerification": {
+          "c": {
+            "paletteHex": "#8E6BFF",
+            "measuredHex": "#8E6BFF",
+            "measuredSrgb255": [
+              142.0,
+              107.0,
+              255.0
+            ],
+            "measuredLinear": [
+              0.2705,
+              0.147,
+              1.0
+            ],
+            "maxDiff255": 0.0
+          },
+          "cream": {
+            "paletteHex": "#FFF8EC",
+            "measuredHex": "#FFF8EC",
+            "measuredSrgb255": [
+              255.0,
+              248.0,
+              236.0
+            ],
+            "measuredLinear": [
+              1.0,
+              0.9387,
+              0.8388
+            ],
+            "maxDiff255": 0.0
+          },
+          "ink": {
+            "paletteHex": "#3B2A22",
+            "measuredHex": "#3B2A22",
+            "measuredSrgb255": [
+              59.0,
+              42.0,
+              34.0
+            ],
+            "measuredLinear": [
+              0.0437,
+              0.0232,
+              0.016
+            ],
+            "maxDiff255": 0.0
+          }
         }
       }
     },
@@ -235,8 +413,8 @@
         "maxKiB": 180
       },
       "measured": {
-        "bytes": 38668,
-        "kib": 37.76,
+        "bytes": 40020,
+        "kib": 39.08,
         "triangles": 2040,
         "primitives": 1,
         "materials": 1,
@@ -247,6 +425,7 @@
           "talk"
         ],
         "hasColor0": true,
+        "colorAttributeType": "FLOAT_COLOR",
         "draco": true,
         "bounds": {
           "min": [
@@ -264,6 +443,68 @@
             0.6,
             0.2509
           ]
+        },
+        "colorVerification": {
+          "d": {
+            "paletteHex": "#14B8A6",
+            "measuredHex": "#14B8A6",
+            "measuredSrgb255": [
+              20.0,
+              184.0,
+              166.0
+            ],
+            "measuredLinear": [
+              0.007,
+              0.4793,
+              0.3813
+            ],
+            "maxDiff255": 0.0
+          },
+          "cream": {
+            "paletteHex": "#FFF8EC",
+            "measuredHex": "#FFF8EC",
+            "measuredSrgb255": [
+              255.0,
+              248.0,
+              236.0
+            ],
+            "measuredLinear": [
+              1.0,
+              0.9387,
+              0.8388
+            ],
+            "maxDiff255": 0.0
+          },
+          "wood": {
+            "paletteHex": "#9B7355",
+            "measuredHex": "#9B7355",
+            "measuredSrgb255": [
+              155.0,
+              115.0,
+              85.0
+            ],
+            "measuredLinear": [
+              0.3278,
+              0.1714,
+              0.0908
+            ],
+            "maxDiff255": 0.0
+          },
+          "stone": {
+            "paletteHex": "#777777",
+            "measuredHex": "#777777",
+            "measuredSrgb255": [
+              119.0,
+              119.0,
+              119.0
+            ],
+            "measuredLinear": [
+              0.1845,
+              0.1845,
+              0.1845
+            ],
+            "maxDiff255": 0.0
+          }
         }
       }
     },
@@ -288,8 +529,8 @@
         "maxKiB": 120
       },
       "measured": {
-        "bytes": 35616,
-        "kib": 34.78,
+        "bytes": 37576,
+        "kib": 36.7,
         "triangles": 1628,
         "primitives": 1,
         "materials": 1,
@@ -300,6 +541,7 @@
           "talk"
         ],
         "hasColor0": true,
+        "colorAttributeType": "FLOAT_COLOR",
         "draco": true,
         "bounds": {
           "min": [
@@ -317,6 +559,53 @@
             0.56,
             0.2495
           ]
+        },
+        "colorVerification": {
+          "gray_body": {
+            "paletteHex": "#A0A0A0",
+            "measuredHex": "#A0A0A0",
+            "measuredSrgb255": [
+              160.0,
+              160.0,
+              160.0
+            ],
+            "measuredLinear": [
+              0.3515,
+              0.3515,
+              0.3515
+            ],
+            "maxDiff255": 0.0
+          },
+          "gray_cap": {
+            "paletteHex": "#777777",
+            "measuredHex": "#777777",
+            "measuredSrgb255": [
+              119.0,
+              119.0,
+              119.0
+            ],
+            "measuredLinear": [
+              0.1845,
+              0.1845,
+              0.1845
+            ],
+            "maxDiff255": 0.0
+          },
+          "cream": {
+            "paletteHex": "#FFF8EC",
+            "measuredHex": "#FFF8EC",
+            "measuredSrgb255": [
+              255.0,
+              248.0,
+              236.0
+            ],
+            "measuredLinear": [
+              1.0,
+              0.9387,
+              0.8388
+            ],
+            "maxDiff255": 0.0
+          }
         }
       },
       "sharedBy": [
