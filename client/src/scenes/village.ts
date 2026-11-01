@@ -3,6 +3,7 @@ import { GLTFLoader, type GLTF } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { clone } from "three/addons/utils/SkeletonUtils.js";
 import { step } from "../core/world/move";
+import { autowalk } from "../core/world/autowalk";
 import { nearest } from "../core/world/nearby";
 import type { Bounds, Collider, Vec2 } from "../core/world/types";
 import { translations } from "../content";
@@ -26,6 +27,7 @@ export class Village {
   private models = new Map<string, Promise<GLTF>>();
   private actors = new Map<string, { object: THREE.Group; marker: THREE.Sprite; character?: Character }>();
   private props = new Map<string, Placement & { id: string }>();
+  private propObjects = new Map<string, THREE.Object3D>();
   private characters: Character[] = [];
   private player = new THREE.Group();
   private cameraTarget = new THREE.Vector3();
@@ -41,12 +43,17 @@ export class Village {
   private talking?: string;
   private available = new Set<string>();
   private ready = false;
+  readonly whenReady: Promise<void>;
+  private auto?: { id: string; best: number; stalled: number };
+  private nearbyMarker = this.label();
+  private portrait = false;
   onNearbyChange: (target: { id: string; available: boolean; examine?: boolean } | null) => void = () => {};
   private lastTime = 0;
   private frame = 0;
   onInteract: (id: string) => void = () => {};
 
   constructor(app: HTMLElement) {
+    performance.mark("village:start");
     if (import.meta.env.DEV) Object.assign(this, { teleport: (x: number, z: number) => { this.player.position.set(x, 0, z); this.cameraTarget.copy(this.player.position); } });
     const draco = new DRACOLoader();
     draco.setDecoderPath(`${import.meta.env.BASE_URL}assets/abraxas/decoders/`); draco.setWorkerLimit(1); this.loader.setDRACOLoader(draco);
@@ -61,12 +68,13 @@ export class Village {
     app.append(this.renderer.domElement);
     this.effects = new DreamEffects(this.scene, map.props, map.zones.lake);
     const loading: Promise<unknown>[] = [this.ground()];
+    this.nearbyMarker.visible = false; this.nearbyMarker.scale.set(.13, .13, 1); this.scene.add(this.nearbyMarker);
     this.player.position.set(map.spawn.x, 0, map.spawn.z); this.cameraTarget.copy(this.player.position); this.scene.add(this.player);
     loading.push(this.character("player", this.player).then(character => { this.playerCharacter = character; }));
     for (const prop of map.props) {
       const register = () => { this.addColliders(prop, prop.id); if (translations("ko").examine[prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset]) this.props.set(prop.id, prop); };
-      if (prop.asset === "signboard") loading.push(this.place(prop).then(register).catch(error => console.warn(`Village prop failed to load: ${prop.id}`, error)));
-      else { register(); loading.push(this.place(prop)); }
+      if (prop.asset === "signboard") loading.push(this.place(prop).then(object => { this.propObjects.set(prop.id, object); register(); }).catch(error => console.warn(`Village prop failed to load: ${prop.id}`, error)));
+      else { register(); loading.push(this.place(prop).then(object => { this.propObjects.set(prop.id, object); })); }
     }
     for (const actor of map.actors) {
       this.addColliders(actor, actor.id);
@@ -80,21 +88,39 @@ export class Village {
       const object = new THREE.Group(); object.position.set(position.x, 0, position.z); object.userData.id = id;
       const marker = this.label(); object.add(marker); this.scene.add(object); this.actors.set(id, { object, marker });
     }
-    this.renderer.domElement.addEventListener("pointerup", event => this.tap(event));
-    void Promise.all(loading).then(() => { this.ready = true; }).catch(error => {
+    let pointer: { id: number; x: number; y: number } | undefined;
+    this.renderer.domElement.addEventListener("pointerdown", event => { if (pointer) { pointer = undefined; return; } pointer = { id: event.pointerId, x: event.clientX, y: event.clientY }; });
+    this.renderer.domElement.addEventListener("pointercancel", () => { pointer = undefined; });
+    this.renderer.domElement.addEventListener("pointerup", event => { if (pointer?.id === event.pointerId && Math.hypot(event.clientX - pointer.x, event.clientY - pointer.y) < 14) { const id = this.hitTargetAt(event.clientX, event.clientY); if (id) this.interactTarget(id); } pointer = undefined; });
+    this.resize();
+    const modelsReady = Promise.all(loading).then(() => { performance.mark("village:models-ready"); });
+    const effectsReady = this.effects.whenReady.then(() => { performance.mark("village:effects-ready"); });
+    this.whenReady = Promise.all([modelsReady, effectsReady]).then(async () => {
+      this.updateCamera(0, true);
+      this.effects?.update(0, this.player.position, this.camera);
+      await this.renderer.compileAsync(this.scene, this.camera);
+      performance.mark("village:compiled");
+      this.renderer.render(this.scene, this.camera);
+      performance.mark("village:first-render");
+      await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+      this.ready = true;
+      performance.mark("village:ready");
+      performance.measure("village:prepare", "village:start", "village:ready");
+    }).catch(error => {
       console.error("Village assets failed to load", error); this.enabled = false;
       const message = document.createElement("div"); message.textContent = "마을을 불러오지 못했어요. 새로고침해 주세요."; message.setAttribute("role", "alert"); Object.assign(message.style, { position: "fixed", inset: "0", display: "grid", placeItems: "center", background: "#fff8ec", color: "#3b2a22", zIndex: "1000" }); app.append(message);
+      throw error;
     });
-    this.resize(); window.addEventListener("abraxas:viewport", () => this.resize());
+    window.addEventListener("abraxas:viewport", (event: Event) => { this.portrait = !!(event as CustomEvent<{ portrait: boolean }>).detail?.portrait; if (this.portrait) { this.input = { x: 0, z: 0 }; this.auto = undefined; } this.resize(); });
     document.addEventListener("visibilitychange", () => {
       cancelAnimationFrame(this.frame);
       if (!document.hidden) { this.lastTime = 0; this.frame = requestAnimationFrame(() => this.tick()); }
     });
     if (!document.hidden) this.frame = requestAnimationFrame(() => this.tick());
   }
-  setEnabled(value: boolean): void { this.enabled = value; if (value) this.talking = undefined; else { this.input = { x: 0, z: 0 }; this.nearby = null; this.onNearbyChange(null); } }
+  setEnabled(value: boolean): void { this.enabled = value; if (value) this.talking = undefined; else { this.auto = undefined; this.input = { x: 0, z: 0 }; this.nearby = null; this.onNearbyChange(null); } }
   setAvailable(ids: string[]): void { this.available = new Set(ids); for (const [id, actor] of this.actors) actor.marker.visible = this.available.has(id); }
-  setMoveInput(x: number, y: number): void { this.input = { x: (x - y) / Math.SQRT2, z: (-x - y) / Math.SQRT2 }; }
+  setMoveInput(x: number, y: number): void { if (x || y) this.auto = undefined; this.input = !this.ready || !this.enabled || this.portrait ? { x: 0, z: 0 } : { x: (x - y) / Math.SQRT2, z: (-x - y) / Math.SQRT2 }; }
   private addColliders(placement: Placement, owner?: string): void {
     const asset = manifest[placement.asset]; if (!asset) throw new Error(`Missing asset: ${placement.asset}`);
     const scale = asset.scale * (placement.scale ?? 1), rot = placement.rot ?? 0, c = Math.cos(rot), s = Math.sin(rot);
@@ -133,20 +159,52 @@ export class Village {
     return nearest(pos, props, .85, previous);
   }
   interactNearby(): void {
-    if (!this.enabled || !this.ready) return;
+    if (!this.enabled || !this.ready || this.portrait || this.talking) return;
     const id = this.findNearby(); if (!id) return;
+    this.interactTarget(id);
+  }
+  private target(id: string): (Vec2 & { colliders?: Collider[] }) | undefined {
+    const actor = this.actors.get(id), prop = this.props.get(id);
+    if (actor) return { x: actor.object.position.x, z: actor.object.position.z };
+    if (prop) return { x: prop.x, z: prop.z, colliders: this.colliders.filter((_, index) => this.colliderOwners[index] === id) };
+    return undefined;
+  }
+  interactTarget(id: string): void {
+    if (!this.enabled || !this.ready || this.portrait || this.talking) return;
+    const target = this.target(id); if (!target) return;
+    const actorAtTarget = this.actors.get(id);
+    if (actorAtTarget && !this.available.has(id) && [...this.actors].some(([otherId, other]) => this.available.has(otherId) && other.object.position.distanceToSquared(actorAtTarget.object.position) < 1e-8)) return;
+    const playerPosition = this.player.position;
+    if (!nearest(playerPosition, [{ id, ...target }])) {
+      this.input = { x: 0, z: 0 }; this.auto = { id, best: Math.hypot(target.x - playerPosition.x, target.z - playerPosition.z), stalled: 0 }; return;
+    }
+    this.auto = undefined;
+    if (!this.visible(id, new THREE.Vector3(target.x, 0, target.z))) return;
     const actor = this.actors.get(id); const prop = this.props.get(id); const position = actor?.object.position ?? prop!; const dx = position.x - this.player.position.x, dz = position.z - this.player.position.z;
     this.input = { x: 0, z: 0 }; if (dx || dz) { this.player.rotation.y = Math.atan2(dx, dz); if (actor?.character) actor.object.rotation.y = Math.atan2(-dx, -dz); }
     this.talking = id; this.onInteract(prop ? `examine:${prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset}` : id);
   }
-  private tap(event: PointerEvent): void {
-    if (!this.enabled) return;
-    const rect = this.renderer.domElement.getBoundingClientRect(), ray = new THREE.Raycaster();
-    ray.setFromCamera(new THREE.Vector2((event.clientX - rect.left) / rect.width * 2 - 1, 1 - (event.clientY - rect.top) / rect.height * 2), this.camera);
-    for (const hit of ray.intersectObjects([...this.actors.values()].filter(actor => actor.character).map(actor => actor.object), true)) {
-      let object: THREE.Object3D | null = hit.object; while (object && !object.userData.id) object = object.parent;
-      if (object?.userData.id === this.findNearby()) this.interactNearby(); return;
+  hitTargetAt(clientX: number, clientY: number): string | null {
+    if (!this.enabled || !this.ready || this.portrait || this.talking) return null;
+    const rect = this.renderer.domElement.getBoundingClientRect();
+    if (!rect.width || !rect.height || clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) return null;
+    const candidates: { id: string; distance: number; available: boolean }[] = [];
+    for (const id of [...this.actors.keys(), ...this.props.keys()]) {
+      const target = this.target(id)!;
+      const actor = this.actors.get(id), object = actor?.character?.object ?? this.propObjects.get(id);
+      const box = object ? new THREE.Box3().setFromObject(object) : new THREE.Box3();
+      if (box.isEmpty()) box.set(new THREE.Vector3(target.x, 0, target.z), new THREE.Vector3(target.x, .6, target.z));
+      let left = Infinity, right = -Infinity, top = Infinity, bottom = -Infinity;
+      for (const x of [box.min.x, box.max.x]) for (const y of [box.min.y, box.max.y]) for (const z of [box.min.z, box.max.z]) {
+        const p = new THREE.Vector3(x, y, z).project(this.camera);
+        const sx = rect.left + (p.x + 1) * rect.width / 2, sy = rect.top + (1 - p.y) * rect.height / 2;
+        left = Math.min(left, sx); right = Math.max(right, sx); top = Math.min(top, sy); bottom = Math.max(bottom, sy);
+      }
+      const cx = (left + right) / 2, cy = (top + bottom) / 2;
+      if (Math.abs(clientX - cx) <= Math.max(24, (right - left) / 2) && Math.abs(clientY - cy) <= Math.max(24, (bottom - top) / 2)) candidates.push({ id, distance: Math.hypot(clientX - cx, clientY - cy), available: this.available.has(id) });
     }
+    candidates.sort((a, b) => Number(b.available) - Number(a.available) || a.distance - b.distance || a.id.localeCompare(b.id));
+    return candidates[0]?.id ?? null;
   }
   private async ground(): Promise<void> {
     const asset = manifest[map.terrain.asset];
@@ -166,13 +224,13 @@ export class Village {
     if (!this.models.has(key)) this.models.set(key, this.loader.loadAsync(`${import.meta.env.BASE_URL}${asset.path}`));
     return this.models.get(key)!;
   }
-  private async place(placement: Placement): Promise<void> {
+  private async place(placement: Placement): Promise<THREE.Object3D> {
     const gltf = await this.load(placement.asset); const object = gltf.scene.clone();
     const terrain = placement.asset === map.terrain.asset;
     const castsShadow = !terrain && !/^(flower-cluster-|grass-|mushroom$|pebbles$)/.test(placement.asset);
     object.traverse(child => { if (child instanceof THREE.Mesh) { child.castShadow = castsShadow; child.receiveShadow = terrain || castsShadow; } });
     object.position.set(placement.x, 0, placement.z); object.rotation.y = placement.rot ?? 0;
-    object.scale.setScalar(manifest[placement.asset]!.scale * (placement.scale ?? 1)); this.scene.add(object);
+    object.scale.setScalar(manifest[placement.asset]!.scale * (placement.scale ?? 1)); this.scene.add(object); return object;
   }
   private async character(key: string, parent: THREE.Group): Promise<Character> {
     const gltf = await this.load(key); const object = clone(gltf.scene); object.scale.setScalar(manifest[key]!.scale); parent.add(object);
@@ -200,8 +258,9 @@ export class Village {
   private resize(): void {
     const w = this.renderer.domElement.parentElement!.clientWidth, h = this.renderer.domElement.parentElement!.clientHeight;
     if (!w || !h) return;
-    this.viewAspect = w / h; this.viewHalfHeight = 1.55 * Math.max(1, h / 390) * Math.max(1, Math.min(1.2, 1.6 / this.viewAspect));
-    const mobile = navigator.maxTouchPoints > 0 || Math.min(w, h) < 600, shadowSize = mobile ? 1024 : 2048;
+    this.viewAspect = w / h; this.portrait = h > w;
+    const mobile = navigator.maxTouchPoints > 0 || Math.min(w, h) < 600;
+    const shadowSize = Math.min(mobile ? 1024 : 2048, Math.max(512, 2 ** Math.ceil(Math.log2(Math.max(w, h) * Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2)))));
     const shadowExtent = Math.max(4, this.viewHalfHeight * (this.viewAspect + 1) * 1.1);
     this.light.shadow.camera.left = this.light.shadow.camera.bottom = -shadowExtent;
     this.light.shadow.camera.right = this.light.shadow.camera.top = shadowExtent; this.light.shadow.camera.updateProjectionMatrix();
@@ -211,12 +270,45 @@ export class Village {
     }
     this.effects?.resize(mobile, this.renderer.getPixelRatio());
     this.camera.near = .1; this.camera.far = 100; this.renderer.setSize(w, h);
+    this.updateCamera(0, true);
+  }
+  private updateCamera(dt: number, snap = false): void {
+    const actor = this.talking ? this.actors.get(this.talking)?.object.position : undefined;
+    const prop = this.talking ? this.props.get(this.talking) : undefined;
+    const focus = this.player.position.clone();
+    if (!this.enabled && actor) focus.lerp(actor, .5);
+    else if (!this.enabled && prop) focus.lerp(new THREE.Vector3(prop.x, 0, prop.z), .35);
+    else if (this.enabled) focus.add(new THREE.Vector3(this.input.x, 0, this.input.z).multiplyScalar(.25));
+    this.cameraTarget.lerp(focus, snap ? 1 : 1 - Math.exp(-5 * dt));
+    const target = this.cameraTarget.clone().add(new THREE.Vector3(1, -Math.sqrt(2) / Math.tan(THREE.MathUtils.degToRad(35)), 1).normalize().multiplyScalar(this.viewHalfHeight * -.12));
+    this.camera.position.copy(target).add(new THREE.Vector3(10, 10 * Math.tan(THREE.MathUtils.degToRad(35)) * Math.sqrt(2), 10)); this.camera.lookAt(target); this.camera.updateMatrixWorld();
+    if (snap && this.playerCharacter) {
+      const size = new THREE.Box3().setFromObject(this.playerCharacter.object).getSize(new THREE.Vector3());
+      const m = this.camera.matrixWorldInverse.elements;
+      const height = Math.abs(m[1]! * size.x) + Math.abs(m[5]! * size.y) + Math.abs(m[9]! * size.z);
+      if (height > 0) this.viewHalfHeight = height * this.renderer.domElement.clientHeight / 140;
+    }
+    const desired = this.viewHalfHeight * (!this.enabled && this.talking ? .88 : 1);
+    this.cameraHalfHeight = snap ? desired : this.cameraHalfHeight + (desired - this.cameraHalfHeight) * (1 - Math.exp(-5 * dt));
+    this.camera.left = -this.cameraHalfHeight * this.viewAspect; this.camera.right = -this.camera.left; this.camera.top = this.cameraHalfHeight; this.camera.bottom = -this.cameraHalfHeight; this.camera.updateProjectionMatrix();
+    this.light.target.position.copy(this.player.position); this.light.position.copy(this.player.position).add(new THREE.Vector3(4, 10, 5));
   }
   private tick(): void {
     if (document.hidden) return;
-    const now = performance.now() / 1000, dt = this.lastTime ? Math.min(now - this.lastTime, .05) : 0; this.lastTime = now;
+    const now = performance.now() / 1000, elapsed = this.lastTime ? now - this.lastTime : 0, dt = Math.min(elapsed, .05); this.lastTime = now;
     let moving = false, distance = 0;
-    if (this.enabled && this.ready && (this.input.x || this.input.z)) {
+    if (this.enabled && this.ready && !this.portrait && this.auto) {
+      const target = this.target(this.auto.id);
+      if (!target) this.auto = undefined;
+      else {
+        const result = autowalk({ position: { x: this.player.position.x, z: this.player.position.z }, best: this.auto.best, stalled: this.auto.stalled, status: "walking" }, target, this.colliders, map.bounds, elapsed);
+        const dx = result.position.x - this.player.position.x, dz = result.position.z - this.player.position.z;
+        distance = Math.hypot(dx, dz); moving = distance > 1e-6;
+        if (moving) { this.player.rotation.y = Math.atan2(dx, dz); this.player.position.set(result.position.x, 0, result.position.z); }
+        this.auto.best = result.best; this.auto.stalled = result.stalled;
+        if (result.status !== "walking") { const id = this.auto.id; this.auto = undefined; if (result.status === "arrived") this.interactTarget(id); }
+      }
+    } else if (this.enabled && this.ready && !this.portrait && (this.input.x || this.input.z)) {
       const before = this.player.position, next = step({ x: before.x, z: before.z }, this.input, dt, this.colliders, map.bounds);
       const dx = next.x - before.x, dz = next.z - before.z; distance = Math.hypot(dx, dz); moving = distance > 1e-6;
       if (moving) { this.player.rotation.y = Math.atan2(dx, dz); this.player.position.set(next.x, 0, next.z); }
@@ -224,22 +316,13 @@ export class Village {
     this.animate(this.playerCharacter, moving ? "walk" : "idle");
     if (moving && this.playerCharacter) this.playerCharacter.actions.get("walk")?.setEffectiveTimeScale(distance / (1.4 * dt));
     for (const [id, actor] of this.actors) this.animate(actor.character, !this.enabled && this.talking === id ? "talk" : "idle");
-    const nearby = this.enabled && this.ready ? this.findNearby(this.nearby) : null;
+    const nearby = this.enabled && this.ready && !this.portrait && !this.talking ? this.findNearby(this.nearby) : null;
     if (nearby !== this.nearby) { this.nearby = nearby; this.onNearbyChange(nearby ? { id: nearby, available: true, examine: this.props.has(nearby) } : null); }
+    this.nearbyMarker.visible = !!nearby;
+    if (nearby) { const target = this.target(nearby)!; const object = this.actors.get(nearby)?.character?.object ?? this.propObjects.get(nearby); const box = object ? new THREE.Box3().setFromObject(object) : undefined; this.nearbyMarker.position.set(target.x, box && !box.isEmpty() ? box.max.y + .15 : .8, target.z); }
     for (const character of this.characters) character.mixer.update(dt);
-    const actor = this.talking ? this.actors.get(this.talking)?.object.position : undefined;
-    const prop = this.talking ? this.props.get(this.talking) : undefined;
-    const focus = this.player.position.clone();
-    if (!this.enabled && actor) focus.lerp(actor, .5);
-    else if (!this.enabled && prop) focus.lerp(new THREE.Vector3(prop.x, 0, prop.z), .35);
-    else if (this.enabled) focus.add(new THREE.Vector3(this.input.x, 0, this.input.z).multiplyScalar(.25));
-    this.cameraTarget.lerp(focus, 1 - Math.exp(-5 * dt));
-    this.cameraHalfHeight += (this.viewHalfHeight * (!this.enabled && this.talking ? .88 : 1) - this.cameraHalfHeight) * (1 - Math.exp(-5 * dt));
-    this.camera.left = -this.cameraHalfHeight * this.viewAspect; this.camera.right = -this.camera.left; this.camera.top = this.cameraHalfHeight; this.camera.bottom = -this.cameraHalfHeight; this.camera.updateProjectionMatrix();
-    const target = this.cameraTarget.clone().add(new THREE.Vector3(1, -Math.sqrt(2) / Math.tan(THREE.MathUtils.degToRad(35)), 1).normalize().multiplyScalar(this.camera.top * -.12));
-    this.camera.position.copy(target).add(new THREE.Vector3(10, 10 * Math.tan(THREE.MathUtils.degToRad(35)) * Math.sqrt(2), 10)); this.camera.lookAt(target);
-    this.light.target.position.copy(this.player.position); this.light.position.copy(this.player.position).add(new THREE.Vector3(4, 10, 5));
+    this.updateCamera(dt);
     this.effects?.update(dt, this.player.position, this.camera);
-    this.renderer.render(this.scene, this.camera); this.frame = requestAnimationFrame(() => this.tick());
+    if (this.ready) this.renderer.render(this.scene, this.camera); this.frame = requestAnimationFrame(() => this.tick());
   }
 }
