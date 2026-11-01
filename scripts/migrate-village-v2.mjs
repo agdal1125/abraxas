@@ -32,8 +32,8 @@ if (v1.version === 2) {
     'medieval/rock_single_B': 'rock-small', 'medieval/rock_single_C': 'rock-large',
     'medieval/mountain_A_grass_trees': 'rock-large', 'medieval/hills_A_trees': 'rock-large',
     'medieval/cloud_small': 'bush', 'medieval/cloud_big': 'bush',
-    flowers_red: 'flower-bed', flowers_yellow: 'flower-bed', flowers_pink: 'flower-bed',
-    flowers_white: 'flower-bed', flowers_purple: 'flower-bed', grass_tuft: 'grass-tuft',
+    flowers_red: 'flower-cluster-red', flowers_yellow: 'flower-cluster-yellow', flowers_pink: 'flower-cluster-pink',
+    flowers_white: 'flower-cluster-white', flowers_purple: 'flower-cluster-purple', grass_tuft: 'grass-small',
     pebbles: 'pebbles', log: 'log', mushroom: 'mushroom'
   };
   const point = ({ q, r, dx = 0, dz = 0 }) => ({ x: 2 * q + r + dx, z: Math.sqrt(3) * r + dz });
@@ -71,10 +71,27 @@ if (v1.version === 2) {
     return loops.sort((a, b) => area(b) - area(a));
   };
   const zones = Object.fromEntries(Object.entries(v1.zones).map(([id, pos]) => [id, point(pos)]));
-  const props = [...v1.props, ...v1.decor].map((item, i) => {
+  let seed = 12345;
+  const random = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 2 ** 32);
+  const protectedDecor = v1.decor.map((item, i) => ({ item, i })).filter(({ item }) => item.kind.startsWith('model:') || item.kind === 'log');
+  const candidates = v1.decor.map((item, i) => ({ item, i })).filter(({ item }) => !item.kind.startsWith('model:') && item.kind !== 'log');
+  for (let i = candidates.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
+  }
+  const selected = new Set([...protectedDecor, ...candidates.slice(0, Math.max(0, Math.round(v1.decor.length * 0.6) - protectedDecor.length))].map(({ i }) => i));
+  let flowerBeds = 0;
+  const props = [...v1.props, ...v1.decor].flatMap((item, i) => {
+    if (i >= v1.props.length && !selected.has(i - v1.props.length)) return [];
     const old = (item.model ?? item.kind).replace(/^model:/, '');
     if (!Object.hasOwn(assets, old)) throw new Error(`Unsupported asset: ${old}`);
-    return { id: `prop-${i + 1}`, asset: assets[old], ...point(item), rot: item.rot ?? 0, scale: 1 };
+    const pos = point(item);
+    let asset = assets[old];
+    if (old.startsWith('flowers_') && flowerBeds < 6 && Math.hypot(pos.x - zones.plaza.x, pos.z - zones.plaza.z) <= 3) {
+      asset = 'flower-bed';
+      flowerBeds++;
+    } else if (old === 'grass_tuft' && random() < 0.25) asset = 'grass-tuft';
+    return [{ id: `prop-${i + 1}`, asset, ...pos, rot: item.rot ?? 0, scale: 1 }];
   });
   const roads = v1.tiles.filter(t => t.model.startsWith('medieval/hex_road_'));
   const roadSet = new Set(roads.map(t => `${t.q},${t.r}`));
