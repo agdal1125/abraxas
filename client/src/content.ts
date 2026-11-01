@@ -12,5 +12,5 @@ const files = import.meta.glob<{ default: unknown }>("../../content/i18n/*/*.jso
 export type UI = typeof import("../../content/i18n/ko/ui.json");
 export type Translation = Record<string, { situation: string; picks: Record<string, string> }>;
 export function translations(lang: string) {
-  return { ui: files[`../../content/i18n/${lang}/ui.json`]!.default as UI, items: (files[`../../content/i18n/${lang}/items.json`]?.default ?? {}) as Translation };
+  return { ui: files[`../../content/i18n/${lang}/ui.json`]!.default as UI, items: (files[`../../content/i18n/${lang}/items.json`]?.default ?? {}) as Translation, examine: files[`../../content/i18n/${lang}/examine.json`]!.default as Record<string, string[]> };
 }
