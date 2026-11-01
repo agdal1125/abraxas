@@ -1,0 +1,330 @@
+{
+  "version": 1,
+  "generator": "Blender 5.2.3 LTS",
+  "assets": {
+    "player": {
+      "path": "assets/abraxas/characters/player.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ],
+      "budget": {
+        "maxTriangles": 2000,
+        "maxKiB": 120
+      },
+      "measured": {
+        "bytes": 36596,
+        "kib": 35.74,
+        "triangles": 1688,
+        "primitives": 1,
+        "materials": 1,
+        "joints": 8,
+        "clips": [
+          "idle",
+          "walk",
+          "talk"
+        ],
+        "hasColor0": true,
+        "draco": true,
+        "bounds": {
+          "min": [
+            -0.1455,
+            0.0,
+            -0.1287
+          ],
+          "max": [
+            0.1455,
+            0.58,
+            0.1287
+          ],
+          "size": [
+            0.2911,
+            0.58,
+            0.2574
+          ]
+        }
+      }
+    },
+    "char-a": {
+      "path": "assets/abraxas/characters/char-a.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ],
+      "budget": {
+        "maxTriangles": 3000,
+        "maxKiB": 180
+      },
+      "measured": {
+        "bytes": 39696,
+        "kib": 38.77,
+        "triangles": 2268,
+        "primitives": 1,
+        "materials": 1,
+        "joints": 8,
+        "clips": [
+          "idle",
+          "walk",
+          "talk"
+        ],
+        "hasColor0": true,
+        "draco": true,
+        "bounds": {
+          "min": [
+            -0.1678,
+            0.0,
+            -0.1243
+          ],
+          "max": [
+            0.2529,
+            0.6,
+            0.1267
+          ],
+          "size": [
+            0.4207,
+            0.6,
+            0.2509
+          ]
+        }
+      }
+    },
+    "char-b": {
+      "path": "assets/abraxas/characters/char-b.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ],
+      "budget": {
+        "maxTriangles": 3000,
+        "maxKiB": 180
+      },
+      "measured": {
+        "bytes": 39444,
+        "kib": 38.52,
+        "triangles": 2244,
+        "primitives": 1,
+        "materials": 1,
+        "joints": 8,
+        "clips": [
+          "idle",
+          "walk",
+          "talk"
+        ],
+        "hasColor0": true,
+        "draco": true,
+        "bounds": {
+          "min": [
+            -0.1515,
+            0.0,
+            -0.1243
+          ],
+          "max": [
+            0.1515,
+            0.6,
+            0.1339
+          ],
+          "size": [
+            0.303,
+            0.6,
+            0.2582
+          ]
+        }
+      }
+    },
+    "char-c": {
+      "path": "assets/abraxas/characters/char-c.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ],
+      "budget": {
+        "maxTriangles": 3500,
+        "maxKiB": 180
+      },
+      "measured": {
+        "bytes": 40336,
+        "kib": 39.39,
+        "triangles": 2468,
+        "primitives": 1,
+        "materials": 1,
+        "joints": 8,
+        "clips": [
+          "idle",
+          "walk",
+          "talk"
+        ],
+        "hasColor0": true,
+        "draco": true,
+        "bounds": {
+          "min": [
+            -0.1604,
+            0.0,
+            -0.141
+          ],
+          "max": [
+            0.1604,
+            0.65,
+            0.1464
+          ],
+          "size": [
+            0.3208,
+            0.65,
+            0.2874
+          ]
+        }
+      }
+    },
+    "char-d": {
+      "path": "assets/abraxas/characters/char-d.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.2
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ],
+      "budget": {
+        "maxTriangles": 3000,
+        "maxKiB": 180
+      },
+      "measured": {
+        "bytes": 38668,
+        "kib": 37.76,
+        "triangles": 2040,
+        "primitives": 1,
+        "materials": 1,
+        "joints": 8,
+        "clips": [
+          "idle",
+          "walk",
+          "talk"
+        ],
+        "hasColor0": true,
+        "draco": true,
+        "bounds": {
+          "min": [
+            -0.1882,
+            0.0,
+            -0.1243
+          ],
+          "max": [
+            0.1882,
+            0.6,
+            0.1267
+          ],
+          "size": [
+            0.3764,
+            0.6,
+            0.2509
+          ]
+        }
+      }
+    },
+    "quest-npc": {
+      "path": "assets/abraxas/characters/quest-npc.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ],
+      "budget": {
+        "maxTriangles": 2000,
+        "maxKiB": 120
+      },
+      "measured": {
+        "bytes": 35616,
+        "kib": 34.78,
+        "triangles": 1628,
+        "primitives": 1,
+        "materials": 1,
+        "joints": 8,
+        "clips": [
+          "idle",
+          "walk",
+          "talk"
+        ],
+        "hasColor0": true,
+        "draco": true,
+        "bounds": {
+          "min": [
+            -0.1451,
+            0.0,
+            -0.1132
+          ],
+          "max": [
+            0.1451,
+            0.56,
+            0.1364
+          ],
+          "size": [
+            0.2902,
+            0.56,
+            0.2495
+          ]
+        }
+      },
+      "sharedBy": [
+        "s1j2",
+        "s2j2",
+        "s3j2",
+        "s4j2"
+      ]
+    }
+  }
+}

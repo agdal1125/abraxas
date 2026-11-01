@@ -31,3 +31,4 @@ assets/_generated/**/*.webp
 .idea/
 .vscode/*
 !.vscode/extensions.json
+*.blend1

@@ -19,3 +19,7 @@
 - 에셋 · Kenney 사이트 zip 링크 자동 추출은 봇 차단 우회로 막힘 → 공식 GitHub(KayKit-Game-Assets 등) 배포본을 sparse checkout (2026-10-31)
 - 에이전트 · `codex exec -i a.png -i b.png "프롬프트"`에서 프롬프트가 이미지 인자로 먹혀 "No prompt provided"로 종료 → `-i`가 여러 값을 받는 옵션 → 프롬프트를 파일로 두고 표준 입력(`< prompt.md`)으로 넘긴다 (2026-11-01)
 - 클라이언트 · 줌인하면 KayKit 헥스 타일 테두리가 격자로 도드라짐 → 풀·길 타일은 걷기 데이터로만 쓰고 연속 땅 평면 + 코드 생성 텍스처로 렌더, 땅 바탕색은 KayKit 풀 색을 텍스처에서 읽어 맞춤 (2026-11-01)
+- 에이전트 · 백그라운드에서 `codex exec ... "프롬프트"`가 "Reading additional input from stdin..."에서 멈춤 → 표준 입력이 열려 있어 추가 입력을 기다림 → 프롬프트는 파일로 두고 `< prompt.md`로 넘긴다 (2026-11-01)
+- 에이전트 · Terra(high)가 큰 범위(맵 변환+충돌, 렌더 통합)를 받으면 일부만 하고 멈춤 → 산출물을 번호 매긴 단계로 쪼개고 "모두 끝내기 전 멈추지 말 것, 단계마다 typecheck"를 명시하면 완주 (2026-11-01)
+- 아트 · agy Blender GLB의 정점 색이 어둡고 탁하게 보임 → 생성 과정에서 COLOR_0 이중 선형화 → 런타임 역변환으로 임시 보정, 다음 에셋 빌드에서 내보내기 색공간 수정 필요 (2026-11-01)
+- 아트 · agy headless Blender 실행은 `"C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --python-exit-code 1 -P <고정 스크립트>`를 `&` 유무 두 형태로 command 허용, 쓰기는 산출 디렉터리만 write_file 허용하면 동작. image-generator는 별도 권한 없이 사용됨 (2026-11-01)

@@ -1,0 +1,1047 @@
+{
+  "version": 1,
+  "blenderVersion": "5.2.3 LTS",
+  "phase1Only": false,
+  "buildTerrain": true,
+  "summary": {
+    "assetCount": 33,
+    "totalTriangles": 29042,
+    "totalBytes": 323836,
+    "totalKiB": 316.25
+  },
+  "assets": {
+    "entrance-house": {
+      "path": "assets/abraxas/environment/entrance-house.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.65,
+          "halfZ": 0.55
+        }
+      ],
+      "triangles": 1056,
+      "bytes": 16932,
+      "maxTriangles": 4000,
+      "maxBytes": 184320,
+      "bounds": {
+        "width": 1.4,
+        "depth": 1.2,
+        "height": 1.4,
+        "minY": 0,
+        "maxY": 1.4
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/buildings-part1.png",
+      "preview": "assets/source/previews/environment/entrance-house.png"
+    },
+    "plaza-hall": {
+      "path": "assets/abraxas/environment/plaza-hall.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.85,
+          "halfZ": 0.7
+        }
+      ],
+      "triangles": 940,
+      "bytes": 14276,
+      "maxTriangles": 5000,
+      "maxBytes": 184320,
+      "bounds": {
+        "width": 1.8,
+        "depth": 1.5,
+        "height": 1.6,
+        "minY": 0,
+        "maxY": 1.6
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/buildings-part1.png",
+      "preview": "assets/source/previews/environment/plaza-hall.png"
+    },
+    "bakery": {
+      "path": "assets/abraxas/environment/bakery.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.75,
+          "halfZ": 0.65
+        }
+      ],
+      "triangles": 1284,
+      "bytes": 20860,
+      "maxTriangles": 5000,
+      "maxBytes": 184320,
+      "bounds": {
+        "width": 1.6,
+        "depth": 1.4,
+        "height": 1.5,
+        "minY": 0,
+        "maxY": 1.5
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/buildings-part1.png",
+      "preview": "assets/source/previews/environment/bakery.png"
+    },
+    "library": {
+      "path": "assets/abraxas/environment/library.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.85,
+          "halfZ": 0.7
+        }
+      ],
+      "triangles": 836,
+      "bytes": 13004,
+      "maxTriangles": 5000,
+      "maxBytes": 184320,
+      "bounds": {
+        "width": 1.8,
+        "depth": 1.5,
+        "height": 1.8,
+        "minY": 0,
+        "maxY": 1.8
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/buildings-part2.png",
+      "preview": "assets/source/previews/environment/library.png"
+    },
+    "smithy": {
+      "path": "assets/abraxas/environment/smithy.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.85,
+          "halfZ": 0.65
+        }
+      ],
+      "triangles": 692,
+      "bytes": 10700,
+      "maxTriangles": 5000,
+      "maxBytes": 184320,
+      "bounds": {
+        "width": 1.8,
+        "depth": 1.4,
+        "height": 1.5,
+        "minY": 0,
+        "maxY": 1.5
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/buildings-part2.png",
+      "preview": "assets/source/previews/environment/smithy.png"
+    },
+    "lake-pavilion": {
+      "path": "assets/abraxas/environment/lake-pavilion.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.75,
+          "halfZ": 0.65
+        }
+      ],
+      "triangles": 892,
+      "bytes": 14136,
+      "maxTriangles": 4000,
+      "maxBytes": 184320,
+      "bounds": {
+        "width": 1.6,
+        "depth": 1.4,
+        "height": 1.4,
+        "minY": 0,
+        "maxY": 1.4
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/buildings-part2.png",
+      "preview": "assets/source/previews/environment/lake-pavilion.png"
+    },
+    "tree-round": {
+      "path": "assets/abraxas/environment/tree-round.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.16
+        }
+      ],
+      "triangles": 436,
+      "bytes": 12304,
+      "maxTriangles": 1200,
+      "maxBytes": 61440,
+      "bounds": {
+        "width": 1.02,
+        "depth": 1.02,
+        "height": 1.5,
+        "minY": 0,
+        "maxY": 1.5
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/tree-round.png"
+    },
+    "tree-layered": {
+      "path": "assets/abraxas/environment/tree-layered.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.2
+        }
+      ],
+      "triangles": 464,
+      "bytes": 7456,
+      "maxTriangles": 1200,
+      "maxBytes": 61440,
+      "bounds": {
+        "width": 1.1,
+        "depth": 1.1,
+        "height": 1.8,
+        "minY": 0,
+        "maxY": 1.8
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/tree-layered.png"
+    },
+    "tree-slender": {
+      "path": "assets/abraxas/environment/tree-slender.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.16
+        }
+      ],
+      "triangles": 276,
+      "bytes": 7696,
+      "maxTriangles": 1200,
+      "maxBytes": 61440,
+      "bounds": {
+        "width": 0.7,
+        "depth": 0.7,
+        "height": 1.6,
+        "minY": 0,
+        "maxY": 1.6
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/tree-slender.png"
+    },
+    "tree-young": {
+      "path": "assets/abraxas/environment/tree-young.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.12
+        }
+      ],
+      "triangles": 332,
+      "bytes": 9652,
+      "maxTriangles": 1200,
+      "maxBytes": 61440,
+      "bounds": {
+        "width": 0.66,
+        "depth": 0.66,
+        "height": 1.2,
+        "minY": 0,
+        "maxY": 1.2
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/tree-young.png"
+    },
+    "bush": {
+      "path": "assets/abraxas/environment/bush.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.22
+        }
+      ],
+      "triangles": 240,
+      "bytes": 7652,
+      "maxTriangles": 500,
+      "maxBytes": 30720,
+      "bounds": {
+        "width": 0.6,
+        "depth": 0.5,
+        "height": 0.4,
+        "minY": 0,
+        "maxY": 0.4
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/bush.png"
+    },
+    "flower-bed": {
+      "path": "assets/abraxas/environment/flower-bed.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 324,
+      "bytes": 8840,
+      "maxTriangles": 600,
+      "maxBytes": 35840,
+      "bounds": {
+        "width": 0.7,
+        "depth": 0.5,
+        "height": 0.25,
+        "minY": 0,
+        "maxY": 0.25
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flower-bed.png"
+    },
+    "grass-tuft": {
+      "path": "assets/abraxas/environment/grass-tuft.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 156,
+      "bytes": 4452,
+      "maxTriangles": 160,
+      "maxBytes": 15360,
+      "bounds": {
+        "width": 0.22,
+        "depth": 0.2,
+        "height": 0.18,
+        "minY": 0,
+        "maxY": 0.18
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/grass-tuft.png"
+    },
+    "mushroom": {
+      "path": "assets/abraxas/environment/mushroom.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 144,
+      "bytes": 3792,
+      "maxTriangles": 160,
+      "maxBytes": 15360,
+      "bounds": {
+        "width": 0.24,
+        "depth": 0.22,
+        "height": 0.2,
+        "minY": 0,
+        "maxY": 0.2
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/mushroom.png"
+    },
+    "pebbles": {
+      "path": "assets/abraxas/environment/pebbles.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 112,
+      "bytes": 3308,
+      "maxTriangles": 160,
+      "maxBytes": 15360,
+      "bounds": {
+        "width": 0.26,
+        "depth": 0.24,
+        "height": 0.06,
+        "minY": 0,
+        "maxY": 0.06
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/pebbles.png"
+    },
+    "fence": {
+      "path": "assets/abraxas/environment/fence.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.5,
+          "halfZ": 0.06
+        }
+      ],
+      "triangles": 176,
+      "bytes": 3576,
+      "maxTriangles": 400,
+      "maxBytes": 25600,
+      "bounds": {
+        "width": 1,
+        "depth": 0.12,
+        "height": 0.45,
+        "minY": 0,
+        "maxY": 0.45
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/landmarks-props.png",
+      "preview": "assets/source/previews/environment/fence.png"
+    },
+    "rock-small": {
+      "path": "assets/abraxas/environment/rock-small.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "triangles": 94,
+      "bytes": 3868,
+      "maxTriangles": 300,
+      "maxBytes": 20480,
+      "bounds": {
+        "width": 0.4,
+        "depth": 0.36,
+        "height": 0.28,
+        "minY": 0,
+        "maxY": 0.28
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/rock-small.png"
+    },
+    "rock-large": {
+      "path": "assets/abraxas/environment/rock-large.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.36
+        }
+      ],
+      "triangles": 176,
+      "bytes": 5940,
+      "maxTriangles": 600,
+      "maxBytes": 35840,
+      "bounds": {
+        "width": 0.8,
+        "depth": 0.72,
+        "height": 0.52,
+        "minY": 0,
+        "maxY": 0.52
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/rock-large.png"
+    },
+    "streetlight": {
+      "path": "assets/abraxas/environment/streetlight.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.1
+        }
+      ],
+      "triangles": 380,
+      "bytes": 7076,
+      "maxTriangles": 650,
+      "maxBytes": 40960,
+      "bounds": {
+        "width": 0.34,
+        "depth": 0.22,
+        "height": 1,
+        "minY": 0,
+        "maxY": 1
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/landmarks-props.png",
+      "preview": "assets/source/previews/environment/streetlight.png"
+    },
+    "bench": {
+      "path": "assets/abraxas/environment/bench.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.4,
+          "halfZ": 0.18
+        }
+      ],
+      "triangles": 352,
+      "bytes": 5252,
+      "maxTriangles": 800,
+      "maxBytes": 46080,
+      "bounds": {
+        "width": 0.8,
+        "depth": 0.35,
+        "height": 0.45,
+        "minY": 0,
+        "maxY": 0.45
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/landmarks-props.png",
+      "preview": "assets/source/previews/environment/bench.png"
+    },
+    "well": {
+      "path": "assets/abraxas/environment/well.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.38
+        }
+      ],
+      "triangles": 488,
+      "bytes": 8612,
+      "maxTriangles": 1500,
+      "maxBytes": 71680,
+      "bounds": {
+        "width": 0.8,
+        "depth": 0.8,
+        "height": 0.8,
+        "minY": 0,
+        "maxY": 0.8
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/landmarks-props.png",
+      "preview": "assets/source/previews/environment/well.png"
+    },
+    "festival-stage": {
+      "path": "assets/abraxas/environment/festival-stage.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.9,
+          "halfZ": 0.6
+        }
+      ],
+      "triangles": 484,
+      "bytes": 7888,
+      "maxTriangles": 2500,
+      "maxBytes": 102400,
+      "bounds": {
+        "width": 1.8,
+        "depth": 1.2,
+        "height": 1,
+        "minY": 0,
+        "maxY": 1
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/landmarks-props.png",
+      "preview": "assets/source/previews/environment/festival-stage.png"
+    },
+    "memory-gate": {
+      "path": "assets/abraxas/environment/memory-gate.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": -0.55,
+          "z": 0,
+          "halfX": 0.15,
+          "halfZ": 0.25
+        },
+        {
+          "type": "box",
+          "x": 0.55,
+          "z": 0,
+          "halfX": 0.15,
+          "halfZ": 0.25
+        }
+      ],
+      "triangles": 352,
+      "bytes": 5324,
+      "maxTriangles": 2500,
+      "maxBytes": 102400,
+      "bounds": {
+        "width": 1.4,
+        "depth": 0.5,
+        "height": 1.6,
+        "minY": 0,
+        "maxY": 1.6
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/landmarks-props.png",
+      "preview": "assets/source/previews/environment/memory-gate.png"
+    },
+    "bridge": {
+      "path": "assets/abraxas/environment/bridge.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": -0.48,
+          "z": 0,
+          "halfX": 0.05,
+          "halfZ": 1
+        },
+        {
+          "type": "box",
+          "x": 0.48,
+          "z": 0,
+          "halfX": 0.05,
+          "halfZ": 1
+        }
+      ],
+      "triangles": 836,
+      "bytes": 10772,
+      "maxTriangles": 1800,
+      "maxBytes": 81920,
+      "bounds": {
+        "width": 1,
+        "depth": 2,
+        "height": 0.35,
+        "minY": -0.025,
+        "maxY": 0.325
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/landmarks-props.png",
+      "preview": "assets/source/previews/environment/bridge.png"
+    },
+    "water-reed": {
+      "path": "assets/abraxas/environment/water-reed.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 456,
+      "bytes": 9808,
+      "maxTriangles": 500,
+      "maxBytes": 30720,
+      "bounds": {
+        "width": 0.26,
+        "depth": 0.24,
+        "height": 0.35,
+        "minY": 0,
+        "maxY": 0.35
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/water-reed.png"
+    },
+    "water-flower": {
+      "path": "assets/abraxas/environment/water-flower.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 132,
+      "bytes": 4020,
+      "maxTriangles": 500,
+      "maxBytes": 30720,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.26,
+        "height": 0.12,
+        "minY": 0,
+        "maxY": 0.12
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/water-flower.png"
+    },
+    "shore-post": {
+      "path": "assets/abraxas/environment/shore-post.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.08
+        }
+      ],
+      "triangles": 392,
+      "bytes": 7268,
+      "maxTriangles": 500,
+      "maxBytes": 30720,
+      "bounds": {
+        "width": 0.24,
+        "depth": 0.24,
+        "height": 0.5,
+        "minY": 0,
+        "maxY": 0.5
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/shore-post.png"
+    },
+    "bread-crate": {
+      "path": "assets/abraxas/environment/bread-crate.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.18,
+          "halfZ": 0.14
+        }
+      ],
+      "triangles": 104,
+      "bytes": 4108,
+      "maxTriangles": 700,
+      "maxBytes": 40960,
+      "bounds": {
+        "width": 0.36,
+        "depth": 0.28,
+        "height": 0.26,
+        "minY": 0,
+        "maxY": 0.26
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/life-props.png",
+      "preview": "assets/source/previews/environment/bread-crate.png"
+    },
+    "book-stack": {
+      "path": "assets/abraxas/environment/book-stack.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.18,
+          "halfZ": 0.14
+        }
+      ],
+      "triangles": 308,
+      "bytes": 6056,
+      "maxTriangles": 700,
+      "maxBytes": 40960,
+      "bounds": {
+        "width": 0.36,
+        "depth": 0.28,
+        "height": 0.3,
+        "minY": 0,
+        "maxY": 0.3
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/life-props.png",
+      "preview": "assets/source/previews/environment/book-stack.png"
+    },
+    "tool-rack": {
+      "path": "assets/abraxas/environment/tool-rack.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.28,
+          "halfZ": 0.16
+        }
+      ],
+      "triangles": 536,
+      "bytes": 9980,
+      "maxTriangles": 700,
+      "maxBytes": 40960,
+      "bounds": {
+        "width": 0.56,
+        "depth": 0.32,
+        "height": 0.55,
+        "minY": 0,
+        "maxY": 0.55
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/life-props.png",
+      "preview": "assets/source/previews/environment/tool-rack.png"
+    },
+    "barrel": {
+      "path": "assets/abraxas/environment/barrel.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.15
+        }
+      ],
+      "triangles": 368,
+      "bytes": 5660,
+      "maxTriangles": 700,
+      "maxBytes": 40960,
+      "bounds": {
+        "width": 0.3,
+        "depth": 0.3,
+        "height": 0.42,
+        "minY": 0,
+        "maxY": 0.42
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/life-props.png",
+      "preview": "assets/source/previews/environment/barrel.png"
+    },
+    "log": {
+      "path": "assets/abraxas/environment/log.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.3,
+          "halfZ": 0.1
+        }
+      ],
+      "triangles": 320,
+      "bytes": 7460,
+      "maxTriangles": 700,
+      "maxBytes": 40960,
+      "bounds": {
+        "width": 0.6,
+        "depth": 0.2,
+        "height": 0.22,
+        "minY": 0,
+        "maxY": 0.22
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/life-props.png",
+      "preview": "assets/source/previews/environment/log.png"
+    },
+    "terrain": {
+      "path": "assets/abraxas/environment/terrain.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 14904,
+      "bytes": 56108,
+      "maxTriangles": 30000,
+      "maxBytes": 1048576,
+      "bounds": {
+        "width": 38,
+        "depth": 33.4864,
+        "height": 0.35,
+        "minX": -19,
+        "maxX": 19,
+        "minY": -0.35,
+        "maxY": 0,
+        "minZ": -16.7432,
+        "maxZ": 16.7432
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "preview": "assets/source/previews/environment/terrain.png"
+    },
+    "flower-cluster-red": {
+      "path": "assets/abraxas/environment/flower-cluster-red.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 280,
+      "bytes": 7356,
+      "maxTriangles": 300,
+      "maxBytes": 20000,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.16,
+        "minY": 0,
+        "maxY": 0.16
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
+    },
+    "flower-cluster-yellow": {
+      "path": "assets/abraxas/environment/flower-cluster-yellow.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 280,
+      "bytes": 7376,
+      "maxTriangles": 300,
+      "maxBytes": 20000,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.15,
+        "minY": 0,
+        "maxY": 0.15
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
+    },
+    "flower-cluster-white": {
+      "path": "assets/abraxas/environment/flower-cluster-white.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 280,
+      "bytes": 7432,
+      "maxTriangles": 300,
+      "maxBytes": 20000,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.14,
+        "minY": 0,
+        "maxY": 0.14
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
+    },
+    "flower-cluster-pink": {
+      "path": "assets/abraxas/environment/flower-cluster-pink.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 280,
+      "bytes": 7388,
+      "maxTriangles": 300,
+      "maxBytes": 20000,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.16,
+        "minY": 0,
+        "maxY": 0.16
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
+    },
+    "flower-cluster-purple": {
+      "path": "assets/abraxas/environment/flower-cluster-purple.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 280,
+      "bytes": 7384,
+      "maxTriangles": 300,
+      "maxBytes": 20000,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.17,
+        "minY": 0,
+        "maxY": 0.17
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
+    },
+    "grass-small": {
+      "path": "assets/abraxas/environment/grass-small.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 112,
+      "bytes": 3632,
+      "maxTriangles": 120,
+      "maxBytes": 15360,
+      "bounds": {
+        "width": 0.18,
+        "depth": 0.18,
+        "height": 0.1,
+        "minY": 0,
+        "maxY": 0.1
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
+    }
+  }
+}

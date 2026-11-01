@@ -1,0 +1,513 @@
+{
+  "version": 1,
+  "assets": {
+    "char-a": {
+      "path": "assets/abraxas/characters/char-a.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ]
+    },
+    "char-b": {
+      "path": "assets/abraxas/characters/char-b.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ]
+    },
+    "char-c": {
+      "path": "assets/abraxas/characters/char-c.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ]
+    },
+    "char-d": {
+      "path": "assets/abraxas/characters/char-d.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.2
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ]
+    },
+    "player": {
+      "path": "assets/abraxas/characters/player.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ]
+    },
+    "quest-npc": {
+      "path": "assets/abraxas/characters/quest-npc.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ]
+    },
+    "entrance-house": {
+      "path": "assets/abraxas/environment/entrance-house.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.65,
+          "halfZ": 0.55
+        }
+      ]
+    },
+    "plaza-hall": {
+      "path": "assets/abraxas/environment/plaza-hall.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.85,
+          "halfZ": 0.7
+        }
+      ]
+    },
+    "bakery": {
+      "path": "assets/abraxas/environment/bakery.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.75,
+          "halfZ": 0.65
+        }
+      ]
+    },
+    "library": {
+      "path": "assets/abraxas/environment/library.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.85,
+          "halfZ": 0.7
+        }
+      ]
+    },
+    "smithy": {
+      "path": "assets/abraxas/environment/smithy.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.85,
+          "halfZ": 0.65
+        }
+      ]
+    },
+    "lake-pavilion": {
+      "path": "assets/abraxas/environment/lake-pavilion.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.75,
+          "halfZ": 0.65
+        }
+      ]
+    },
+    "fence": {
+      "path": "assets/abraxas/environment/fence.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.5,
+          "halfZ": 0.06
+        }
+      ]
+    },
+    "bench": {
+      "path": "assets/abraxas/environment/bench.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.4,
+          "halfZ": 0.18
+        }
+      ]
+    },
+    "festival-stage": {
+      "path": "assets/abraxas/environment/festival-stage.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.9,
+          "halfZ": 0.6
+        }
+      ]
+    },
+    "bread-crate": {
+      "path": "assets/abraxas/environment/bread-crate.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.18,
+          "halfZ": 0.14
+        }
+      ]
+    },
+    "book-stack": {
+      "path": "assets/abraxas/environment/book-stack.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.18,
+          "halfZ": 0.14
+        }
+      ]
+    },
+    "tool-rack": {
+      "path": "assets/abraxas/environment/tool-rack.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.28,
+          "halfZ": 0.16
+        }
+      ]
+    },
+    "log": {
+      "path": "assets/abraxas/environment/log.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.3,
+          "halfZ": 0.1
+        }
+      ]
+    },
+    "tree-round": {
+      "path": "assets/abraxas/environment/tree-round.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.16
+        }
+      ]
+    },
+    "tree-layered": {
+      "path": "assets/abraxas/environment/tree-layered.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.2
+        }
+      ]
+    },
+    "tree-slender": {
+      "path": "assets/abraxas/environment/tree-slender.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.16
+        }
+      ]
+    },
+    "tree-young": {
+      "path": "assets/abraxas/environment/tree-young.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.12
+        }
+      ]
+    },
+    "bush": {
+      "path": "assets/abraxas/environment/bush.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.22
+        }
+      ]
+    },
+    "rock-small": {
+      "path": "assets/abraxas/environment/rock-small.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ]
+    },
+    "rock-large": {
+      "path": "assets/abraxas/environment/rock-large.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.36
+        }
+      ]
+    },
+    "streetlight": {
+      "path": "assets/abraxas/environment/streetlight.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.1
+        }
+      ]
+    },
+    "well": {
+      "path": "assets/abraxas/environment/well.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.38
+        }
+      ]
+    },
+    "shore-post": {
+      "path": "assets/abraxas/environment/shore-post.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.08
+        }
+      ]
+    },
+    "barrel": {
+      "path": "assets/abraxas/environment/barrel.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.15
+        }
+      ]
+    },
+    "flower-bed": {
+      "path": "assets/abraxas/environment/flower-bed.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "grass-tuft": {
+      "path": "assets/abraxas/environment/grass-tuft.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "mushroom": {
+      "path": "assets/abraxas/environment/mushroom.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "pebbles": {
+      "path": "assets/abraxas/environment/pebbles.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "water-reed": {
+      "path": "assets/abraxas/environment/water-reed.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "water-flower": {
+      "path": "assets/abraxas/environment/water-flower.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "terrain": {
+      "path": "assets/abraxas/environment/terrain.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "memory-gate": {
+      "path": "assets/abraxas/environment/memory-gate.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": -0.55,
+          "z": 0,
+          "halfX": 0.15,
+          "halfZ": 0.25
+        },
+        {
+          "type": "box",
+          "x": 0.55,
+          "z": 0,
+          "halfX": 0.15,
+          "halfZ": 0.25
+        }
+      ]
+    },
+    "bridge": {
+      "path": "assets/abraxas/environment/bridge.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": -0.48,
+          "z": 0,
+          "halfX": 0.05,
+          "halfZ": 1
+        },
+        {
+          "type": "box",
+          "x": 0.48,
+          "z": 0,
+          "halfX": 0.05,
+          "halfZ": 1
+        }
+      ]
+    },
+    "flower-cluster-red": {
+      "path": "assets/abraxas/environment/flower-cluster-red.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "flower-cluster-yellow": {
+      "path": "assets/abraxas/environment/flower-cluster-yellow.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "flower-cluster-white": {
+      "path": "assets/abraxas/environment/flower-cluster-white.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "flower-cluster-pink": {
+      "path": "assets/abraxas/environment/flower-cluster-pink.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "flower-cluster-purple": {
+      "path": "assets/abraxas/environment/flower-cluster-purple.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "grass-small": {
+      "path": "assets/abraxas/environment/grass-small.glb",
+      "scale": 1,
+      "collision": []
+    }
+  }
+}
