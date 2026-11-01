@@ -3,6 +3,8 @@ import { data, translations } from "../content";
 import { episodeStage, nextSegment } from "../core/flow";
 import { npcMatches, score, type Input } from "../core/scoring";
 import type { Village } from "../scenes/village";
+import { Controls } from "../input/controls";
+import type { VillageInput } from "../input/movement";
 
 type Lang = "ko" | "en";
 type Save = { lang: Lang; playId: string; log: Input["log"]; completed: string[]; segment: string };
@@ -20,7 +22,9 @@ export class Game {
   private resumed = false;
   private episodeLimit = 6;
   private largeText = false;
+  private controls: Controls;
   constructor(app: HTMLElement, private village: Village) {
+    this.controls = new Controls(app, village as Village & VillageInput);
     try { this.largeText = localStorage.getItem("abraxas-large-text") === "true"; } catch { /* Continue in memory if storage is unavailable. */ }
     document.documentElement.style.setProperty("--body-size", this.largeText ? "18px" : "15px");
     this.overlay.className = "overlay"; app.append(this.overlay);
@@ -33,7 +37,7 @@ export class Game {
   private save(): void { try { localStorage.setItem(storageKey, JSON.stringify(this.state)); } catch { /* Continue in memory if storage is unavailable. */ } }
   private get ui() { return translations(this.state.lang).ui; }
   private panel(text: string, buttons: [string, () => void][], kind: "dialogue" | "title" | "result" = "dialogue", speaker?: string): void {
-    this.token++; const token = this.token; this.village.setEnabled(false); this.overlay.replaceChildren(); this.overlay.className = `overlay ${kind}`;
+    this.token++; const token = this.token; this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.replaceChildren(); this.overlay.className = `overlay ${kind}`;
     const panel = document.createElement("div"); panel.className = "panel";
     const run = (action: () => void) => { if (token === this.token) { this.token++; action(); } };
     const button = (label: string, action: () => void) => { const element = document.createElement("button"); element.textContent = label; element.addEventListener("click", () => run(action)); return element; };
@@ -47,7 +51,7 @@ export class Game {
     const match = text.match(/^([^:\n]+):\s*([\s\S]*)$/); const p = document.createElement("p"); p.textContent = match ? match[2]! : text;
     if (match || speaker) { const name = document.createElement("span"); name.className = "speaker"; name.textContent = match ? match[1]!.trim() : speaker!; const index = Object.values(this.ui.npc).indexOf(name.textContent); name.style.backgroundColor = ["var(--char-a)", "var(--char-b)", "var(--char-c)", "var(--char-d)"][index] ?? "var(--char-npc)"; if (index < 0) name.style.color = "var(--paper)"; panel.append(name); }
     panel.append(p);
-    if (buttons.length === 1 && buttons[0]![0] === this.ui.next) { panel.classList.add("continue"); panel.tabIndex = 0; panel.setAttribute("role", "button"); panel.setAttribute("aria-label", this.ui.next); panel.addEventListener("click", () => run(buttons[0]![1])); panel.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); run(buttons[0]![1]); } }); const indicator = document.createElement("span"); indicator.className = "indicator"; indicator.textContent = "▼"; indicator.setAttribute("aria-hidden", "true"); panel.append(indicator); }
+    if (buttons.length === 1 && buttons[0]![0] === this.ui.next) { panel.classList.add("continue"); panel.tabIndex = 0; panel.setAttribute("role", "button"); panel.setAttribute("aria-label", this.ui.next); panel.addEventListener("click", () => run(buttons[0]![1])); panel.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); if (!event.repeat) run(buttons[0]![1]); } }); const indicator = document.createElement("span"); indicator.className = "indicator"; indicator.textContent = "▼"; indicator.setAttribute("aria-hidden", "true"); panel.append(indicator); }
     this.overlay.append(panel);
     if (!(buttons.length === 1 && buttons[0]![0] === this.ui.next)) { const choices = document.createElement("div"); choices.className = "choices"; for (const [label, action] of buttons) choices.append(button(label, action)); this.overlay.append(choices); }
   }
@@ -66,7 +70,7 @@ export class Game {
     if (segment === "gate") { this.showWorld(["gate"]); return; }
     this.state.segment = "hub"; this.save(); this.showWorld(ids.flatMap((id, index) => this.state.completed.includes(id) ? [] : ["ABCD"[index]!]));
   }
-  private showWorld(available: string[]): void { this.token++; this.overlay.replaceChildren(); this.village.setAvailable(available); this.village.setEnabled(true); }
+  private showWorld(available: string[]): void { this.token++; this.overlay.replaceChildren(); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
   private answered(segment: string): number { return data.items.filter(item => item.segment === segment && this.state.log.some(entry => entry.id === item.id)).length; }
   private interact(id: string): void {
     const segment = this.state.segment;
@@ -77,7 +81,7 @@ export class Game {
   }
   private async open(segment: string): Promise<void> {
     const continuing = segment === this.state.segment && this.story !== null;
-    this.village.setEnabled(false); this.state.segment = segment; this.save(); if (!continuing) { this.story = null; this.lastLine = ""; } const token = ++this.token;
+    this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.state.segment = segment; this.save(); if (!continuing) { this.story = null; this.lastLine = ""; } const token = ++this.token;
     const answered = this.answered(segment); this.episodeLimit = answered < 3 ? 3 : answered < 5 ? 5 : 6;
     if (!continuing && !this.resumed && (segment === "prologue" || (segment === "ep_lumi" && this.answered(segment) === 0))) {
       try { const response = await fetch(`./ink/${this.state.lang}/${segment}.json`); if (response.ok) this.story = new Story(await response.text()); } catch { this.story = null; }
