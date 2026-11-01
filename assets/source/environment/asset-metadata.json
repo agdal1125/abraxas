@@ -1,14 +1,15 @@
 {
-  "version": 1,
+  "version": 2,
   "blenderVersion": "5.2.3 LTS",
-  "colorSpaceNote": "색공간 수정(2026-11-01): sRGB 팔레트 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
+  "paletteVersion": "dream-v2",
+  "colorSpaceNote": "몽환 팔레트 v2(2026-11-01): sRGB 팔레트 v2 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
   "phase1Only": false,
   "buildTerrain": true,
   "summary": {
-    "assetCount": 39,
-    "totalTriangles": 32858,
-    "totalBytes": 349700,
-    "totalKiB": 341.5
+    "assetCount": 40,
+    "totalTriangles": 34360,
+    "totalBytes": 359468,
+    "totalKiB": 351.04
   },
   "assets": {
     "entrance-house": {
@@ -24,7 +25,7 @@
         }
       ],
       "triangles": 1056,
-      "bytes": 15036,
+      "bytes": 15436,
       "maxTriangles": 4000,
       "maxBytes": 184320,
       "bounds": {
@@ -42,137 +43,137 @@
       "preview": "assets/source/previews/environment/entrance-house.png",
       "colorVerification": {
         "ink": {
-          "paletteHex": "#3B2A22",
-          "measuredHex": "#3B2A22",
+          "paletteHex": "#564863",
+          "measuredHex": "#564863",
           "measuredSrgb255": [
-            59.0,
-            42.0,
-            34.0
+            86.0,
+            72.0,
+            99.0
           ],
           "measuredLinear": [
-            0.0437,
-            0.0232,
-            0.016
+            0.0931,
+            0.0648,
+            0.1248
           ],
           "maxDiff255": 0.0
         },
         "wood_dark": {
-          "paletteHex": "#6E4E37",
-          "measuredHex": "#6E4E37",
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
           "measuredSrgb255": [
-            110.0,
-            78.0,
-            55.0
+            156.0,
+            120.0,
+            96.0
           ],
           "measuredLinear": [
-            0.1559,
-            0.0762,
-            0.0382
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "stone": {
-          "paletteHex": "#B1ADA2",
-          "measuredHex": "#B1ADA2",
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
           "measuredSrgb255": [
-            177.0,
-            173.0,
-            162.0
+            200.0,
+            191.0,
+            224.0
           ],
           "measuredLinear": [
-            0.4397,
-            0.4179,
-            0.3613
-          ],
-          "maxDiff255": 0.0
-        },
-        "wood_light": {
-          "paletteHex": "#B88C6A",
-          "measuredHex": "#B88C6A",
-          "measuredSrgb255": [
-            184.0,
-            140.0,
-            106.0
-          ],
-          "measuredLinear": [
-            0.4793,
-            0.2623,
-            0.1441
+            0.5776,
+            0.521,
+            0.7454
           ],
           "maxDiff255": 0.0
         },
         "stone_light": {
-          "paletteHex": "#C7C3B8",
-          "measuredHex": "#C7C3B8",
+          "paletteHex": "#DDD5F0",
+          "measuredHex": "#DDD5F0",
           "measuredSrgb255": [
-            199.0,
-            195.0,
-            184.0
+            221.0,
+            213.0,
+            240.0
           ],
           "measuredLinear": [
-            0.5711,
-            0.5457,
-            0.4793
+            0.7231,
+            0.6654,
+            0.8714
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_light": {
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
+          "measuredSrgb255": [
+            223.0,
+            185.0,
+            158.0
+          ],
+          "measuredLinear": [
+            0.7379,
+            0.4851,
+            0.3419
           ],
           "maxDiff255": 0.0
         },
         "cream_warm": {
-          "paletteHex": "#F5E9D4",
-          "measuredHex": "#F5E9D4",
+          "paletteHex": "#F7EFE2",
+          "measuredHex": "#F7EFE2",
           "measuredSrgb255": [
-            245.0,
-            233.0,
-            212.0
+            247.0,
+            239.0,
+            226.0
           ],
           "measuredLinear": [
-            0.9131,
-            0.8148,
-            0.6584
+            0.9301,
+            0.8632,
+            0.7605
           ],
           "maxDiff255": 0.0
         },
         "gold": {
-          "paletteHex": "#FFB020",
-          "measuredHex": "#FFB020",
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
           "measuredSrgb255": [
             255.0,
-            176.0,
-            32.0
+            224.0,
+            138.0
           ],
           "measuredLinear": [
             1.0,
-            0.4342,
-            0.0144
+            0.7454,
+            0.2542
           ],
           "maxDiff255": 0.0
         },
         "gold_light": {
-          "paletteHex": "#FFD166",
-          "measuredHex": "#FFD166",
+          "paletteHex": "#FFF0B8",
+          "measuredHex": "#FFF0B8",
           "measuredSrgb255": [
             255.0,
-            209.0,
-            102.0
+            240.0,
+            184.0
           ],
           "measuredLinear": [
             1.0,
-            0.6376,
-            0.1329
+            0.8714,
+            0.4793
           ],
           "maxDiff255": 0.0
         },
@@ -206,7 +207,7 @@
         }
       ],
       "triangles": 940,
-      "bytes": 12712,
+      "bytes": 13032,
       "maxTriangles": 5000,
       "maxBytes": 184320,
       "bounds": {
@@ -224,137 +225,137 @@
       "preview": "assets/source/previews/environment/plaza-hall.png",
       "colorVerification": {
         "wood_dark": {
-          "paletteHex": "#6E4E37",
-          "measuredHex": "#6E4E37",
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
           "measuredSrgb255": [
-            110.0,
-            78.0,
-            55.0
+            156.0,
+            120.0,
+            96.0
           ],
           "measuredLinear": [
-            0.1559,
-            0.0762,
-            0.0382
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },
         "stone_dark": {
-          "paletteHex": "#878378",
-          "measuredHex": "#878378",
+          "paletteHex": "#A99CC4",
+          "measuredHex": "#A99CC4",
           "measuredSrgb255": [
-            135.0,
-            131.0,
-            120.0
+            169.0,
+            156.0,
+            196.0
           ],
           "measuredLinear": [
-            0.2423,
-            0.227,
-            0.1878
+            0.3968,
+            0.3325,
+            0.552
           ],
           "maxDiff255": 0.0
         },
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "stone": {
-          "paletteHex": "#B1ADA2",
-          "measuredHex": "#B1ADA2",
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
           "measuredSrgb255": [
-            177.0,
-            173.0,
-            162.0
+            200.0,
+            191.0,
+            224.0
           ],
           "measuredLinear": [
-            0.4397,
-            0.4179,
-            0.3613
+            0.5776,
+            0.521,
+            0.7454
           ],
           "maxDiff255": 0.0
         },
         "stone_light": {
-          "paletteHex": "#C7C3B8",
-          "measuredHex": "#C7C3B8",
+          "paletteHex": "#DDD5F0",
+          "measuredHex": "#DDD5F0",
           "measuredSrgb255": [
-            199.0,
-            195.0,
-            184.0
+            221.0,
+            213.0,
+            240.0
           ],
           "measuredLinear": [
-            0.5711,
-            0.5457,
-            0.4793
-          ],
-          "maxDiff255": 0.0
-        },
-        "cream_warm": {
-          "paletteHex": "#F5E9D4",
-          "measuredHex": "#F5E9D4",
-          "measuredSrgb255": [
-            245.0,
-            233.0,
-            212.0
-          ],
-          "measuredLinear": [
-            0.9131,
-            0.8148,
-            0.6584
+            0.7231,
+            0.6654,
+            0.8714
           ],
           "maxDiff255": 0.0
         },
         "coral": {
-          "paletteHex": "#FF7A59",
-          "measuredHex": "#FF7A59",
+          "paletteHex": "#EBA698",
+          "measuredHex": "#EBA698",
           "measuredSrgb255": [
-            255.0,
-            122.0,
-            89.0
+            235.0,
+            166.0,
+            152.0
           ],
           "measuredLinear": [
-            1.0,
-            0.1946,
-            0.0999
+            0.8308,
+            0.3813,
+            0.314
+          ],
+          "maxDiff255": 0.0
+        },
+        "cream_warm": {
+          "paletteHex": "#F7EFE2",
+          "measuredHex": "#F7EFE2",
+          "measuredSrgb255": [
+            247.0,
+            239.0,
+            226.0
+          ],
+          "measuredLinear": [
+            0.9301,
+            0.8632,
+            0.7605
           ],
           "maxDiff255": 0.0
         },
         "gold": {
-          "paletteHex": "#FFB020",
-          "measuredHex": "#FFB020",
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
           "measuredSrgb255": [
             255.0,
-            176.0,
-            32.0
+            224.0,
+            138.0
           ],
           "measuredLinear": [
             1.0,
-            0.4342,
-            0.0144
+            0.7454,
+            0.2542
           ],
           "maxDiff255": 0.0
         },
         "gold_light": {
-          "paletteHex": "#FFD166",
-          "measuredHex": "#FFD166",
+          "paletteHex": "#FFF0B8",
+          "measuredHex": "#FFF0B8",
           "measuredSrgb255": [
             255.0,
-            209.0,
-            102.0
+            240.0,
+            184.0
           ],
           "measuredLinear": [
             1.0,
-            0.6376,
-            0.1329
+            0.8714,
+            0.4793
           ],
           "maxDiff255": 0.0
         },
@@ -388,7 +389,7 @@
         }
       ],
       "triangles": 1284,
-      "bytes": 17720,
+      "bytes": 17800,
       "maxTriangles": 5000,
       "maxBytes": 184320,
       "bounds": {
@@ -406,137 +407,137 @@
       "preview": "assets/source/previews/environment/bakery.png",
       "colorVerification": {
         "ink": {
-          "paletteHex": "#3B2A22",
-          "measuredHex": "#3B2A22",
+          "paletteHex": "#564863",
+          "measuredHex": "#564863",
           "measuredSrgb255": [
-            59.0,
-            42.0,
-            34.0
+            86.0,
+            72.0,
+            99.0
           ],
           "measuredLinear": [
-            0.0437,
-            0.0232,
-            0.016
+            0.0931,
+            0.0648,
+            0.1248
           ],
           "maxDiff255": 0.0
         },
         "wood_dark": {
-          "paletteHex": "#6E4E37",
-          "measuredHex": "#6E4E37",
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
           "measuredSrgb255": [
-            110.0,
-            78.0,
-            55.0
+            156.0,
+            120.0,
+            96.0
           ],
           "measuredLinear": [
-            0.1559,
-            0.0762,
-            0.0382
-          ],
-          "maxDiff255": 0.0
-        },
-        "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
-          "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
-          ],
-          "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },
         "brick_dark": {
-          "paletteHex": "#9E5038",
-          "measuredHex": "#9E5038",
+          "paletteHex": "#C47B6B",
+          "measuredHex": "#C47B6B",
           "measuredSrgb255": [
-            158.0,
-            80.0,
-            56.0
+            196.0,
+            123.0,
+            107.0
           ],
           "measuredLinear": [
-            0.3419,
-            0.0802,
-            0.0395
+            0.552,
+            0.1981,
+            0.147
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood": {
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
+          "measuredSrgb255": [
+            198.0,
+            157.0,
+            128.0
+          ],
+          "measuredLinear": [
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "stone": {
-          "paletteHex": "#B1ADA2",
-          "measuredHex": "#B1ADA2",
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
           "measuredSrgb255": [
-            177.0,
-            173.0,
-            162.0
+            200.0,
+            191.0,
+            224.0
           ],
           "measuredLinear": [
-            0.4397,
-            0.4179,
-            0.3613
+            0.5776,
+            0.521,
+            0.7454
           ],
           "maxDiff255": 0.0
         },
         "brick": {
-          "paletteHex": "#C86D51",
-          "measuredHex": "#C86D51",
+          "paletteHex": "#DF9686",
+          "measuredHex": "#DF9686",
           "measuredSrgb255": [
-            200.0,
-            109.0,
-            81.0
+            223.0,
+            150.0,
+            134.0
           ],
           "measuredLinear": [
-            0.5776,
-            0.1529,
-            0.0823
+            0.7379,
+            0.305,
+            0.2384
           ],
           "maxDiff255": 0.0
         },
         "coral": {
-          "paletteHex": "#FF7A59",
-          "measuredHex": "#FF7A59",
+          "paletteHex": "#EBA698",
+          "measuredHex": "#EBA698",
           "measuredSrgb255": [
-            255.0,
-            122.0,
-            89.0
+            235.0,
+            166.0,
+            152.0
           ],
           "measuredLinear": [
-            1.0,
-            0.1946,
-            0.0999
+            0.8308,
+            0.3813,
+            0.314
           ],
           "maxDiff255": 0.0
         },
         "gold": {
-          "paletteHex": "#FFB020",
-          "measuredHex": "#FFB020",
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
           "measuredSrgb255": [
             255.0,
-            176.0,
-            32.0
+            224.0,
+            138.0
           ],
           "measuredLinear": [
             1.0,
-            0.4342,
-            0.0144
+            0.7454,
+            0.2542
           ],
           "maxDiff255": 0.0
         },
         "gold_light": {
-          "paletteHex": "#FFD166",
-          "measuredHex": "#FFD166",
+          "paletteHex": "#FFF0B8",
+          "measuredHex": "#FFF0B8",
           "measuredSrgb255": [
             255.0,
-            209.0,
-            102.0
+            240.0,
+            184.0
           ],
           "measuredLinear": [
             1.0,
-            0.6376,
-            0.1329
+            0.8714,
+            0.4793
           ],
           "maxDiff255": 0.0
         },
@@ -570,7 +571,7 @@
         }
       ],
       "triangles": 836,
-      "bytes": 11972,
+      "bytes": 12252,
       "maxTriangles": 5000,
       "maxBytes": 184320,
       "bounds": {
@@ -588,137 +589,137 @@
       "preview": "assets/source/previews/environment/library.png",
       "colorVerification": {
         "teal": {
-          "paletteHex": "#14B8A6",
-          "measuredHex": "#14B8A6",
+          "paletteHex": "#78CCC0",
+          "measuredHex": "#78CCC0",
           "measuredSrgb255": [
-            20.0,
-            184.0,
-            166.0
+            120.0,
+            204.0,
+            192.0
           ],
           "measuredLinear": [
-            0.007,
-            0.4793,
-            0.3813
+            0.1878,
+            0.6038,
+            0.5271
           ],
           "maxDiff255": 0.0
         },
         "violet_slate": {
-          "paletteHex": "#625684",
-          "measuredHex": "#625684",
+          "paletteHex": "#8A74B5",
+          "measuredHex": "#8A74B5",
           "measuredSrgb255": [
-            98.0,
-            86.0,
-            132.0
+            138.0,
+            116.0,
+            181.0
           ],
           "measuredLinear": [
-            0.1221,
-            0.0931,
-            0.2307
+            0.2542,
+            0.1746,
+            0.4621
           ],
           "maxDiff255": 0.0
         },
         "wood_dark": {
-          "paletteHex": "#6E4E37",
-          "measuredHex": "#6E4E37",
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
           "measuredSrgb255": [
-            110.0,
-            78.0,
-            55.0
+            156.0,
+            120.0,
+            96.0
           ],
           "measuredLinear": [
-            0.1559,
-            0.0762,
-            0.0382
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },
         "violet_muted": {
-          "paletteHex": "#7A68A6",
-          "measuredHex": "#7A68A6",
+          "paletteHex": "#AA92D6",
+          "measuredHex": "#AA92D6",
           "measuredSrgb255": [
-            122.0,
-            104.0,
-            166.0
+            170.0,
+            146.0,
+            214.0
           ],
           "measuredLinear": [
-            0.1946,
-            0.1384,
-            0.3813
+            0.402,
+            0.2874,
+            0.6724
           ],
           "maxDiff255": 0.0
         },
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "stone": {
-          "paletteHex": "#B1ADA2",
-          "measuredHex": "#B1ADA2",
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
           "measuredSrgb255": [
-            177.0,
-            173.0,
-            162.0
+            200.0,
+            191.0,
+            224.0
           ],
           "measuredLinear": [
-            0.4397,
-            0.4179,
-            0.3613
+            0.5776,
+            0.521,
+            0.7454
           ],
           "maxDiff255": 0.0
         },
         "coral": {
-          "paletteHex": "#FF7A59",
-          "measuredHex": "#FF7A59",
+          "paletteHex": "#EBA698",
+          "measuredHex": "#EBA698",
           "measuredSrgb255": [
-            255.0,
-            122.0,
-            89.0
+            235.0,
+            166.0,
+            152.0
           ],
           "measuredLinear": [
-            1.0,
-            0.1946,
-            0.0999
+            0.8308,
+            0.3813,
+            0.314
           ],
           "maxDiff255": 0.0
         },
         "gold": {
-          "paletteHex": "#FFB020",
-          "measuredHex": "#FFB020",
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
           "measuredSrgb255": [
             255.0,
-            176.0,
-            32.0
+            224.0,
+            138.0
           ],
           "measuredLinear": [
             1.0,
-            0.4342,
-            0.0144
+            0.7454,
+            0.2542
           ],
           "maxDiff255": 0.0
         },
         "gold_light": {
-          "paletteHex": "#FFD166",
-          "measuredHex": "#FFD166",
+          "paletteHex": "#FFF0B8",
+          "measuredHex": "#FFF0B8",
           "measuredSrgb255": [
             255.0,
-            209.0,
-            102.0
+            240.0,
+            184.0
           ],
           "measuredLinear": [
             1.0,
-            0.6376,
-            0.1329
+            0.8714,
+            0.4793
           ],
           "maxDiff255": 0.0
         },
@@ -752,7 +753,7 @@
         }
       ],
       "triangles": 692,
-      "bytes": 9808,
+      "bytes": 10068,
       "maxTriangles": 5000,
       "maxBytes": 184320,
       "bounds": {
@@ -770,137 +771,137 @@
       "preview": "assets/source/previews/environment/smithy.png",
       "colorVerification": {
         "ink": {
-          "paletteHex": "#3B2A22",
-          "measuredHex": "#3B2A22",
+          "paletteHex": "#564863",
+          "measuredHex": "#564863",
           "measuredSrgb255": [
-            59.0,
-            42.0,
-            34.0
+            86.0,
+            72.0,
+            99.0
           ],
           "measuredLinear": [
-            0.0437,
-            0.0232,
-            0.016
+            0.0931,
+            0.0648,
+            0.1248
           ],
           "maxDiff255": 0.0
         },
         "teal_muted": {
-          "paletteHex": "#4B9E96",
-          "measuredHex": "#4B9E96",
+          "paletteHex": "#6FB8AE",
+          "measuredHex": "#6FB8AE",
           "measuredSrgb255": [
-            75.0,
-            158.0,
-            150.0
+            111.0,
+            184.0,
+            174.0
           ],
           "measuredLinear": [
-            0.0704,
-            0.3419,
-            0.305
+            0.159,
+            0.4793,
+            0.4233
           ],
           "maxDiff255": 0.0
         },
         "wood_dark": {
-          "paletteHex": "#6E4E37",
-          "measuredHex": "#6E4E37",
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
           "measuredSrgb255": [
-            110.0,
-            78.0,
-            55.0
+            156.0,
+            120.0,
+            96.0
           ],
           "measuredLinear": [
-            0.1559,
-            0.0762,
-            0.0382
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },
         "stone_dark": {
-          "paletteHex": "#878378",
-          "measuredHex": "#878378",
+          "paletteHex": "#A99CC4",
+          "measuredHex": "#A99CC4",
           "measuredSrgb255": [
-            135.0,
-            131.0,
-            120.0
+            169.0,
+            156.0,
+            196.0
           ],
           "measuredLinear": [
-            0.2423,
-            0.227,
-            0.1878
+            0.3968,
+            0.3325,
+            0.552
           ],
           "maxDiff255": 0.0
         },
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "stone": {
-          "paletteHex": "#B1ADA2",
-          "measuredHex": "#B1ADA2",
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
           "measuredSrgb255": [
-            177.0,
-            173.0,
-            162.0
+            200.0,
+            191.0,
+            224.0
           ],
           "measuredLinear": [
-            0.4397,
-            0.4179,
-            0.3613
-          ],
-          "maxDiff255": 0.0
-        },
-        "wood_light": {
-          "paletteHex": "#B88C6A",
-          "measuredHex": "#B88C6A",
-          "measuredSrgb255": [
-            184.0,
-            140.0,
-            106.0
-          ],
-          "measuredLinear": [
-            0.4793,
-            0.2623,
-            0.1441
+            0.5776,
+            0.521,
+            0.7454
           ],
           "maxDiff255": 0.0
         },
         "stone_light": {
-          "paletteHex": "#C7C3B8",
-          "measuredHex": "#C7C3B8",
+          "paletteHex": "#DDD5F0",
+          "measuredHex": "#DDD5F0",
           "measuredSrgb255": [
-            199.0,
-            195.0,
-            184.0
+            221.0,
+            213.0,
+            240.0
           ],
           "measuredLinear": [
-            0.5711,
-            0.5457,
-            0.4793
+            0.7231,
+            0.6654,
+            0.8714
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_light": {
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
+          "measuredSrgb255": [
+            223.0,
+            185.0,
+            158.0
+          ],
+          "measuredLinear": [
+            0.7379,
+            0.4851,
+            0.3419
           ],
           "maxDiff255": 0.0
         },
         "coral": {
-          "paletteHex": "#FF7A59",
-          "measuredHex": "#FF7A59",
+          "paletteHex": "#EBA698",
+          "measuredHex": "#EBA698",
           "measuredSrgb255": [
-            255.0,
-            122.0,
-            89.0
+            235.0,
+            166.0,
+            152.0
           ],
           "measuredLinear": [
-            1.0,
-            0.1946,
-            0.0999
+            0.8308,
+            0.3813,
+            0.314
           ],
           "maxDiff255": 0.0
         }
@@ -919,7 +920,7 @@
         }
       ],
       "triangles": 892,
-      "bytes": 11316,
+      "bytes": 11536,
       "maxTriangles": 4000,
       "maxBytes": 184320,
       "bounds": {
@@ -937,92 +938,92 @@
       "preview": "assets/source/previews/environment/lake-pavilion.png",
       "colorVerification": {
         "teal_dark": {
-          "paletteHex": "#35736D",
-          "measuredHex": "#35736D",
+          "paletteHex": "#56968D",
+          "measuredHex": "#56968D",
           "measuredSrgb255": [
-            53.0,
-            115.0,
-            109.0
+            86.0,
+            150.0,
+            141.0
           ],
           "measuredLinear": [
-            0.0356,
-            0.1714,
-            0.1529
+            0.0931,
+            0.305,
+            0.2664
           ],
           "maxDiff255": 0.0
         },
         "teal_muted": {
-          "paletteHex": "#4B9E96",
-          "measuredHex": "#4B9E96",
+          "paletteHex": "#6FB8AE",
+          "measuredHex": "#6FB8AE",
           "measuredSrgb255": [
-            75.0,
-            158.0,
-            150.0
+            111.0,
+            184.0,
+            174.0
           ],
           "measuredLinear": [
-            0.0704,
-            0.3419,
-            0.305
+            0.159,
+            0.4793,
+            0.4233
           ],
           "maxDiff255": 0.0
         },
         "wood_dark": {
-          "paletteHex": "#6E4E37",
-          "measuredHex": "#6E4E37",
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
           "measuredSrgb255": [
-            110.0,
-            78.0,
-            55.0
+            156.0,
+            120.0,
+            96.0
           ],
           "measuredLinear": [
-            0.1559,
-            0.0762,
-            0.0382
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "wood_light": {
-          "paletteHex": "#B88C6A",
-          "measuredHex": "#B88C6A",
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
           "measuredSrgb255": [
-            184.0,
-            140.0,
-            106.0
+            223.0,
+            185.0,
+            158.0
           ],
           "measuredLinear": [
-            0.4793,
-            0.2623,
-            0.1441
+            0.7379,
+            0.4851,
+            0.3419
           ],
           "maxDiff255": 0.0
         },
         "gold": {
-          "paletteHex": "#FFB020",
-          "measuredHex": "#FFB020",
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
           "measuredSrgb255": [
             255.0,
-            176.0,
-            32.0
+            224.0,
+            138.0
           ],
           "measuredLinear": [
             1.0,
-            0.4342,
-            0.0144
+            0.7454,
+            0.2542
           ],
           "maxDiff255": 0.0
         }
@@ -1040,7 +1041,7 @@
         }
       ],
       "triangles": 436,
-      "bytes": 7764,
+      "bytes": 7784,
       "maxTriangles": 1200,
       "maxBytes": 61440,
       "bounds": {
@@ -1058,62 +1059,62 @@
       "preview": "assets/source/previews/environment/tree-round.png",
       "colorVerification": {
         "grass_dark": {
-          "paletteHex": "#3A9E57",
-          "measuredHex": "#3A9E57",
+          "paletteHex": "#64AD8E",
+          "measuredHex": "#64AD8E",
           "measuredSrgb255": [
-            58.0,
-            158.0,
-            87.0
+            100.0,
+            173.0,
+            142.0
           ],
           "measuredLinear": [
-            0.0423,
-            0.3419,
-            0.0953
+            0.1274,
+            0.4179,
+            0.2705
           ],
           "maxDiff255": 0.0
         },
         "grass": {
-          "paletteHex": "#5CC96B",
-          "measuredHex": "#5CC96B",
+          "paletteHex": "#7EC4A6",
+          "measuredHex": "#7EC4A6",
           "measuredSrgb255": [
-            92.0,
-            201.0,
-            107.0
+            126.0,
+            196.0,
+            166.0
           ],
           "measuredLinear": [
-            0.107,
-            0.5841,
-            0.147
+            0.2086,
+            0.552,
+            0.3813
           ],
           "maxDiff255": 0.0
         },
         "grass_light": {
-          "paletteHex": "#7EE089",
-          "measuredHex": "#7EE089",
+          "paletteHex": "#9CD4B5",
+          "measuredHex": "#9CD4B5",
           "measuredSrgb255": [
-            126.0,
-            224.0,
-            137.0
+            156.0,
+            212.0,
+            181.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.7454,
-            0.2502
+            0.3325,
+            0.6584,
+            0.4621
           ],
           "maxDiff255": 0.0
         },
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         }
@@ -1131,7 +1132,7 @@
         }
       ],
       "triangles": 464,
-      "bytes": 4244,
+      "bytes": 4248,
       "maxTriangles": 1200,
       "maxBytes": 61440,
       "bounds": {
@@ -1149,62 +1150,62 @@
       "preview": "assets/source/previews/environment/tree-layered.png",
       "colorVerification": {
         "grass_dark": {
-          "paletteHex": "#3A9E57",
-          "measuredHex": "#3A9E57",
+          "paletteHex": "#64AD8E",
+          "measuredHex": "#64AD8E",
           "measuredSrgb255": [
-            58.0,
-            158.0,
-            87.0
+            100.0,
+            173.0,
+            142.0
           ],
           "measuredLinear": [
-            0.0423,
-            0.3419,
-            0.0953
+            0.1274,
+            0.4179,
+            0.2705
           ],
           "maxDiff255": 0.0
         },
         "grass": {
-          "paletteHex": "#5CC96B",
-          "measuredHex": "#5CC96B",
+          "paletteHex": "#7EC4A6",
+          "measuredHex": "#7EC4A6",
           "measuredSrgb255": [
-            92.0,
-            201.0,
-            107.0
+            126.0,
+            196.0,
+            166.0
           ],
           "measuredLinear": [
-            0.107,
-            0.5841,
-            0.147
+            0.2086,
+            0.552,
+            0.3813
           ],
           "maxDiff255": 0.0
         },
         "wood_dark": {
-          "paletteHex": "#6E4E37",
-          "measuredHex": "#6E4E37",
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
           "measuredSrgb255": [
-            110.0,
-            78.0,
-            55.0
+            156.0,
+            120.0,
+            96.0
           ],
           "measuredLinear": [
-            0.1559,
-            0.0762,
-            0.0382
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },
         "grass_light": {
-          "paletteHex": "#7EE089",
-          "measuredHex": "#7EE089",
+          "paletteHex": "#9CD4B5",
+          "measuredHex": "#9CD4B5",
           "measuredSrgb255": [
-            126.0,
-            224.0,
-            137.0
+            156.0,
+            212.0,
+            181.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.7454,
-            0.2502
+            0.3325,
+            0.6584,
+            0.4621
           ],
           "maxDiff255": 0.0
         }
@@ -1222,7 +1223,7 @@
         }
       ],
       "triangles": 276,
-      "bytes": 5156,
+      "bytes": 5256,
       "maxTriangles": 1200,
       "maxBytes": 61440,
       "bounds": {
@@ -1240,47 +1241,47 @@
       "preview": "assets/source/previews/environment/tree-slender.png",
       "colorVerification": {
         "grass": {
-          "paletteHex": "#5CC96B",
-          "measuredHex": "#5CC96B",
+          "paletteHex": "#7EC4A6",
+          "measuredHex": "#7EC4A6",
           "measuredSrgb255": [
-            92.0,
-            201.0,
-            107.0
+            126.0,
+            196.0,
+            166.0
           ],
           "measuredLinear": [
-            0.107,
-            0.5841,
-            0.147
+            0.2086,
+            0.552,
+            0.3813
           ],
           "maxDiff255": 0.0
         },
         "grass_light": {
-          "paletteHex": "#7EE089",
-          "measuredHex": "#7EE089",
+          "paletteHex": "#9CD4B5",
+          "measuredHex": "#9CD4B5",
           "measuredSrgb255": [
-            126.0,
-            224.0,
-            137.0
+            156.0,
+            212.0,
+            181.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.7454,
-            0.2502
+            0.3325,
+            0.6584,
+            0.4621
           ],
           "maxDiff255": 0.0
         },
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         }
@@ -1298,7 +1299,7 @@
         }
       ],
       "triangles": 332,
-      "bytes": 6100,
+      "bytes": 6084,
       "maxTriangles": 1200,
       "maxBytes": 61440,
       "bounds": {
@@ -1316,47 +1317,47 @@
       "preview": "assets/source/previews/environment/tree-young.png",
       "colorVerification": {
         "grass": {
-          "paletteHex": "#5CC96B",
-          "measuredHex": "#5CC96B",
+          "paletteHex": "#7EC4A6",
+          "measuredHex": "#7EC4A6",
           "measuredSrgb255": [
-            92.0,
-            201.0,
-            107.0
+            126.0,
+            196.0,
+            166.0
           ],
           "measuredLinear": [
-            0.107,
-            0.5841,
-            0.147
+            0.2086,
+            0.552,
+            0.3813
           ],
           "maxDiff255": 0.0
         },
         "grass_light": {
-          "paletteHex": "#7EE089",
-          "measuredHex": "#7EE089",
+          "paletteHex": "#9CD4B5",
+          "measuredHex": "#9CD4B5",
           "measuredSrgb255": [
-            126.0,
-            224.0,
-            137.0
+            156.0,
+            212.0,
+            181.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.7454,
-            0.2502
+            0.3325,
+            0.6584,
+            0.4621
           ],
           "maxDiff255": 0.0
         },
         "wood_light": {
-          "paletteHex": "#B88C6A",
-          "measuredHex": "#B88C6A",
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
           "measuredSrgb255": [
-            184.0,
-            140.0,
-            106.0
+            223.0,
+            185.0,
+            158.0
           ],
           "measuredLinear": [
-            0.4793,
-            0.2623,
-            0.1441
+            0.7379,
+            0.4851,
+            0.3419
           ],
           "maxDiff255": 0.0
         }
@@ -1374,7 +1375,7 @@
         }
       ],
       "triangles": 240,
-      "bytes": 5436,
+      "bytes": 5496,
       "maxTriangles": 500,
       "maxBytes": 30720,
       "bounds": {
@@ -1392,47 +1393,47 @@
       "preview": "assets/source/previews/environment/bush.png",
       "colorVerification": {
         "grass_dark": {
-          "paletteHex": "#3A9E57",
-          "measuredHex": "#3A9E57",
+          "paletteHex": "#64AD8E",
+          "measuredHex": "#64AD8E",
           "measuredSrgb255": [
-            58.0,
-            158.0,
-            87.0
+            100.0,
+            173.0,
+            142.0
           ],
           "measuredLinear": [
-            0.0423,
-            0.3419,
-            0.0953
+            0.1274,
+            0.4179,
+            0.2705
           ],
           "maxDiff255": 0.0
         },
         "grass": {
-          "paletteHex": "#5CC96B",
-          "measuredHex": "#5CC96B",
+          "paletteHex": "#7EC4A6",
+          "measuredHex": "#7EC4A6",
           "measuredSrgb255": [
-            92.0,
-            201.0,
-            107.0
+            126.0,
+            196.0,
+            166.0
           ],
           "measuredLinear": [
-            0.107,
-            0.5841,
-            0.147
+            0.2086,
+            0.552,
+            0.3813
           ],
           "maxDiff255": 0.0
         },
         "grass_light": {
-          "paletteHex": "#7EE089",
-          "measuredHex": "#7EE089",
+          "paletteHex": "#9CD4B5",
+          "measuredHex": "#9CD4B5",
           "measuredSrgb255": [
-            126.0,
-            224.0,
-            137.0
+            156.0,
+            212.0,
+            181.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.7454,
-            0.2502
+            0.3325,
+            0.6584,
+            0.4621
           ],
           "maxDiff255": 0.0
         }
@@ -1443,7 +1444,7 @@
       "scale": 1,
       "collision": [],
       "triangles": 324,
-      "bytes": 6320,
+      "bytes": 6388,
       "maxTriangles": 600,
       "maxBytes": 35840,
       "bounds": {
@@ -1461,122 +1462,122 @@
       "preview": "assets/source/previews/environment/flower-bed.png",
       "colorVerification": {
         "grass_dark": {
-          "paletteHex": "#3A9E57",
-          "measuredHex": "#3A9E57",
+          "paletteHex": "#64AD8E",
+          "measuredHex": "#64AD8E",
           "measuredSrgb255": [
-            58.0,
-            158.0,
-            87.0
+            100.0,
+            173.0,
+            142.0
           ],
           "measuredLinear": [
-            0.0423,
-            0.3419,
-            0.0953
+            0.1274,
+            0.4179,
+            0.2705
           ],
           "maxDiff255": 0.0
         },
         "violet": {
-          "paletteHex": "#8E6BFF",
-          "measuredHex": "#8E6BFF",
+          "paletteHex": "#BEA5EB",
+          "measuredHex": "#BEA5EB",
           "measuredSrgb255": [
-            142.0,
-            107.0,
-            255.0
+            190.0,
+            165.0,
+            235.0
           ],
           "measuredLinear": [
-            0.2705,
-            0.147,
-            1.0
+            0.5149,
+            0.3763,
+            0.8308
           ],
           "maxDiff255": 0.0
         },
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
-          ],
-          "maxDiff255": 0.0
-        },
-        "coral": {
-          "paletteHex": "#FF7A59",
-          "measuredHex": "#FF7A59",
-          "measuredSrgb255": [
-            255.0,
-            122.0,
-            89.0
-          ],
-          "measuredLinear": [
-            1.0,
-            0.1946,
-            0.0999
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "blossom_pink": {
-          "paletteHex": "#FF8FA3",
-          "measuredHex": "#FF8FA3",
+          "paletteHex": "#E6A8C7",
+          "measuredHex": "#E6A8C7",
           "measuredSrgb255": [
-            255.0,
-            143.0,
-            163.0
+            230.0,
+            168.0,
+            199.0
           ],
           "measuredLinear": [
-            1.0,
-            0.2747,
-            0.3663
+            0.7913,
+            0.3916,
+            0.5711
           ],
           "maxDiff255": 0.0
         },
-        "gold": {
-          "paletteHex": "#FFB020",
-          "measuredHex": "#FFB020",
+        "coral": {
+          "paletteHex": "#EBA698",
+          "measuredHex": "#EBA698",
           "measuredSrgb255": [
-            255.0,
-            176.0,
-            32.0
+            235.0,
+            166.0,
+            152.0
           ],
           "measuredLinear": [
-            1.0,
-            0.4342,
-            0.0144
-          ],
-          "maxDiff255": 0.0
-        },
-        "gold_light": {
-          "paletteHex": "#FFD166",
-          "measuredHex": "#FFD166",
-          "measuredSrgb255": [
-            255.0,
-            209.0,
-            102.0
-          ],
-          "measuredLinear": [
-            1.0,
-            0.6376,
-            0.1329
+            0.8308,
+            0.3813,
+            0.314
           ],
           "maxDiff255": 0.0
         },
         "blossom_white": {
-          "paletteHex": "#FFFDF9",
-          "measuredHex": "#FFFDF9",
+          "paletteHex": "#FAF5FF",
+          "measuredHex": "#FAF5FF",
+          "measuredSrgb255": [
+            250.0,
+            245.0,
+            255.0
+          ],
+          "measuredLinear": [
+            0.956,
+            0.9131,
+            1.0
+          ],
+          "maxDiff255": 0.0
+        },
+        "gold": {
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
           "measuredSrgb255": [
             255.0,
-            253.0,
-            249.0
+            224.0,
+            138.0
           ],
           "measuredLinear": [
             1.0,
-            0.9823,
-            0.9473
+            0.7454,
+            0.2542
+          ],
+          "maxDiff255": 0.0
+        },
+        "gold_light": {
+          "paletteHex": "#FFF0B8",
+          "measuredHex": "#FFF0B8",
+          "measuredSrgb255": [
+            255.0,
+            240.0,
+            184.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.8714,
+            0.4793
           ],
           "maxDiff255": 0.0
         }
@@ -1587,7 +1588,7 @@
       "scale": 1,
       "collision": [],
       "triangles": 156,
-      "bytes": 4356,
+      "bytes": 4476,
       "maxTriangles": 160,
       "maxBytes": 15360,
       "bounds": {
@@ -1605,47 +1606,47 @@
       "preview": "assets/source/previews/environment/grass-tuft.png",
       "colorVerification": {
         "grass_dark": {
-          "paletteHex": "#3A9E57",
-          "measuredHex": "#3A9E57",
+          "paletteHex": "#64AD8E",
+          "measuredHex": "#64AD8E",
           "measuredSrgb255": [
-            58.0,
-            158.0,
-            87.0
+            100.0,
+            173.0,
+            142.0
           ],
           "measuredLinear": [
-            0.0423,
-            0.3419,
-            0.0953
+            0.1274,
+            0.4179,
+            0.2705
           ],
           "maxDiff255": 0.0
         },
         "grass": {
-          "paletteHex": "#5CC96B",
-          "measuredHex": "#5CC96B",
+          "paletteHex": "#7EC4A6",
+          "measuredHex": "#7EC4A6",
           "measuredSrgb255": [
-            92.0,
-            201.0,
-            107.0
+            126.0,
+            196.0,
+            166.0
           ],
           "measuredLinear": [
-            0.107,
-            0.5841,
-            0.147
+            0.2086,
+            0.552,
+            0.3813
           ],
           "maxDiff255": 0.0
         },
         "grass_light": {
-          "paletteHex": "#7EE089",
-          "measuredHex": "#7EE089",
+          "paletteHex": "#9CD4B5",
+          "measuredHex": "#9CD4B5",
           "measuredSrgb255": [
-            126.0,
-            224.0,
-            137.0
+            156.0,
+            212.0,
+            181.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.7454,
-            0.2502
+            0.3325,
+            0.6584,
+            0.4621
           ],
           "maxDiff255": 0.0
         }
@@ -1656,7 +1657,7 @@
       "scale": 1,
       "collision": [],
       "triangles": 144,
-      "bytes": 2548,
+      "bytes": 2544,
       "maxTriangles": 160,
       "maxBytes": 15360,
       "bounds": {
@@ -1674,47 +1675,47 @@
       "preview": "assets/source/previews/environment/mushroom.png",
       "colorVerification": {
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "wood_light": {
-          "paletteHex": "#B88C6A",
-          "measuredHex": "#B88C6A",
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
           "measuredSrgb255": [
-            184.0,
-            140.0,
-            106.0
+            223.0,
+            185.0,
+            158.0
           ],
           "measuredLinear": [
-            0.4793,
-            0.2623,
-            0.1441
+            0.7379,
+            0.4851,
+            0.3419
           ],
           "maxDiff255": 0.0
         },
         "coral_soft": {
-          "paletteHex": "#E06B4F",
-          "measuredHex": "#E06B4F",
+          "paletteHex": "#F0B8AC",
+          "measuredHex": "#F0B8AC",
           "measuredSrgb255": [
-            224.0,
-            107.0,
-            79.0
+            240.0,
+            184.0,
+            172.0
           ],
           "measuredLinear": [
-            0.7454,
-            0.147,
-            0.0782
+            0.8714,
+            0.4793,
+            0.4125
           ],
           "maxDiff255": 0.0
         },
@@ -1740,7 +1741,7 @@
       "scale": 1,
       "collision": [],
       "triangles": 112,
-      "bytes": 2236,
+      "bytes": 2240,
       "maxTriangles": 160,
       "maxBytes": 15360,
       "bounds": {
@@ -1758,47 +1759,47 @@
       "preview": "assets/source/previews/environment/pebbles.png",
       "colorVerification": {
         "stone_dark": {
-          "paletteHex": "#878378",
-          "measuredHex": "#878378",
+          "paletteHex": "#A99CC4",
+          "measuredHex": "#A99CC4",
           "measuredSrgb255": [
-            135.0,
-            131.0,
-            120.0
+            169.0,
+            156.0,
+            196.0
           ],
           "measuredLinear": [
-            0.2423,
-            0.227,
-            0.1878
+            0.3968,
+            0.3325,
+            0.552
           ],
           "maxDiff255": 0.0
         },
         "stone": {
-          "paletteHex": "#B1ADA2",
-          "measuredHex": "#B1ADA2",
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
           "measuredSrgb255": [
-            177.0,
-            173.0,
-            162.0
+            200.0,
+            191.0,
+            224.0
           ],
           "measuredLinear": [
-            0.4397,
-            0.4179,
-            0.3613
+            0.5776,
+            0.521,
+            0.7454
           ],
           "maxDiff255": 0.0
         },
         "stone_light": {
-          "paletteHex": "#C7C3B8",
-          "measuredHex": "#C7C3B8",
+          "paletteHex": "#DDD5F0",
+          "measuredHex": "#DDD5F0",
           "measuredSrgb255": [
-            199.0,
-            195.0,
-            184.0
+            221.0,
+            213.0,
+            240.0
           ],
           "measuredLinear": [
-            0.5711,
-            0.5457,
-            0.4793
+            0.7231,
+            0.6654,
+            0.8714
           ],
           "maxDiff255": 0.0
         }
@@ -1835,32 +1836,32 @@
       "preview": "assets/source/previews/environment/fence.png",
       "colorVerification": {
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "wood_light": {
-          "paletteHex": "#B88C6A",
-          "measuredHex": "#B88C6A",
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
           "measuredSrgb255": [
-            184.0,
-            140.0,
-            106.0
+            223.0,
+            185.0,
+            158.0
           ],
           "measuredLinear": [
-            0.4793,
-            0.2623,
-            0.1441
+            0.7379,
+            0.4851,
+            0.3419
           ],
           "maxDiff255": 0.0
         }
@@ -1896,17 +1897,17 @@
       "preview": "assets/source/previews/environment/rock-small.png",
       "colorVerification": {
         "stone": {
-          "paletteHex": "#B1ADA2",
-          "measuredHex": "#B1ADA2",
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
           "measuredSrgb255": [
-            177.0,
-            173.0,
-            162.0
+            200.0,
+            191.0,
+            224.0
           ],
           "measuredLinear": [
-            0.4397,
-            0.4179,
-            0.3613
+            0.5776,
+            0.521,
+            0.7454
           ],
           "maxDiff255": 0.0
         }
@@ -1924,7 +1925,7 @@
         }
       ],
       "triangles": 176,
-      "bytes": 5396,
+      "bytes": 5468,
       "maxTriangles": 600,
       "maxBytes": 35840,
       "bounds": {
@@ -1942,32 +1943,32 @@
       "preview": "assets/source/previews/environment/rock-large.png",
       "colorVerification": {
         "stone_dark": {
-          "paletteHex": "#878378",
-          "measuredHex": "#878378",
+          "paletteHex": "#A99CC4",
+          "measuredHex": "#A99CC4",
           "measuredSrgb255": [
-            135.0,
-            131.0,
-            120.0
+            169.0,
+            156.0,
+            196.0
           ],
           "measuredLinear": [
-            0.2423,
-            0.227,
-            0.1878
+            0.3968,
+            0.3325,
+            0.552
           ],
           "maxDiff255": 0.0
         },
         "stone": {
-          "paletteHex": "#B1ADA2",
-          "measuredHex": "#B1ADA2",
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
           "measuredSrgb255": [
-            177.0,
-            173.0,
-            162.0
+            200.0,
+            191.0,
+            224.0
           ],
           "measuredLinear": [
-            0.4397,
-            0.4179,
-            0.3613
+            0.5776,
+            0.521,
+            0.7454
           ],
           "maxDiff255": 0.0
         }
@@ -1985,7 +1986,7 @@
         }
       ],
       "triangles": 380,
-      "bytes": 5080,
+      "bytes": 5120,
       "maxTriangles": 650,
       "maxBytes": 40960,
       "bounds": {
@@ -2003,47 +2004,47 @@
       "preview": "assets/source/previews/environment/streetlight.png",
       "colorVerification": {
         "ink": {
-          "paletteHex": "#3B2A22",
-          "measuredHex": "#3B2A22",
+          "paletteHex": "#564863",
+          "measuredHex": "#564863",
           "measuredSrgb255": [
-            59.0,
-            42.0,
-            34.0
+            86.0,
+            72.0,
+            99.0
           ],
           "measuredLinear": [
-            0.0437,
-            0.0232,
-            0.016
+            0.0931,
+            0.0648,
+            0.1248
           ],
           "maxDiff255": 0.0
         },
         "wood_dark": {
-          "paletteHex": "#6E4E37",
-          "measuredHex": "#6E4E37",
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
           "measuredSrgb255": [
-            110.0,
-            78.0,
-            55.0
+            156.0,
+            120.0,
+            96.0
           ],
           "measuredLinear": [
-            0.1559,
-            0.0762,
-            0.0382
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },
         "gold": {
-          "paletteHex": "#FFB020",
-          "measuredHex": "#FFB020",
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
           "measuredSrgb255": [
             255.0,
-            176.0,
-            32.0
+            224.0,
+            138.0
           ],
           "measuredLinear": [
             1.0,
-            0.4342,
-            0.0144
+            0.7454,
+            0.2542
           ],
           "maxDiff255": 0.0
         }
@@ -2062,7 +2063,7 @@
         }
       ],
       "triangles": 352,
-      "bytes": 4868,
+      "bytes": 4928,
       "maxTriangles": 800,
       "maxBytes": 46080,
       "bounds": {
@@ -2080,47 +2081,47 @@
       "preview": "assets/source/previews/environment/bench.png",
       "colorVerification": {
         "wood_dark": {
-          "paletteHex": "#6E4E37",
-          "measuredHex": "#6E4E37",
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
           "measuredSrgb255": [
-            110.0,
-            78.0,
-            55.0
+            156.0,
+            120.0,
+            96.0
           ],
           "measuredLinear": [
-            0.1559,
-            0.0762,
-            0.0382
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "wood_light": {
-          "paletteHex": "#B88C6A",
-          "measuredHex": "#B88C6A",
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
           "measuredSrgb255": [
-            184.0,
-            140.0,
-            106.0
+            223.0,
+            185.0,
+            158.0
           ],
           "measuredLinear": [
-            0.4793,
-            0.2623,
-            0.1441
+            0.7379,
+            0.4851,
+            0.3419
           ],
           "maxDiff255": 0.0
         }
@@ -2138,7 +2139,7 @@
         }
       ],
       "triangles": 488,
-      "bytes": 6864,
+      "bytes": 6928,
       "maxTriangles": 1500,
       "maxBytes": 71680,
       "bounds": {
@@ -2156,92 +2157,92 @@
       "preview": "assets/source/previews/environment/well.png",
       "colorVerification": {
         "sea": {
-          "paletteHex": "#5BC0F8",
-          "measuredHex": "#5BC0F8",
+          "paletteHex": "#94D2CB",
+          "measuredHex": "#94D2CB",
           "measuredSrgb255": [
-            91.0,
-            192.0,
-            248.0
+            148.0,
+            210.0,
+            203.0
           ],
           "measuredLinear": [
-            0.1046,
-            0.5271,
-            0.9387
+            0.2961,
+            0.6445,
+            0.5972
           ],
           "maxDiff255": 0.0
         },
         "wood_dark": {
-          "paletteHex": "#6E4E37",
-          "measuredHex": "#6E4E37",
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
           "measuredSrgb255": [
-            110.0,
-            78.0,
-            55.0
+            156.0,
+            120.0,
+            96.0
           ],
           "measuredLinear": [
-            0.1559,
-            0.0762,
-            0.0382
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "stone": {
-          "paletteHex": "#B1ADA2",
-          "measuredHex": "#B1ADA2",
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
           "measuredSrgb255": [
-            177.0,
-            173.0,
-            162.0
+            200.0,
+            191.0,
+            224.0
           ],
           "measuredLinear": [
-            0.4397,
-            0.4179,
-            0.3613
-          ],
-          "maxDiff255": 0.0
-        },
-        "wood_light": {
-          "paletteHex": "#B88C6A",
-          "measuredHex": "#B88C6A",
-          "measuredSrgb255": [
-            184.0,
-            140.0,
-            106.0
-          ],
-          "measuredLinear": [
-            0.4793,
-            0.2623,
-            0.1441
+            0.5776,
+            0.521,
+            0.7454
           ],
           "maxDiff255": 0.0
         },
         "stone_light": {
-          "paletteHex": "#C7C3B8",
-          "measuredHex": "#C7C3B8",
+          "paletteHex": "#DDD5F0",
+          "measuredHex": "#DDD5F0",
           "measuredSrgb255": [
-            199.0,
-            195.0,
-            184.0
+            221.0,
+            213.0,
+            240.0
           ],
           "measuredLinear": [
-            0.5711,
-            0.5457,
-            0.4793
+            0.7231,
+            0.6654,
+            0.8714
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_light": {
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
+          "measuredSrgb255": [
+            223.0,
+            185.0,
+            158.0
+          ],
+          "measuredLinear": [
+            0.7379,
+            0.4851,
+            0.3419
           ],
           "maxDiff255": 0.0
         }
@@ -2260,7 +2261,7 @@
         }
       ],
       "triangles": 484,
-      "bytes": 7508,
+      "bytes": 7612,
       "maxTriangles": 2500,
       "maxBytes": 102400,
       "bounds": {
@@ -2278,92 +2279,92 @@
       "preview": "assets/source/previews/environment/festival-stage.png",
       "colorVerification": {
         "teal": {
-          "paletteHex": "#14B8A6",
-          "measuredHex": "#14B8A6",
+          "paletteHex": "#78CCC0",
+          "measuredHex": "#78CCC0",
           "measuredSrgb255": [
-            20.0,
-            184.0,
-            166.0
+            120.0,
+            204.0,
+            192.0
           ],
           "measuredLinear": [
-            0.007,
-            0.4793,
-            0.3813
+            0.1878,
+            0.6038,
+            0.5271
           ],
           "maxDiff255": 0.0
         },
         "wood_dark": {
-          "paletteHex": "#6E4E37",
-          "measuredHex": "#6E4E37",
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
           "measuredSrgb255": [
-            110.0,
-            78.0,
-            55.0
+            156.0,
+            120.0,
+            96.0
           ],
           "measuredLinear": [
-            0.1559,
-            0.0762,
-            0.0382
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },
         "violet": {
-          "paletteHex": "#8E6BFF",
-          "measuredHex": "#8E6BFF",
+          "paletteHex": "#BEA5EB",
+          "measuredHex": "#BEA5EB",
           "measuredSrgb255": [
-            142.0,
-            107.0,
-            255.0
+            190.0,
+            165.0,
+            235.0
           ],
           "measuredLinear": [
-            0.2705,
-            0.147,
-            1.0
+            0.5149,
+            0.3763,
+            0.8308
           ],
           "maxDiff255": 0.0
         },
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "coral": {
-          "paletteHex": "#FF7A59",
-          "measuredHex": "#FF7A59",
+          "paletteHex": "#EBA698",
+          "measuredHex": "#EBA698",
           "measuredSrgb255": [
-            255.0,
-            122.0,
-            89.0
+            235.0,
+            166.0,
+            152.0
           ],
           "measuredLinear": [
-            1.0,
-            0.1946,
-            0.0999
+            0.8308,
+            0.3813,
+            0.314
           ],
           "maxDiff255": 0.0
         },
         "gold": {
-          "paletteHex": "#FFB020",
-          "measuredHex": "#FFB020",
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
           "measuredSrgb255": [
             255.0,
-            176.0,
-            32.0
+            224.0,
+            138.0
           ],
           "measuredLinear": [
             1.0,
-            0.4342,
-            0.0144
+            0.7454,
+            0.2542
           ],
           "maxDiff255": 0.0
         }
@@ -2389,7 +2390,7 @@
         }
       ],
       "triangles": 352,
-      "bytes": 4780,
+      "bytes": 4768,
       "maxTriangles": 2500,
       "maxBytes": 102400,
       "bounds": {
@@ -2407,47 +2408,47 @@
       "preview": "assets/source/previews/environment/memory-gate.png",
       "colorVerification": {
         "stone_dark": {
-          "paletteHex": "#878378",
-          "measuredHex": "#878378",
+          "paletteHex": "#A99CC4",
+          "measuredHex": "#A99CC4",
           "measuredSrgb255": [
-            135.0,
-            131.0,
-            120.0
+            169.0,
+            156.0,
+            196.0
           ],
           "measuredLinear": [
-            0.2423,
-            0.227,
-            0.1878
+            0.3968,
+            0.3325,
+            0.552
           ],
           "maxDiff255": 0.0
         },
         "stone": {
-          "paletteHex": "#B1ADA2",
-          "measuredHex": "#B1ADA2",
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
           "measuredSrgb255": [
-            177.0,
-            173.0,
-            162.0
+            200.0,
+            191.0,
+            224.0
           ],
           "measuredLinear": [
-            0.4397,
-            0.4179,
-            0.3613
+            0.5776,
+            0.521,
+            0.7454
           ],
           "maxDiff255": 0.0
         },
         "stone_light": {
-          "paletteHex": "#C7C3B8",
-          "measuredHex": "#C7C3B8",
+          "paletteHex": "#DDD5F0",
+          "measuredHex": "#DDD5F0",
           "measuredSrgb255": [
-            199.0,
-            195.0,
-            184.0
+            221.0,
+            213.0,
+            240.0
           ],
           "measuredLinear": [
-            0.5711,
-            0.5457,
-            0.4793
+            0.7231,
+            0.6654,
+            0.8714
           ],
           "maxDiff255": 0.0
         }
@@ -2473,7 +2474,7 @@
         }
       ],
       "triangles": 836,
-      "bytes": 9004,
+      "bytes": 9052,
       "maxTriangles": 1800,
       "maxBytes": 81920,
       "bounds": {
@@ -2491,47 +2492,47 @@
       "preview": "assets/source/previews/environment/bridge.png",
       "colorVerification": {
         "wood_dark": {
-          "paletteHex": "#6E4E37",
-          "measuredHex": "#6E4E37",
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
           "measuredSrgb255": [
-            110.0,
-            78.0,
-            55.0
+            156.0,
+            120.0,
+            96.0
           ],
           "measuredLinear": [
-            0.1559,
-            0.0762,
-            0.0382
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "wood_light": {
-          "paletteHex": "#B88C6A",
-          "measuredHex": "#B88C6A",
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
           "measuredSrgb255": [
-            184.0,
-            140.0,
-            106.0
+            223.0,
+            185.0,
+            158.0
           ],
           "measuredLinear": [
-            0.4793,
-            0.2623,
-            0.1441
+            0.7379,
+            0.4851,
+            0.3419
           ],
           "maxDiff255": 0.0
         }
@@ -2542,7 +2543,7 @@
       "scale": 1,
       "collision": [],
       "triangles": 456,
-      "bytes": 4276,
+      "bytes": 4288,
       "maxTriangles": 500,
       "maxBytes": 30720,
       "bounds": {
@@ -2560,32 +2561,32 @@
       "preview": "assets/source/previews/environment/water-reed.png",
       "colorVerification": {
         "grass_dark": {
-          "paletteHex": "#3A9E57",
-          "measuredHex": "#3A9E57",
+          "paletteHex": "#64AD8E",
+          "measuredHex": "#64AD8E",
           "measuredSrgb255": [
-            58.0,
-            158.0,
-            87.0
+            100.0,
+            173.0,
+            142.0
           ],
           "measuredLinear": [
-            0.0423,
-            0.3419,
-            0.0953
+            0.1274,
+            0.4179,
+            0.2705
           ],
           "maxDiff255": 0.0
         },
         "wood_dark": {
-          "paletteHex": "#6E4E37",
-          "measuredHex": "#6E4E37",
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
           "measuredSrgb255": [
-            110.0,
-            78.0,
-            55.0
+            156.0,
+            120.0,
+            96.0
           ],
           "measuredLinear": [
-            0.1559,
-            0.0762,
-            0.0382
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         }
@@ -2596,7 +2597,7 @@
       "scale": 1,
       "collision": [],
       "triangles": 132,
-      "bytes": 3032,
+      "bytes": 3028,
       "maxTriangles": 500,
       "maxBytes": 30720,
       "bounds": {
@@ -2614,47 +2615,47 @@
       "preview": "assets/source/previews/environment/water-flower.png",
       "colorVerification": {
         "grass": {
-          "paletteHex": "#5CC96B",
-          "measuredHex": "#5CC96B",
+          "paletteHex": "#7EC4A6",
+          "measuredHex": "#7EC4A6",
           "measuredSrgb255": [
-            92.0,
-            201.0,
-            107.0
+            126.0,
+            196.0,
+            166.0
           ],
           "measuredLinear": [
-            0.107,
-            0.5841,
-            0.147
+            0.2086,
+            0.552,
+            0.3813
           ],
           "maxDiff255": 0.0
         },
         "blossom_pink": {
-          "paletteHex": "#FF8FA3",
-          "measuredHex": "#FF8FA3",
+          "paletteHex": "#E6A8C7",
+          "measuredHex": "#E6A8C7",
           "measuredSrgb255": [
-            255.0,
-            143.0,
-            163.0
+            230.0,
+            168.0,
+            199.0
           ],
           "measuredLinear": [
-            1.0,
-            0.2747,
-            0.3663
+            0.7913,
+            0.3916,
+            0.5711
           ],
           "maxDiff255": 0.0
         },
         "gold": {
-          "paletteHex": "#FFB020",
-          "measuredHex": "#FFB020",
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
           "measuredSrgb255": [
             255.0,
-            176.0,
-            32.0
+            224.0,
+            138.0
           ],
           "measuredLinear": [
             1.0,
-            0.4342,
-            0.0144
+            0.7454,
+            0.2542
           ],
           "maxDiff255": 0.0
         }
@@ -2672,7 +2673,7 @@
         }
       ],
       "triangles": 392,
-      "bytes": 5440,
+      "bytes": 5044,
       "maxTriangles": 500,
       "maxBytes": 30720,
       "bounds": {
@@ -2690,47 +2691,47 @@
       "preview": "assets/source/previews/environment/shore-post.png",
       "colorVerification": {
         "wood_dark": {
-          "paletteHex": "#6E4E37",
-          "measuredHex": "#6E4E37",
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
           "measuredSrgb255": [
-            110.0,
-            78.0,
-            55.0
+            156.0,
+            120.0,
+            96.0
           ],
           "measuredLinear": [
-            0.1559,
-            0.0762,
-            0.0382
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "cream_shadow": {
-          "paletteHex": "#E5D4B7",
-          "measuredHex": "#E5D4B7",
+          "paletteHex": "#E6D8C0",
+          "measuredHex": "#E6D8C0",
           "measuredSrgb255": [
-            229.0,
-            212.0,
-            183.0
+            230.0,
+            216.0,
+            192.0
           ],
           "measuredLinear": [
-            0.7835,
-            0.6584,
-            0.4735
+            0.7913,
+            0.6867,
+            0.5271
           ],
           "maxDiff255": 0.0
         }
@@ -2749,7 +2750,7 @@
         }
       ],
       "triangles": 104,
-      "bytes": 3360,
+      "bytes": 3380,
       "maxTriangles": 700,
       "maxBytes": 40960,
       "bounds": {
@@ -2767,62 +2768,62 @@
       "preview": "assets/source/previews/environment/bread-crate.png",
       "colorVerification": {
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "path": {
-          "paletteHex": "#F2B35E",
-          "measuredHex": "#F2B35E",
+          "paletteHex": "#EDC9A3",
+          "measuredHex": "#EDC9A3",
           "measuredSrgb255": [
-            242.0,
-            179.0,
-            94.0
+            237.0,
+            201.0,
+            163.0
           ],
           "measuredLinear": [
-            0.8879,
-            0.4508,
-            0.1119
+            0.8469,
+            0.5841,
+            0.3663
           ],
           "maxDiff255": 0.0
         },
         "gold": {
-          "paletteHex": "#FFB020",
-          "measuredHex": "#FFB020",
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
           "measuredSrgb255": [
             255.0,
-            176.0,
-            32.0
+            224.0,
+            138.0
           ],
           "measuredLinear": [
             1.0,
-            0.4342,
-            0.0144
+            0.7454,
+            0.2542
           ],
           "maxDiff255": 0.0
         },
         "gold_light": {
-          "paletteHex": "#FFD166",
-          "measuredHex": "#FFD166",
+          "paletteHex": "#FFF0B8",
+          "measuredHex": "#FFF0B8",
           "measuredSrgb255": [
             255.0,
-            209.0,
-            102.0
+            240.0,
+            184.0
           ],
           "measuredLinear": [
             1.0,
-            0.6376,
-            0.1329
+            0.8714,
+            0.4793
           ],
           "maxDiff255": 0.0
         }
@@ -2841,7 +2842,7 @@
         }
       ],
       "triangles": 308,
-      "bytes": 5916,
+      "bytes": 5960,
       "maxTriangles": 700,
       "maxBytes": 40960,
       "bounds": {
@@ -2859,62 +2860,62 @@
       "preview": "assets/source/previews/environment/book-stack.png",
       "colorVerification": {
         "teal": {
-          "paletteHex": "#14B8A6",
-          "measuredHex": "#14B8A6",
+          "paletteHex": "#78CCC0",
+          "measuredHex": "#78CCC0",
           "measuredSrgb255": [
-            20.0,
-            184.0,
-            166.0
+            120.0,
+            204.0,
+            192.0
           ],
           "measuredLinear": [
-            0.007,
-            0.4793,
-            0.3813
+            0.1878,
+            0.6038,
+            0.5271
           ],
           "maxDiff255": 0.0
         },
         "violet": {
-          "paletteHex": "#8E6BFF",
-          "measuredHex": "#8E6BFF",
+          "paletteHex": "#BEA5EB",
+          "measuredHex": "#BEA5EB",
           "measuredSrgb255": [
-            142.0,
-            107.0,
-            255.0
+            190.0,
+            165.0,
+            235.0
           ],
           "measuredLinear": [
-            0.2705,
-            0.147,
-            1.0
+            0.5149,
+            0.3763,
+            0.8308
           ],
           "maxDiff255": 0.0
         },
         "wood_light": {
-          "paletteHex": "#B88C6A",
-          "measuredHex": "#B88C6A",
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
           "measuredSrgb255": [
-            184.0,
-            140.0,
-            106.0
+            223.0,
+            185.0,
+            158.0
           ],
           "measuredLinear": [
-            0.4793,
-            0.2623,
-            0.1441
+            0.7379,
+            0.4851,
+            0.3419
           ],
           "maxDiff255": 0.0
         },
         "gold": {
-          "paletteHex": "#FFB020",
-          "measuredHex": "#FFB020",
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
           "measuredSrgb255": [
             255.0,
-            176.0,
-            32.0
+            224.0,
+            138.0
           ],
           "measuredLinear": [
             1.0,
-            0.4342,
-            0.0144
+            0.7454,
+            0.2542
           ],
           "maxDiff255": 0.0
         },
@@ -2948,7 +2949,7 @@
         }
       ],
       "triangles": 536,
-      "bytes": 8052,
+      "bytes": 8060,
       "maxTriangles": 700,
       "maxBytes": 40960,
       "bounds": {
@@ -2966,77 +2967,77 @@
       "preview": "assets/source/previews/environment/tool-rack.png",
       "colorVerification": {
         "wood_dark": {
-          "paletteHex": "#6E4E37",
-          "measuredHex": "#6E4E37",
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
           "measuredSrgb255": [
-            110.0,
-            78.0,
-            55.0
+            156.0,
+            120.0,
+            96.0
           ],
           "measuredLinear": [
-            0.1559,
-            0.0762,
-            0.0382
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },
         "stone_dark": {
-          "paletteHex": "#878378",
-          "measuredHex": "#878378",
+          "paletteHex": "#A99CC4",
+          "measuredHex": "#A99CC4",
           "measuredSrgb255": [
-            135.0,
-            131.0,
-            120.0
+            169.0,
+            156.0,
+            196.0
           ],
           "measuredLinear": [
-            0.2423,
-            0.227,
-            0.1878
+            0.3968,
+            0.3325,
+            0.552
           ],
           "maxDiff255": 0.0
         },
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "stone": {
-          "paletteHex": "#B1ADA2",
-          "measuredHex": "#B1ADA2",
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
           "measuredSrgb255": [
-            177.0,
-            173.0,
-            162.0
+            200.0,
+            191.0,
+            224.0
           ],
           "measuredLinear": [
-            0.4397,
-            0.4179,
-            0.3613
+            0.5776,
+            0.521,
+            0.7454
           ],
           "maxDiff255": 0.0
         },
         "wood_light": {
-          "paletteHex": "#B88C6A",
-          "measuredHex": "#B88C6A",
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
           "measuredSrgb255": [
-            184.0,
-            140.0,
-            106.0
+            223.0,
+            185.0,
+            158.0
           ],
           "measuredLinear": [
-            0.4793,
-            0.2623,
-            0.1441
+            0.7379,
+            0.4851,
+            0.3419
           ],
           "maxDiff255": 0.0
         }
@@ -3054,7 +3055,7 @@
         }
       ],
       "triangles": 368,
-      "bytes": 4084,
+      "bytes": 4072,
       "maxTriangles": 700,
       "maxBytes": 40960,
       "bounds": {
@@ -3072,32 +3073,32 @@
       "preview": "assets/source/previews/environment/barrel.png",
       "colorVerification": {
         "ink": {
-          "paletteHex": "#3B2A22",
-          "measuredHex": "#3B2A22",
+          "paletteHex": "#564863",
+          "measuredHex": "#564863",
           "measuredSrgb255": [
-            59.0,
-            42.0,
-            34.0
+            86.0,
+            72.0,
+            99.0
           ],
           "measuredLinear": [
-            0.0437,
-            0.0232,
-            0.016
+            0.0931,
+            0.0648,
+            0.1248
           ],
           "maxDiff255": 0.0
         },
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         }
@@ -3116,7 +3117,7 @@
         }
       ],
       "triangles": 320,
-      "bytes": 5224,
+      "bytes": 5140,
       "maxTriangles": 700,
       "maxBytes": 40960,
       "bounds": {
@@ -3134,62 +3135,62 @@
       "preview": "assets/source/previews/environment/log.png",
       "colorVerification": {
         "wood_dark": {
-          "paletteHex": "#6E4E37",
-          "measuredHex": "#6E4E37",
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
           "measuredSrgb255": [
-            110.0,
-            78.0,
-            55.0
+            156.0,
+            120.0,
+            96.0
           ],
           "measuredLinear": [
-            0.1559,
-            0.0762,
-            0.0382
+            0.3325,
+            0.1878,
+            0.117
           ],
           "maxDiff255": 0.0
         },
         "grass_light": {
-          "paletteHex": "#7EE089",
-          "measuredHex": "#7EE089",
+          "paletteHex": "#9CD4B5",
+          "measuredHex": "#9CD4B5",
           "measuredSrgb255": [
-            126.0,
-            224.0,
-            137.0
+            156.0,
+            212.0,
+            181.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.7454,
-            0.2502
+            0.3325,
+            0.6584,
+            0.4621
           ],
           "maxDiff255": 0.0
         },
         "wood": {
-          "paletteHex": "#9B7355",
-          "measuredHex": "#9B7355",
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
           "measuredSrgb255": [
-            155.0,
-            115.0,
-            85.0
+            198.0,
+            157.0,
+            128.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1714,
-            0.0908
+            0.5647,
+            0.3372,
+            0.2159
           ],
           "maxDiff255": 0.0
         },
         "cream_warm": {
-          "paletteHex": "#F5E9D4",
-          "measuredHex": "#F5E9D4",
+          "paletteHex": "#F7EFE2",
+          "measuredHex": "#F7EFE2",
           "measuredSrgb255": [
-            245.0,
-            233.0,
-            212.0
+            247.0,
+            239.0,
+            226.0
           ],
           "measuredLinear": [
-            0.9131,
-            0.8148,
-            0.6584
+            0.9301,
+            0.8632,
+            0.7605
           ],
           "maxDiff255": 0.0
         }
@@ -3198,22 +3199,22 @@
     "terrain": {
       "path": "assets/abraxas/environment/terrain.glb",
       "scale": 1,
-      "coast": "organic-v1",
+      "coast": "organic-v3",
       "collision": [],
-      "triangles": 17208,
-      "bytes": 96332,
+      "triangles": 18246,
+      "bytes": 96900,
       "maxTriangles": 30000,
       "maxBytes": 1048576,
       "bounds": {
-        "width": 39.0778,
-        "depth": 34.3814,
+        "width": 38.3077,
+        "depth": 38.0369,
         "height": 0.35,
-        "minX": -19.5389,
-        "maxX": 19.5389,
+        "minX": -18.8726,
+        "maxX": 19.4351,
         "minY": -0.35,
         "maxY": 0,
-        "minZ": -17.1907,
-        "maxZ": 17.1907
+        "minZ": -18.8651,
+        "maxZ": 19.1718
       },
       "materials": 1,
       "vertexColorAttribute": "COLOR_0",
@@ -3222,92 +3223,92 @@
       "preview": "assets/source/previews/environment/terrain.png",
       "colorVerification": {
         "grass": {
-          "paletteHex": "#5CC96B",
-          "measuredHex": "#5CC96B",
+          "paletteHex": "#7EC4A6",
+          "measuredHex": "#7EC4A6",
           "measuredSrgb255": [
-            92.0,
-            201.0,
-            107.0
+            126.0,
+            196.0,
+            166.0
           ],
           "measuredLinear": [
-            0.107,
-            0.5841,
-            0.147
+            0.2086,
+            0.552,
+            0.3813
           ],
           "maxDiff255": 0.0
         },
         "grass_dark": {
-          "paletteHex": "#3A9E57",
-          "measuredHex": "#3B9F58",
+          "paletteHex": "#64AD8E",
+          "measuredHex": "#66AD8F",
           "measuredSrgb255": [
-            59.0,
-            159.0,
-            88.0
+            102.0,
+            173.0,
+            143.0
           ],
           "measuredLinear": [
-            0.0437,
-            0.3467,
-            0.0976
+            0.1329,
+            0.4179,
+            0.2747
           ],
-          "maxDiff255": 1.0
+          "maxDiff255": 2.0
         },
         "grass_light": {
-          "paletteHex": "#7EE089",
-          "measuredHex": "#7EE089",
+          "paletteHex": "#9CD4B5",
+          "measuredHex": "#9CD4B5",
           "measuredSrgb255": [
-            126.0,
-            224.0,
-            137.0
+            156.0,
+            212.0,
+            181.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.7454,
-            0.2502
+            0.3325,
+            0.6584,
+            0.4621
           ],
           "maxDiff255": 0.0
         },
         "path": {
-          "paletteHex": "#F2B35E",
-          "measuredHex": "#F2B35E",
+          "paletteHex": "#EDC9A3",
+          "measuredHex": "#EDC9A3",
           "measuredSrgb255": [
-            242.0,
-            179.0,
-            94.0
+            237.0,
+            201.0,
+            163.0
           ],
           "measuredLinear": [
-            0.8879,
-            0.4508,
-            0.1119
+            0.8469,
+            0.5841,
+            0.3663
           ],
           "maxDiff255": 0.0
         },
         "path_center": {
-          "paletteHex": "#F5C276",
-          "measuredHex": "#F5C276",
+          "paletteHex": "#F3D5B5",
+          "measuredHex": "#F3D5B5",
           "measuredSrgb255": [
-            245.0,
-            194.0,
-            118.0
+            243.0,
+            213.0,
+            181.0
           ],
           "measuredLinear": [
-            0.9131,
-            0.5395,
-            0.1812
+            0.8963,
+            0.6654,
+            0.4621
           ],
           "maxDiff255": 0.0
         },
         "path_edge": {
-          "paletteHex": "#D99B4E",
-          "measuredHex": "#D99B4E",
+          "paletteHex": "#D9B087",
+          "measuredHex": "#D9B087",
           "measuredSrgb255": [
             217.0,
-            155.0,
-            78.0
+            176.0,
+            135.0
           ],
           "measuredLinear": [
             0.6939,
-            0.3278,
-            0.0762
+            0.4342,
+            0.2423
           ],
           "maxDiff255": 0.0
         }
@@ -3318,7 +3319,7 @@
       "scale": 1,
       "collision": [],
       "triangles": 280,
-      "bytes": 7396,
+      "bytes": 7516,
       "maxTriangles": 300,
       "maxBytes": 20000,
       "bounds": {
@@ -3335,78 +3336,78 @@
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/flowers.png",
       "colorVerification": {
-        "#3A9E57": {
-          "paletteHex": "#3A9E57",
-          "measuredHex": "#3A9E57",
+        "#64AD8E": {
+          "paletteHex": "#64AD8E",
+          "measuredHex": "#64AD8E",
           "measuredSrgb255": [
-            58.0,
-            158.0,
-            87.0
+            100.0,
+            173.0,
+            142.0
           ],
           "measuredLinear": [
-            0.0423,
-            0.3419,
-            0.0953
+            0.1274,
+            0.4179,
+            0.2705
           ],
           "maxDiff255": 0.0
         },
-        "#5CC96B": {
-          "paletteHex": "#5CC96B",
-          "measuredHex": "#5CC96B",
-          "measuredSrgb255": [
-            92.0,
-            201.0,
-            107.0
-          ],
-          "measuredLinear": [
-            0.107,
-            0.5841,
-            0.147
-          ],
-          "maxDiff255": 0.0
-        },
-        "#7EE089": {
-          "paletteHex": "#7EE089",
-          "measuredHex": "#7EE089",
+        "#7EC4A6": {
+          "paletteHex": "#7EC4A6",
+          "measuredHex": "#7EC4A6",
           "measuredSrgb255": [
             126.0,
-            224.0,
-            137.0
+            196.0,
+            166.0
           ],
           "measuredLinear": [
             0.2086,
+            0.552,
+            0.3813
+          ],
+          "maxDiff255": 0.0
+        },
+        "#9CD4B5": {
+          "paletteHex": "#9CD4B5",
+          "measuredHex": "#9CD4B5",
+          "measuredSrgb255": [
+            156.0,
+            212.0,
+            181.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.6584,
+            0.4621
+          ],
+          "maxDiff255": 0.0
+        },
+        "#E8949A": {
+          "paletteHex": "#E8949A",
+          "measuredHex": "#E8949A",
+          "measuredSrgb255": [
+            232.0,
+            148.0,
+            154.0
+          ],
+          "measuredLinear": [
+            0.807,
+            0.2961,
+            0.3231
+          ],
+          "maxDiff255": 0.0
+        },
+        "#FFE08A": {
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
+          "measuredSrgb255": [
+            255.0,
+            224.0,
+            138.0
+          ],
+          "measuredLinear": [
+            1.0,
             0.7454,
-            0.2502
-          ],
-          "maxDiff255": 0.0
-        },
-        "#FF5A5F": {
-          "paletteHex": "#FF5A5F",
-          "measuredHex": "#FF5A5F",
-          "measuredSrgb255": [
-            255.0,
-            90.0,
-            95.0
-          ],
-          "measuredLinear": [
-            1.0,
-            0.1022,
-            0.1144
-          ],
-          "maxDiff255": 0.0
-        },
-        "#FFD23F": {
-          "paletteHex": "#FFD23F",
-          "measuredHex": "#FFD23F",
-          "measuredSrgb255": [
-            255.0,
-            210.0,
-            63.0
-          ],
-          "measuredLinear": [
-            1.0,
-            0.6445,
-            0.0497
+            0.2542
           ],
           "maxDiff255": 0.0
         }
@@ -3417,7 +3418,7 @@
       "scale": 1,
       "collision": [],
       "triangles": 280,
-      "bytes": 7492,
+      "bytes": 7488,
       "maxTriangles": 300,
       "maxBytes": 20000,
       "bounds": {
@@ -3434,78 +3435,78 @@
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/flowers.png",
       "colorVerification": {
-        "#3A9E57": {
-          "paletteHex": "#3A9E57",
-          "measuredHex": "#3A9E57",
+        "#64AD8E": {
+          "paletteHex": "#64AD8E",
+          "measuredHex": "#64AD8E",
           "measuredSrgb255": [
-            58.0,
-            158.0,
-            87.0
+            100.0,
+            173.0,
+            142.0
           ],
           "measuredLinear": [
-            0.0423,
-            0.3419,
-            0.0953
+            0.1274,
+            0.4179,
+            0.2705
           ],
           "maxDiff255": 0.0
         },
-        "#5CC96B": {
-          "paletteHex": "#5CC96B",
-          "measuredHex": "#5CC96B",
+        "#7EC4A6": {
+          "paletteHex": "#7EC4A6",
+          "measuredHex": "#7EC4A6",
           "measuredSrgb255": [
-            92.0,
-            201.0,
+            126.0,
+            196.0,
+            166.0
+          ],
+          "measuredLinear": [
+            0.2086,
+            0.552,
+            0.3813
+          ],
+          "maxDiff255": 0.0
+        },
+        "#9CD4B5": {
+          "paletteHex": "#9CD4B5",
+          "measuredHex": "#9CD4B5",
+          "measuredSrgb255": [
+            156.0,
+            212.0,
+            181.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.6584,
+            0.4621
+          ],
+          "maxDiff255": 0.0
+        },
+        "#E5A86B": {
+          "paletteHex": "#E5A86B",
+          "measuredHex": "#E5A86B",
+          "measuredSrgb255": [
+            229.0,
+            168.0,
             107.0
           ],
           "measuredLinear": [
-            0.107,
-            0.5841,
+            0.7835,
+            0.3916,
             0.147
           ],
           "maxDiff255": 0.0
         },
-        "#7EE089": {
-          "paletteHex": "#7EE089",
-          "measuredHex": "#7EE089",
-          "measuredSrgb255": [
-            126.0,
-            224.0,
-            137.0
-          ],
-          "measuredLinear": [
-            0.2086,
-            0.7454,
-            0.2502
-          ],
-          "maxDiff255": 0.0
-        },
-        "#E07A38": {
-          "paletteHex": "#E07A38",
-          "measuredHex": "#E07A38",
-          "measuredSrgb255": [
-            224.0,
-            122.0,
-            56.0
-          ],
-          "measuredLinear": [
-            0.7454,
-            0.1946,
-            0.0395
-          ],
-          "maxDiff255": 0.0
-        },
-        "#FFD23F": {
-          "paletteHex": "#FFD23F",
-          "measuredHex": "#FFD23F",
+        "#FFE08A": {
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
           "measuredSrgb255": [
             255.0,
-            210.0,
-            63.0
+            224.0,
+            138.0
           ],
           "measuredLinear": [
             1.0,
-            0.6445,
-            0.0497
+            0.7454,
+            0.2542
           ],
           "maxDiff255": 0.0
         }
@@ -3516,7 +3517,7 @@
       "scale": 1,
       "collision": [],
       "triangles": 280,
-      "bytes": 7500,
+      "bytes": 7480,
       "maxTriangles": 300,
       "maxBytes": 20000,
       "bounds": {
@@ -3533,63 +3534,63 @@
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/flowers.png",
       "colorVerification": {
-        "#3A9E57": {
-          "paletteHex": "#3A9E57",
-          "measuredHex": "#3A9E57",
+        "#64AD8E": {
+          "paletteHex": "#64AD8E",
+          "measuredHex": "#64AD8E",
           "measuredSrgb255": [
-            58.0,
-            158.0,
-            87.0
+            100.0,
+            173.0,
+            142.0
           ],
           "measuredLinear": [
-            0.0423,
-            0.3419,
-            0.0953
+            0.1274,
+            0.4179,
+            0.2705
           ],
           "maxDiff255": 0.0
         },
-        "#5CC96B": {
-          "paletteHex": "#5CC96B",
-          "measuredHex": "#5CC96B",
-          "measuredSrgb255": [
-            92.0,
-            201.0,
-            107.0
-          ],
-          "measuredLinear": [
-            0.107,
-            0.5841,
-            0.147
-          ],
-          "maxDiff255": 0.0
-        },
-        "#7EE089": {
-          "paletteHex": "#7EE089",
-          "measuredHex": "#7EE089",
+        "#7EC4A6": {
+          "paletteHex": "#7EC4A6",
+          "measuredHex": "#7EC4A6",
           "measuredSrgb255": [
             126.0,
-            224.0,
-            137.0
+            196.0,
+            166.0
           ],
           "measuredLinear": [
             0.2086,
-            0.7454,
-            0.2502
+            0.552,
+            0.3813
           ],
           "maxDiff255": 0.0
         },
-        "#FFB020": {
-          "paletteHex": "#FFB020",
-          "measuredHex": "#FFB020",
+        "#9CD4B5": {
+          "paletteHex": "#9CD4B5",
+          "measuredHex": "#9CD4B5",
+          "measuredSrgb255": [
+            156.0,
+            212.0,
+            181.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.6584,
+            0.4621
+          ],
+          "maxDiff255": 0.0
+        },
+        "#FFE08A": {
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
           "measuredSrgb255": [
             255.0,
-            176.0,
-            32.0
+            224.0,
+            138.0
           ],
           "measuredLinear": [
             1.0,
-            0.4342,
-            0.0144
+            0.7454,
+            0.2542
           ],
           "maxDiff255": 0.0
         },
@@ -3615,7 +3616,7 @@
       "scale": 1,
       "collision": [],
       "triangles": 280,
-      "bytes": 7444,
+      "bytes": 7408,
       "maxTriangles": 300,
       "maxBytes": 20000,
       "bounds": {
@@ -3632,78 +3633,78 @@
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/flowers.png",
       "colorVerification": {
-        "#3A9E57": {
-          "paletteHex": "#3A9E57",
-          "measuredHex": "#3A9E57",
+        "#64AD8E": {
+          "paletteHex": "#64AD8E",
+          "measuredHex": "#64AD8E",
           "measuredSrgb255": [
-            58.0,
-            158.0,
-            87.0
+            100.0,
+            173.0,
+            142.0
           ],
           "measuredLinear": [
-            0.0423,
-            0.3419,
-            0.0953
+            0.1274,
+            0.4179,
+            0.2705
           ],
           "maxDiff255": 0.0
         },
-        "#5CC96B": {
-          "paletteHex": "#5CC96B",
-          "measuredHex": "#5CC96B",
-          "measuredSrgb255": [
-            92.0,
-            201.0,
-            107.0
-          ],
-          "measuredLinear": [
-            0.107,
-            0.5841,
-            0.147
-          ],
-          "maxDiff255": 0.0
-        },
-        "#7EE089": {
-          "paletteHex": "#7EE089",
-          "measuredHex": "#7EE089",
+        "#7EC4A6": {
+          "paletteHex": "#7EC4A6",
+          "measuredHex": "#7EC4A6",
           "measuredSrgb255": [
             126.0,
+            196.0,
+            166.0
+          ],
+          "measuredLinear": [
+            0.2086,
+            0.552,
+            0.3813
+          ],
+          "maxDiff255": 0.0
+        },
+        "#9CD4B5": {
+          "paletteHex": "#9CD4B5",
+          "measuredHex": "#9CD4B5",
+          "measuredSrgb255": [
+            156.0,
+            212.0,
+            181.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.6584,
+            0.4621
+          ],
+          "maxDiff255": 0.0
+        },
+        "#E6A8C7": {
+          "paletteHex": "#E6A8C7",
+          "measuredHex": "#E6A8C7",
+          "measuredSrgb255": [
+            230.0,
+            168.0,
+            199.0
+          ],
+          "measuredLinear": [
+            0.7913,
+            0.3916,
+            0.5711
+          ],
+          "maxDiff255": 0.0
+        },
+        "#FFE08A": {
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
+          "measuredSrgb255": [
+            255.0,
             224.0,
-            137.0
+            138.0
           ],
           "measuredLinear": [
-            0.2086,
+            1.0,
             0.7454,
-            0.2502
-          ],
-          "maxDiff255": 0.0
-        },
-        "#FF7EB6": {
-          "paletteHex": "#FF7EB6",
-          "measuredHex": "#FF7EB6",
-          "measuredSrgb255": [
-            255.0,
-            126.0,
-            182.0
-          ],
-          "measuredLinear": [
-            1.0,
-            0.2086,
-            0.4678
-          ],
-          "maxDiff255": 0.0
-        },
-        "#FFD23F": {
-          "paletteHex": "#FFD23F",
-          "measuredHex": "#FFD23F",
-          "measuredSrgb255": [
-            255.0,
-            210.0,
-            63.0
-          ],
-          "measuredLinear": [
-            1.0,
-            0.6445,
-            0.0497
+            0.2542
           ],
           "maxDiff255": 0.0
         }
@@ -3714,7 +3715,7 @@
       "scale": 1,
       "collision": [],
       "triangles": 280,
-      "bytes": 7532,
+      "bytes": 7428,
       "maxTriangles": 300,
       "maxBytes": 20000,
       "bounds": {
@@ -3731,78 +3732,78 @@
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/flowers.png",
       "colorVerification": {
-        "#3A9E57": {
-          "paletteHex": "#3A9E57",
-          "measuredHex": "#3A9E57",
+        "#64AD8E": {
+          "paletteHex": "#64AD8E",
+          "measuredHex": "#64AD8E",
           "measuredSrgb255": [
-            58.0,
-            158.0,
-            87.0
+            100.0,
+            173.0,
+            142.0
           ],
           "measuredLinear": [
-            0.0423,
-            0.3419,
-            0.0953
+            0.1274,
+            0.4179,
+            0.2705
           ],
           "maxDiff255": 0.0
         },
-        "#5CC96B": {
-          "paletteHex": "#5CC96B",
-          "measuredHex": "#5CC96B",
-          "measuredSrgb255": [
-            92.0,
-            201.0,
-            107.0
-          ],
-          "measuredLinear": [
-            0.107,
-            0.5841,
-            0.147
-          ],
-          "maxDiff255": 0.0
-        },
-        "#7EE089": {
-          "paletteHex": "#7EE089",
-          "measuredHex": "#7EE089",
+        "#7EC4A6": {
+          "paletteHex": "#7EC4A6",
+          "measuredHex": "#7EC4A6",
           "measuredSrgb255": [
             126.0,
-            224.0,
-            137.0
+            196.0,
+            166.0
           ],
           "measuredLinear": [
             0.2086,
-            0.7454,
-            0.2502
+            0.552,
+            0.3813
           ],
           "maxDiff255": 0.0
         },
-        "#9B7BFF": {
-          "paletteHex": "#9B7BFF",
-          "measuredHex": "#9B7BFF",
+        "#9CD4B5": {
+          "paletteHex": "#9CD4B5",
+          "measuredHex": "#9CD4B5",
           "measuredSrgb255": [
-            155.0,
-            123.0,
-            255.0
+            156.0,
+            212.0,
+            181.0
           ],
           "measuredLinear": [
-            0.3278,
-            0.1981,
-            1.0
+            0.3325,
+            0.6584,
+            0.4621
           ],
           "maxDiff255": 0.0
         },
-        "#FFD23F": {
-          "paletteHex": "#FFD23F",
-          "measuredHex": "#FFD23F",
+        "#BEA5EB": {
+          "paletteHex": "#BEA5EB",
+          "measuredHex": "#BEA5EB",
+          "measuredSrgb255": [
+            190.0,
+            165.0,
+            235.0
+          ],
+          "measuredLinear": [
+            0.5149,
+            0.3763,
+            0.8308
+          ],
+          "maxDiff255": 0.0
+        },
+        "#FFE08A": {
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
           "measuredSrgb255": [
             255.0,
-            210.0,
-            63.0
+            224.0,
+            138.0
           ],
           "measuredLinear": [
             1.0,
-            0.6445,
-            0.0497
+            0.7454,
+            0.2542
           ],
           "maxDiff255": 0.0
         }
@@ -3813,7 +3814,7 @@
       "scale": 1,
       "collision": [],
       "triangles": 112,
-      "bytes": 3676,
+      "bytes": 3904,
       "maxTriangles": 120,
       "maxBytes": 15360,
       "bounds": {
@@ -3830,48 +3831,200 @@
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/flowers.png",
       "colorVerification": {
-        "#3A9E57": {
-          "paletteHex": "#3A9E57",
-          "measuredHex": "#3A9E57",
+        "#64AD8E": {
+          "paletteHex": "#64AD8E",
+          "measuredHex": "#64AD8E",
           "measuredSrgb255": [
-            58.0,
-            158.0,
-            87.0
+            100.0,
+            173.0,
+            142.0
           ],
           "measuredLinear": [
-            0.0423,
-            0.3419,
-            0.0953
+            0.1274,
+            0.4179,
+            0.2705
           ],
           "maxDiff255": 0.0
         },
-        "#5CC96B": {
-          "paletteHex": "#5CC96B",
-          "measuredHex": "#5CC96B",
-          "measuredSrgb255": [
-            92.0,
-            201.0,
-            107.0
-          ],
-          "measuredLinear": [
-            0.107,
-            0.5841,
-            0.147
-          ],
-          "maxDiff255": 0.0
-        },
-        "#7EE089": {
-          "paletteHex": "#7EE089",
-          "measuredHex": "#7EE089",
+        "#7EC4A6": {
+          "paletteHex": "#7EC4A6",
+          "measuredHex": "#7EC4A6",
           "measuredSrgb255": [
             126.0,
-            224.0,
-            137.0
+            196.0,
+            166.0
           ],
           "measuredLinear": [
             0.2086,
+            0.552,
+            0.3813
+          ],
+          "maxDiff255": 0.0
+        },
+        "#9CD4B5": {
+          "paletteHex": "#9CD4B5",
+          "measuredHex": "#9CD4B5",
+          "measuredSrgb255": [
+            156.0,
+            212.0,
+            181.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.6584,
+            0.4621
+          ],
+          "maxDiff255": 0.0
+        }
+      }
+    },
+    "signboard": {
+      "path": "assets/abraxas/environment/signboard.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0.0,
+          "z": 0.0,
+          "halfX": 0.22,
+          "halfZ": 0.1
+        }
+      ],
+      "triangles": 464,
+      "bytes": 7136,
+      "maxTriangles": 600,
+      "maxBytes": 35840,
+      "bounds": {
+        "width": 0.48,
+        "depth": 0.22,
+        "height": 0.9,
+        "minY": 0.0,
+        "maxY": 0.9
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "colorAttributeType": "FLOAT_COLOR",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/landmarks-props.png",
+      "preview": "assets/source/previews/environment/signboard.png",
+      "colorVerification": {
+        "teal_muted": {
+          "paletteHex": "#6FB8AE",
+          "measuredHex": "#6FB8AE",
+          "measuredSrgb255": [
+            111.0,
+            184.0,
+            174.0
+          ],
+          "measuredLinear": [
+            0.159,
+            0.4793,
+            0.4233
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_dark": {
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
+          "measuredSrgb255": [
+            156.0,
+            120.0,
+            96.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.1878,
+            0.117
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood": {
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
+          "measuredSrgb255": [
+            198.0,
+            157.0,
+            128.0
+          ],
+          "measuredLinear": [
+            0.5647,
+            0.3372,
+            0.2159
+          ],
+          "maxDiff255": 0.0
+        },
+        "stone": {
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
+          "measuredSrgb255": [
+            200.0,
+            191.0,
+            224.0
+          ],
+          "measuredLinear": [
+            0.5776,
+            0.521,
+            0.7454
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_light": {
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
+          "measuredSrgb255": [
+            223.0,
+            185.0,
+            158.0
+          ],
+          "measuredLinear": [
+            0.7379,
+            0.4851,
+            0.3419
+          ],
+          "maxDiff255": 0.0
+        },
+        "coral": {
+          "paletteHex": "#EBA698",
+          "measuredHex": "#EBA698",
+          "measuredSrgb255": [
+            235.0,
+            166.0,
+            152.0
+          ],
+          "measuredLinear": [
+            0.8308,
+            0.3813,
+            0.314
+          ],
+          "maxDiff255": 0.0
+        },
+        "gold": {
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
+          "measuredSrgb255": [
+            255.0,
+            224.0,
+            138.0
+          ],
+          "measuredLinear": [
+            1.0,
             0.7454,
-            0.2502
+            0.2542
+          ],
+          "maxDiff255": 0.0
+        },
+        "cream": {
+          "paletteHex": "#FFF8EC",
+          "measuredHex": "#FFF8EC",
+          "measuredSrgb255": [
+            255.0,
+            248.0,
+            236.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.9387,
+            0.8388
           ],
           "maxDiff255": 0.0
         }

@@ -53,39 +53,90 @@ PHASE1_KEYS = [
 ]
 
 # -----------------------------------------------------------------------------
-# Palette & Color Utilities (sRGB -> Linear sRGB)
+# Palette & Color Utilities (sRGB -> Linear sRGB, Dream Palette v2)
 # -----------------------------------------------------------------------------
 PALETTE = {
     "cream": "#FFF8EC",
-    "cream_warm": "#F5E9D4",
-    "cream_shadow": "#E5D4B7",
-    "ink": "#3B2A22",
-    "wood": "#9B7355",
-    "wood_light": "#B88C6A",
-    "wood_dark": "#6E4E37",
-    "stone": "#B1ADA2",
-    "stone_light": "#C7C3B8",
-    "stone_dark": "#878378",
-    "grass": "#5CC96B",
-    "grass_dark": "#3A9E57",
-    "grass_light": "#7EE089",
-    "path": "#F2B35E",
-    "sea": "#5BC0F8",
-    "coral": "#FF7A59",
-    "coral_soft": "#E06B4F",
-    "gold": "#FFB020",
-    "gold_light": "#FFD166",
-    "violet": "#8E6BFF",
-    "violet_muted": "#7A68A6",
-    "violet_slate": "#625684",
-    "teal": "#14B8A6",
-    "teal_muted": "#4B9E96",
-    "teal_dark": "#35736D",
-    "brick": "#C86D51",
-    "brick_dark": "#9E5038",
-    "blossom_pink": "#FF8FA3",
-    "blossom_white": "#FFFDF9",
+    "cream_warm": "#F7EFE2",
+    "cream_shadow": "#E6D8C0",
+    "ink": "#564863",
+    "wood": "#C69D80",
+    "wood_light": "#DFB99E",
+    "wood_dark": "#9C7860",
+    "stone": "#C8BFE0",
+    "stone_light": "#DDD5F0",
+    "stone_dark": "#A99CC4",
+    "grass": "#7EC4A6",
+    "grass_dark": "#64AD8E",
+    "grass_light": "#9CD4B5",
+    "path": "#EDC9A3",
+    "sea": "#94D2CB",
+    "coral": "#EBA698",
+    "coral_soft": "#F0B8AC",
+    "gold": "#FFE08A",
+    "gold_light": "#FFF0B8",
+    "violet": "#BEA5EB",
+    "violet_muted": "#AA92D6",
+    "violet_slate": "#8A74B5",
+    "teal": "#78CCC0",
+    "teal_muted": "#6FB8AE",
+    "teal_dark": "#56968D",
+    "brick": "#DF9686",
+    "brick_dark": "#C47B6B",
+    "blossom_pink": "#E6A8C7",
+    "blossom_white": "#FAF5FF",
 }
+
+DREAM_V1_PALETTE = {
+    "sky": "#DDD8F1",
+    "mist": "#EDE8F8",
+    "ground_grass": "#B5D9C4",
+    "cream": "#FFF8EC",
+    "cream_warm": "#F7EFE2",
+    "cream_shadow": "#E8DEC8",
+    "ink": "#5A4E66",
+    "wood": "#C8A992",
+    "wood_light": "#DEC3AE",
+    "wood_dark": "#9E8270",
+    "stone": "#CFC8DC",
+    "stone_light": "#E2DCEE",
+    "stone_dark": "#B3AAC4",
+    "grass": "#98C9B5",
+    "grass_dark": "#7EB39D",
+    "grass_light": "#B5D9C4",
+    "path": "#EBD3B9",
+    "sea": "#A9D8D3",
+    "coral": "#E7B6AB",
+    "coral_soft": "#EFC7BE",
+    "gold": "#FFE8A3",
+    "gold_light": "#FFF3C9",
+    "violet": "#C8B6E8",
+    "violet_muted": "#B5A3D6",
+    "violet_slate": "#9585B5",
+    "teal": "#8FD1C8",
+    "teal_muted": "#82BEB6",
+    "teal_dark": "#689E97",
+    "brick": "#E2A89B",
+    "brick_dark": "#C98F82",
+    "blossom_pink": "#E8BDD4",
+    "blossom_white": "#FAF5FF",
+}
+
+DREAM_V2_CORE_9_CHIPS = [
+    {"role_ko": "하늘 (Sky)", "label": "SKY", "hex": "#D8D0F0", "v1Hex": "#DDD8F1", "desc": "안개 라벤더"},
+    {"role_ko": "안개 (Mist)", "label": "MIST", "hex": "#EAE3F7", "v1Hex": "#EDE8F8", "desc": "연보라 안개빛"},
+    {"role_ko": "지면 풀 (Grass)", "label": "GRASS", "hex": "#9CD4B5", "v1Hex": "#B5D9C4", "desc": "파스텔 민트 풀 (+22.7% 채도)"},
+    {"role_ko": "흙길 (Path)", "label": "PATH", "hex": "#EDC9A3", "v1Hex": "#EBD3B9", "desc": "따뜻한 모래 살구 (+21.0% 채도)"},
+    {"role_ko": "건물 벽 (Wall)", "label": "WALL", "hex": "#FFF8EC", "v1Hex": "#FFF8EC", "desc": "따뜻한 크림"},
+    {"role_ko": "지붕 (Roof)", "label": "ROOF", "hex": "#EBA698", "v1Hex": "#E7B6AB", "desc": "복숭아 테라코타 (+21.4% 채도)"},
+    {"role_ko": "나뭇잎 (Leaves)", "label": "LEAVES", "hex": "#7EC4A6", "v1Hex": "#98C9B5", "desc": "세이지 민트 수관 (+19.2% 채도)"},
+    {"role_ko": "물 (Water)", "label": "WATER", "hex": "#94D2CB", "v1Hex": "#A9D8D3", "desc": "맑은 아쿠아 민트"},
+    {"role_ko": "빛 (Light)", "label": "LIGHT", "hex": "#FFE08A", "v1Hex": "#FFE8A3", "desc": "은은한 별빛 앰버"},
+]
+
+CHARACTER_REP_HEX = "#FF7A59"
+CHARACTER_HEAD_HEX = "#FFF8EC"
+CHARACTER_EYE_HEX = "#3B2A22"
 
 
 def srgb_to_linear(c: float) -> float:
@@ -350,6 +401,13 @@ ASSET_SPECS = {
         "max_kib": 40,
         "collision": [{"type": "box", "x": 0.0, "z": 0.0, "halfX": 0.30, "halfZ": 0.10}],
         "concept_sheet": "life-props.png",
+    },
+    "signboard": {
+        "dims": (0.48, 0.22, 0.90),
+        "max_tri": 600,
+        "max_kib": 35,
+        "collision": [{"type": "box", "x": 0.0, "z": 0.0, "halfX": 0.22, "halfZ": 0.10}],
+        "concept_sheet": "landmarks-props.png",
     },
 }
 
@@ -1014,6 +1072,24 @@ def build_log(pb: PartBuilder):
     pb.add_sphere(0.028, (-0.10, 0.0, 0.22), PALETTE["grass_light"], subdivisions=1, scale=(1.3, 0.7, 0.8))
 
 
+def build_signboard(pb: PartBuilder):
+    # Stone collar base at ground level (z=0)
+    pb.add_cylinder(0.11, 0.095, 0.08, (0.0, 0.02, 0.04), PALETTE["stone"], vertices=8, bevel=0.01)
+    # Sturdy wooden post + rounded top finial (~0.90m total height)
+    pb.add_cylinder(0.052, 0.046, 0.84, (0.0, 0.02, 0.44), PALETTE["wood_dark"], vertices=8, bevel=0.008)
+    pb.add_sphere(0.058, (0.0, 0.02, 0.865), PALETTE["wood"], subdivisions=1, scale=(1.0, 1.0, 0.72))
+    # Rounded-corner wooden signboard frame & protective top cap (-Y is front)
+    pb.add_box((0.46, 0.065, 0.32), (0.0, -0.02, 0.60), PALETTE["wood"], bevel=0.026, segments=2)
+    pb.add_box((0.48, 0.095, 0.045), (0.0, -0.025, 0.77), PALETTE["wood_dark"], bevel=0.012, segments=1)
+    # Inset warm cream notice board face
+    pb.add_box((0.38, 0.035, 0.24), (0.0, -0.045, 0.60), PALETTE["cream"], bevel=0.014, segments=1)
+    # Original pastel zone emblem & direction bars on the board face
+    pb.add_box((0.26, 0.02, 0.04), (-0.03, -0.062, 0.66), PALETTE["coral"], bevel=0.0, segments=0)
+    pb.add_box((0.20, 0.02, 0.032), (-0.06, -0.062, 0.595), PALETTE["teal_muted"], bevel=0.0, segments=0)
+    pb.add_box((0.24, 0.02, 0.032), (-0.04, -0.062, 0.535), PALETTE["wood_light"], bevel=0.0, segments=0)
+    pb.add_cylinder(0.028, 0.028, 0.025, (0.125, -0.060, 0.60), PALETTE["gold"], vertices=8, rot_euler=(math.pi * 0.5, 0.0, 0.0), bevel=0.0, segments=0)
+
+
 BUILDERS = {
     "entrance-house": build_entrance_house,
     "plaza-hall": build_plaza_hall,
@@ -1047,6 +1123,7 @@ BUILDERS = {
     "tool-rack": build_tool_rack,
     "barrel": build_barrel,
     "log": build_log,
+    "signboard": build_signboard,
 }
 
 
@@ -1311,7 +1388,7 @@ def render_zone_showcase(built_objects, studio, out_name="preview-zone-entrance-
     pb = PartBuilder()
     pb.add_box((8.0, 8.0, 0.08), (0.0, 0.0, -0.04), PALETTE["grass"], bevel=0.01)
     pb.add_box((2.2, 6.8, 0.02), (0.0, 0.0, 0.005), PALETTE["path"], bevel=0.005)
-    pb.add_cylinder(0.16, 0.14, 0.40, (0.0, -0.8, 0.20), PALETTE["coral"], vertices=12, bevel=0.01)
+    pb.add_cylinder(0.16, 0.14, 0.40, (0.0, -0.8, 0.20), CHARACTER_REP_HEX, vertices=12, bevel=0.01)
     pb.add_sphere(0.14, (0.0, -0.8, 0.50), PALETTE["cream"], subdivisions=2)
     ground_obj = pb.build_combined_object("_ShowcaseGround", (8.0, 8.0, 0.64), lock_x_bounds=True, z_ground_offset=-0.04)
 
@@ -1322,6 +1399,7 @@ def render_zone_showcase(built_objects, studio, out_name="preview-zone-entrance-
         "well": (-0.9, 0.4, 0.0),
         "bench": (0.9, 0.4, 0.0),
         "streetlight": (-0.9, -0.8, 0.0),
+        "signboard": (0.85, -0.35, 0.0),
         "fence": (-1.8, -1.6, 0.0),
         "tree-round": (-2.3, 1.6, 0.0),
         "bush": (1.6, -1.1, 0.0),
@@ -1353,6 +1431,498 @@ def render_zone_showcase(built_objects, studio, out_name="preview-zone-entrance-
         obj.hide_render = True
     scene.render.resolution_x = 512
     scene.render.resolution_y = 512
+
+
+# -----------------------------------------------------------------------------
+# Dream Palette v2 Preview & Comparison Rendering (dream-v2.png & dream-v2-compare.png)
+# -----------------------------------------------------------------------------
+FONT_5X7 = {
+    "#": ["01010", "11111", "01010", "01010", "11111", "01010", "00000"],
+    "0": ["01110", "10001", "10011", "10101", "11001", "10001", "01110"],
+    "1": ["00100", "01100", "00100", "00100", "00100", "00100", "01110"],
+    "2": ["01110", "10001", "00001", "00110", "01000", "10000", "11111"],
+    "3": ["11110", "00001", "00001", "01110", "00001", "00001", "11110"],
+    "4": ["00010", "00110", "01010", "10010", "11111", "00010", "00010"],
+    "5": ["11111", "10000", "10000", "11110", "00001", "00001", "11110"],
+    "6": ["01110", "10000", "10000", "11110", "10001", "10001", "01110"],
+    "7": ["11111", "00001", "00010", "00100", "01000", "01000", "01000"],
+    "8": ["01110", "10001", "10001", "01110", "10001", "10001", "01110"],
+    "9": ["01110", "10001", "10001", "01111", "00001", "00001", "01110"],
+    "A": ["01110", "10001", "10001", "11111", "10001", "10001", "10001"],
+    "B": ["11110", "10001", "10001", "11110", "10001", "10001", "11110"],
+    "C": ["01110", "10001", "10000", "10000", "10000", "10001", "01110"],
+    "D": ["11110", "10001", "10001", "10001", "10001", "10001", "11110"],
+    "E": ["11111", "10000", "10000", "11110", "10000", "10000", "11111"],
+    "F": ["11111", "10000", "10000", "11110", "10000", "10000", "10000"],
+    "G": ["01110", "10001", "10000", "10111", "10001", "10001", "01110"],
+    "H": ["10001", "10001", "10001", "11111", "10001", "10001", "10001"],
+    "I": ["01110", "00100", "00100", "00100", "00100", "00100", "01110"],
+    "K": ["10001", "10010", "10100", "11000", "10100", "10010", "10001"],
+    "L": ["10000", "10000", "10000", "10000", "10000", "10000", "11111"],
+    "M": ["10001", "11011", "10101", "10101", "10001", "10001", "10001"],
+    "N": ["10001", "11001", "10101", "10011", "10001", "10001", "10001"],
+    "O": ["01110", "10001", "10001", "10001", "10001", "10001", "01110"],
+    "P": ["11110", "10001", "10001", "11110", "10000", "10000", "10000"],
+    "R": ["11110", "10001", "10001", "11110", "10100", "10010", "10001"],
+    "S": ["01111", "10000", "10000", "01110", "00001", "00001", "11110"],
+    "T": ["11111", "00100", "00100", "00100", "00100", "00100", "00100"],
+    "U": ["10001", "10001", "10001", "10001", "10001", "10001", "01110"],
+    "V": ["10001", "10001", "10001", "10001", "10001", "01010", "00100"],
+    "W": ["10001", "10001", "10001", "10101", "10101", "11011", "10001"],
+    "X": ["10001", "10001", "01010", "00100", "01010", "10001", "10001"],
+    "Y": ["10001", "10001", "01010", "00100", "00100", "00100", "00100"],
+    " ": ["00000", "00000", "00000", "00000", "00000", "00000", "00000"],
+}
+
+
+def hex_to_srgb_float(hex_str: str):
+    h = hex_str.lstrip("#")
+    return (
+        int(h[0:2], 16) / 255.0,
+        int(h[2:4], 16) / 255.0,
+        int(h[4:6], 16) / 255.0,
+    )
+
+
+def draw_text_on_buffer(buf, width, height, text, start_x, top_y, scale, rgba):
+    cursor_x = start_x
+    for ch in text.upper():
+        glyph = FONT_5X7.get(ch, FONT_5X7[" "])
+        for gy, row_str in enumerate(glyph):
+            for gx, bit in enumerate(row_str):
+                if bit == "1":
+                    for sy in range(scale):
+                        py = height - 1 - (top_y + gy * scale + sy)
+                        if py < 0 or py >= height:
+                            continue
+                        for sx in range(scale):
+                            px = cursor_x + gx * scale + sx
+                            if 0 <= px < width:
+                                idx = (py * width + px) * 4
+                                buf[idx : idx + 4] = rgba
+        cursor_x += 6 * scale
+
+
+def fill_rounded_rect(buf, width, height, x0, y0_top, rw, rh, radius, rgba):
+    for dy in range(rh):
+        py = height - 1 - (y0_top + dy)
+        if py < 0 or py >= height:
+            continue
+        for dx in range(rw):
+            px = x0 + dx
+            if px < 0 or px >= width:
+                continue
+            inside = True
+            if dx < radius and dy < radius:
+                inside = (dx - radius) ** 2 + (dy - radius) ** 2 <= radius ** 2
+            elif dx >= rw - radius and dy < radius:
+                inside = (dx - (rw - radius - 1)) ** 2 + (dy - radius) ** 2 <= radius ** 2
+            elif dx < radius and dy >= rh - radius:
+                inside = (dx - radius) ** 2 + (dy - (rh - radius - 1)) ** 2 <= radius ** 2
+            elif dx >= rw - radius and dy >= rh - radius:
+                inside = (dx - (rw - radius - 1)) ** 2 + (dy - (rh - radius - 1)) ** 2 <= radius ** 2
+            if inside:
+                idx = (py * width + px) * 4
+                buf[idx : idx + 4] = rgba
+
+
+def build_mannequin_06m():
+    """Builds a 0.60m SD 3-head-tall rounded mannequin keeping signature #FF7A59 coral."""
+    pb = PartBuilder()
+    pb.add_cylinder(0.052, 0.048, 0.16, (-0.055, 0.0, 0.08), CHARACTER_REP_HEX, vertices=10, bevel=0.008)
+    pb.add_cylinder(0.052, 0.048, 0.16, (0.055, 0.0, 0.08), CHARACTER_REP_HEX, vertices=10, bevel=0.008)
+    pb.add_cylinder(0.135, 0.105, 0.25, (0.0, 0.0, 0.27), CHARACTER_REP_HEX, vertices=14, bevel=0.015)
+    pb.add_cylinder(0.038, 0.032, 0.17, (-0.145, 0.0, 0.27), CHARACTER_REP_HEX, vertices=8, rot_euler=(0.0, 0.22, 0.0), bevel=0.006)
+    pb.add_cylinder(0.038, 0.032, 0.17, (0.145, 0.0, 0.27), CHARACTER_REP_HEX, vertices=8, rot_euler=(0.0, -0.22, 0.0), bevel=0.006)
+    pb.add_sphere(0.105, (0.0, 0.0, 0.495), CHARACTER_HEAD_HEX, subdivisions=2, scale=(1.04, 1.0, 0.98))
+    pb.add_sphere(0.015, (-0.038, -0.098, 0.495), CHARACTER_EYE_HEX, subdivisions=1)
+    pb.add_sphere(0.015, (0.038, -0.098, 0.495), CHARACTER_EYE_HEX, subdivisions=1)
+    return pb.build_combined_object("_Mannequin06m", (0.34, 0.23, 0.60), lock_x_bounds=True, z_ground_offset=0.0)
+
+
+def build_dream_showcase_ground(name: str, grass_hex: str, path_hex: str, edge_hex: str):
+    pb = PartBuilder()
+    pb.add_cylinder(4.35, 4.10, 0.24, (0.0, 0.15, -0.12), edge_hex, vertices=24, bevel=0.02)
+    pb.add_cylinder(4.20, 4.20, 0.08, (0.0, 0.15, -0.03), grass_hex, vertices=24, bevel=0.02)
+    pb.add_cylinder(1.55, 1.55, 0.025, (0.0, -0.35, 0.01), path_hex, vertices=20, bevel=0.008)
+    pb.add_box((1.35, 2.80, 0.025), (-0.45, -1.20, 0.01), path_hex, rot_euler=(0.0, 0.0, -0.18), bevel=0.008)
+    pb.add_box((1.90, 1.15, 0.025), (0.85, -0.15, 0.01), path_hex, rot_euler=(0.0, 0.0, 0.25), bevel=0.008)
+    return pb.build_combined_object(name, (8.6, 8.6, 0.26), lock_x_bounds=True, z_ground_offset=-0.24)
+
+
+def apply_dream_mist_postfx(pixels, width, height, mist_hex="#EAE3F7", glow_hex="#FFE08A", petal_hex="#E6A8C7", max_mist=0.26):
+    mist_r, mist_g, mist_b = hex_to_srgb_float(mist_hex)
+    glow_r, glow_g, glow_b = hex_to_srgb_float(glow_hex)
+    petal_r, petal_g, petal_b = hex_to_srgb_float(petal_hex)
+
+    glow_points = [
+        (0.51, 0.56, 0.11, 0.26),
+        (0.70, 0.49, 0.10, 0.17),
+        (0.32, 0.34, 0.06, 0.15),
+        (0.64, 0.28, 0.05, 0.14),
+    ]
+    petals = [
+        (0.22, 0.28, 0.012),
+        (0.38, 0.21, 0.010),
+        (0.76, 0.31, 0.011),
+        (0.18, 0.64, 0.011),
+        (0.82, 0.67, 0.012),
+    ]
+
+    out = list(pixels)
+    for y in range(height):
+        ny = y / float(height - 1)
+        for x in range(width):
+            nx = x / float(width - 1)
+            idx = (y * width + x) * 4
+            r, g, b, a = out[idx], out[idx + 1], out[idx + 2], out[idx + 3]
+
+            dx = (nx - 0.50) * 1.15
+            dy = (ny - 0.44) * 1.15
+            radial = math.sqrt(dx * dx + dy * dy)
+            top_haze = max(0.0, (ny - 0.72) / 0.28) * 0.18
+            edge_haze = max(0.0, (radial - 0.56) / 0.44) ** 1.6 * 0.22
+            mist_amt = max(0.0, min(max_mist, top_haze + edge_haze))
+
+            r = r * (1.0 - mist_amt) + mist_r * mist_amt
+            g = g * (1.0 - mist_amt) + mist_g * mist_amt
+            b = b * (1.0 - mist_amt) + mist_b * mist_amt
+
+            for gx, gy, gr, gstr in glow_points:
+                gd2 = ((nx - gx) / gr) ** 2 + ((ny - gy) / gr) ** 2
+                if gd2 < 1.0:
+                    gw = ((1.0 - gd2) ** 2.2) * gstr
+                    r = min(1.0, r + glow_r * gw * 0.42)
+                    g = min(1.0, g + glow_g * gw * 0.40)
+                    b = min(1.0, b + glow_b * gw * 0.30)
+
+            for px_c, py_c, pr in petals:
+                pd2 = ((nx - px_c) / pr) ** 2 + ((ny - py_c) / (pr * 0.65)) ** 2
+                if pd2 < 1.0:
+                    pw = (1.0 - pd2) ** 1.5 * 0.78
+                    r = r * (1.0 - pw) + petal_r * pw
+                    g = g * (1.0 - pw) + petal_g * pw
+                    b = b * (1.0 - pw) + petal_b * pw
+
+            out[idx] = r
+            out[idx + 1] = g
+            out[idx + 2] = b
+            out[idx + 3] = a
+    return out
+
+
+def render_dream_v2_previews_and_metadata(built_objects, studio, metadata_assets):
+    """
+    Renders:
+    - assets/source/previews/dream/dream-v2.png (1024x1024 Plaza + Bakery + Signboard + #FF7A59 Mannequin)
+    - assets/source/previews/dream/dream-v2-compare.png (1024x512 Left: Dream Test v1 vs. Right: Dream Pastel v2)
+    - assets/source/concepts/dream/dream-palette-chips.png (Updated 9-chip v2 reference)
+    - Updates assets/source/dream/asset-metadata.json
+    """
+    global PALETTE
+    source_dream_dir = os.path.join(ROOT_DIR, "assets", "source", "dream")
+    concepts_dream_dir = os.path.join(ROOT_DIR, "assets", "source", "concepts", "dream")
+    previews_dream_dir = os.path.join(ROOT_DIR, "assets", "source", "previews", "dream")
+    os.makedirs(source_dream_dir, exist_ok=True)
+    os.makedirs(concepts_dream_dir, exist_ok=True)
+    os.makedirs(previews_dream_dir, exist_ok=True)
+
+    # 1) Update 9-color palette chip sheet for Dream Palette v2
+    W, H = 1024, 1024
+    bg_r, bg_g, bg_b = hex_to_srgb_float("#FAF7FC")
+    buf = [bg_r, bg_g, bg_b, 1.0] * (W * H)
+    ink_rgba = (*hex_to_srgb_float("#3B2A22"), 1.0)
+    sub_rgba = (*hex_to_srgb_float("#6D5F7A"), 1.0)
+    card_rgba = (*hex_to_srgb_float("#FFFFFF"), 1.0)
+    border_rgba = (*hex_to_srgb_float("#DDD5F0"), 1.0)
+
+    draw_text_on_buffer(buf, W, H, "ABRAXAS DREAM PALETTE V2", 136, 36, 5, ink_rgba)
+    card_w, card_h = 280, 270
+    margin_x, margin_y = 56, 104
+    gap_x, gap_y = 36, 32
+
+    for idx, chip in enumerate(DREAM_V2_CORE_9_CHIPS):
+        row = idx // 3
+        col = idx % 3
+        cx = margin_x + col * (card_w + gap_x)
+        cy = margin_y + row * (card_h + gap_y)
+        fill_rounded_rect(buf, W, H, cx - 3, cy - 3, card_w + 6, card_h + 6, 18, border_rgba)
+        fill_rounded_rect(buf, W, H, cx, cy, card_w, card_h, 16, card_rgba)
+        sw_rgba = (*hex_to_srgb_float(chip["hex"]), 1.0)
+        fill_rounded_rect(buf, W, H, cx + 16, cy + 16, card_w - 32, 166, 12, sw_rgba)
+        draw_text_on_buffer(buf, W, H, chip["label"], cx + 22, cy + 196, 3, sub_rgba)
+        draw_text_on_buffer(buf, W, H, chip["hex"], cx + 22, cy + 226, 4, ink_rgba)
+
+    chip_dst = os.path.join(concepts_dream_dir, "dream-palette-chips.png")
+    chip_img = bpy.data.images.new("DreamPaletteV2Chips", width=W, height=H, alpha=True)
+    chip_img.pixels[:] = buf
+    chip_img.file_format = 'PNG'
+    chip_img.filepath_raw = chip_dst
+    chip_img.save()
+    bpy.data.images.remove(chip_img)
+
+    # 2) Render dream-v2.png (1024x1024) and dream-v2-compare.png (1024x512)
+    cam_obj, sun_obj, fill_obj, ruler_obj = studio
+    ruler_obj.hide_render = True
+    scene = bpy.context.scene
+    world = scene.world
+    bg = world.node_tree.nodes.get("Background") if world else None
+
+    for obj in built_objects.values():
+        obj.hide_render = True
+
+    layout = {
+        "plaza-hall": (Vector((-0.95, 1.40, 0.0)), Euler((0.0, 0.0, math.radians(24)), 'XYZ')),
+        "bakery": (Vector((1.45, 0.55, 0.0)), Euler((0.0, 0.0, math.radians(16)), 'XYZ')),
+        "well": (Vector((-0.55, -0.15, 0.0)), Euler((0.0, 0.0, math.radians(20)), 'XYZ')),
+        "streetlight": (Vector((0.20, 0.45, 0.0)), Euler((0.0, 0.0, math.radians(-25)), 'XYZ')),
+        "signboard": (Vector((0.68, -0.22, 0.0)), Euler((0.0, 0.0, math.radians(18)), 'XYZ')),
+        "tree-round": (Vector((-2.25, 0.35, 0.0)), Euler((0.0, 0.0, 0.0), 'XYZ')),
+        "bush": (Vector((0.85, 1.85, 0.0)), Euler((0.0, 0.0, 0.3), 'XYZ')),
+        "flower-bed": (Vector((-1.35, -0.95, 0.0)), Euler((0.0, 0.0, math.radians(22)), 'XYZ')),
+    }
+
+    target = Vector((0.0, 0.15, 0.55))
+    cam_pos = Vector((5.4, -5.4, 4.9))
+    cam_obj.location = cam_pos
+    cam_obj.rotation_euler = (target - cam_pos).normalized().to_track_quat('-Z', 'Y').to_euler()
+    cam_obj.data.ortho_scale = 6.2
+
+    mannequin_obj = build_mannequin_06m()
+    mannequin_obj.location = Vector((0.18, -0.78, 0.0))
+    mannequin_obj.rotation_euler = Euler((0.0, 0.0, math.radians(38)), 'XYZ')
+
+    extra_v2_objs = []
+    for dup_key, loc, rot in [
+        ("tree-round", Vector((0.35, 2.35, 0.0)), Euler((0.0, 0.0, 1.1), 'XYZ')),
+        ("bush", Vector((-1.95, -0.45, 0.0)), Euler((0.0, 0.0, -0.5), 'XYZ')),
+        ("flower-bed", Vector((1.55, -0.75, 0.0)), Euler((0.0, 0.0, math.radians(24)), 'XYZ')),
+    ]:
+        dup_obj = built_objects[dup_key].copy()
+        bpy.context.collection.objects.link(dup_obj)
+        dup_obj.location = loc
+        dup_obj.rotation_euler = rot
+        dup_obj.hide_render = False
+        extra_v2_objs.append(dup_obj)
+
+    for k, (loc, rot) in layout.items():
+        obj = built_objects[k]
+        obj.location = loc
+        obj.rotation_euler = rot
+        obj.hide_render = False
+
+    v2_ground = build_dream_showcase_ground(
+        "_DreamV2Ground",
+        PALETTE["grass_light"],
+        PALETTE["path"],
+        PALETTE["stone_dark"],
+    )
+
+    if bg:
+        bg.inputs[0].default_value = hex_to_linear_rgba("#D8D0F0")
+        bg.inputs[1].default_value = 1.02
+    sun_obj.data.color = hex_to_linear_rgba("#FFF6E5")[:3]
+    sun_obj.data.energy = 2.65
+    fill_obj.data.color = hex_to_linear_rgba("#E4DCF5")[:3]
+    fill_obj.data.energy = 1.22
+
+    # Render 1024x1024 dream-v2.png
+    scene.render.resolution_x = 1024
+    scene.render.resolution_y = 1024
+    v2_raw_1024 = os.path.join(previews_dream_dir, "_dream_v2_raw_1024.png")
+    scene.render.filepath = v2_raw_1024
+    bpy.ops.render.render(write_still=True)
+
+    v2_img_1024 = bpy.data.images.load(v2_raw_1024)
+    v2_pix_1024 = apply_dream_mist_postfx(
+        list(v2_img_1024.pixels), 1024, 1024,
+        mist_hex="#EAE3F7", glow_hex=PALETTE["gold"], petal_hex=PALETTE["blossom_pink"], max_mist=0.25,
+    )
+    bpy.data.images.remove(v2_img_1024)
+    if os.path.exists(v2_raw_1024):
+        os.remove(v2_raw_1024)
+
+    dream_v2_path = os.path.join(previews_dream_dir, "dream-v2.png")
+    out_v2 = bpy.data.images.new("DreamV2Final", width=1024, height=1024, alpha=True)
+    out_v2.pixels[:] = v2_pix_1024
+    out_v2.file_format = 'PNG'
+    out_v2.filepath_raw = dream_v2_path
+    out_v2.save()
+    bpy.data.images.remove(out_v2)
+
+    # Render 512x512 Dream v2 right panel
+    scene.render.resolution_x = 512
+    scene.render.resolution_y = 512
+    v2_raw_512 = os.path.join(previews_dream_dir, "_dream_v2_raw_512.png")
+    scene.render.filepath = v2_raw_512
+    bpy.ops.render.render(write_still=True)
+    v2_img_512 = bpy.data.images.load(v2_raw_512)
+    v2_pix_512 = apply_dream_mist_postfx(
+        list(v2_img_512.pixels), 512, 512,
+        mist_hex="#EAE3F7", glow_hex=PALETTE["gold"], petal_hex=PALETTE["blossom_pink"], max_mist=0.25,
+    )
+    bpy.data.images.remove(v2_img_512)
+    if os.path.exists(v2_raw_512):
+        os.remove(v2_raw_512)
+
+    # Hide v2 objects and build Dream Test v1 objects for the left panel comparison
+    v2_ground.hide_render = True
+    for k in layout:
+        built_objects[k].hide_render = True
+    for o in extra_v2_objs:
+        o.hide_render = True
+
+    saved_v2_palette = dict(PALETTE)
+    PALETTE = dict(DREAM_V1_PALETTE)
+    v1_objs = {}
+    for k, (loc, rot) in layout.items():
+        pb = PartBuilder()
+        BUILDERS[k](pb)
+        v1_o = pb.build_combined_object(f"_v1_{k}", ASSET_SPECS[k]["dims"])
+        v1_o.location = loc
+        v1_o.rotation_euler = rot
+        v1_objs[k] = v1_o
+
+    extra_v1_objs = []
+    for dup_key, loc, rot in [
+        ("tree-round", Vector((0.35, 2.35, 0.0)), Euler((0.0, 0.0, 1.1), 'XYZ')),
+        ("bush", Vector((-1.95, -0.45, 0.0)), Euler((0.0, 0.0, -0.5), 'XYZ')),
+        ("flower-bed", Vector((1.55, -0.75, 0.0)), Euler((0.0, 0.0, math.radians(24)), 'XYZ')),
+    ]:
+        dup_v1 = v1_objs[dup_key].copy()
+        bpy.context.collection.objects.link(dup_v1)
+        dup_v1.location = loc
+        dup_v1.rotation_euler = rot
+        extra_v1_objs.append(dup_v1)
+
+    v1_ground = build_dream_showcase_ground(
+        "_DreamV1Ground",
+        DREAM_V1_PALETTE["ground_grass"],
+        DREAM_V1_PALETTE["path"],
+        DREAM_V1_PALETTE["stone_dark"],
+    )
+
+    if bg:
+        bg.inputs[0].default_value = hex_to_linear_rgba(DREAM_V1_PALETTE["sky"])
+        bg.inputs[1].default_value = 1.05
+    sun_obj.data.energy = 2.65
+    fill_obj.data.energy = 1.25
+
+    v1_raw_512 = os.path.join(previews_dream_dir, "_dream_v1_raw_512.png")
+    scene.render.filepath = v1_raw_512
+    bpy.ops.render.render(write_still=True)
+    v1_img_512 = bpy.data.images.load(v1_raw_512)
+    v1_pix_512 = apply_dream_mist_postfx(
+        list(v1_img_512.pixels), 512, 512,
+        mist_hex="#EDE8F8", glow_hex="#FFE8A3", petal_hex="#E8BDD4", max_mist=0.34,
+    )
+    bpy.data.images.remove(v1_img_512)
+    if os.path.exists(v1_raw_512):
+        os.remove(v1_raw_512)
+
+    PALETTE = saved_v2_palette
+
+    # Composite side-by-side 1024x512: Left = DREAM TEST V1, Right = DREAM PASTEL V2
+    comp_w, comp_h = 1024, 512
+    comp_buf = [1.0] * (comp_w * comp_h * 4)
+    for row in range(512):
+        src_start = row * 512 * 4
+        dst_left = (row * comp_w + 0) * 4
+        dst_right = (row * comp_w + 512) * 4
+        comp_buf[dst_left : dst_left + 512 * 4] = v1_pix_512[src_start : src_start + 512 * 4]
+        comp_buf[dst_right : dst_right + 512 * 4] = v2_pix_512[src_start : src_start + 512 * 4]
+
+    div_rgba = (*hex_to_srgb_float("#3B2A22"), 1.0)
+    for row in range(512):
+        for dx in (511, 512):
+            idx = (row * comp_w + dx) * 4
+            comp_buf[idx : idx + 4] = div_rgba
+
+    badge_bg = (*hex_to_srgb_float("#FFF8EC"), 1.0)
+    fill_rounded_rect(comp_buf, comp_w, comp_h, 16, 14, 184, 34, 8, badge_bg)
+    fill_rounded_rect(comp_buf, comp_w, comp_h, 528, 14, 204, 34, 8, badge_bg)
+    draw_text_on_buffer(comp_buf, comp_w, comp_h, "DREAM TEST V1", 28, 22, 2, div_rgba)
+    draw_text_on_buffer(comp_buf, comp_w, comp_h, "DREAM PASTEL V2", 540, 22, 2, div_rgba)
+
+    compare_v2_path = os.path.join(previews_dream_dir, "dream-v2-compare.png")
+    comp_img = bpy.data.images.new("DreamV2CompareFinal", width=comp_w, height=comp_h, alpha=True)
+    comp_img.pixels[:] = comp_buf
+    comp_img.file_format = 'PNG'
+    comp_img.filepath_raw = compare_v2_path
+    comp_img.save()
+    bpy.data.images.remove(comp_img)
+
+    # Clean up temporary showcase objects & restore studio settings
+    for o in list(v1_objs.values()) + extra_v1_objs + extra_v2_objs + [v1_ground, v2_ground, mannequin_obj]:
+        bpy.data.objects.remove(o, do_unlink=True)
+
+    for obj in built_objects.values():
+        obj.location = Vector((0.0, 0.0, 0.0))
+        obj.rotation_euler = Euler((0.0, 0.0, 0.0), 'XYZ')
+        obj.hide_render = True
+
+    if bg:
+        bg.inputs[0].default_value = hex_to_linear_rgba(PALETTE["cream"])
+        bg.inputs[1].default_value = 1.0
+    sun_obj.data.color = (1.0, 1.0, 1.0)
+    sun_obj.data.energy = 3.2
+    fill_obj.data.color = (1.0, 1.0, 1.0)
+    fill_obj.data.energy = 1.1
+    scene.render.resolution_x = 512
+    scene.render.resolution_y = 512
+
+    # 3) Update assets/source/dream/asset-metadata.json
+    dream_meta_path = os.path.join(source_dream_dir, "asset-metadata.json")
+    existing_fx = {}
+    if os.path.exists(dream_meta_path):
+        try:
+            with open(dream_meta_path, "r", encoding="utf-8") as f:
+                old_dream_meta = json.load(f)
+                existing_fx = old_dream_meta.get("fxSprites", {})
+        except Exception:
+            existing_fx = {}
+
+    showcase_keys = list(layout.keys())
+    dream_v2_assets = {k: metadata_assets[k] for k in showcase_keys if k in metadata_assets}
+    d_tris = sum(int(a["triangles"]) for a in dream_v2_assets.values())
+    d_bytes = sum(int(a["bytes"]) for a in dream_v2_assets.values())
+
+    dream_meta_doc = {
+        "version": 2,
+        "blenderVersion": bpy.app.version_string,
+        "colorSpaceNote": (
+            "Dream 파스텔 v2 확정 빌드(2026-11-01): 시험판 대비 잔디·나무·흙길·지붕 채도를 +15~25% 보강하고 "
+            "FLOAT_COLOR COLOR_0에 단일 sRGB->Linear 변환 및 단일 선형 AO 곱을 적용, 재임포트 ±6/255 색 검증 통과."
+        ),
+        "characterSignatureColorKept": CHARACTER_REP_HEX,
+        "core9PaletteV2": DREAM_V2_CORE_9_CHIPS,
+        "dreamPaletteV2": dict(PALETTE),
+        "dreamPaletteV1": DREAM_V1_PALETTE,
+        "summary": {
+            "showcaseAssetCount": len(dream_v2_assets),
+            "totalEnvironmentAssetCount": len(metadata_assets),
+            "showcaseTriangles": d_tris,
+            "showcaseBytes": d_bytes,
+            "showcaseKiB": round(d_bytes / 1024.0, 2),
+        },
+        "showcaseAssets": dream_v2_assets,
+        "fxSprites": existing_fx,
+        "concepts": [
+            "assets/source/concepts/dream/dream-plaza-bakery.png",
+            "assets/source/concepts/dream/dream-palette-chips.png",
+        ],
+        "previews": [
+            "assets/source/previews/dream/dream-v2.png",
+            "assets/source/previews/dream/dream-v2-compare.png",
+            "assets/source/previews/dream/dream-test.png",
+            "assets/source/previews/dream/dream-compare.png",
+        ],
+    }
+    with open(dream_meta_path, "w", encoding="utf-8") as f:
+        json.dump(dream_meta_doc, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+
+    print(f"[INFO] Saved Dream v2 previews: {dream_v2_path}, {compare_v2_path} and updated {dream_meta_path}")
 
 
 def render_kit_overview(built_objects, studio, out_name="preview-kit-overview.png"):
@@ -1487,6 +2057,7 @@ def main():
         build_terrain_from_v2_map()
 
     render_zone_showcase(built_objects, studio, "preview-zone-entrance-plaza.png")
+    render_dream_v2_previews_and_metadata(built_objects, studio, metadata_assets)
     render_kit_overview(built_objects, studio, "preview-kit-overview.png")
 
     os.makedirs(SOURCE_ENV_DIR, exist_ok=True)
@@ -1508,9 +2079,10 @@ def main():
     all_bytes = sum(int(item.get("bytes", 0)) for item in merged_assets.values())
 
     metadata_doc = {
-        "version": 1,
+        "version": 2,
         "blenderVersion": bpy.app.version_string,
-        "colorSpaceNote": "색공간 수정(2026-11-01): sRGB 팔레트 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
+        "paletteVersion": "dream-v2",
+        "colorSpaceNote": "몽환 팔레트 v2(2026-11-01): sRGB 팔레트 v2 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
         "phase1Only": PHASE1_ONLY,
         "buildTerrain": BUILD_TERRAIN,
         "summary": {
@@ -1532,6 +2104,11 @@ def main():
     bpy.ops.wm.save_as_mainfile(filepath=blend_path)
     if os.path.exists(blend1_path):
         os.remove(blend1_path)
+    for d in (SOURCE_ENV_DIR, os.path.join(ROOT_DIR, "assets", "source", "dream")):
+        if os.path.exists(d):
+            for fname in os.listdir(d):
+                if fname.endswith(".blend1"):
+                    os.remove(os.path.join(d, fname))
     print(f"[INFO] Completed {len(metadata_assets)} kit assets (total {total_tris} tris, {round(total_bytes/1024.0, 2)} KiB). Saved {meta_path} and {blend_path}")
 
 

@@ -21,24 +21,26 @@ PUBLIC_ENV_DIR = os.path.join(ROOT_DIR, "client", "public", "assets", "abraxas",
 
 PALETTE = {
     "cream": "#FFF8EC",
-    "cream_warm": "#F5E9D4",
-    "ink": "#3B2A22",
-    "wood": "#9B7355",
-    "stone": "#B1ADA2",
-    "grass": "#5CC96B",
-    "grass_dark": "#3A9E57",
-    "grass_light": "#7EE089",
-    "path": "#F2B35E",
-    "coral": "#FF7A59",
-    "gold": "#FFB020",
-    "gold_Center": "#FFAA1D",
-    "amber_center": "#E07A38",
-    "flower_red": "#FF5A5F",
-    "flower_yellow": "#FFD23F",
+    "cream_warm": "#F7EFE2",
+    "ink": "#564863",
+    "wood": "#C69D80",
+    "stone": "#C8BFE0",
+    "grass": "#7EC4A6",
+    "grass_dark": "#64AD8E",
+    "grass_light": "#9CD4B5",
+    "path": "#EDC9A3",
+    "coral": "#EBA698",
+    "gold": "#FFE08A",
+    "gold_Center": "#FFE08A",
+    "amber_center": "#E5A86B",
+    "flower_red": "#E8949A",
+    "flower_yellow": "#FFE08A",
     "flower_white": "#FFF8EC",
-    "flower_pink": "#FF7EB6",
-    "flower_purple": "#9B7BFF",
+    "flower_pink": "#E6A8C7",
+    "flower_purple": "#BEA5EB",
 }
+
+CHARACTER_REP_HEX = "#FF7A59"
 
 FLOWER_SPECS = {
     "flower-cluster-red": {
@@ -670,8 +672,8 @@ def build_mannequin_and_stage():
     # Legs (0.0 ~ 0.16m)
     pb.add_cylinder(0.038, 0.042, 0.16, (mx - 0.048, 0.0, 0.08), PALETTE["ink"], vertices=8)
     pb.add_cylinder(0.038, 0.042, 0.16, (mx + 0.048, 0.0, 0.08), PALETTE["ink"], vertices=8)
-    # Rounded torso/tunic (0.14 ~ 0.40m)
-    pb.add_cylinder(0.115, 0.085, 0.26, (mx, 0.0, 0.27), PALETTE["coral"], vertices=12, bevel=0.01, segments=1)
+    # Rounded torso/tunic (0.14 ~ 0.40m) — keep character signature coral #FF7A59
+    pb.add_cylinder(0.115, 0.085, 0.26, (mx, 0.0, 0.27), CHARACTER_REP_HEX, vertices=12, bevel=0.01, segments=1)
     # Arms
     pb.add_cylinder(0.032, 0.028, 0.18, (mx - 0.115, 0.0, 0.28), PALETTE["cream_warm"], vertices=8, rot_euler=(0.0, 0.22, 0.0))
     pb.add_cylinder(0.032, 0.028, 0.18, (mx + 0.115, 0.0, 0.28), PALETTE["cream_warm"], vertices=8, rot_euler=(0.0, -0.22, 0.0))
@@ -679,7 +681,7 @@ def build_mannequin_and_stage():
     pb.add_sphere(0.10, (mx, 0.0, 0.50), PALETTE["cream_warm"], subdivisions=2)
     # 0.60m reference tick bar next to mannequin
     pb.add_box((0.015, 0.015, 0.60), (mx - 0.22, 0.0, 0.30), PALETTE["ink"])
-    pb.add_box((0.05, 0.015, 0.012), (mx - 0.22, 0.0, 0.594), PALETTE["coral"])
+    pb.add_box((0.05, 0.015, 0.012), (mx - 0.22, 0.0, 0.594), CHARACTER_REP_HEX)
     pb.add_box((0.05, 0.015, 0.012), (mx - 0.22, 0.0, 0.20), PALETTE["gold"])
 
     return pb.build_combined_object("_MannequinStage", (2.90, 0.72, 0.64), lock_x_bounds=True, z_ground_offset=-0.04)
@@ -775,7 +777,9 @@ def update_asset_metadata(new_entries: dict):
 
     total_tris = sum(item["triangles"] for item in assets_map.values())
     total_bytes = sum(item["bytes"] for item in assets_map.values())
-    meta_doc["colorSpaceNote"] = "색공간 수정(2026-11-01): sRGB 팔레트 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용"
+    meta_doc["version"] = 2
+    meta_doc["paletteVersion"] = "dream-v2"
+    meta_doc["colorSpaceNote"] = "몽환 팔레트 v2(2026-11-01): sRGB 팔레트 v2 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용"
     meta_doc["assets"] = assets_map
     meta_doc["summary"] = {
         "assetCount": len(assets_map),

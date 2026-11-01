@@ -38,27 +38,27 @@ MAX_BYTES = 1024 * 1024  # 1 MiB
 # -----------------------------------------------------------------------------
 PALETTE = {
     "cream": "#FFF8EC",
-    "cream_warm": "#F5E9D4",
-    "cream_shadow": "#E5D4B7",
-    "ink": "#3B2A22",
-    "wood": "#9B7355",
-    "wood_light": "#B88C6A",
-    "wood_dark": "#6E4E37",
-    "stone": "#B1ADA2",
-    "stone_light": "#C7C3B8",
-    "stone_dark": "#878378",
-    "grass": "#5CC96B",
-    "grass_dark": "#3A9E57",
-    "grass_light": "#7EE089",
-    "path": "#F2B35E",
-    "path_center": "#F5C276",
-    "path_edge": "#D99B4E",
-    "sea": "#5BC0F8",
-    "sea_shallow": "#7ED3FA",
-    "sea_deep": "#3FA0DF",
-    "coral": "#FF7A59",
-    "gold": "#FFB020",
-    "teal": "#14B8A6",
+    "cream_warm": "#F7EFE2",
+    "cream_shadow": "#E6D8C0",
+    "ink": "#564863",
+    "wood": "#C69D80",
+    "wood_light": "#DFB99E",
+    "wood_dark": "#9C7860",
+    "stone": "#C8BFE0",
+    "stone_light": "#DDD5F0",
+    "stone_dark": "#A99CC4",
+    "grass": "#7EC4A6",
+    "grass_dark": "#64AD8E",
+    "grass_light": "#9CD4B5",
+    "path": "#EDC9A3",
+    "path_center": "#F3D5B5",
+    "path_edge": "#D9B087",
+    "sea": "#94D2CB",
+    "sea_shallow": "#B0E2DC",
+    "sea_deep": "#78BEB6",
+    "coral": "#EBA698",
+    "gold": "#FFE08A",
+    "teal": "#78CCC0",
 }
 
 HEX_TO_PALETTE_NAME = {v: k for k, v in PALETTE.items()}
@@ -1347,8 +1347,10 @@ def main():
             "assets": {},
         }
 
+    meta_doc["version"] = 2
+    meta_doc["paletteVersion"] = "dream-v2"
     meta_doc["blenderVersion"] = bpy.app.version_string
-    meta_doc["colorSpaceNote"] = "색공간 수정(2026-11-01): sRGB 팔레트 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용"
+    meta_doc["colorSpaceNote"] = "몽환 팔레트 v2(2026-11-01): sRGB 팔레트 v2 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용"
     meta_doc["buildTerrain"] = True
     meta_doc.setdefault("assets", {})["terrain"] = {
         "path": "assets/abraxas/environment/terrain.glb",
