@@ -17,7 +17,7 @@ type Character = { object: THREE.Object3D; mixer: THREE.AnimationMixer; actions:
 export class Village {
   private scene = new THREE.Scene();
   private camera = new THREE.OrthographicCamera();
-  private light = new THREE.DirectionalLight(0xffe5c4, 1.1);
+  private light = new THREE.DirectionalLight(0xffffff, .8);
   private renderer = new THREE.WebGLRenderer({ antialias: true });
   private loader = new GLTFLoader();
   private models = new Map<string, Promise<GLTF>>();
@@ -43,7 +43,7 @@ export class Village {
     const draco = new DRACOLoader();
     draco.setDecoderPath(`${import.meta.env.BASE_URL}assets/abraxas/decoders/`); draco.setWorkerLimit(1); this.loader.setDRACOLoader(draco);
     this.scene.background = new THREE.Color("#5bc0f8");
-    this.scene.add(new THREE.HemisphereLight(0xc5e5ff, 0xb3c4a3, .7));
+    this.scene.add(new THREE.HemisphereLight(0xffffff, 0xffffff, 1));
     this.light.castShadow = true; this.light.shadow.camera.left = -4; this.light.shadow.camera.right = 4;
     this.light.shadow.camera.top = 4; this.light.shadow.camera.bottom = -4; this.light.shadow.camera.near = .1; this.light.shadow.camera.far = 25;
     this.light.shadow.bias = -.0001; this.light.shadow.normalBias = .02;
@@ -142,7 +142,19 @@ export class Village {
   private load(key: string): Promise<GLTF> {
     const asset = manifest[key];
     if (!asset || !/^assets\/abraxas\/[\w/-]+\.glb$/.test(asset.path) || asset.path.includes("..")) return Promise.reject(new Error(`Invalid asset: ${key}`));
-    if (!this.models.has(key)) this.models.set(key, this.loader.loadAsync(`${import.meta.env.BASE_URL}${asset.path}`));
+    if (!this.models.has(key)) this.models.set(key, this.loader.loadAsync(`${import.meta.env.BASE_URL}${asset.path}`).then(gltf => {
+      if (asset.path.startsWith("assets/abraxas/environment/")) gltf.scene.traverse(child => {
+        if (!(child instanceof THREE.Mesh)) return;
+        const colors = child.geometry.getAttribute("color"); if (!colors) return;
+        const color = new THREE.Color();
+        for (let i = 0; i < colors.count; i++) {
+          color.setRGB(colors.getX(i), colors.getY(i), colors.getZ(i)).convertLinearToSRGB();
+          colors.setXYZ(i, color.r, color.g, color.b);
+        }
+        colors.needsUpdate = true;
+      });
+      return gltf;
+    }));
     return this.models.get(key)!;
   }
   private async place(placement: Placement): Promise<void> {
