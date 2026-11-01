@@ -57,3 +57,16 @@
 - **생성 프롬프트**:
   > Generate an original 2D concept sheet PNG for the Abraxas environment kit: Life Props (`bread-crate`, `book-stack`, `tool-rack`, `barrel`, `log`). Style & Tone: Original rounded, warm low-poly diorama style with chunky beveled edges and matte opaque surfaces. Do NOT imitate or reference any existing game or asset pack. Layout requirements on a clean cream background (#FFF8EC) showing Front, Side, and 3/4 Isometric views for each of the 5 props: 1. `bread-crate` (0.36x0.28x0.25m): Slatted wooden crate filled with warm golden loaves and rolls. 2. `book-stack` (0.36x0.28x0.30m): Tied stack of thick hardcover books with colorful spines (violet, teal, cream, amber). 3. `tool-rack` (0.56x0.32x0.55m): Wooden A-frame rack holding simple rounded smithing tools (tongs, mallet, shovel). 4. `barrel` (diameter 0.30m, height 0.42m): Plump wooden stave barrel with two dark metal/wood hoops. 5. `log` (0.60x0.20x0.22m): Cut timber log with warm bark, pale wood end-grain rings, and a tiny sprout. Include a color palette chip strip at the bottom (#FFF8EC, #3B2A22, #9B7355, #B1ADA2, #FFB020, #8E6BFF, #14B8A6).
 - **채택 이유**: 빵집·도서관·대장간·호숫가 주변에 배치할 생활 소품 5종이 각 구역의 서사와 색감을 자연스럽게 보강함.
+
+## 4. 추가 식생 에셋 6종 (`build_flowers.py`)
+
+- **소스 스크립트**: `assets/source/environment/build_flowers.py`
+- **실행 도구**: Blender `5.2.3 LTS` (`C:/Program Files/Blender Foundation/Blender 5.2/blender.exe`, 빌드 해시 `e13b728c6880`)
+- **미리보기 시트**: `assets/source/previews/environment/flowers.png` (0.60m SD 캐릭터 마네킹과 나란히 3/4 쿼터뷰 및 정면 입면 비교)
+- **추가 항목 및 독자 설계 근거**:
+  - **작은 들꽃 무리 5종** (`flower-cluster-red` `#FF5A5F`, `flower-cluster-yellow` `#FFD23F`, `flower-cluster-white` `#FFF8EC`, `flower-cluster-pink` `#FF7EB6`, `flower-cluster-purple` `#9B7BFF`):
+    - 화단 목재 상자나 흙 둔덕 없이 지면(`z = 0`)에서 곧바로 줄기 4개(활짝 핀 5꽃잎 원판 3송이 + 봉오리 1송이)와 바닥의 작은 입체 잎 4장이 솟아오르는 일반적인 들꽃 군집 형태로 독자 제작했다.
+    - 각 꽃송이는 알파 카드 없이 볼록한 로우폴리 5장 꽃잎 원판과 중심 수술 원기둥으로 구성되며, 단일 불투명 재질(`AbraxasEnvMat`)과 선형 버텍스 컬러 `COLOR_0` + 하단 자체 AO를 적용했다.
+    - 치수는 지름 `0.28m × 0.28m`, 높이 `0.14~0.17m`, 충돌 없음(`collision: []`), 삼각형 `280 tris` (예산 300 이하), Draco GLB `7,356~7,432 bytes` (예산 20KB 이하)를 충족한다.
+  - **작은 잔풀 1종** (`grass-small`):
+    - 기존 `grass-tuft`보다 작은 식생 군집 배치용으로, 지름 `0.18m × 0.18m`, 높이 `0.10m`, 충돌 없음(`collision: []`), 삼각형 `112 tris` (예산 120 이하), Draco GLB `3,632 bytes`로 제작했다.

@@ -4,10 +4,10 @@
   "phase1Only": false,
   "buildTerrain": false,
   "summary": {
-    "assetCount": 32,
-    "totalTriangles": 14138,
-    "totalBytes": 267728,
-    "totalKiB": 261.45
+    "assetCount": 38,
+    "totalTriangles": 15650,
+    "totalBytes": 308296,
+    "totalKiB": 301.07
   },
   "assets": {
     "entrance-house": {
@@ -892,6 +892,132 @@
       "dracoCompressed": true,
       "concept": "assets/source/concepts/environment/life-props.png",
       "preview": "assets/source/previews/environment/log.png"
+    },
+    "flower-cluster-red": {
+      "path": "assets/abraxas/environment/flower-cluster-red.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 280,
+      "bytes": 7356,
+      "maxTriangles": 300,
+      "maxBytes": 20000,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.16,
+        "minY": 0.0,
+        "maxY": 0.16
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
+    },
+    "flower-cluster-yellow": {
+      "path": "assets/abraxas/environment/flower-cluster-yellow.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 280,
+      "bytes": 7376,
+      "maxTriangles": 300,
+      "maxBytes": 20000,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.15,
+        "minY": 0.0,
+        "maxY": 0.15
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
+    },
+    "flower-cluster-white": {
+      "path": "assets/abraxas/environment/flower-cluster-white.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 280,
+      "bytes": 7432,
+      "maxTriangles": 300,
+      "maxBytes": 20000,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.14,
+        "minY": 0.0,
+        "maxY": 0.14
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
+    },
+    "flower-cluster-pink": {
+      "path": "assets/abraxas/environment/flower-cluster-pink.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 280,
+      "bytes": 7388,
+      "maxTriangles": 300,
+      "maxBytes": 20000,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.16,
+        "minY": 0.0,
+        "maxY": 0.16
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
+    },
+    "flower-cluster-purple": {
+      "path": "assets/abraxas/environment/flower-cluster-purple.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 280,
+      "bytes": 7384,
+      "maxTriangles": 300,
+      "maxBytes": 20000,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.17,
+        "minY": 0.0,
+        "maxY": 0.17
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
+    },
+    "grass-small": {
+      "path": "assets/abraxas/environment/grass-small.glb",
+      "scale": 1,
+      "collision": [],
+      "triangles": 112,
+      "bytes": 3632,
+      "maxTriangles": 120,
+      "maxBytes": 15360,
+      "bounds": {
+        "width": 0.18,
+        "depth": 0.18,
+        "height": 0.1,
+        "minY": 0.0,
+        "maxY": 0.1
+      },
+      "materials": 1,
+      "vertexColorAttribute": "COLOR_0",
+      "dracoCompressed": true,
+      "concept": "assets/source/concepts/environment/nature-foliage.png",
+      "preview": "assets/source/previews/environment/flowers.png"
     }
   }
 }
