@@ -19,7 +19,7 @@ type Character = { object: THREE.Object3D; mixer: THREE.AnimationMixer; actions:
 export class Village {
   private scene = new THREE.Scene();
   private camera = new THREE.OrthographicCamera();
-  private light = new THREE.DirectionalLight("#fff0df", 1.4);
+  private light = new THREE.DirectionalLight("#fff0df", 1.8);
   private renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   private effects?: DreamEffects;
   private loader = new GLTFLoader();
@@ -29,6 +29,9 @@ export class Village {
   private characters: Character[] = [];
   private player = new THREE.Group();
   private cameraTarget = new THREE.Vector3();
+  private viewHalfHeight = 1.75;
+  private cameraHalfHeight = 1.75;
+  private viewAspect = 1;
   private playerCharacter?: Character;
   private enabled = false;
   private input: Vec2 = { x: 0, z: 0 };
@@ -48,9 +51,8 @@ export class Village {
     const draco = new DRACOLoader();
     draco.setDecoderPath(`${import.meta.env.BASE_URL}assets/abraxas/decoders/`); draco.setWorkerLimit(1); this.loader.setDRACOLoader(draco);
     this.scene.fog = new THREE.Fog("#eae3f7", 19, 40);
-    this.scene.add(new THREE.HemisphereLight("#fff4ed", "#e8ddf4", 2.5));
-    this.light.castShadow = true; this.light.shadow.camera.left = -4; this.light.shadow.camera.right = 4;
-    this.light.shadow.camera.top = 4; this.light.shadow.camera.bottom = -4; this.light.shadow.camera.near = .1; this.light.shadow.camera.far = 25;
+    this.scene.add(new THREE.AmbientLight("#fff4ed", .2), new THREE.HemisphereLight("#fff4ed", "#e8ddf4", 1.8));
+    this.light.castShadow = true; this.light.shadow.camera.near = .1; this.light.shadow.camera.far = 25;
     this.light.shadow.bias = -.0001; this.light.shadow.normalBias = .02;
     this.scene.add(this.light, this.light.target);
     this.renderer.shadowMap.enabled = true; this.renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -83,7 +85,7 @@ export class Village {
       console.error("Village assets failed to load", error); this.enabled = false;
       const message = document.createElement("div"); message.textContent = "마을을 불러오지 못했어요. 새로고침해 주세요."; message.setAttribute("role", "alert"); Object.assign(message.style, { position: "fixed", inset: "0", display: "grid", placeItems: "center", background: "#fff8ec", color: "#3b2a22", zIndex: "1000" }); app.append(message);
     });
-    this.resize(); window.addEventListener("resize", () => this.resize());
+    this.resize(); window.addEventListener("abraxas:viewport", () => this.resize());
     document.addEventListener("visibilitychange", () => {
       cancelAnimationFrame(this.frame);
       if (!document.hidden) { this.lastTime = 0; this.frame = requestAnimationFrame(() => this.tick()); }
@@ -168,13 +170,18 @@ export class Village {
     const gltf = await this.load(placement.asset); const object = gltf.scene.clone();
     const terrain = placement.asset === map.terrain.asset;
     const castsShadow = !terrain && !/^(flower-cluster-|grass-|mushroom$|pebbles$)/.test(placement.asset);
-    object.traverse(child => { if (child instanceof THREE.Mesh) { child.castShadow = castsShadow; child.receiveShadow = terrain; } });
+    object.traverse(child => { if (child instanceof THREE.Mesh) { child.castShadow = castsShadow; child.receiveShadow = terrain || castsShadow; } });
     object.position.set(placement.x, 0, placement.z); object.rotation.y = placement.rot ?? 0;
     object.scale.setScalar(manifest[placement.asset]!.scale * (placement.scale ?? 1)); this.scene.add(object);
   }
   private async character(key: string, parent: THREE.Group): Promise<Character> {
     const gltf = await this.load(key); const object = clone(gltf.scene); object.scale.setScalar(manifest[key]!.scale); parent.add(object);
-    object.traverse(child => { if (child instanceof THREE.Mesh) child.castShadow = true; });
+    object.traverse(child => { if (child instanceof THREE.Mesh) { child.castShadow = true; child.receiveShadow = true; } });
+    const canvas = document.createElement("canvas"); canvas.width = canvas.height = 64; const ctx = canvas.getContext("2d")!;
+    const gradient = ctx.createRadialGradient(32, 32, 2, 32, 32, 32); gradient.addColorStop(0, "rgba(55,38,42,.26)"); gradient.addColorStop(1, "rgba(55,38,42,0)");
+    ctx.fillStyle = gradient; ctx.fillRect(0, 0, 64, 64);
+    const shadow = new THREE.Mesh(new THREE.PlaneGeometry(.55, .55), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true, depthWrite: false }));
+    shadow.rotation.x = -Math.PI / 2; shadow.position.y = .012; parent.add(shadow);
     const mixer = new THREE.AnimationMixer(object), actions = new Map(gltf.animations.map(clip => [clip.name.toLowerCase(), mixer.clipAction(clip)]));
     const character: Character = { object, mixer, actions }; this.characters.push(character); this.animate(character, "idle"); return character;
   }
@@ -191,14 +198,19 @@ export class Village {
     const marker = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true })); marker.scale.set(.25, .25, 1); marker.position.y = .95; return marker;
   }
   private resize(): void {
-    const w = window.innerWidth, h = window.innerHeight, halfHeight = 2.4, halfWidth = halfHeight * w / h;
-    const mobile = navigator.maxTouchPoints > 0 || Math.min(w, h) < 600, shadowSize = mobile ? 512 : 1024;
+    const w = this.renderer.domElement.parentElement!.clientWidth, h = this.renderer.domElement.parentElement!.clientHeight;
+    if (!w || !h) return;
+    this.viewAspect = w / h; this.viewHalfHeight = 1.75 * Math.max(1, Math.min(1.2, 1.6 / this.viewAspect));
+    const mobile = navigator.maxTouchPoints > 0 || Math.min(w, h) < 600, shadowSize = mobile ? 1024 : 2048;
+    const shadowExtent = Math.max(4, this.viewHalfHeight * (this.viewAspect + 1) * 1.1);
+    this.light.shadow.camera.left = this.light.shadow.camera.bottom = -shadowExtent;
+    this.light.shadow.camera.right = this.light.shadow.camera.top = shadowExtent; this.light.shadow.camera.updateProjectionMatrix();
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2));
     if (this.light.shadow.mapSize.x !== shadowSize) {
       this.light.shadow.mapSize.set(shadowSize, shadowSize); this.light.shadow.map?.dispose(); this.light.shadow.map = null;
     }
     this.effects?.resize(mobile, this.renderer.getPixelRatio());
-    this.camera.left = -halfWidth; this.camera.right = halfWidth; this.camera.top = halfHeight; this.camera.bottom = -halfHeight; this.camera.near = .1; this.camera.far = 100; this.camera.updateProjectionMatrix(); this.renderer.setSize(w, h);
+    this.camera.near = .1; this.camera.far = 100; this.renderer.setSize(w, h);
   }
   private tick(): void {
     if (document.hidden) return;
@@ -215,8 +227,16 @@ export class Village {
     const nearby = this.enabled && this.ready ? this.findNearby(this.nearby) : null;
     if (nearby !== this.nearby) { this.nearby = nearby; this.onNearbyChange(nearby ? { id: nearby, available: true, examine: this.props.has(nearby) } : null); }
     for (const character of this.characters) character.mixer.update(dt);
-    this.cameraTarget.lerp(this.player.position, 1 - Math.exp(-10 * dt));
-    const target = this.cameraTarget.clone().add(new THREE.Vector3(1, -Math.sqrt(2) / Math.tan(THREE.MathUtils.degToRad(35)), 1).normalize().multiplyScalar(this.camera.top * .2));
+    const actor = this.talking ? this.actors.get(this.talking)?.object.position : undefined;
+    const prop = this.talking ? this.props.get(this.talking) : undefined;
+    const focus = this.player.position.clone();
+    if (!this.enabled && actor) focus.lerp(actor, .5);
+    else if (!this.enabled && prop) focus.lerp(new THREE.Vector3(prop.x, 0, prop.z), .35);
+    else if (this.enabled) focus.add(new THREE.Vector3(this.input.x, 0, this.input.z).multiplyScalar(.25));
+    this.cameraTarget.lerp(focus, 1 - Math.exp(-5 * dt));
+    this.cameraHalfHeight += (this.viewHalfHeight * (!this.enabled && this.talking ? .88 : 1) - this.cameraHalfHeight) * (1 - Math.exp(-5 * dt));
+    this.camera.left = -this.cameraHalfHeight * this.viewAspect; this.camera.right = -this.camera.left; this.camera.top = this.cameraHalfHeight; this.camera.bottom = -this.cameraHalfHeight; this.camera.updateProjectionMatrix();
+    const target = this.cameraTarget.clone().add(new THREE.Vector3(1, -Math.sqrt(2) / Math.tan(THREE.MathUtils.degToRad(35)), 1).normalize().multiplyScalar(this.camera.top * -.12));
     this.camera.position.copy(target).add(new THREE.Vector3(10, 10 * Math.tan(THREE.MathUtils.degToRad(35)) * Math.sqrt(2), 10)); this.camera.lookAt(target);
     this.light.target.position.copy(this.player.position); this.light.position.copy(this.player.position).add(new THREE.Vector3(4, 10, 5));
     this.effects?.update(dt, this.player.position, this.camera);

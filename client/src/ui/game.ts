@@ -53,7 +53,7 @@ export class Game {
     panel.append(p);
     if (buttons.length === 1 && buttons[0]![0] === this.ui.next) { panel.classList.add("continue"); panel.tabIndex = 0; panel.setAttribute("role", "button"); panel.setAttribute("aria-label", this.ui.next); panel.addEventListener("click", () => run(buttons[0]![1])); panel.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); if (!event.repeat) run(buttons[0]![1]); } }); const indicator = document.createElement("span"); indicator.className = "indicator"; indicator.textContent = "▼"; indicator.setAttribute("aria-hidden", "true"); panel.append(indicator); }
     this.overlay.append(panel);
-    if (!(buttons.length === 1 && buttons[0]![0] === this.ui.next)) { const choices = document.createElement("div"); choices.className = "choices"; for (const [label, action] of buttons) choices.append(button(label, action)); this.overlay.append(choices); }
+    if (!(buttons.length === 1 && buttons[0]![0] === this.ui.next)) { this.overlay.classList.add("has-choices"); const choices = document.createElement("div"); choices.className = "choices"; for (const [label, action] of buttons) choices.append(button(label, action)); this.overlay.append(choices); }
   }
   private title(): void { this.state.segment = "title"; this.panel(`${this.ui.title.name}\n\n${this.ui.title.subtitle}`, [[this.ui.title.language, () => { this.state.lang = this.state.lang === "ko" ? "en" : "ko"; this.title(); }], [this.ui.title.start, () => void this.open("prologue")]], "title"); }
   private world(): void {
