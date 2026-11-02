@@ -17,11 +17,15 @@ test("an invalid command response shows one error without a retry action", async
 });
 
 test("dialogue focuses the actor named by the speaker", () => {
-  const element = () => ({ className: "", textContent: "", style: {}, classList: { add: vi.fn() }, append: vi.fn(), replaceChildren: vi.fn(), setAttribute: vi.fn(), addEventListener: vi.fn() });
+  const elements: { className: string; textContent: string }[] = [];
+  const element = () => { const node = { className: "", textContent: "", style: {}, classList: { add: vi.fn() }, append: vi.fn(), replaceChildren: vi.fn(), setAttribute: vi.fn(), addEventListener: vi.fn() }; elements.push(node); return node; };
   vi.stubGlobal("document", { createElement: element });
   const focusSpeaker = vi.fn();
   const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko" }, overlay: element(), controls: { setActive: vi.fn() }, village: { setEnabled: vi.fn(), focusSpeaker }, updateHud: vi.fn(), token: 0 });
-  game.panel("B: 안녕", []);
-  game.panel("v1j2: 안녕", []);
-  expect(focusSpeaker.mock.calls).toEqual([["B"], ["v1j2"]]);
+  game.panel("모카: 안녕", []);
+  game.panel("시식 안내인: 안녕", []);
+  game.panel("안녕", [], "dialogue", "s1j2");
+  game.panel("안녕", [], "dialogue", "B");
+  expect(focusSpeaker.mock.calls).toEqual([["B"], ["v1j2"], ["s1j2"], ["B"]]);
+  expect(elements.filter(node => node.className === "speaker").map(node => node.textContent)).toEqual(["모카", "시식 안내인", "무대지기", "모카"]);
 });
