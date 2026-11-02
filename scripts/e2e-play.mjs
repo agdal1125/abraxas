@@ -60,7 +60,7 @@ try {
   await requireFreePort(8080); await requireFreePort(5173);
   if (emulators) {
     await requireFreePort(9099); await requireFreePort(8081);
-    const firebase = start(process.execPath, [join(root, "node_modules/firebase-tools/lib/bin/firebase.js"), "emulators:start", "--only", "auth,firestore", "--project", "demo-abraxas"], { cwd: root, env: { ...process.env, PATH: process.env.JAVA_HOME ? `${join(process.env.JAVA_HOME, "bin")}${process.platform === "win32" ? ";" : ":"}${process.env.PATH}` : process.env.PATH }, reportStderr: true });
+    const firebase = start(process.execPath, [join(root, "node_modules/firebase-tools/lib/bin/firebase.js"), "emulators:start", "--only", "auth,firestore", "--project", "demo-abraxas"], { cwd: root, env: { ...process.env, XDG_CONFIG_HOME: join(root, ".staging", "xdg"), PATH: process.env.JAVA_HOME ? `${join(process.env.JAVA_HOME, "bin")}${process.platform === "win32" ? ";" : ":"}${process.env.PATH}` : process.env.PATH }, reportStderr: true });
     await ready("http://127.0.0.1:9099/emulator/v1/projects/demo-abraxas/config", firebase);
     await ready("http://127.0.0.1:8081/v1/projects/demo-abraxas/databases/(default)/documents", firebase);
   }

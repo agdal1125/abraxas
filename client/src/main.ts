@@ -53,7 +53,7 @@ if (document.fullscreenEnabled && document.documentElement.requestFullscreen) {
 
 const village = new Village(app);
 void ((village as { whenReady?: Promise<void> }).whenReady ?? Promise.resolve()).then(async () => {
-  configurePlayTransport({ auth: await createAuthSource() });
+  configurePlayTransport(await createAuthSource());
   const game = new Game(app, village);
   updateViewport();
   if (import.meta.env.DEV) Object.assign(window, { __abraxas: { village, game } });
