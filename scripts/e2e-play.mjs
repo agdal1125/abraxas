@@ -7,7 +7,8 @@ import { fileURLToPath } from "node:url";
 import { contentVersion } from "./content-version.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const lang = process.argv[2] ?? "ko", output = resolve(process.argv[3] ?? `e2e-${lang}`);
+// Usage: npm run e2e:play -- en ./out
+const lang = process.argv[2] ?? "ko", output = resolve(process.argv[3] ?? join(root, ".e2e", lang));
 if (!["ko", "en"].includes(lang)) throw new Error("Usage: node scripts/e2e-play.mjs ko|en output-directory");
 const candidates = process.platform === "win32" ? [
   join(process.env["PROGRAMFILES(X86)"] ?? "C:/Program Files (x86)", "Microsoft/Edge/Application/msedge.exe"),
