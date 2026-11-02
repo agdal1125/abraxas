@@ -2,6 +2,10 @@ import { readFileSync } from 'node:fs';
 import { stripTypeScriptTypes } from 'node:module';
 
 const map = JSON.parse(readFileSync(process.argv[2] ?? new URL('../content/world/village.json', import.meta.url), 'utf8'));
+const guide = map.actors.find(actor => actor.id === 'v1j2');
+if (!guide || !map.zones['moka-guide']) throw new Error('Missing Moka guide position');
+const originalGuide = { ...guide, id: 'v1j2-original' };
+Object.assign(guide, map.zones['moka-guide']);
 const manifest = JSON.parse(readFileSync(new URL('../content/assets/manifest.json', import.meta.url), 'utf8')).assets;
 const source = readFileSync(new URL('../client/src/core/world/move.ts', import.meta.url), 'utf8');
 const module = await import(`data:text/javascript,${encodeURIComponent(stripTypeScriptTypes(source) + '\nexport { inside, allowed, boundaries, boxEdges, distanceToSegment };')}`);
@@ -9,7 +13,7 @@ const { inside, allowed, boundaries, boxEdges, distanceToSegment } = module;
 const nearbySource = readFileSync(new URL('../client/src/core/world/nearby.ts', import.meta.url), 'utf8');
 const { nearest } = await import(`data:text/javascript,${encodeURIComponent(stripTypeScriptTypes(nearbySource))}`);
 const colliders = [...map.props, ...map.actors].flatMap(p => {
-  const asset = manifest[p.asset];
+  const asset = manifest[p.id === 'moka-basket-source' ? 'prop-moka-dropoff' : p.asset];
   if (!asset) throw new Error(`Missing asset: ${p.asset}`);
   const scale = asset.scale * (p.scale ?? 1), rot = p.rot ?? 0, c = Math.cos(rot), s = Math.sin(rot);
   return asset.collision.map(shape => {
@@ -25,6 +29,12 @@ const radius = 0.3, spacing = 0.15, eps = 1e-9;
 const safe = p => allowed(p, map.bounds) && edges.every(e => distanceToSegment(p, e) >= radius - eps)
   && circles.every(c => Math.hypot(p.x - c.x, p.z - c.z) >= radius + c.radius - eps)
   && boxes.every(b => !inside(p, b.edges.map(e => e.a)) && b.edges.every(e => distanceToSegment(p, e) >= radius - eps));
+const guideCollider = colliders.find(c => c.owner === 'v1j2');
+if (!guideCollider || guideCollider.type !== 'circle') throw new Error('Missing guide collider');
+const otherCircles = circles.filter(c => c.owner !== 'v1j2');
+if (!allowed(guide, map.bounds) || edges.some(e => distanceToSegment(guide, e) < guideCollider.radius - eps)
+  || otherCircles.some(c => Math.hypot(guide.x - c.x, guide.z - c.z) < guideCollider.radius + c.radius - eps)
+  || boxes.some(b => inside(guide, b.edges.map(e => e.a)) || b.edges.some(e => distanceToSegment(guide, e) < guideCollider.radius - eps))) throw new Error('Moka guide overlaps a collider');
 const cross = (a, b, c) => (b.x - a.x) * (c.z - a.z) - (b.z - a.z) * (c.x - a.x);
 const intersects = (a, b, c, d) => cross(a, b, c) * cross(a, b, d) <= 0 && cross(c, d, a) * cross(c, d, b) <= 0
   && Math.max(Math.min(a.x, b.x), Math.min(c.x, d.x)) <= Math.min(Math.max(a.x, b.x), Math.max(c.x, d.x)) + eps
@@ -33,7 +43,7 @@ const segmentDistance = (a, b, e) => intersects(a, b, e.a, e.b) ? 0 : Math.min(d
 const canMove = (a, b) => safe(b) && edges.every(e => segmentDistance(a, b, e) >= radius - eps)
   && circles.every(c => distanceToSegment(c, { a, b }) >= radius + c.radius - eps)
   && boxes.every(box => box.edges.every(e => segmentDistance(a, b, e) >= radius - eps));
-const coreTargets = [...map.actors, ...['lake', 'plaza', 'gate'].map(id => ({ id, ...map.zones[id] }))];
+const coreTargets = [...map.actors, originalGuide, ...['lake', 'plaza', 'gate'].map(id => ({ id, ...map.zones[id] }))];
 const targets = [...coreTargets, ...map.props.filter(p => p.asset === 'signboard' || p.id.startsWith('moka-')).map(p => ({ ...p, colliders: colliders.filter(c => c.owner === p.id) })), ...['moka-route-shortcut', 'moka-route-gentle', 'moka-route-join'].map(id => ({ id, ...map.zones[id] }))];
 const visible = (p, target) => colliders.every(c => {
   if (c.owner === target.id || map.actors.some(a => a.id === c.owner && a.x === target.x && a.z === target.z)) return true;

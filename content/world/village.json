@@ -1062,6 +1062,7 @@
     "moka-route-shortcut": { "x": 10, "z": -1 },
     "moka-route-gentle": { "x": 8, "z": 1 },
     "moka-route-join": { "x": 9.2, "z": 3.1 },
+    "moka-guide": { "x": 10.8, "z": -2.1 },
     "gate": {
       "x": -8,
       "z": -13.856406460551018
