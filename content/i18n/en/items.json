@@ -63,31 +63,31 @@
     }
   },
   "interlude_1_01": {
-    "situation": "You unfold the first fragment of a map from your pocket.",
+    "situation": "You open the small notebook in your pocket to record a moment from your day.",
     "picks": {
-      "a": "Read it slowly in a quiet spot",
-      "b": "Ask passersby where it might lead"
+      "a": "Write down clues and what to do next",
+      "b": "Sketch the lane you just saw"
     }
   },
   "interlude_1_02": {
-    "situation": "By the fountain, a villager is struggling to choose between two unfamiliar paths.",
+    "situation": "By the fountain, two villagers are arguing over a scratched cart wheel.",
     "picks": {
-      "a": "Notice their worried expression first",
-      "b": "Check which path leads where"
+      "a": "Notice how upset they look",
+      "b": "Examine the wheel marks and what happened"
     }
   },
   "moka_01": {
-    "situation": "B hands you a basket of warm walnut pastries to deliver.",
+    "situation": "B asks you to deliver a basket of freshly baked walnut bread to the workshop up the hill.",
     "picks": {
-      "a": "Run to deliver them while they are warm",
-      "b": "Walk carefully to keep them intact"
+      "a": "Run up the steep shortcut to deliver it warm",
+      "b": "Take the gentler path to keep it from getting crushed"
     }
   },
   "moka_02": {
-    "situation": "A customer comes for a cake, but the name on the receipt does not match.",
+    "situation": "A regular comes for bread they ordered, but the ledger lists a different kind.",
     "picks": {
       "a": "Check the order with them",
-      "b": "Reassure them and give them the cake"
+      "b": "Reassure them and give them the bread they asked for"
     }
   },
   "moka_03": {
@@ -122,7 +122,7 @@
     "situation": "You rest on a wooden bench in the afternoon sun.",
     "picks": {
       "a": "Enjoy the insects singing around you",
-      "b": "Prepare your shoes and things for tomorrow"
+      "b": "Tie your shoes and check your plans for the evening"
     }
   },
   "interlude_2_02": {
@@ -140,7 +140,7 @@
     }
   },
   "echo_02": {
-    "situation": "You enter the archive to find an old festival songbook. Two rooms lie ahead.",
+    "situation": "You enter the archive to find an old record of the festival's origins. Two rooms lie ahead.",
     "picks": {
       "a": "Search the familiar corner shelves",
       "b": "Open the annex you have never visited"
@@ -163,7 +163,7 @@
   "echo_05": {
     "situation": "You and C read an old story found after sorting the shelves.",
     "picks": {
-      "a": "Remember how the characters comforted each other",
+      "a": "Remember the words the characters shared while missing each other",
       "b": "Admire how the clues fit together"
     }
   },
