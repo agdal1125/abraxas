@@ -1,6 +1,6 @@
 # ADR-0006: Firebase 백엔드 의존성
 
-- 상태: 검토 중 (2026-11-02). 운영 배포는 이 문서로 승인되지 않는다.
+- 상태: 로컬 검증 완료, PR #46 최종 CI 대기 (2026-11-03). 운영 배포는 이 문서로 승인되지 않는다.
 
 ## 결정과 대안
 
@@ -13,7 +13,7 @@
 
 2026-11-03 보안 수정: Firebase Web의 `@firebase/firestore` 4.19.0이 `@grpc/grpc-js` 1.9.x를 고정해 [GHSA-m9gg-hp2v-232j](https://github.com/grpc/grpc-node/security/advisories/GHSA-m9gg-hp2v-232j)에 노출되므로 해당 하위 의존성만 1.14.7로 override한다. 클라이언트는 Firebase의 app·auth·app-check만 사용하며 Firestore의 Node 전송 코드는 브라우저 번들에 포함하지 않는다. 업스트림이 해당 pin을 취약하지 않은 버전으로 수정하면 override를 제거하고 lockfile과 감사를 다시 검증한다. 감독이 lockfile로 새로 설치하고 npm audit에서 취약점 0건, 실제 의존성 트리의 1.14.7 적용, 타입 검사·77개 테스트·빌드 통과를 확인했다. 브라우저 초기 엔트리와 청크 해시는 변경 전후 동일하다.
 
-Web SDK는 첫 인증 요청 시 동적 로드한다. 2026-11-03에는 제목 화면에서 쓰지 않는 ink 대사 파서도 실제 대사 로딩 시 불러오도록 분리했다. 같은 Node gzip 설정으로 측정한 초기 JS는 이전 Firebase 빌드 969,889바이트 / gzip 251,316바이트에서 842,460바이트 / gzip 219,959바이트로 줄었다. 부모가 빌드한 main `271be63` 기준 968,171바이트 / gzip 250,606바이트보다 각각 125,711바이트 / gzip 30,647바이트 작다. 새 ink 청크는 127,088바이트 / gzip 31,090바이트이며 전체 `check:size`는 7.04 MiB다. HTML은 초기 JS와 CSS만 참조하고 빌드 코드의 ink import는 대사 로딩 경로에 있다. 부모가 수정 후 제목 화면의 실제 네트워크와 ko/en E2E를 검증해야 한다. 이전 초기 JS 증가에 관한 사용자 답변은 아직 받지 못했다. Go 모듈과 서버 실행 파일의 증가분은 측정하지 않았다.
+Web SDK는 첫 인증 요청 시 동적 로드한다. 2026-11-03에는 제목 화면에서 쓰지 않는 ink 대사 파서도 실제 대사 로딩 시 불러오도록 분리했다. 같은 Node gzip 설정으로 측정한 초기 JS는 이전 Firebase 빌드 969,889바이트 / gzip 251,316바이트에서 842,460바이트 / gzip 219,959바이트로 줄었다. 부모가 빌드한 main `271be63` 기준 968,171바이트 / gzip 250,606바이트보다 각각 125,711바이트 / gzip 30,647바이트 작다. 새 ink 청크는 127,088바이트 / gzip 31,090바이트이며 전체 `check:size`는 7.04 MiB다. HTML은 초기 JS와 CSS만 참조하고 빌드 코드의 ink import는 대사 로딩 경로에 있다. 감독이 배포 제목 화면에서 ink·Firebase 요청과 오류가 없음을 확인했고, 수정 후 ko/en Auth·Firestore 에뮬레이터 E2E도 결과 화면까지 통과했다. 원래 초기 크기 조건을 충족하므로 증가 허용 답변은 필요하지 않다. Go 모듈과 서버 실행 파일의 증가분은 측정하지 않았다.
 
 Firestore 에뮬레이터에는 Java 21이 필요하다. 로컬 검증은 `demo-abraxas` 프로젝트만 사용하고 `node scripts/test-firestore-emulator.mjs`로 실행한다.
 
