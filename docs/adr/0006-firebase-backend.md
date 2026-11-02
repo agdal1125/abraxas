@@ -13,7 +13,7 @@
 
 2026-11-03 보안 수정: Firebase Web의 `@firebase/firestore` 4.19.0이 `@grpc/grpc-js` 1.9.x를 고정해 [GHSA-m9gg-hp2v-232j](https://github.com/grpc/grpc-node/security/advisories/GHSA-m9gg-hp2v-232j)에 노출되므로 해당 하위 의존성만 1.14.7로 override한다. 클라이언트는 Firebase의 app·auth·app-check만 사용하며 Firestore의 Node 전송 코드는 브라우저 번들에 포함하지 않는다. 업스트림이 해당 pin을 취약하지 않은 버전으로 수정하면 override를 제거하고 lockfile과 감사를 다시 검증한다. 감독이 lockfile로 새로 설치하고 npm audit에서 취약점 0건, 실제 의존성 트리의 1.14.7 적용, 타입 검사·77개 테스트·빌드 통과를 확인했다. 브라우저 초기 엔트리와 청크 해시는 변경 전후 동일하다.
 
-Web SDK는 첫 인증 요청 시 동적 로드한다. 2026-11-02 main 통합 후 빌드의 초기 JS는 969.88 kB(압축 253.11 kB), 인증 선택 청크는 1.66 kB(압축 0.80 kB), Firebase 청크 네 개는 합계 171.13 kB(압축 50.92 kB)였다. HTML에는 초기 JS와 CSS만 참조되며 인증 선택 청크는 인증 요청 전에는 호출하지 않는다. 부모가 빌드한 main `271be63` 기준 초기 JS는 968.17 kB(압축 252.39 kB), `check:size`는 6.88 MiB였고 현재는 7.04 MiB다. `client/public`, `content`, `assets`의 추적 파일은 기준과 같다. 초기 JS가 기준보다 1.71 kB(압축 0.72 kB) 커서 첫 화면 크기 증가 금지 조건은 미충족이다. 감독이 배포 빌드의 실제 시작 요청에서 인증 청크가 내려오지 않음을 확인했다. 동일 Node gzip 비교의 정확한 증가량은 초기 JS 1,718바이트, gzip 710바이트이며 이 증가량에 대한 사용자 답변을 기다린다. Go 모듈과 서버 실행 파일의 증가분은 측정하지 않았다.
+Web SDK는 첫 인증 요청 시 동적 로드한다. 2026-11-03에는 제목 화면에서 쓰지 않는 ink 대사 파서도 실제 대사 로딩 시 불러오도록 분리했다. 같은 Node gzip 설정으로 측정한 초기 JS는 이전 Firebase 빌드 969,889바이트 / gzip 251,316바이트에서 842,460바이트 / gzip 219,959바이트로 줄었다. 부모가 빌드한 main `271be63` 기준 968,171바이트 / gzip 250,606바이트보다 각각 125,711바이트 / gzip 30,647바이트 작다. 새 ink 청크는 127,088바이트 / gzip 31,090바이트이며 전체 `check:size`는 7.04 MiB다. HTML은 초기 JS와 CSS만 참조하고 빌드 코드의 ink import는 대사 로딩 경로에 있다. 부모가 수정 후 제목 화면의 실제 네트워크와 ko/en E2E를 검증해야 한다. 이전 초기 JS 증가에 관한 사용자 답변은 아직 받지 못했다. Go 모듈과 서버 실행 파일의 증가분은 측정하지 않았다.
 
 Firestore 에뮬레이터에는 Java 21이 필요하다. 로컬 검증은 `demo-abraxas` 프로젝트만 사용하고 `node scripts/test-firestore-emulator.mjs`로 실행한다.
 

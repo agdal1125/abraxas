@@ -1,6 +1,7 @@
 import { expect, test, vi } from "vitest";
 import { Game } from "./game";
 import { configurePlayTransport } from "../net/plays";
+import { Compiler } from "inkjs/full";
 
 test("an invalid command response shows one error without a retry action", async () => {
   const data = new Map<string, string>();
@@ -28,4 +29,23 @@ test("dialogue focuses the actor named by the speaker", () => {
   game.panel("안녕", [], "dialogue", "B");
   expect(focusSpeaker.mock.calls).toEqual([["B"], ["v1j2"], ["s1j2"], ["B"]]);
   expect(elements.filter(node => node.className === "speaker").map(node => node.textContent)).toEqual(["모카", "시식 안내인", "무대지기", "모카"]);
+});
+
+test("dialogue parser load failure offers a retry", async () => {
+  vi.doMock("inkjs", () => { throw new Error("module unavailable"); });
+  const ink = new Compiler("Hello.\n-> END").Compile().ToJson() || "";
+  vi.stubGlobal("fetch", vi.fn(async () => new Response(ink)));
+  const panel = vi.fn(), advance = vi.fn();
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko", segment: "title", log: [] }, story: null, resumed: false, token: 0, controls: { setActive: vi.fn() }, village: { setEnabled: vi.fn() }, save: vi.fn(), answered: () => 0, panel, advance });
+  try {
+    await game.open("prologue");
+    expect(panel).toHaveBeenCalledOnce();
+    expect(advance).not.toHaveBeenCalled();
+    vi.doUnmock("inkjs");
+    panel.mock.calls[0]![1][0][1]();
+    await vi.waitFor(() => expect(advance).toHaveBeenCalledOnce());
+  } finally {
+    vi.doUnmock("inkjs");
+    vi.unstubAllGlobals();
+  }
 });
