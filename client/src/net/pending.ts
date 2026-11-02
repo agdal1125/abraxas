@@ -1,5 +1,8 @@
 import type { Command, PendingCommand } from "../core/play";
 import content from "../../../content/quests/moka-errand.json";
+import lumi from "../../../content/quests/lumi-errand.json";
+import echo from "../../../content/quests/echo-errand.json";
+import or from "../../../content/quests/or-errand.json";
 
 const storageKey = "abraxas:pending-command";
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -13,6 +16,7 @@ function validCommand(value: unknown): value is Command {
   if (value.kind === "choice") return exact(value, ["kind", "itemId", "pick"]) && nonempty(value.itemId) && (value.pick === "a" || value.pick === "b");
   if (["pickup", "set_down", "deliver", "act", "talk", "complete"].includes(String(value.kind))) return exact(value, ["kind", "targetId"]) && nonempty(value.targetId);
   if (value.kind === "place") return exact(value, ["kind", "breadId", "slotId"]) && nonempty(value.breadId) && Object.hasOwn(content.bread, value.breadId) && nonempty(value.slotId) && Object.hasOwn(content.slots, value.slotId);
+  if (value.kind === "place_piece") return exact(value, ["kind", "pieceId", "slotId"]) && nonempty(value.pieceId) && nonempty(value.slotId) && [lumi, echo, or].some((quest) => Object.hasOwn(quest.pieces, value.pieceId as string) && Object.hasOwn(quest.slots, value.slotId as string) && (quest.pieces as Record<string, string>)[value.pieceId as string] === (quest.slots as Record<string, string>)[value.slotId as string]);
   return (value.kind === "auto_arrange" || value.kind === "finish_segment") && exact(value, ["kind"]);
 }
 
