@@ -1,4 +1,4 @@
-.resident-board { display: grid; gap: .5rem; max-height: 80vh; overflow: auto; }
+.dialogue .panel.resident-board { display: grid; gap: .5rem; max-height: 80vh; overflow: auto; }
 .resident-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .35rem; }
 .resident-board button { min-height: 48px; word-break: keep-all; overflow-wrap: break-word; }
 .resident-board button[aria-pressed="true"] { outline: 3px solid currentColor; }
