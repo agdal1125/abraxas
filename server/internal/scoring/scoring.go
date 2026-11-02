@@ -14,8 +14,9 @@ type Answer struct {
 	Pick string `json:"pick"`
 }
 type Input struct {
-	PlayID string   `json:"playId"`
-	Log    []Answer `json:"log"`
+	PlayID           string   `json:"playId"`
+	Log              []Answer `json:"log"`
+	CompletedErrands []string `json:"completedErrands,omitempty"`
 }
 type NPCResult struct {
 	S        Scores `json:"s"`
@@ -27,6 +28,10 @@ type Result struct {
 	Modifier string               `json:"modifier"`
 	NPCs     map[string]NPCResult `json:"npcs"`
 }
+type ProgressResult struct {
+	NPCs      map[string]NPCResult `json:"npcs"`
+	Reactions map[string]string    `json:"reactions"`
+}
 type item struct {
 	ID    string `json:"id"`
 	Axis  string `json:"axis"`
@@ -36,13 +41,14 @@ type item struct {
 	} `json:"picks"`
 }
 type rules struct {
-	ScoreLimit    int `json:"scoreLimit"`
-	TieThreshold  int `json:"tieThreshold"`
-	NPCStep       int `json:"npcStep"`
-	AffinityStart int `json:"affinityStart"`
-	AffinityGain  int `json:"affinityGain"`
-	AffinityMin   int `json:"affinityMin"`
-	AffinityMax   int `json:"affinityMax"`
+	ScoreLimit         int `json:"scoreLimit"`
+	TieThreshold       int `json:"tieThreshold"`
+	NPCStep            int `json:"npcStep"`
+	AffinityStart      int `json:"affinityStart"`
+	AffinityGain       int `json:"affinityGain"`
+	ErrandAffinityGain int `json:"errandAffinityGain"`
+	AffinityMin        int `json:"affinityMin"`
+	AffinityMax        int `json:"affinityMax"`
 }
 type Data struct {
 	Items       []item `json:"items"`
@@ -82,7 +88,21 @@ func sign(value int) int {
 	return 0
 }
 func (data Data) Score(input Input) (Result, error) {
+	result, _, err := data.calculate(input, true)
+	return result, err
+}
+
+func (data Data) Progress(input Input) (ProgressResult, error) {
+	result, reactions, err := data.calculate(input, false)
+	if err != nil {
+		return ProgressResult{}, err
+	}
+	return ProgressResult{NPCs: result.NPCs, Reactions: reactions}, nil
+}
+
+func (data Data) calculate(input Input, complete bool) (Result, map[string]string, error) {
 	result := Result{S: Scores{"A": 0, "B": 0, "C": 0, "D": 0, "E": 0}, NPCs: map[string]NPCResult{}}
+	reactions := map[string]string{}
 	r := data.Rules
 	for _, npc := range data.NPCs {
 		s := Scores{}
@@ -105,11 +125,11 @@ func (data Data) Score(input Input) (Result, error) {
 	for _, answer := range input.Log {
 		item, ok := items[answer.ID]
 		if !ok || seen[answer.ID] {
-			return Result{}, fmt.Errorf("unknown or duplicate answer: %s", answer.ID)
+			return Result{}, nil, fmt.Errorf("unknown or duplicate answer: %s", answer.ID)
 		}
 		pick, ok := item.Picks[answer.Pick]
 		if !ok {
-			return Result{}, fmt.Errorf("unknown pick: %s", answer.Pick)
+			return Result{}, nil, fmt.Errorf("unknown pick: %s", answer.Pick)
 		}
 		seen[answer.ID] = true
 		if gates[item.ID] {
@@ -122,7 +142,7 @@ func (data Data) Score(input Input) (Result, error) {
 		if item.NPC != "" {
 			npc, ok := result.NPCs[item.NPC]
 			if !ok {
-				return Result{}, fmt.Errorf("unknown npc: %s", item.NPC)
+				return Result{}, nil, fmt.Errorf("unknown npc: %s", item.NPC)
 			}
 			current := npc.S[item.Axis]
 			expected := sign(current)
@@ -136,6 +156,10 @@ func (data Data) Score(input Input) (Result, error) {
 				}
 			}
 			chosen := sign(pick.W[item.Axis])
+			reactions[item.ID] = "thinking"
+			if chosen == expected {
+				reactions[item.ID] = "empathy"
+			}
 			npc.S[item.Axis] = bound(current+chosen*r.NPCStep, -r.ScoreLimit, r.ScoreLimit)
 			if chosen == expected {
 				npc.Affinity = bound(npc.Affinity+r.AffinityGain, r.AffinityMin, r.AffinityMax)
@@ -143,13 +167,28 @@ func (data Data) Score(input Input) (Result, error) {
 			result.NPCs[item.NPC] = npc
 		}
 	}
+	completed := map[string]bool{}
+	for _, id := range input.CompletedErrands {
+		npc, ok := result.NPCs[id]
+		if id != "moka" || !ok {
+			return Result{}, nil, fmt.Errorf("unknown completed errand: %s", id)
+		}
+		if !completed[id] {
+			npc.Affinity = bound(npc.Affinity+r.ErrandAffinityGain, r.AffinityMin, r.AffinityMax)
+			result.NPCs[id] = npc
+			completed[id] = true
+		}
+	}
+	if !complete {
+		return result, reactions, nil
+	}
 	if len(seen) != len(items) {
-		return Result{}, fmt.Errorf("incomplete answers")
+		return Result{}, nil, fmt.Errorf("incomplete answers")
 	}
 	for index, axis := range []string{"A", "B", "C", "D"} {
 		weight, ok := gateWeights[axis]
 		if !ok {
-			return Result{}, fmt.Errorf("missing tiebreaker")
+			return Result{}, nil, fmt.Errorf("missing tiebreaker")
 		}
 		direction := result.S[axis]
 		if math.Abs(float64(direction)) < float64(r.TieThreshold) {
@@ -170,5 +209,5 @@ func (data Data) Score(input Input) (Result, error) {
 	} else {
 		result.Modifier = "between"
 	}
-	return result, nil
+	return result, reactions, nil
 }
