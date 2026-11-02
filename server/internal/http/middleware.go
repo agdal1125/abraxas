@@ -71,7 +71,7 @@ func RecoverMiddleware(logger *slog.Logger) func(http.Handler) http.Handler {
 	}
 }
 
-// RequestLogMiddleware logs only the HTTP method, URL path, status code, and duration.
+// RequestLogMiddleware logs only the HTTP method, route pattern, status code, and duration.
 // Query strings, headers, request bodies, and tokens are never logged.
 func RequestLogMiddleware(logger *slog.Logger) func(http.Handler) http.Handler {
 	if logger == nil {

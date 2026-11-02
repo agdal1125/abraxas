@@ -50,6 +50,9 @@
     "saving": "Saving your choice.",
     "retry": "You can continue when you're connected.",
     "reconnect": "Reconnect",
+    "contentUnavailable": "Couldn't load the story.",
+    "tryAgain": "Try again",
+    "invalidResponse": "Couldn't verify the saved progress. Please restart the game later.",
     "version": "Load the new version to continue.",
     "otherTab": "We loaded the progress from your other screen.",
     "wrongItem": "That isn't the bread to deliver here."
