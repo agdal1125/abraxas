@@ -10,6 +10,14 @@ import { contentVersion } from "./content-version.mjs";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export const outputDirectory = lang => join(root, ".e2e", lang);
 export const e2eSucceeded = (reached, errors, abnormal) => reached && errors.length === 0 && abnormal === 0;
+export function loadHarnessContent(lang) {
+  const quests = Object.fromEntries(["lumi", "moka", "echo", "or"].map(id => [id, JSON.parse(readFileSync(join(root, "content", "quests", `${id}-errand.json`), "utf8"))]));
+  const scoring = JSON.parse(readFileSync(join(root, "content", "scoring", "items.json"), "utf8"));
+  const path = join(root, "content", "i18n", lang, "items.json");
+  const translations = existsSync(path) ? JSON.parse(readFileSync(path, "utf8")) : {};
+  const itemText = Object.fromEntries([...scoring.items, ...scoring.tiebreakers].map(item => [item.id, { picks: Object.fromEntries(Object.entries(item.picks).map(([pick, value]) => [pick, translations[item.id]?.picks[pick] ?? value.text])) }]));
+  return { quests, itemText };
+}
 export function parseArgs(argv) {
   const emulators = argv.includes("--emulators"), args = argv.filter(arg => arg !== "--emulators");
   const [lang = "ko", directory, scenario = "a-auto"] = args;
@@ -71,6 +79,7 @@ export function javaEnv(source = process.env) {
 }
 async function main() {
 const { emulators, lang, output, scenario } = parseArgs(process.argv.slice(2));
+const { quests, itemText } = loadHarnessContent(lang);
 const candidates = process.platform === "win32" ? [
   join(process.env["PROGRAMFILES(X86)"] ?? "C:/Program Files (x86)", "Microsoft/Edge/Application/msedge.exe"),
   join(process.env.PROGRAMFILES ?? "C:/Program Files", "Google/Chrome/Application/chrome.exe"),
@@ -82,8 +91,6 @@ const temp = mkdtempSync(join(tmpdir(), "abraxas-e2e-"));
 const children = [], errors = [], warnings = [], segments = [], abnormalDetails = [];
 let abnormal = 0, socket, steps = 0, reached = false, stopping = false, browserLog = "";
 const residents = ["lumi", "echo", "or"], allResidents = ["lumi", "moka", "echo", "or"];
-const quests = Object.fromEntries(allResidents.map(id => [id, JSON.parse(readFileSync(join(root, "content", "quests", `${id}-errand.json`), "utf8"))]));
-const itemText = JSON.parse(readFileSync(join(root, "content", "i18n", lang, "items.json"), "utf8"));
 const recovery = Object.fromEntries(residents.map(id => [id, { choice: false, rest: false, puzzle: false, report: false }]));
 const pointerEvidence = Object.fromEntries(allResidents.map(id => [id, 0]));
 const interactionEvidence = { direct: 0, pointer: 0, walked: 0 };

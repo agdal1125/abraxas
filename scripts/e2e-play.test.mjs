@@ -1,6 +1,21 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import * as harness from "./e2e-play.mjs";
 import { demoEnv, e2eSucceeded, outputDirectory, responseClassifier, consoleClassifier, stderrClassifier, canInteract, parseArgs, choiceIndex, boardPair, finalErrors } from "./e2e-play.mjs";
+
+test("preflight loads repository quests and both languages with the game's choice fallback", () => {
+  assert.equal(typeof harness.loadHarnessContent, "function");
+  const scoring = JSON.parse(readFileSync(new URL("../content/scoring/items.json", import.meta.url), "utf8"));
+  const english = JSON.parse(readFileSync(new URL("../content/i18n/en/items.json", import.meta.url), "utf8"));
+  for (const lang of ["ko", "en"]) {
+    const { quests, itemText } = harness.loadHarnessContent(lang);
+    for (const id of ["lumi", "moka", "echo", "or"]) assert.ok(Object.keys(quests[id].slots).length > 0);
+    for (const item of [...scoring.items, ...scoring.tiebreakers]) for (const pick of ["a", "b"]) {
+      assert.equal(itemText[item.id].picks[pick], (lang === "en" ? english[item.id]?.picks[pick] : undefined) ?? item.picks[pick].text);
+    }
+  }
+});
 
 test("arguments accept only the three fixed scenarios", () => {
   assert.equal(parseArgs([]).scenario, "a-auto");
