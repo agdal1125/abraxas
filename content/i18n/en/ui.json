@@ -9,11 +9,12 @@
     "prompt": "Who will you visit next?"
   },
   "npc": {
-    "lumi": "A",
-    "moka": "B",
-    "echo": "C",
-    "or": "D"
+    "lumi": "Lumi",
+    "moka": "Moka",
+    "echo": "Echo",
+    "or": "Or"
   },
+  "questNpc": { "s1j2": "Stagehand", "v1j2": "Tasting Guide", "t1p2": "Book Keeper", "s2j2": "Workshop Apprentice" },
   "segment": {
     "interlude": "A quiet moment alone",
     "festival": "Festival night",

@@ -3,13 +3,23 @@ import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:
 import { tmpdir } from "node:os";
 import { createServer } from "node:net";
 import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { contentVersion } from "./content-version.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+export const outputDirectory = lang => join(root, ".e2e", lang);
+export const e2eSucceeded = (reached, errors, abnormal) => reached && errors.length === 0 && abnormal === 0;
+export function demoEnv(source = process.env) {
+  return Object.fromEntries(Object.entries(source).filter(([key]) => !/^(GOOGLE_|GCLOUD_|GCP_|CLOUDSDK_|FIREBASE_|FIRESTORE_|VITE_|ABRAXAS_)/i.test(key)));
+}
+export function javaEnv(source = process.env) {
+  const java = source.JAVA_HOME || (process.platform === "win32" && existsSync("C:/Program Files/Eclipse Adoptium/jdk-21.0.13.9-hotspot") ? "C:/Program Files/Eclipse Adoptium/jdk-21.0.13.9-hotspot" : undefined);
+  return { ...(java ? { JAVA_HOME: java } : {}), PATH: java ? `${join(java, "bin")}${process.platform === "win32" ? ";" : ":"}${source.PATH}` : source.PATH };
+}
+async function main() {
 const emulators = process.argv.includes("--emulators");
 const args = process.argv.slice(2).filter(arg => arg !== "--emulators");
-const lang = args[0] ?? "ko", output = resolve(args[1] ?? `e2e-${lang}`);
+const lang = args[0] ?? "ko", output = resolve(args[1] ?? outputDirectory(lang));
 if (!["ko", "en"].includes(lang)) throw new Error("Usage: node scripts/e2e-play.mjs ko|en output-directory");
 const candidates = process.platform === "win32" ? [
   join(process.env["PROGRAMFILES(X86)"] ?? "C:/Program Files (x86)", "Microsoft/Edge/Application/msedge.exe"),
@@ -25,6 +35,8 @@ const abnormalStatuses = {};
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const start = (command, args, options = {}) => {
   const child = spawn(command, args, { ...options, detached: process.platform !== "win32", windowsHide: true, stdio: ["ignore", "pipe", "pipe"] });
+  child.output = "";
+  child.stdout.on("data", data => { child.output = (child.output + String(data)).slice(-4000); });
   child.on("error", error => errors.push(`${command}: ${error.message}`));
   child.stderr.on("data", data => { if (options.reportStderr) errors.push(String(data).slice(0, 500)); });
   children.push(child); return child;
@@ -42,10 +54,12 @@ for (const signal of ["SIGINT", "SIGTERM"]) process.once(signal, () => {
   try { rmSync(temp, { recursive: true, force: true }); } catch {}
   process.exit(1);
 });
-async function ready(url, child) {
+async function ready(url, child, marker) {
   for (let i = 0; i < 150; i++) {
     if (child.exitCode !== null) throw new Error(`Process exited before ready: ${child.exitCode}`);
-    try { const response = await fetch(url); if (response.ok) return response; } catch {}
+    if (!marker || child.output.includes(marker)) {
+      try { const response = await fetch(url); if (response.ok) return response; } catch {}
+    }
     await sleep(200);
   }
   throw new Error(`Timed out waiting for ${url}`);
@@ -56,25 +70,28 @@ async function requireFreePort(port) {
   await new Promise(resolve => probe.close(resolve));
 }
 try {
+  if ([".env", ".env.local", ".env.development", ".env.development.local"].some(name => existsSync(join(root, "client", name)))) throw new Error("Vite environment files must be absent for demo E2E");
+  const env = { ...demoEnv(), XDG_CONFIG_HOME: join(root, ".staging", "xdg") };
   mkdirSync(output, { recursive: true });
   await requireFreePort(8080); await requireFreePort(5173);
   if (emulators) {
     await requireFreePort(9099); await requireFreePort(8081);
-    const firebase = start(process.execPath, [join(root, "node_modules/firebase-tools/lib/bin/firebase.js"), "emulators:start", "--only", "auth,firestore", "--project", "demo-abraxas"], { cwd: root, env: { ...process.env, XDG_CONFIG_HOME: join(root, ".staging", "xdg"), PATH: process.env.JAVA_HOME ? `${join(process.env.JAVA_HOME, "bin")}${process.platform === "win32" ? ";" : ":"}${process.env.PATH}` : process.env.PATH }, reportStderr: true });
+    const firebase = start(process.execPath, [join(root, "node_modules/firebase-tools/lib/bin/firebase.js"), "emulators:start", "--only", "auth,firestore", "--project", "demo-abraxas"], { cwd: root, env: { ...env, ...javaEnv(env) }, reportStderr: true });
     await ready("http://127.0.0.1:9099/emulator/v1/projects/demo-abraxas/config", firebase);
     await ready("http://127.0.0.1:8081/v1/projects/demo-abraxas/databases/(default)/documents", firebase);
   }
-  const ink = spawnSync(process.execPath, ["scripts/compile-ink.mjs"], { cwd: join(root, "client"), encoding: "utf8" });
+  const ink = spawnSync(process.execPath, ["scripts/compile-ink.mjs"], { cwd: join(root, "client"), encoding: "utf8", env });
   if (ink.status !== 0) throw new Error(`Ink compilation failed: ${ink.stderr || ink.stdout}`);
   const exe = join(temp, process.platform === "win32" ? "server.exe" : "server");
-  const build = spawnSync("go", ["build", "-o", exe, "./cmd/api"], { cwd: join(root, "server"), encoding: "utf8", env: { ...process.env, GOCACHE: process.env.GOCACHE || join(temp, "go-cache") } });
+  const build = spawnSync("go", ["build", "-o", exe, "./cmd/api"], { cwd: join(root, "server"), encoding: "utf8", env: { ...env, GOCACHE: process.env.GOCACHE || join(temp, "go-cache"), GOPROXY: "off" } });
   if (build.status !== 0) throw new Error(`Go build failed: ${build.stderr || build.error?.message}`);
-  const server = start(exe, [], { cwd: join(root, "server"), env: { ...process.env, ABRAXAS_BIND_ADDR: "127.0.0.1:8080", ABRAXAS_DEV_FAKE_AUTH: emulators ? "0" : "1", ABRAXAS_DEV_SKIP_APP_CHECK: "1", ABRAXAS_CONTENT_VERSION: contentVersion(root), ...(emulators ? { ABRAXAS_STORE: "firestore", GOOGLE_CLOUD_PROJECT: "demo-abraxas", FIRESTORE_EMULATOR_HOST: "127.0.0.1:8081", FIREBASE_AUTH_EMULATOR_HOST: "127.0.0.1:9099" } : {}) } });
+  const server = start(exe, [], { cwd: join(root, "server"), env: { ...env, ABRAXAS_BIND_ADDR: "127.0.0.1:8080", ABRAXAS_DEV_FAKE_AUTH: emulators ? "0" : "1", ABRAXAS_DEV_SKIP_APP_CHECK: "1", ABRAXAS_CONTENT_VERSION: contentVersion(root), ...(emulators ? { ABRAXAS_STORE: "firestore", GOOGLE_CLOUD_PROJECT: "demo-abraxas", FIRESTORE_EMULATOR_HOST: "127.0.0.1:8081", FIREBASE_AUTH_EMULATOR_HOST: "127.0.0.1:9099" } : {}) } });
   await ready("http://127.0.0.1:8080/healthz", server);
-  const vite = start(process.execPath, [join(root, "client/node_modules/vite/bin/vite.js"), "--host", "127.0.0.1", "--port", "5173", "--strictPort"], { cwd: join(root, "client"), env: { ...process.env, VITE_ABRAXAS_DEV_FAKE_AUTH: emulators ? "0" : "1", ...(emulators ? { VITE_FIREBASE_API_KEY: "demo-api-key", VITE_FIREBASE_AUTH_DOMAIN: "demo-abraxas.firebaseapp.com", VITE_FIREBASE_PROJECT_ID: "demo-abraxas", VITE_FIREBASE_APP_ID: "demo-app", VITE_FIREBASE_AUTH_EMULATOR_HOST: "127.0.0.1:9099" } : {}) }, reportStderr: true });
-  await ready("http://127.0.0.1:5173/", vite);
+  const vite = start(process.execPath, [join(root, "client/node_modules/vite/bin/vite.js"), "--host", "127.0.0.1", "--port", "5173", "--strictPort"], { cwd: join(root, "client"), env: { ...env, VITE_ABRAXAS_DEV_FAKE_AUTH: emulators ? "0" : "1", ...(emulators ? { VITE_FIREBASE_API_KEY: "demo-api-key", VITE_FIREBASE_AUTH_DOMAIN: "demo-abraxas.firebaseapp.com", VITE_FIREBASE_PROJECT_ID: "demo-abraxas", VITE_FIREBASE_APP_ID: "demo-app", VITE_FIREBASE_AUTH_EMULATOR_HOST: "127.0.0.1:9099" } : {}) }, reportStderr: true });
+  await ready("http://127.0.0.1:5173/", vite, "ready in");
+  if (server.exitCode !== null || errors.length) throw new Error("Demo processes failed before browser startup");
   const debugPort = 9400 + Math.floor(Math.random() * 500);
-  const chrome = start(browser, ["--headless=new", `--remote-debugging-port=${debugPort}`, "--use-angle=swiftshader", "--enable-unsafe-swiftshader", ...(process.env.ABRAXAS_BROWSER_NO_SANDBOX === "1" ? ["--no-sandbox", "--disable-gpu-sandbox"] : []), `--user-data-dir=${join(temp, "browser")}`, "about:blank"]);
+  const chrome = start(browser, ["--headless=new", `--remote-debugging-port=${debugPort}`, "--use-angle=swiftshader", "--enable-unsafe-swiftshader", ...(process.env.ABRAXAS_BROWSER_NO_SANDBOX === "1" ? ["--no-sandbox", "--disable-gpu-sandbox"] : []), `--user-data-dir=${join(temp, "browser")}`, "about:blank"], { env });
   chrome.stderr.on("data", data => { browserLog = (browserLog + String(data)).slice(-4000); });
   const pages = await (await ready(`http://127.0.0.1:${debugPort}/json`, chrome)).json();
   const page = pages.find(item => item.type === "page");
@@ -134,4 +151,6 @@ finally {
   if (!reached && browserLog) errors.push(`Browser stderr: ${browserLog}`);
   console.log(JSON.stringify({ language: lang, reached, steps, segments, errors, abnormalResponses: abnormal, abnormalStatuses, captures: output }, null, 2));
 }
-process.exit(reached ? 0 : 1);
+process.exit(e2eSucceeded(reached, errors, abnormal) ? 0 : 1);
+}
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) await main();
