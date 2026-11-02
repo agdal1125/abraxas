@@ -56,8 +56,9 @@ function accumulate(input: Input, data: Data) {
   }
   if (input.completedErrands !== undefined && !Array.isArray(input.completedErrands)) throw new Error("Invalid completed errands");
   for (const id of new Set(input.completedErrands ?? [])) {
-    if (id !== "moka" || !npcs[id]) throw new Error("Unknown completed errand");
-    npcs[id].affinity = clamp(npcs[id].affinity + rules.errandAffinityGain, rules.affinityMin, rules.affinityMax);
+    const npc = Object.hasOwn(npcs, id) ? npcs[id] : undefined;
+    if (!["lumi", "moka", "echo", "or"].includes(id) || !npc) throw new Error("Unknown completed errand");
+    npc.affinity = clamp(npc.affinity + rules.errandAffinityGain, rules.affinityMin, rules.affinityMax);
   }
   return { s, npcs, gates, seen, items, reactions };
 }

@@ -2,8 +2,10 @@ package play
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -39,6 +41,8 @@ func TestMokaFixtures(t *testing.T) {
 	if err := json.Unmarshal(raw, &fixture); err != nil {
 		t.Fatal(err)
 	}
+	initial := NewSnapshot(fixture.Initial.PlayID, fixture.Initial.ContentVersion)
+	fixture.Initial.Lumi, fixture.Initial.Echo, fixture.Initial.Or = initial.Lumi, initial.Echo, initial.Or
 	for _, scenario := range fixture.Success {
 		t.Run(scenario.Name, func(t *testing.T) {
 			doc := NewDoc(fixture.Initial)
@@ -76,61 +80,74 @@ func TestMokaFixtures(t *testing.T) {
 	}
 }
 
-func TestFullExistingFlow(t *testing.T) {
+func TestAllEpisodeOrders(t *testing.T) {
 	engine, err := Load("../../../content", "fixture-version")
 	if err != nil {
 		t.Fatal(err)
 	}
-	raw, err := os.ReadFile("../../../content/quests/fixtures/moka-errand.json")
-	if err != nil {
-		t.Fatal(err)
-	}
-	var fixture struct {
-		CompletedAt string `json:"completedAt"`
-		Success     []struct {
-			Commands []Command `json:"commands"`
-		} `json:"success"`
-	}
-	if err := json.Unmarshal(raw, &fixture); err != nil {
-		t.Fatal(err)
-	}
-	doc := NewDoc(NewSnapshot("play", "fixture-version"))
-	apply := func(c Command) {
-		t.Helper()
-		if _, err := engine.Apply(&doc, c, fixture.CompletedAt); err != nil {
-			t.Fatalf("%s %+v: %v", doc.Snapshot.Segment, c, err)
-		}
-	}
-	finish := func() {
-		t.Helper()
-		for _, item := range engine.segmentItems(doc.Snapshot.Segment) {
-			apply(Command{Kind: "choice", ItemID: item.ID, Pick: "a"})
-		}
-		apply(Command{Kind: "finish_segment"})
-	}
-	finish()
+	fixtures := map[string][]Command{}
 	for _, npc := range []string{"lumi", "moka", "echo", "or"} {
-		if npc == "moka" {
-			for _, cmd := range fixture.Success[0].Commands {
-				apply(cmd)
+		raw, err := os.ReadFile("../../../content/quests/fixtures/" + npc + "-errand.json")
+		if err != nil {
+			t.Fatal(err)
+		}
+		var fixture struct {
+			Success []struct {
+				Commands []Command `json:"commands"`
+			} `json:"success"`
+		}
+		if err := json.Unmarshal(raw, &fixture); err != nil {
+			t.Fatal(err)
+		}
+		fixtures[npc] = fixture.Success[0].Commands
+	}
+	var visit func([]string, []string)
+	visit = func(order, remaining []string) {
+		if len(remaining) > 0 {
+			for i, npc := range remaining {
+				rest := append([]string{}, remaining[:i]...)
+				rest = append(rest, remaining[i+1:]...)
+				visit(append(append([]string{}, order...), npc), rest)
 			}
-			if doc.Snapshot.EpisodeEnd == nil || doc.Snapshot.EpisodeEnd.NPCID != "moka" {
-				t.Fatal("moka completion must include episode end")
+			return
+		}
+		t.Run(strings.Join(order, "-"), func(t *testing.T) {
+			doc := NewDoc(NewSnapshot("play", "fixture-version"))
+			apply := func(c Command) {
+				t.Helper()
+				if _, err := engine.Apply(&doc, c, "2026-11-02T00:00:00Z"); err != nil {
+					t.Fatalf("%s %+v: %v", doc.Snapshot.Segment, c, err)
+				}
 			}
-		} else {
-			apply(Command{Kind: "open_episode", NPCID: npc})
-			if npc == "echo" && (doc.Snapshot.Moka.Phase != "completed" || doc.Snapshot.EpisodeEnd != nil) {
-				t.Fatal("opening another episode must clear the optional episode end")
+			finish := func() {
+				t.Helper()
+				for _, item := range engine.segmentItems(doc.Snapshot.Segment) {
+					apply(Command{Kind: "choice", ItemID: item.ID, Pick: "a"})
+				}
+				apply(Command{Kind: "finish_segment"})
 			}
 			finish()
-		}
-		if doc.Snapshot.Segment != "festival" {
+			for i, npc := range order {
+				for _, cmd := range fixtures[npc] {
+					apply(cmd)
+				}
+				want := "festival"
+				if i < 3 {
+					want = fmt.Sprintf("interlude_%d", i+1)
+				}
+				if doc.Snapshot.Segment != want || doc.Snapshot.EpisodeEnd == nil || doc.Snapshot.EpisodeEnd.NPCID != npc || !doc.Events[npc+"-errand-completed"] || len(doc.CompletedErrands) != i+1 {
+					t.Fatalf("completion %s: %+v", npc, doc)
+				}
+				if i < 3 {
+					finish()
+				}
+			}
 			finish()
-		}
+			finish()
+			if doc.Snapshot.Segment != "result" || len(doc.Snapshot.Answers) != 42 {
+				t.Fatalf("result: %+v", doc.Snapshot)
+			}
+		})
 	}
-	finish()
-	finish()
-	if doc.Snapshot.Segment != "result" || len(doc.Snapshot.Answers) != 42 || len(doc.CompletedErrands) != 1 {
-		t.Fatalf("unexpected result: %+v", doc)
-	}
+	visit(nil, []string{"lumi", "moka", "echo", "or"})
 }

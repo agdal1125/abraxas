@@ -161,3 +161,69 @@ func TestCompletionPreservesPersonality(t *testing.T) {
 		}
 	}
 }
+
+func TestAllResidentsCompletionGolden(t *testing.T) {
+	data, err := Load(os.DirFS("../../../content/scoring"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	paths, err := filepath.Glob("../../../content/scoring/golden/*.json")
+	if err != nil || len(paths) == 0 {
+		t.Fatal("missing golden cases", err)
+	}
+	residents := []string{"lumi", "moka", "echo", "or"}
+	for _, path := range paths {
+		t.Run(filepath.Base(path), func(t *testing.T) {
+			raw, err := os.ReadFile(path)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var example struct {
+				Input
+				Expect Result `json:"expect"`
+			}
+			if err := json.Unmarshal(raw, &example); err != nil {
+				t.Fatal(err)
+			}
+			for _, id := range residents {
+				npc := example.Expect.NPCs[id]
+				npc.Affinity = min(npc.Affinity+8, 100)
+				example.Expect.NPCs[id] = npc
+			}
+			example.CompletedErrands = append(append([]string{}, residents...), residents...)
+			got, err := data.Score(example.Input)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !reflect.DeepEqual(got, example.Expect) {
+				t.Fatalf("score mismatch: got %+v, want %+v", got, example.Expect)
+			}
+			progress, err := data.Progress(example.Input)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !reflect.DeepEqual(progress.NPCs, example.Expect.NPCs) {
+				t.Fatalf("progress mismatch: %+v", progress.NPCs)
+			}
+		})
+	}
+	data.Rules.AffinityStart = 99
+	progress, err := data.Progress(Input{CompletedErrands: residents})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, id := range residents {
+		if progress.NPCs[id].Affinity != 100 {
+			t.Fatalf("%s reward not clamped", id)
+		}
+	}
+	for _, id := range []string{"invalid", "__proto__", "constructor", "toString"} {
+		if _, err := data.Progress(Input{CompletedErrands: []string{id}}); err == nil {
+			t.Fatalf("accepted %s", id)
+		}
+	}
+	data.NPCs = data.NPCs[:0]
+	if _, err := data.Progress(Input{CompletedErrands: []string{"lumi"}}); err == nil {
+		t.Fatal("accepted missing resident")
+	}
+}

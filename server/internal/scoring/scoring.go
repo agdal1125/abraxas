@@ -170,7 +170,7 @@ func (data Data) calculate(input Input, complete bool) (Result, map[string]strin
 	completed := map[string]bool{}
 	for _, id := range input.CompletedErrands {
 		npc, ok := result.NPCs[id]
-		if id != "moka" || !ok {
+		if (id != "lumi" && id != "moka" && id != "echo" && id != "or") || !ok {
 			return Result{}, nil, fmt.Errorf("unknown completed errand: %s", id)
 		}
 		if !completed[id] {

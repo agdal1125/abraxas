@@ -8,6 +8,22 @@ const read = (name: string) => JSON.parse(readFileSync(resolve(dir, name), "utf8
 const data: Data = { ...read("items.json"), ...read("npcs.json"), rules: read("rules.json") };
 const cases = readdirSync(resolve(dir, "golden")).filter((name) => name.endsWith(".json")).map((name) => read(`golden/${name}`) as Input & { name: string; expect: unknown });
 describe("scoring", () => {
+  it.each(cases)("applies each resident's completion once to shared golden $name", (example) => {
+    const residents = ["lumi", "moka", "echo", "or"];
+    const expected = structuredClone(example.expect) as ReturnType<typeof score>;
+    for (const id of residents) expected.npcs[id]!.affinity = Math.min(expected.npcs[id]!.affinity + 8, 100);
+    const input = { ...example, completedErrands: [...residents, ...residents] };
+    expect(score(input, data)).toEqual(expected);
+    expect(progress(input, data).npcs).toEqual(expected.npcs);
+  });
+  it("clamps all resident rewards and rejects unknown and prototype IDs", () => {
+    const residents = ["lumi", "moka", "echo", "or"];
+    const high = { ...data, rules: { ...data.rules, affinityStart: 99 } };
+    const result = progress({ playId: "test", log: [], completedErrands: residents }, high);
+    for (const id of residents) expect(result.npcs[id]!.affinity).toBe(100);
+    for (const id of ["invalid", "__proto__", "constructor", "toString"]) expect(() => progress({ playId: "test", log: [], completedErrands: [id] }, data)).toThrow();
+    expect(() => progress({ playId: "test", log: [], completedErrands: ["lumi"] }, { ...data, npcs: [] })).toThrow();
+  });
   it.each(cases)("$name", (example) => expect(score(example, data)).toEqual(example.expect));
   it("rejects missing answers", () => expect(() => score({ playId: "test", log: [] }, data)).toThrow());
   it("rejects duplicate answers", () => expect(() => score({ ...cases[0]!, log: [...cases[0]!.log, cases[0]!.log[0]!] }, data)).toThrow());
