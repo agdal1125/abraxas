@@ -1,6 +1,9 @@
 import { expect, test, vi } from "vitest";
 import { Game } from "./game";
 import { configurePlayTransport } from "../net/plays";
+import fixture from "../../../content/quests/fixtures/lumi-errand.json";
+import type { PlaySnapshot } from "../core/play";
+declare const __CONTENT_VERSION__: string;
 
 test("an invalid command response shows one error without a retry action", async () => {
   const data = new Map<string, string>();
@@ -28,4 +31,31 @@ test("dialogue focuses the actor named by the speaker", () => {
   game.panel("안녕", [], "dialogue", "B");
   expect(focusSpeaker.mock.calls).toEqual([["B"], ["v1j2"], ["s1j2"], ["B"]]);
   expect(elements.filter(node => node.className === "speaker").map(node => node.textContent)).toEqual(["모카", "시식 안내인", "무대지기", "모카"]);
+});
+
+test("resident interaction uses the confirmed branch and rejects inactive targets", () => {
+  const snapshot = structuredClone(fixture.initial) as PlaySnapshot;
+  snapshot.segment = "ep_lumi";
+  snapshot.lumi.phase = "notice_first";
+  snapshot.lumi.objects.notice = "player";
+  snapshot.answers = [{ id: "lumi_03", pick: "a" }];
+  const command = vi.fn(), world = vi.fn();
+  const game = Object.assign(Object.create(Game.prototype), { snapshot, command, world, residentNarrative: (_npc: string, _knot: string, after: () => void) => after() });
+  game.interactResident("lumi", "lumi-board");
+  expect(command).not.toHaveBeenCalled();
+  game.interactResident("lumi", "lumi-neighbor-1");
+  expect(command.mock.calls[0]![0]).toEqual({ kind: "talk", targetId: "lumi-neighbor-1" });
+});
+
+test("snapshot sends completed and locked resident views to the world", () => {
+  const snapshot = structuredClone(fixture.initial) as PlaySnapshot;
+  snapshot.contentVersion = __CONTENT_VERSION__; snapshot.segment = "ep_echo";
+  snapshot.lumi.phase = "completed"; snapshot.lumi.completedAt = "2026-11-02T00:00:00Z";
+  const village = { setMokaView: vi.fn(), setLumiView: vi.fn(), setEchoView: vi.fn(), setOrView: vi.fn() };
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko" }, village });
+  expect(game.applySnapshot(snapshot)).toBe(true);
+  expect(village.setMokaView.mock.calls[0]![0].phase).toBe("locked");
+  expect(village.setLumiView.mock.calls[0]![0].phase).toBe("completed");
+  expect(village.setEchoView.mock.calls[0]![0].phase).toBe("locked");
+  expect(village.setOrView.mock.calls[0]![0].phase).toBe("locked");
 });
