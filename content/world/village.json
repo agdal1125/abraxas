@@ -1059,6 +1059,9 @@
       "x": -3,
       "z": 8.660254037844386
     },
+    "moka-route-shortcut": { "x": 10, "z": -1 },
+    "moka-route-gentle": { "x": 8, "z": 1 },
+    "moka-route-join": { "x": 9.2, "z": 3.1 },
     "gate": {
       "x": -8,
       "z": -13.856406460551018
@@ -5550,6 +5553,16 @@
       "rot": 0,
       "scale": 1
     },
+    { "id": "moka-basket-source", "asset": "prop-moka-basket", "x": 8.7, "z": -4.1 },
+    { "id": "moka-display", "asset": "prop-moka-display", "x": 9.8, "z": -4.45 },
+    { "id": "moka-workshop-dropoff", "asset": "prop-moka-dropoff", "x": 14, "z": 6.1 },
+    { "id": "moka-rest", "asset": "prop-moka-dropoff", "x": 10, "z": 3 },
+    { "id": "moka-ledger", "asset": "prop-moka-ledger", "x": 9.2, "z": -3 },
+    { "id": "moka-reservation-bread", "asset": "prop-moka-bread-round", "x": 9.5, "z": -2.5 },
+    { "id": "moka-tired-neighbor", "asset": "quest-npc", "x": 8.6, "z": -2 },
+    { "id": "moka-tasting-plate", "asset": "prop-moka-plate", "x": 9.5, "z": -3.1 },
+    { "id": "moka-dough-double", "asset": "prop-moka-mold", "x": 10.1, "z": -3 },
+    { "id": "moka-dough-reserved", "asset": "prop-moka-mold", "x": 10.3, "z": -2.6 },
     {
       "id": "signboard-gate",
       "asset": "signboard",

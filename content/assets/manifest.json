@@ -509,6 +509,15 @@
       "scale": 1,
       "collision": []
     },
+    "prop-moka-basket": { "path": "assets/abraxas/environment/prop-moka-basket.glb", "scale": 1, "collision": [] },
+    "prop-moka-display": { "path": "assets/abraxas/environment/prop-moka-display.glb", "scale": 1, "collision": [{ "type": "box", "x": 0, "z": 0, "halfX": 0.38, "halfZ": 0.2 }] },
+    "prop-moka-bread-round": { "path": "assets/abraxas/environment/prop-moka-bread-round.glb", "scale": 1, "collision": [] },
+    "prop-moka-bread-long": { "path": "assets/abraxas/environment/prop-moka-bread-long.glb", "scale": 1, "collision": [] },
+    "prop-moka-bread-flower": { "path": "assets/abraxas/environment/prop-moka-bread-flower.glb", "scale": 1, "collision": [] },
+    "prop-moka-dropoff": { "path": "assets/abraxas/environment/prop-moka-dropoff.glb", "scale": 1, "collision": [{ "type": "box", "x": 0, "z": 0, "halfX": 0.27, "halfZ": 0.2 }] },
+    "prop-moka-ledger": { "path": "assets/abraxas/environment/prop-moka-ledger.glb", "scale": 1, "collision": [] },
+    "prop-moka-plate": { "path": "assets/abraxas/environment/prop-moka-plate.glb", "scale": 1, "collision": [] },
+    "prop-moka-mold": { "path": "assets/abraxas/environment/prop-moka-mold.glb", "scale": 1, "collision": [] },
     "signboard": {
       "path": "assets/abraxas/environment/signboard.glb",
       "scale": 1,

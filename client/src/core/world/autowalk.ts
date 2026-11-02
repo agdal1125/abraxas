@@ -30,6 +30,18 @@ export function findPath(start: Vec2, target: Target, colliders: Collider[], bou
   return null;
 }
 
+export function findPathVia(start: Vec2, waypoints: Vec2[], target: Target, colliders: Collider[], bounds: Bounds, visible: (position: Vec2) => boolean = () => true): Vec2[] | null {
+  let position = start;
+  const path: Vec2[] = [];
+  for (const point of [...waypoints, target]) {
+    const leg = findPath(position, point, colliders, bounds, point === target ? visible : undefined);
+    if (!leg) return null;
+    path.push(...leg);
+    position = leg.at(-1) ?? position;
+  }
+  return path;
+}
+
 export function followPath(state: State & { path: Vec2[] }, target: Target, colliders: Collider[], bounds: Bounds, dt: number): State & { path: Vec2[] } {
   const waypoint = state.path[0];
   if (!waypoint) return { ...state, status: nearest(state.position, [{ id: "target", ...target }]) ? "arrived" : "blocked" };
