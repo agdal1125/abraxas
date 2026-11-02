@@ -34,3 +34,4 @@
 - 2026-10-31 · 에이전트 · 규칙·스킬 원본은 `.agents/`, 공유 메모리 원본은 `docs/memory/` · ADR-0002
 - 2026-10-31 · 역할 · 코딩은 Codex CLI(`gpt-6.1-terra`, 난이도별 effort, ponytail), 디자인·아트는 agy(argon → 한도 시 gemini-3.8), 지휘·검수·PR 병합·최종 판단은 Claude(Opus). 병렬 worktree·PR 단위 진행, 핵심 테스트만 · 사용자 지시 · ADR-0004
 - 2026-10-31 · 작업 환경 · macOS·Windows 병행 지원, 저장소 스크립트는 Node로 통일, ink 컴파일은 inkjs 내장 컴파일러 · 병행 비용이 작음 · ADR-0003
+- 2026-11-03 · 작업 권한 · 상위 환경은 로컬 검증과 저장소 관리에 한정해 허용, 구현자는 workspace-write 유지 · GPU 프로세스 및 Git 잠금 쓰기 제한 해결 · 사용자 승인 답변(로컬 검증에 한정해 허용 / 저장소 관리 범위만 허용)

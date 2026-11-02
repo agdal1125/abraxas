@@ -26,6 +26,7 @@ type fakeTransactions struct {
 	docs    map[string]*pb.Document
 	commits int
 	writes  []int
+	fail    bool
 }
 
 func (f *fakeTransactions) BeginTransaction(context.Context, *pb.BeginTransactionRequest) (*pb.BeginTransactionResponse, error) {
@@ -48,6 +49,9 @@ func (f *fakeTransactions) BatchGetDocuments(req *pb.BatchGetDocumentsRequest, s
 func (f *fakeTransactions) Commit(_ context.Context, req *pb.CommitRequest) (*pb.CommitResponse, error) {
 	f.commits++
 	f.writes = append(f.writes, len(req.Writes))
+	if f.fail {
+		return nil, status.Error(codes.Internal, "commit failed")
+	}
 	if f.commits == 1 {
 		return nil, status.Error(codes.Aborted, "retry")
 	}
@@ -135,5 +139,18 @@ func TestFirestoreTransactionRetryAndAtomicWrites(t *testing.T) {
 	var after play.Doc
 	if err := json.Unmarshal(fake.docs[ref.Path].Fields["data"].GetBytesValue(), &after); err != nil || after.Snapshot.Revision != 1 {
 		t.Fatalf("rollback changed saved state: %+v %v", after, err)
+	}
+	fake.fail = true
+	_, err = s.Update(ctx, "user", "play", func(d *play.Doc) error {
+		d.Snapshot.Revision++
+		d.Events["other"] = true
+		d.Receipts["other"] = play.StoredReceipt{Receipt: play.Receipt{Key: "other"}}
+		return nil
+	})
+	if status.Code(err) != codes.Internal || len(fake.docs) != 3 {
+		t.Fatalf("failed commit changed documents: %v, count=%d", err, len(fake.docs))
+	}
+	if err := json.Unmarshal(fake.docs[ref.Path].Fields["data"].GetBytesValue(), &after); err != nil || after.Snapshot.Revision != 1 || after.Events["other"] {
+		t.Fatalf("failed commit changed state: %+v %v", after, err)
 	}
 }
