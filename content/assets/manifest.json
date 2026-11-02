@@ -530,6 +530,101 @@
           "halfZ": 0.08
         }
       ]
+    },
+    "prop-lumi-notice": {
+      "path": "assets/abraxas/environment/prop-lumi-notice.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-lumi-horn": {
+      "path": "assets/abraxas/environment/prop-lumi-horn.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-lumi-material": {
+      "path": "assets/abraxas/environment/prop-lumi-material.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-lumi-score": {
+      "path": "assets/abraxas/environment/prop-lumi-score.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-lumi-decoration-board": {
+      "path": "assets/abraxas/environment/prop-lumi-decoration-board.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-lumi-decoration-circle": {
+      "path": "assets/abraxas/environment/prop-lumi-decoration-circle.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-lumi-decoration-triangle": {
+      "path": "assets/abraxas/environment/prop-lumi-decoration-triangle.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-lumi-decoration-square": {
+      "path": "assets/abraxas/environment/prop-lumi-decoration-square.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-echo-book": {
+      "path": "assets/abraxas/environment/prop-echo-book.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-echo-books-board": {
+      "path": "assets/abraxas/environment/prop-echo-books-board.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-or-bucket-empty": {
+      "path": "assets/abraxas/environment/prop-or-bucket-empty.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-or-bucket-sand": {
+      "path": "assets/abraxas/environment/prop-or-bucket-sand.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-or-sand": {
+      "path": "assets/abraxas/environment/prop-or-sand.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-or-gear-board": {
+      "path": "assets/abraxas/environment/prop-or-gear-board.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-or-gear-circle": {
+      "path": "assets/abraxas/environment/prop-or-gear-circle.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-or-gear-triangle": {
+      "path": "assets/abraxas/environment/prop-or-gear-triangle.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-or-gear-square": {
+      "path": "assets/abraxas/environment/prop-or-gear-square.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-or-bell": {
+      "path": "assets/abraxas/environment/prop-or-bell.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-or-lantern-diagram": {
+      "path": "assets/abraxas/environment/prop-or-lantern-diagram.glb",
+      "scale": 1,
+      "collision": []
     }
   }
 }
