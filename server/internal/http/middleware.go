@@ -58,7 +58,7 @@ func RecoverMiddleware(logger *slog.Logger) func(http.Handler) http.Handler {
 				if p := recover(); p != nil {
 					logger.ErrorContext(r.Context(), "panic recovered",
 						slog.String("method", r.Method),
-						slog.String("path", r.URL.Path),
+						slog.String("route", r.Pattern),
 						slog.Any("panic", p),
 					)
 					if !rec.wroteHeader {
@@ -86,7 +86,7 @@ func RequestLogMiddleware(logger *slog.Logger) func(http.Handler) http.Handler {
 
 			logger.InfoContext(r.Context(), "http request",
 				slog.String("method", r.Method),
-				slog.String("path", r.URL.Path),
+				slog.String("route", r.Pattern),
 				slog.Int("status", rec.status),
 				slog.Duration("duration", time.Since(start)),
 			)
