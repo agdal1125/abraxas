@@ -4,6 +4,12 @@ import { readFileSync } from "node:fs";
 import * as harness from "./e2e-play.mjs";
 import { demoEnv, e2eSucceeded, outputDirectory, responseClassifier, consoleClassifier, stderrClassifier, canInteract, parseArgs, choiceIndex, boardPair, finalErrors } from "./e2e-play.mjs";
 
+test("only b-manual uses touch for world pointer interactions", () => {
+  assert.equal(harness.pointerInput("a-auto"), "mouse");
+  assert.equal(harness.pointerInput("b-manual"), "touch");
+  assert.equal(harness.pointerInput("resume"), "mouse");
+});
+
 test("preflight loads repository quests and both languages with the game's choice fallback", () => {
   assert.equal(typeof harness.loadHarnessContent, "function");
   const scoring = JSON.parse(readFileSync(new URL("../content/scoring/items.json", import.meta.url), "utf8"));
