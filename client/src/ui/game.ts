@@ -6,6 +6,14 @@ import type { Village } from "../scenes/village";
 import { Controls } from "../input/controls";
 import type { VillageInput } from "../input/movement";
 import { objectiveKey } from "./hud";
+import { contentVersionMatches, mokaView, type BreadId, type Command, type PlaySnapshot, type SlotId } from "../core/moka-errand";
+import { createPlay, loadCurrentPlay, recoverPending, sendCommand, PlayApiError, type CommandResult } from "../net/plays";
+import { clearPending, loadPending } from "../net/pending";
+import { confirmedCommand } from "./moka-errand";
+import quest from "../../../content/quests/moka-errand.json";
+import "./moka-errand.css";
+
+declare const __CONTENT_VERSION__: string;
 
 type Lang = "ko" | "en";
 type Save = { lang: Lang; playId: string; log: Input["log"]; completed: string[]; segment: string };
@@ -16,6 +24,9 @@ const storageKey = "abraxas-prototype";
 
 export class Game {
   private state: Save;
+  private snapshot: PlaySnapshot | null = null;
+  private local = false;
+  private localSave: Save | null = null;
   private overlay = document.createElement("div");
   private token = 0;
   private story: Story | null = null;
@@ -43,17 +54,18 @@ export class Game {
     this.settingsButton.className = "hud-settings-button"; this.settingsButton.textContent = "⚙"; this.settingsButton.addEventListener("click", () => this.settings());
     this.settingsMenu.className = "hud-menu"; this.settingsMenu.hidden = true; app.append(this.goal, this.direction, this.settingsButton, this.settingsMenu);
     let saved: Save | null = null; try { saved = JSON.parse(localStorage.getItem(storageKey) || "null") as Save | null; } catch { /* Storage may be unavailable. */ }
-    this.state = saved?.playId && Array.isArray(saved.log) && Array.isArray(saved.completed) ? saved : { lang: "ko", playId: this.newId(), log: [], completed: [], segment: "title" };
+    this.localSave = saved?.playId && Array.isArray(saved.log) && Array.isArray(saved.completed) ? saved : null;
+    this.state = { lang: this.localSave?.lang ?? "ko", playId: this.newId(), log: [], completed: [], segment: "title" };
     village.onInteract = id => this.interact(id);
     village.onPathBlocked = () => { this.notice.textContent = this.ui.pathBlocked; window.clearTimeout(this.noticeTimer); this.noticeTimer = window.setTimeout(() => { this.notice.textContent = ""; }, 2400); };
-    if (saved?.playId && this.state.segment !== "title") { this.resumed = true; this.world(); } else this.title();
+    this.title();
     requestAnimationFrame(this.updateDirection);
   }
   private newId(): string { return globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random()}`; }
-  private save(): void { try { localStorage.setItem(storageKey, JSON.stringify(this.state)); } catch { /* Continue in memory if storage is unavailable. */ } }
+  private save(): void { if (this.local) try { localStorage.setItem(storageKey, JSON.stringify(this.state)); this.localSave = this.state; } catch { /* Continue in memory if storage is unavailable. */ } }
   private get ui() { return translations(this.state.lang).ui; }
   private setTextSize(value: boolean): void { this.largeText = value; document.documentElement.style.setProperty("--body-size", value ? "18px" : "15px"); try { localStorage.setItem("abraxas-large-text", String(value)); } catch { /* Continue in memory if storage is unavailable. */ } }
-  private restart(): void { this.state = { lang: this.state.lang, playId: this.newId(), log: [], completed: [], segment: "title" }; try { localStorage.removeItem(storageKey); } catch { /* Storage may be unavailable. */ } this.title(); }
+  private restart(): void { this.local = false; this.snapshot = null; this.village.setMokaView(null); this.state = { lang: this.state.lang, playId: this.newId(), log: [], completed: [], segment: "title" }; this.title(); }
   private settings(confirm = false): void {
     this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.inert = true; this.settingsMenu.hidden = false;
     const card = document.createElement("div"); card.className = "hud-menu-card"; card.setAttribute("role", "dialog"); card.setAttribute("aria-modal", "true"); card.setAttribute("aria-label", this.ui.hud.settings);
@@ -72,7 +84,12 @@ export class Game {
     this.settingsButton.hidden = this.state.segment === "title" || this.state.segment === "result";
     this.settingsButton.setAttribute("aria-label", this.ui.hud.settings);
     this.goal.hidden = !this.exploring;
-    if (this.exploring) this.goal.textContent = this.ui.hud.goal[objectiveKey(this.state.segment, episodeStage(this.answered(this.state.segment)))];
+    if (this.exploring && this.snapshot?.segment === "ep_moka") {
+      const view = mokaView(this.snapshot), copy = translations(this.state.lang).moka;
+      const key = view.objectiveKey.split(".").at(-1) as keyof typeof copy.objective;
+      this.goal.textContent = copy.objective[key];
+      const carrying = document.createElement("span"); carrying.className = "moka-carry"; carrying.textContent = `${this.ui.carrying}: ${copy.items[view.basket === "player" ? "basket" : "empty"]}`; this.goal.append(carrying);
+    } else if (this.exploring) this.goal.textContent = this.ui.hud.goal[objectiveKey(this.state.segment, episodeStage(this.answered(this.state.segment)))];
   }
   private updateDirection = (): void => {
     this.direction.hidden = true;
@@ -107,11 +124,60 @@ export class Game {
     this.overlay.append(panel);
     if (!(buttons.length === 1 && buttons[0]![0] === this.ui.next)) { this.overlay.classList.add("has-choices"); const choices = document.createElement("div"); choices.className = "choices"; for (const [label, action] of buttons) choices.append(button(label, action)); this.overlay.append(choices); }
   }
-  private title(): void { this.worldApi.focusSpeaker?.(null); this.state.segment = "title"; this.panel(`${this.ui.title.name}\n\n${this.ui.title.subtitle}`, [[this.ui.title.language, () => { this.state.lang = this.state.lang === "ko" ? "en" : "ko"; this.title(); }], [this.ui.title.start, () => void this.open("prologue")]], "title"); }
+  private applySnapshot(snapshot: PlaySnapshot): boolean {
+    if (!contentVersionMatches(snapshot, __CONTENT_VERSION__)) { this.panel(translations(this.state.lang).moka.status.version, []); return false; }
+    this.snapshot = snapshot;
+    this.state = { ...this.state, playId: snapshot.playId, log: snapshot.answers, completed: snapshot.completedEpisodes, segment: snapshot.segment };
+    this.village.setMokaView(snapshot.segment === "ep_moka" ? mokaView(snapshot) : null);
+    return true;
+  }
+  private async startServer(key = crypto.randomUUID()): Promise<void> {
+    this.panel(translations(this.state.lang).moka.status.saving, []);
+    try {
+      let snapshot: PlaySnapshot;
+      try { snapshot = await loadCurrentPlay(); } catch (error) {
+        if (!(error instanceof PlayApiError) || error.status !== 404) throw error;
+        snapshot = await createPlay(key);
+      }
+      this.local = false;
+      if (!this.applySnapshot(snapshot)) return;
+      const recovered = await recoverPending();
+      if (recovered) { if (!recovered.pendingCleared) throw new Error("pending_unavailable"); if (!this.applySnapshot(recovered.snapshot)) return; snapshot = recovered.snapshot; }
+      this.resumed = snapshot.answers.length > 0;
+      if (snapshot.segment === "ep_moka") await this.village.resumeMoka();
+      this.world();
+    } catch { this.panel(translations(this.state.lang).moka.status.retry, [[translations(this.state.lang).moka.status.reconnect, () => void this.startServer(key)]]); }
+  }
+  private async command(command: Command, after: (result: CommandResult) => void, retry = false): Promise<void> {
+    if (!this.snapshot) return;
+    this.panel(translations(this.state.lang).moka.status.saving, []);
+    const apply = (result: CommandResult) => {
+      if (!result.pendingCleared) { this.panel(translations(this.state.lang).moka.status.retry, [[translations(this.state.lang).moka.status.reconnect, () => void this.command(command, after, true)]]); return; }
+      if (this.applySnapshot(result.snapshot)) after(result);
+    };
+    try {
+      if (retry) { const record = loadPending(); if (record) apply(await sendCommand(record.playId, record.pending)); else await confirmedCommand(this.snapshot, command, sendCommand, apply); }
+      else await confirmedCommand(this.snapshot, command, sendCommand, apply);
+    } catch (error) {
+      if (error instanceof PlayApiError && error.status === 409 && error.snapshot) {
+        try { const record = loadPending(); if (record) clearPending(record.playId, record.pending.key); } catch { this.panel(translations(this.state.lang).moka.status.retry, [[translations(this.state.lang).moka.status.reconnect, () => void this.command(command, after, true)]]); return; }
+        if (this.applySnapshot(error.snapshot)) this.panel(translations(this.state.lang).moka.status.otherTab, [[this.ui.next, () => this.world()]]);
+        return;
+      }
+      this.panel(translations(this.state.lang).moka.status.retry, [[translations(this.state.lang).moka.status.reconnect, () => void this.command(command, after, true)]]);
+    }
+  }
+  private title(): void {
+    this.worldApi.focusSpeaker?.(null); this.state.segment = "title";
+    const buttons: [string, () => void][] = [[this.ui.title.language, () => { this.state.lang = this.state.lang === "ko" ? "en" : "ko"; this.title(); }], [this.ui.title.start, () => void this.startServer()]];
+    if (this.localSave && this.localSave.segment !== "title") buttons.push([this.ui.continueLocal, () => { this.local = true; this.state = structuredClone(this.localSave!); this.resumed = true; this.panel(this.ui.localExperience, [[this.ui.next, () => this.world()]]); }]);
+    this.panel(`${this.ui.title.name}\n\n${this.ui.title.subtitle}`, buttons, "title");
+  }
   private world(): void {
     const segment = this.state.segment;
     if (segment === "result") { this.result(); return; }
     if (segment === "prologue") { void this.open(segment); return; }
+    if (segment === "ep_moka" && this.snapshot) { this.village.setMokaView(mokaView(this.snapshot)); this.showWorld(mokaView(this.snapshot).activeTargetIds); return; }
     if (segment.startsWith("ep_")) {
       const index = ids.indexOf(segment.slice(3)); const stage = episodeStage(this.answered(segment));
       if (stage === "done") { this.finish(); return; }
@@ -125,6 +191,7 @@ export class Game {
   private showWorld(available: string[]): void { this.worldApi.focusSpeaker?.(null); this.exploring = true; this.targets = available; this.updateHud(); this.token++; this.overlay.replaceChildren(); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
   private answered(segment: string): number { return data.items.filter(item => item.segment === segment && this.state.log.some(entry => entry.id === item.id)).length; }
   private interact(id: string): void {
+    if (this.snapshot?.segment === "ep_moka") { this.interactMoka(id); return; }
     if (id.startsWith("examine:")) {
       const lines = translations(this.state.lang).examine[id.slice(8)];
       if (lines?.length) {
@@ -135,7 +202,7 @@ export class Game {
     }
     this.worldApi.focusSpeaker?.(id);
     const segment = this.state.segment;
-    if (segment === "hub") { const index = "ABCD".indexOf(id); if (index >= 0 && !this.state.completed.includes(ids[index]!)) { void this.open(`ep_${ids[index]}`); return; } }
+    if (segment === "hub") { const index = "ABCD".indexOf(id); if (index >= 0 && !this.state.completed.includes(ids[index]!)) { const npcId = ids[index]!; if (this.snapshot) void this.command({ kind: "open_episode", npcId }, () => { if (npcId === "moka") void this.openMoka(); else void this.open(`ep_${npcId}`); }); else void this.open(`ep_${npcId}`); return; } }
     else if (segment.startsWith("ep_")) { const index = ids.indexOf(segment.slice(3)); const stage = episodeStage(this.answered(segment)); if (id === (stage === "quest" ? quests[index] : "ABCD"[index])) { void this.open(segment); return; } }
     else if ((segment.startsWith("interlude_") && id === "lake") || (segment === "festival" && id === "plaza") || (segment === "gate" && id === "gate")) { void this.open(segment); return; }
     const idle = (this.ui as typeof this.ui & { idle?: Record<string, string> }).idle?.[id];
@@ -150,26 +217,94 @@ export class Game {
     }
     if (token !== this.token) return; this.resumed = false; this.advance();
   }
+  private async openMoka(): Promise<void> {
+    if (!this.snapshot) return;
+    const knots: Partial<Record<PlaySnapshot["moka"]["phase"], string>> = { choose_route: "moka_meet", reservation: "moka_reservation", choose_display: "moka_choose_display", share: "moka_share", order: "moka_order", feedback: "moka_feedback" };
+    const knot = knots[this.snapshot.moka.phase];
+    if (!knot) { this.world(); return; }
+    const token = ++this.token;
+    try {
+      const response = await fetch(`./ink/${this.state.lang}/ep_moka.json`);
+      if (!response.ok) throw new Error("ink_unavailable");
+      const story = new Story(await response.text()); story.ChoosePathString(knot);
+      if (token !== this.token) return;
+      this.story = story; this.lastLine = ""; this.advance();
+    } catch { if (token === this.token) this.panel(translations(this.state.lang).moka.status.retry, [[translations(this.state.lang).moka.status.reconnect, () => void this.openMoka()]]); }
+  }
+  private async mokaNarrative(knot: string, after: () => void): Promise<void> {
+    const token = ++this.token;
+    try {
+      const response = await fetch(`./ink/${this.state.lang}/ep_moka.json`);
+      if (!response.ok) throw new Error("ink_unavailable");
+      const story = new Story(await response.text()); story.ChoosePathString(knot);
+      if (token !== this.token) return;
+      const next = () => { while (story.canContinue) { const line = (story.Continue() ?? "").trim(); if (line) { this.panel(line, [[this.ui.next, next]]); return; } } after(); };
+      next();
+    } catch { if (token === this.token) this.panel(translations(this.state.lang).moka.status.retry, [[translations(this.state.lang).moka.status.reconnect, () => void this.mokaNarrative(knot, after)]]); }
+  }
+  private interactMoka(id: string): void {
+    if (!this.snapshot || !mokaView(this.snapshot).activeTargetIds.includes(id)) { this.world(); return; }
+    const phase = this.snapshot.moka.phase;
+    if (["choose_route", "reservation", "choose_display", "share", "order", "feedback"].includes(phase)) { void this.openMoka(); return; }
+    if (phase === "arrange") { void this.mokaNarrative("moka_arrange", () => this.board()); return; }
+    if (phase === "report") { void this.mokaNarrative("moka_report", () => this.panel(this.ui.finishErrand, [[this.ui.finishErrand, () => void this.command({ kind: "complete", targetId: "B" }, result => { const hearts = result.snapshot.episodeEnd?.hearts ?? 0; void this.mokaNarrative("moka_completed", () => this.panel(`${"♥".repeat(hearts)}${"♡".repeat(5 - hearts)}`, [[this.ui.next, () => this.world()]])); })]])); return; }
+    let command: Command;
+    if (phase === "pick_up") command = { kind: "pickup", targetId: id };
+    else if (phase === "deliver") command = { kind: id === "moka-rest" ? (this.snapshot.moka.basket === "player" ? "set_down" : "pickup") : "deliver", targetId: id };
+    else if (phase === "return") command = { kind: "talk", targetId: id };
+    else command = { kind: "act", targetId: id };
+    const knots: Partial<Record<PlaySnapshot["moka"]["phase"], string>> = { pick_up: "moka_pick_up", deliver: "moka_deliver", reservation_action: "moka_reservation_action", share_action: "moka_share_action", order_action: "moka_order_action", return: "moka_return" };
+    const send = () => void this.command(command, () => { if (command.kind === "deliver") void this.mokaNarrative("moka_delivered", () => this.world()); else this.world(); });
+    const knot = knots[phase]; if (knot) void this.mokaNarrative(knot, send); else send();
+  }
+  private board(): void {
+    if (!this.snapshot || this.snapshot.moka.phase !== "arrange") { this.world(); return; }
+    this.exploring = false; this.updateHud(); this.token++; this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.replaceChildren(); this.overlay.className = "overlay dialogue";
+    const copy = translations(this.state.lang).moka, placements = this.snapshot.moka.placements;
+    const board = document.createElement("div"); board.className = "panel moka-board"; board.setAttribute("role", "dialog"); board.setAttribute("aria-label", copy.objective.arrange);
+    const message = document.createElement("p"); message.textContent = copy.objective.arrange; board.append(message);
+    let selected: BreadId | null = null;
+    const breads = document.createElement("div"), slots = document.createElement("div"); breads.className = "moka-grid"; slots.className = `moka-grid ${mokaView(this.snapshot).display === "high" ? "moka-high" : "moka-low"}`;
+    const breadButtons = new Map<BreadId, HTMLButtonElement>();
+    for (const id of Object.keys(quest.bread) as BreadId[]) {
+      const button = document.createElement("button"); button.textContent = copy.items[quest.bread[id] as "walnut" | "roll" | "flower"]; button.disabled = Object.values(placements).includes(id); button.setAttribute("aria-pressed", "false");
+      button.onclick = () => { selected = id; for (const [key, element] of breadButtons) element.setAttribute("aria-pressed", String(key === id)); }; breadButtons.set(id, button); breads.append(button);
+    }
+    for (const id of Object.keys(quest.slots) as SlotId[]) {
+      const button = document.createElement("button"); button.textContent = `${copy.items[quest.slots[id] as "walnut" | "roll" | "flower"]} ${placements[id] ? "✓" : "○"}`; button.disabled = !!placements[id];
+      button.onclick = () => { if (!selected) return; if (quest.bread[selected] !== quest.slots[id]) { message.textContent = copy.puzzle.wrong; selected = null; for (const element of breadButtons.values()) element.setAttribute("aria-pressed", "false"); return; } void this.command({ kind: "place", breadId: selected, slotId: id }, () => this.snapshot?.moka.phase === "arrange" ? this.board() : this.world()); }; slots.append(button);
+    }
+    board.append(breads, slots);
+    const hint = document.createElement("button"); hint.textContent = copy.puzzle.hint; hint.onclick = () => { const slot = (Object.keys(quest.slots) as SlotId[]).find(id => !placements[id]); const bread = (Object.keys(quest.bread) as BreadId[]).find(id => slot && quest.bread[id] === quest.slots[slot] && !Object.values(placements).includes(id)); if (slot && bread) { selected = bread; for (const [key, element] of breadButtons) element.setAttribute("aria-pressed", String(key === bread)); message.textContent = `${copy.items[quest.bread[bread] as "walnut" | "roll" | "flower"]} → ${copy.items[quest.slots[slot] as "walnut" | "roll" | "flower"]}`; } };
+    const auto = document.createElement("button"); auto.textContent = copy.puzzle.auto; auto.onclick = () => void this.command({ kind: "auto_arrange" }, () => this.world());
+    const close = document.createElement("button"); close.textContent = copy.puzzle.close; close.onclick = () => this.world(); board.append(hint, auto, close); this.overlay.append(board); breadButtons.values().next().value?.focus();
+  }
   private advance(): void {
     const segment = this.state.segment;
-    if (segment.startsWith("ep_") && this.episodeLimit < 6 && this.answered(segment) >= this.episodeLimit) { this.world(); return; }
+    if (segment.startsWith("ep_") && segment !== "ep_moka" && this.episodeLimit < 6 && this.answered(segment) >= this.episodeLimit) { this.world(); return; }
     if (this.story) {
       try {
         while (this.story.canContinue) { const line = (this.story.Continue() ?? "").trim(); if (line) { this.lastLine = line; this.panel(line, [[this.ui.next, () => this.advance()]]); return; } }
-        if (this.story.currentChoices.length) { const choices = this.story.currentChoices; this.panel(this.lastLine, choices.map(choice => [choice.text, () => { const id = choice.tags?.find(tag => tag.startsWith("item:"))?.slice(5).trim(); const pick = choice.tags?.find(tag => tag.startsWith("pick:"))?.slice(5).trim(); const item = data.items.find(candidate => candidate.id === id && candidate.segment === segment); if ((id || pick) && (!item || !pick || !item.picks[pick] || this.state.log.some(entry => entry.id === id))) { this.story = null; this.advance(); return; } try { this.story!.ChooseChoiceIndex(choice.index); } catch { this.story = null; this.advance(); return; } if (item && pick) this.choose(item, pick); else this.advance(); }])); return; }
+        if (this.story.currentChoices.length) { const choices = this.story.currentChoices; this.panel(this.lastLine, choices.map(choice => [choice.text, () => { const id = choice.tags?.find(tag => tag.startsWith("item:"))?.slice(5).trim(); const pick = choice.tags?.find(tag => tag.startsWith("pick:"))?.slice(5).trim(); const item = data.items.find(candidate => candidate.id === id && candidate.segment === segment); if ((id || pick) && (!item || !pick || !item.picks[pick] || this.state.log.some(entry => entry.id === id))) { this.story = null; this.advance(); return; } const proceed = () => { try { this.story?.ChooseChoiceIndex(choice.index); } catch { this.story = null; } }; if (item && pick) this.choose(item, pick, proceed); else { proceed(); this.advance(); } }])); return; }
       } catch { /* Continue with remaining questions. */ }
       this.story = null;
     }
+    if (segment === "ep_moka" && this.snapshot) { this.world(); return; }
     const items = segment === "gate" ? data.tiebreakers : data.items.filter(item => item.segment === segment);
     const item = items.find(candidate => !this.state.log.some(entry => entry.id === candidate.id));
     if (item) { const copy = translations(this.state.lang).items[item.id]; const index = ids.indexOf(segment.slice(3)); const speaker = index >= 0 && episodeStage(this.answered(segment)) === "quest" ? quests[index] : item.npc ? this.ui.npc[item.npc as keyof typeof this.ui.npc] : undefined; this.panel(copy?.situation ?? item.situation, Object.entries(item.picks).map(([pick, value]) => [copy?.picks[pick] ?? value.text, () => this.choose(item, pick)]), "dialogue", speaker); return; }
     this.finish();
   }
-  private choose(item: Item, pick: string): void {
+  private choose(item: Item, pick: string, proceed = () => {}): void {
+    if (this.snapshot) {
+      if (pick !== "a" && pick !== "b") return;
+      void this.command({ kind: "choice", itemId: item.id, pick }, result => { proceed(); const reaction = result.receipt.reaction; if (reaction && item.npc) { const text = this.state.segment === "ep_moka" ? translations(this.state.lang).moka.reaction[reaction] : this.ui.reaction[reaction][0]; this.panel(`${this.ui.npc[item.npc as keyof typeof this.ui.npc]}: ${text}`, [[this.ui.next, () => this.state.segment === "ep_moka" ? this.world() : this.advance()]]); } else this.advance(); }); return;
+    }
+    proceed();
     const entry = { id: item.id, pick }; const match = item.npc ? npcMatches(this.state, data, entry) : false; this.state.log.push(entry); this.save();
     if (item.npc) { const name = this.ui.npc[item.npc as keyof typeof this.ui.npc]; this.panel(`${name}: ${this.ui.reaction[match ? "empathy" : "thinking"][0]}`, [[this.ui.next, () => this.advance()]]); } else this.advance();
   }
-  private finish(): void { const segment = this.state.segment; if (segment.startsWith("ep_") && !this.state.completed.includes(segment.slice(3))) this.state.completed.push(segment.slice(3)); this.state.segment = nextSegment(segment, this.state.completed.length); this.save(); this.world(); }
+  private finish(): void { if (this.snapshot) { void this.command({ kind: "finish_segment" }, () => this.world()); return; } const segment = this.state.segment; if (segment.startsWith("ep_") && !this.state.completed.includes(segment.slice(3))) this.state.completed.push(segment.slice(3)); this.state.segment = nextSegment(segment, this.state.completed.length); this.save(); this.world(); }
   private result(): void {
     const result = score(this.state, data); const axes = ["A", "B", "C", "D"] as const; const lines = axes.map((axis, i) => this.ui.result.poles[axis][result.type[i] === "OHVG"[i] ? "plus" : "minus"]);
     this.panel([this.ui.result.title, this.ui.result.modifier[result.modifier], ...lines, this.ui.result.disclaimer].join("\n\n"), [[this.ui.result.restart, () => this.restart()]], "result");
