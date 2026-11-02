@@ -56,7 +56,7 @@ function load(name) {
 }
 
 const rules = load("rules.json");
-const expectedRules = { scoreLimit: 100, tieThreshold: 10, npcStep: 20, affinityStart: 20, affinityGain: 12, affinityMin: 0, affinityMax: 100 };
+const expectedRules = { scoreLimit: 100, tieThreshold: 10, npcStep: 20, affinityStart: 20, affinityGain: 12, errandAffinityGain: 8, affinityMin: 0, affinityMax: 100 };
 if (rules) for (const [key, value] of Object.entries(expectedRules)) {
   if (rules[key] !== value) err(`rules.json ${key}`, `must be ${value}`);
 }
