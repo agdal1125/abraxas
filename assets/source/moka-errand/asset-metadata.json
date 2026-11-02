@@ -1,0 +1,607 @@
+{
+  "paletteVersion": "dream-v2",
+  "blenderVersion": "5.2.3 LTS",
+  "colorSpace": "FLOAT_COLOR COLOR_0: sRGB to linear once, one linear AO multiplication",
+  "basketAttachment": {
+    "coordinateSystem": "player local, glTF Y-up",
+    "offset": [
+      0,
+      0.3,
+      0.3
+    ],
+    "scale": 1,
+    "status": "initial proposal; verify player forward direction, clipping and face visibility in game"
+  },
+  "displayStack": {
+    "count": [
+      1,
+      3
+    ],
+    "stepY": 0.29,
+    "collision": "one base footprint regardless of tier count"
+  },
+  "assets": {
+    "prop-moka-basket": {
+      "path": "assets/abraxas/environment/prop-moka-basket.glb",
+      "triangles": 688,
+      "bytes": 9072,
+      "bounds": {
+        "width": 0.4,
+        "depth": 0.29,
+        "height": 0.4,
+        "minY": 0,
+        "maxY": 0.4
+      },
+      "collision": [],
+      "colorVerification": {
+        "wood_dark": {
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
+          "measuredSrgb255": [
+            156.0,
+            120.0,
+            96.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.1878,
+            0.117
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood": {
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
+          "measuredSrgb255": [
+            198.0,
+            157.0,
+            128.0
+          ],
+          "measuredLinear": [
+            0.5647,
+            0.3372,
+            0.2159
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_light": {
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
+          "measuredSrgb255": [
+            223.0,
+            185.0,
+            158.0
+          ],
+          "measuredLinear": [
+            0.7379,
+            0.4851,
+            0.3419
+          ],
+          "maxDiff255": 0.0
+        },
+        "path": {
+          "paletteHex": "#EDC9A3",
+          "measuredHex": "#EDC9A3",
+          "measuredSrgb255": [
+            237.0,
+            201.0,
+            163.0
+          ],
+          "measuredLinear": [
+            0.8469,
+            0.5841,
+            0.3663
+          ],
+          "maxDiff255": 0.0
+        },
+        "gold": {
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
+          "measuredSrgb255": [
+            255.0,
+            224.0,
+            138.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.7454,
+            0.2542
+          ],
+          "maxDiff255": 0.0
+        }
+      },
+      "manifestDraft": {
+        "path": "assets/abraxas/environment/prop-moka-basket.glb",
+        "scale": 1,
+        "collision": []
+      },
+      "preview": "assets/source/moka-errand/previews/prop-moka-basket.png"
+    },
+    "prop-moka-display": {
+      "path": "assets/abraxas/environment/prop-moka-display.glb",
+      "triangles": 264,
+      "bytes": 3860,
+      "bounds": {
+        "width": 0.76,
+        "depth": 0.4,
+        "height": 0.345,
+        "minY": 0,
+        "maxY": 0.345
+      },
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.38,
+          "halfZ": 0.2
+        }
+      ],
+      "colorVerification": {
+        "wood_dark": {
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
+          "measuredSrgb255": [
+            156.0,
+            120.0,
+            96.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.1878,
+            0.117
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood": {
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
+          "measuredSrgb255": [
+            198.0,
+            157.0,
+            128.0
+          ],
+          "measuredLinear": [
+            0.5647,
+            0.3372,
+            0.2159
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_light": {
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
+          "measuredSrgb255": [
+            223.0,
+            185.0,
+            158.0
+          ],
+          "measuredLinear": [
+            0.7379,
+            0.4851,
+            0.3419
+          ],
+          "maxDiff255": 0.0
+        }
+      },
+      "manifestDraft": {
+        "path": "assets/abraxas/environment/prop-moka-display.glb",
+        "scale": 1,
+        "collision": [
+          {
+            "type": "box",
+            "x": 0,
+            "z": 0,
+            "halfX": 0.38,
+            "halfZ": 0.2
+          }
+        ]
+      },
+      "preview": "assets/source/moka-errand/previews/prop-moka-display.png"
+    },
+    "prop-moka-bread-round": {
+      "path": "assets/abraxas/environment/prop-moka-bread-round.glb",
+      "triangles": 124,
+      "bytes": 3476,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.15,
+        "minY": 0,
+        "maxY": 0.15
+      },
+      "collision": [],
+      "colorVerification": {
+        "path": {
+          "paletteHex": "#EDC9A3",
+          "measuredHex": "#EDC9A3",
+          "measuredSrgb255": [
+            237.0,
+            201.0,
+            163.0
+          ],
+          "measuredLinear": [
+            0.8469,
+            0.5841,
+            0.3663
+          ],
+          "maxDiff255": 0.0
+        },
+        "cream_warm": {
+          "paletteHex": "#F7EFE2",
+          "measuredHex": "#F7EFE2",
+          "measuredSrgb255": [
+            247.0,
+            239.0,
+            226.0
+          ],
+          "measuredLinear": [
+            0.9301,
+            0.8632,
+            0.7605
+          ],
+          "maxDiff255": 0.0
+        }
+      },
+      "manifestDraft": {
+        "path": "assets/abraxas/environment/prop-moka-bread-round.glb",
+        "scale": 1,
+        "collision": []
+      },
+      "preview": "assets/source/moka-errand/previews/prop-moka-bread-round.png"
+    },
+    "prop-moka-bread-long": {
+      "path": "assets/abraxas/environment/prop-moka-bread-long.glb",
+      "triangles": 212,
+      "bytes": 4760,
+      "bounds": {
+        "width": 0.42,
+        "depth": 0.16,
+        "height": 0.14,
+        "minY": 0,
+        "maxY": 0.14
+      },
+      "collision": [],
+      "colorVerification": {
+        "cream_warm": {
+          "paletteHex": "#F7EFE2",
+          "measuredHex": "#F7EFE2",
+          "measuredSrgb255": [
+            247.0,
+            239.0,
+            226.0
+          ],
+          "measuredLinear": [
+            0.9301,
+            0.8632,
+            0.7605
+          ],
+          "maxDiff255": 0.0
+        },
+        "gold": {
+          "paletteHex": "#FFE08A",
+          "measuredHex": "#FFE08A",
+          "measuredSrgb255": [
+            255.0,
+            224.0,
+            138.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.7454,
+            0.2542
+          ],
+          "maxDiff255": 0.0
+        }
+      },
+      "manifestDraft": {
+        "path": "assets/abraxas/environment/prop-moka-bread-long.glb",
+        "scale": 1,
+        "collision": []
+      },
+      "preview": "assets/source/moka-errand/previews/prop-moka-bread-long.png"
+    },
+    "prop-moka-bread-flower": {
+      "path": "assets/abraxas/environment/prop-moka-bread-flower.glb",
+      "triangles": 120,
+      "bytes": 3280,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.28,
+        "height": 0.1,
+        "minY": 0,
+        "maxY": 0.1
+      },
+      "collision": [],
+      "colorVerification": {
+        "path": {
+          "paletteHex": "#EDC9A3",
+          "measuredHex": "#EDC9A3",
+          "measuredSrgb255": [
+            237.0,
+            201.0,
+            163.0
+          ],
+          "measuredLinear": [
+            0.8469,
+            0.5841,
+            0.3663
+          ],
+          "maxDiff255": 0.0
+        },
+        "gold_light": {
+          "paletteHex": "#FFF0B8",
+          "measuredHex": "#FFF0B8",
+          "measuredSrgb255": [
+            255.0,
+            240.0,
+            184.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.8714,
+            0.4793
+          ],
+          "maxDiff255": 0.0
+        }
+      },
+      "manifestDraft": {
+        "path": "assets/abraxas/environment/prop-moka-bread-flower.glb",
+        "scale": 1,
+        "collision": []
+      },
+      "preview": "assets/source/moka-errand/previews/prop-moka-bread-flower.png"
+    },
+    "prop-moka-dropoff": {
+      "path": "assets/abraxas/environment/prop-moka-dropoff.glb",
+      "triangles": 264,
+      "bytes": 3900,
+      "bounds": {
+        "width": 0.54,
+        "depth": 0.4,
+        "height": 0.51,
+        "minY": 0,
+        "maxY": 0.51
+      },
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.27,
+          "halfZ": 0.2
+        }
+      ],
+      "colorVerification": {
+        "wood_dark": {
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
+          "measuredSrgb255": [
+            156.0,
+            120.0,
+            96.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.1878,
+            0.117
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood": {
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
+          "measuredSrgb255": [
+            198.0,
+            157.0,
+            128.0
+          ],
+          "measuredLinear": [
+            0.5647,
+            0.3372,
+            0.2159
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood_light": {
+          "paletteHex": "#DFB99E",
+          "measuredHex": "#DFB99E",
+          "measuredSrgb255": [
+            223.0,
+            185.0,
+            158.0
+          ],
+          "measuredLinear": [
+            0.7379,
+            0.4851,
+            0.3419
+          ],
+          "maxDiff255": 0.0
+        }
+      },
+      "manifestDraft": {
+        "path": "assets/abraxas/environment/prop-moka-dropoff.glb",
+        "scale": 1,
+        "collision": [
+          {
+            "type": "box",
+            "x": 0,
+            "z": 0,
+            "halfX": 0.27,
+            "halfZ": 0.2
+          }
+        ]
+      },
+      "preview": "assets/source/moka-errand/previews/prop-moka-dropoff.png"
+    },
+    "prop-moka-ledger": {
+      "path": "assets/abraxas/environment/prop-moka-ledger.glb",
+      "triangles": 132,
+      "bytes": 2756,
+      "bounds": {
+        "width": 0.28,
+        "depth": 0.2,
+        "height": 0.06,
+        "minY": 0,
+        "maxY": 0.06
+      },
+      "collision": [],
+      "colorVerification": {
+        "wood_dark": {
+          "paletteHex": "#9C7860",
+          "measuredHex": "#9C7860",
+          "measuredSrgb255": [
+            156.0,
+            120.0,
+            96.0
+          ],
+          "measuredLinear": [
+            0.3325,
+            0.1878,
+            0.117
+          ],
+          "maxDiff255": 0.0
+        },
+        "wood": {
+          "paletteHex": "#C69D80",
+          "measuredHex": "#C69D80",
+          "measuredSrgb255": [
+            198.0,
+            157.0,
+            128.0
+          ],
+          "measuredLinear": [
+            0.5647,
+            0.3372,
+            0.2159
+          ],
+          "maxDiff255": 0.0
+        },
+        "cream": {
+          "paletteHex": "#FFF8EC",
+          "measuredHex": "#FFF8EC",
+          "measuredSrgb255": [
+            255.0,
+            248.0,
+            236.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.9387,
+            0.8388
+          ],
+          "maxDiff255": 0.0
+        }
+      },
+      "manifestDraft": {
+        "path": "assets/abraxas/environment/prop-moka-ledger.glb",
+        "scale": 1,
+        "collision": []
+      },
+      "preview": "assets/source/moka-errand/previews/prop-moka-ledger.png"
+    },
+    "prop-moka-plate": {
+      "path": "assets/abraxas/environment/prop-moka-plate.glb",
+      "triangles": 248,
+      "bytes": 3724,
+      "bounds": {
+        "width": 0.3,
+        "depth": 0.3,
+        "height": 0.04,
+        "minY": 0,
+        "maxY": 0.04
+      },
+      "collision": [],
+      "colorVerification": {
+        "cream_warm": {
+          "paletteHex": "#F7EFE2",
+          "measuredHex": "#F7EFE2",
+          "measuredSrgb255": [
+            247.0,
+            239.0,
+            226.0
+          ],
+          "measuredLinear": [
+            0.9301,
+            0.8632,
+            0.7605
+          ],
+          "maxDiff255": 0.0
+        },
+        "cream": {
+          "paletteHex": "#FFF8EC",
+          "measuredHex": "#FFF8EC",
+          "measuredSrgb255": [
+            255.0,
+            248.0,
+            236.0
+          ],
+          "measuredLinear": [
+            1.0,
+            0.9387,
+            0.8388
+          ],
+          "maxDiff255": 0.0
+        }
+      },
+      "manifestDraft": {
+        "path": "assets/abraxas/environment/prop-moka-plate.glb",
+        "scale": 1,
+        "collision": []
+      },
+      "preview": "assets/source/moka-errand/previews/prop-moka-plate.png"
+    },
+    "prop-moka-mold": {
+      "path": "assets/abraxas/environment/prop-moka-mold.glb",
+      "triangles": 184,
+      "bytes": 3144,
+      "bounds": {
+        "width": 0.26,
+        "depth": 0.26,
+        "height": 0.07,
+        "minY": 0,
+        "maxY": 0.07
+      },
+      "collision": [],
+      "colorVerification": {
+        "stone": {
+          "paletteHex": "#C8BFE0",
+          "measuredHex": "#C8BFE0",
+          "measuredSrgb255": [
+            200.0,
+            191.0,
+            224.0
+          ],
+          "measuredLinear": [
+            0.5776,
+            0.521,
+            0.7454
+          ],
+          "maxDiff255": 0.0
+        },
+        "cream_warm": {
+          "paletteHex": "#F7EFE2",
+          "measuredHex": "#F7EFE2",
+          "measuredSrgb255": [
+            247.0,
+            239.0,
+            226.0
+          ],
+          "measuredLinear": [
+            0.9301,
+            0.8632,
+            0.7605
+          ],
+          "maxDiff255": 0.0
+        }
+      },
+      "manifestDraft": {
+        "path": "assets/abraxas/environment/prop-moka-mold.glb",
+        "scale": 1,
+        "collision": []
+      },
+      "preview": "assets/source/moka-errand/previews/prop-moka-mold.png"
+    }
+  },
+  "totalBytes": 37972
+}
