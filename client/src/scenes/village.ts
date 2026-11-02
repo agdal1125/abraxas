@@ -127,6 +127,12 @@ export class Village {
   }
   setEnabled(value: boolean): void { this.enabled = value; if (value) { this.talking = undefined; this.speaker = null; } else { this.auto = undefined; this.input = { x: 0, z: 0 }; this.nearby = null; this.onNearbyChange(null); } }
   focusSpeaker(id: string | null): void { this.speaker = id && this.target(id) ? id : null; }
+  targetScreenPos(id: string): { x: number; y: number; onScreen: boolean } | null {
+    const target = this.target(id); if (!target) return null;
+    const point = new THREE.Vector3(target.x, 0, target.z).project(this.camera);
+    const rect = this.renderer.domElement.getBoundingClientRect();
+    return { x: rect.left + (point.x + 1) * rect.width / 2, y: rect.top + (1 - point.y) * rect.height / 2, onScreen: Math.abs(point.x) <= 1 && Math.abs(point.y) <= 1 && Math.abs(point.z) <= 1 };
+  }
   setAvailable(ids: string[]): void { this.available = new Set(ids); for (const [id, actor] of this.actors) actor.marker.visible = this.available.has(id); }
   setMoveInput(x: number, y: number): void { if (x || y) this.auto = undefined; this.input = !this.ready || !this.enabled || this.portrait ? { x: 0, z: 0 } : { x: (x - y) / Math.SQRT2, z: (-x - y) / Math.SQRT2 }; }
   private addColliders(placement: Placement, owner?: string): void {
