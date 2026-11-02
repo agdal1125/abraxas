@@ -25,6 +25,8 @@
       "path": "assets/abraxas/environment/prop-moka-basket.glb",
       "triangles": 688,
       "bytes": 9072,
+      "maxTriangles": 700,
+      "maxBytes": 40960,
       "bounds": {
         "width": 0.4,
         "depth": 0.29,
@@ -121,6 +123,8 @@
       "path": "assets/abraxas/environment/prop-moka-display.glb",
       "triangles": 264,
       "bytes": 3860,
+      "maxTriangles": 700,
+      "maxBytes": 40960,
       "bounds": {
         "width": 0.76,
         "depth": 0.4,
@@ -203,6 +207,8 @@
       "path": "assets/abraxas/environment/prop-moka-bread-round.glb",
       "triangles": 124,
       "bytes": 3476,
+      "maxTriangles": 700,
+      "maxBytes": 40960,
       "bounds": {
         "width": 0.28,
         "depth": 0.28,
@@ -254,6 +260,8 @@
       "path": "assets/abraxas/environment/prop-moka-bread-long.glb",
       "triangles": 212,
       "bytes": 4760,
+      "maxTriangles": 700,
+      "maxBytes": 40960,
       "bounds": {
         "width": 0.42,
         "depth": 0.16,
@@ -305,6 +313,8 @@
       "path": "assets/abraxas/environment/prop-moka-bread-flower.glb",
       "triangles": 120,
       "bytes": 3280,
+      "maxTriangles": 700,
+      "maxBytes": 40960,
       "bounds": {
         "width": 0.28,
         "depth": 0.28,
@@ -356,6 +366,8 @@
       "path": "assets/abraxas/environment/prop-moka-dropoff.glb",
       "triangles": 264,
       "bytes": 3900,
+      "maxTriangles": 700,
+      "maxBytes": 40960,
       "bounds": {
         "width": 0.54,
         "depth": 0.4,
@@ -438,6 +450,8 @@
       "path": "assets/abraxas/environment/prop-moka-ledger.glb",
       "triangles": 132,
       "bytes": 2756,
+      "maxTriangles": 700,
+      "maxBytes": 40960,
       "bounds": {
         "width": 0.28,
         "depth": 0.2,
@@ -504,6 +518,8 @@
       "path": "assets/abraxas/environment/prop-moka-plate.glb",
       "triangles": 248,
       "bytes": 3724,
+      "maxTriangles": 700,
+      "maxBytes": 40960,
       "bounds": {
         "width": 0.3,
         "depth": 0.3,
@@ -555,6 +571,8 @@
       "path": "assets/abraxas/environment/prop-moka-mold.glb",
       "triangles": 184,
       "bytes": 3144,
+      "maxTriangles": 700,
+      "maxBytes": 40960,
       "bounds": {
         "width": 0.26,
         "depth": 0.26,
