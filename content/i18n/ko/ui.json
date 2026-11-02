@@ -9,11 +9,12 @@
     "prompt": "누구를 만나러 갈까?"
   },
   "npc": {
-    "lumi": "A",
-    "moka": "B",
-    "echo": "C",
-    "or": "D"
+    "lumi": "루미",
+    "moka": "모카",
+    "echo": "에코",
+    "or": "오르"
   },
+  "questNpc": { "s1j2": "무대지기", "v1j2": "시식 안내인", "t1p2": "책 정리인", "s2j2": "공방 조수" },
   "segment": {
     "interlude": "잠깐, 혼자만의 시간",
     "festival": "축제의 밤",

@@ -1,7 +1,7 @@
 {
   "objective": {
-    "locked": "B에게 말 걸기",
-    "choose_route": "B에게 말 걸기",
+    "locked": "모카에게 말 걸기",
+    "choose_route": "모카에게 말 걸기",
     "pick_up": "호두빵 바구니 집기",
     "deliver": "빵을 공방에 전하기",
     "pick_up_rest": "바구니 다시 집기",
@@ -13,10 +13,10 @@
     "share_action": "정한 곳에 시식 빵 놓기",
     "order": "축제에 쓸 반죽 준비하기",
     "order_action": "정한 수량의 반죽 준비하기",
-    "return": "B에게 돌아가기",
-    "feedback": "B와 쿠키 이야기 나누기",
+    "return": "모카에게 돌아가기",
+    "feedback": "모카와 쿠키 이야기 나누기",
     "report": "심부름 이야기 마치기",
-    "completed": "B의 심부름을 마쳤어요"
+    "completed": "모카의 심부름을 마쳤어요"
   },
   "items": {
     "empty": "빈손",
