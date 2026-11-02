@@ -1,0 +1,57 @@
+{
+  "objective": {
+    "locked": "B에게 말 걸기",
+    "choose_route": "B에게 말 걸기",
+    "pick_up": "호두빵 바구니 집기",
+    "deliver": "빵을 공방에 전하기",
+    "pick_up_rest": "바구니 다시 집기",
+    "reservation": "빵집 앞 손님을 만나기",
+    "reservation_action": "예약 착오 해결하기",
+    "choose_display": "진열 방법 고르기",
+    "arrange": "같은 모양의 자리에 빵 놓기",
+    "share": "남은 빵 나누기",
+    "share_action": "정한 곳에 시식 빵 놓기",
+    "order": "축제에 쓸 반죽 준비하기",
+    "order_action": "정한 수량의 반죽 준비하기",
+    "return": "B에게 돌아가기",
+    "feedback": "B와 쿠키 이야기 나누기",
+    "report": "심부름 이야기 마치기",
+    "completed": "B의 심부름을 마쳤어요"
+  },
+  "items": {
+    "empty": "빈손",
+    "basket": "호두빵 바구니",
+    "moka-basket-source": "호두빵 바구니",
+    "moka-rest": "바구니 받침대",
+    "moka-workshop-dropoff": "공방 받침대",
+    "moka-ledger": "예약 장부",
+    "moka-reservation-bread": "예약 손님에게 줄 빵",
+    "customer": "예약 손님",
+    "tastingGuide": "시식 안내인",
+    "moka-tired-neighbor": "지친 이웃",
+    "moka-tasting-plate": "시식 접시",
+    "moka-dough-double": "넉넉한 반죽 준비 묶음",
+    "moka-dough-reserved": "예약 수량 반죽 준비 묶음",
+    "walnut": "호두빵",
+    "roll": "둥근 빵",
+    "flower": "꽃모양 빵"
+  },
+  "reaction": {
+    "empathy": "그렇구나. 나도 그렇게 생각해.",
+    "thinking": "음, 그렇게 생각할 수도 있겠네."
+  },
+  "puzzle": {
+    "hint": "힌트",
+    "auto": "자동으로 정리하기",
+    "close": "잠깐 닫기",
+    "wrong": "표식을 한 번 더 살펴볼까요?"
+  },
+  "status": {
+    "saving": "선택을 저장하고 있어요.",
+    "retry": "연결되면 이어갈 수 있어요.",
+    "reconnect": "다시 연결",
+    "version": "새 버전을 불러온 뒤 이어갈 수 있어요.",
+    "otherTab": "다른 화면에서 이어진 내용을 불러왔어요.",
+    "wrongItem": "이곳에 전할 빵은 아니에요."
+  }
+}

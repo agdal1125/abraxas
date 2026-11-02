@@ -1,0 +1,26 @@
+{
+  "episode": "moka",
+  "items": ["moka_01", "moka_02", "moka_03", "moka_04", "moka_05", "moka_06"],
+  "routes": { "a": { "name": "shortcut", "waypoints": ["moka-route-shortcut", "moka-route-join"] }, "b": { "name": "gentle", "waypoints": ["moka-route-gentle", "moka-route-join"] } },
+  "displays": { "a": "low", "b": "high" },
+  "bread": { "walnut-1": "walnut", "walnut-2": "walnut", "roll-1": "roll", "roll-2": "roll", "flower-1": "flower", "flower-2": "flower" },
+  "slots": { "walnut-left": "walnut", "walnut-right": "walnut", "roll-left": "roll", "roll-right": "roll", "flower-left": "flower", "flower-right": "flower" },
+  "phases": {
+    "locked": { "objectiveKey": "moka.objective.locked", "targets": [], "resumePointId": null },
+    "choose_route": { "objectiveKey": "moka.objective.choose_route", "targets": ["B"], "resumePointId": "B", "itemId": "moka_01" },
+    "pick_up": { "objectiveKey": "moka.objective.pick_up", "targets": ["moka-basket-source"], "resumePointId": "moka-basket-source" },
+    "deliver": { "objectiveKey": "moka.objective.deliver", "targets": ["moka-workshop-dropoff", "moka-rest"], "resumePointId": "moka-rest" },
+    "reservation": { "objectiveKey": "moka.objective.reservation", "targets": ["v1j2"], "resumePointId": "v1j2", "itemId": "moka_02" },
+    "reservation_action": { "objectiveKey": "moka.objective.reservation_action", "targetsByPick": { "a": "moka-ledger", "b": "moka-reservation-bread" }, "resumePointId": "v1j2" },
+    "choose_display": { "objectiveKey": "moka.objective.choose_display", "targets": ["moka-display"], "resumePointId": "moka-display", "itemId": "moka_03" },
+    "arrange": { "objectiveKey": "moka.objective.arrange", "targets": ["moka-display"], "resumePointId": "moka-display" },
+    "share": { "objectiveKey": "moka.objective.share", "targets": ["B"], "resumePointId": "moka-display", "itemId": "moka_04" },
+    "share_action": { "objectiveKey": "moka.objective.share_action", "targetsByPick": { "a": "moka-tired-neighbor", "b": "moka-tasting-plate" }, "resumePointId": "moka-display" },
+    "order": { "objectiveKey": "moka.objective.order", "targets": ["B"], "resumePointId": "moka-display", "itemId": "moka_05" },
+    "order_action": { "objectiveKey": "moka.objective.order_action", "targetsByPick": { "a": "moka-dough-double", "b": "moka-dough-reserved" }, "resumePointId": "moka-display" },
+    "return": { "objectiveKey": "moka.objective.return", "targets": ["B"], "resumePointId": "moka-display" },
+    "feedback": { "objectiveKey": "moka.objective.feedback", "targets": ["B"], "resumePointId": "B", "itemId": "moka_06" },
+    "report": { "objectiveKey": "moka.objective.report", "targets": ["B"], "resumePointId": "B" },
+    "completed": { "objectiveKey": "moka.objective.completed", "targets": [], "resumePointId": "B" }
+  }
+}

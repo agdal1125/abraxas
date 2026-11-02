@@ -62,3 +62,4 @@
 
 - `scoreLimit`: 플레이어·NPC 성향 범위(±100), `tieThreshold`: 경계 구간과 수식어 기준(10)
 - `npcStep`: NPC 성향 이동 폭(20), `affinityStart`·`affinityGain`·`affinityMin`·`affinityMax`: 호감도 시작(20)·일치 시 증가(+12)·범위(0~100)
+- `errandAffinityGain`: 담당 심부름 완료 시 호감도 증가(+8). 서버가 검증한 완료 사건을 회차당 한 번 합산하고 기존 범위로 제한한다.

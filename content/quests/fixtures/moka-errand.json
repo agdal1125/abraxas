@@ -1,0 +1,79 @@
+{
+  "initial": { "playId": "fixture-play", "contentVersion": "fixture-version", "revision": 0, "segment": "hub", "completedEpisodes": [], "answers": [], "moka": { "phase": "locked", "basket": "source", "placements": {}, "completedAt": null } },
+  "completedAt": "2026-11-02T00:00:00Z",
+  "success": [
+    {
+      "name": "automatic arrangement and report",
+      "commands": [
+        { "kind": "open_episode", "npcId": "moka" },
+        { "kind": "choice", "itemId": "moka_01", "pick": "a" },
+        { "kind": "pickup", "targetId": "moka-basket-source" },
+        { "kind": "set_down", "targetId": "moka-rest" },
+        { "kind": "pickup", "targetId": "moka-rest" },
+        { "kind": "deliver", "targetId": "moka-workshop-dropoff" },
+        { "kind": "choice", "itemId": "moka_02", "pick": "a" },
+        { "kind": "act", "targetId": "moka-ledger" },
+        { "kind": "choice", "itemId": "moka_03", "pick": "b" },
+        { "kind": "place", "breadId": "flower-2", "slotId": "flower-left" },
+        { "kind": "auto_arrange" },
+        { "kind": "choice", "itemId": "moka_04", "pick": "b" },
+        { "kind": "act", "targetId": "moka-tasting-plate" },
+        { "kind": "choice", "itemId": "moka_05", "pick": "a" },
+        { "kind": "act", "targetId": "moka-dough-double" },
+        { "kind": "talk", "targetId": "B" },
+        { "kind": "choice", "itemId": "moka_06", "pick": "b" },
+        { "kind": "complete", "targetId": "B" }
+      ],
+      "expected": { "phase": "completed", "basket": "delivered", "answerIds": ["moka_01", "moka_02", "moka_03", "moka_04", "moka_05", "moka_06"], "placementCount": 6, "completedEpisodes": ["moka"] }
+    },
+    {
+      "name": "manual arrangement and alternate actions",
+      "commands": [
+        { "kind": "open_episode", "npcId": "moka" },
+        { "kind": "choice", "itemId": "moka_01", "pick": "b" },
+        { "kind": "pickup", "targetId": "moka-basket-source" },
+        { "kind": "deliver", "targetId": "moka-workshop-dropoff" },
+        { "kind": "choice", "itemId": "moka_02", "pick": "b" },
+        { "kind": "act", "targetId": "moka-reservation-bread" },
+        { "kind": "choice", "itemId": "moka_03", "pick": "a" },
+        { "kind": "place", "breadId": "walnut-2", "slotId": "walnut-left" },
+        { "kind": "place", "breadId": "walnut-1", "slotId": "walnut-right" },
+        { "kind": "place", "breadId": "roll-2", "slotId": "roll-left" },
+        { "kind": "place", "breadId": "roll-1", "slotId": "roll-right" },
+        { "kind": "place", "breadId": "flower-2", "slotId": "flower-left" },
+        { "kind": "place", "breadId": "flower-1", "slotId": "flower-right" },
+        { "kind": "choice", "itemId": "moka_04", "pick": "a" },
+        { "kind": "act", "targetId": "moka-tired-neighbor" },
+        { "kind": "choice", "itemId": "moka_05", "pick": "b" },
+        { "kind": "act", "targetId": "moka-dough-reserved" },
+        { "kind": "talk", "targetId": "B" },
+        { "kind": "choice", "itemId": "moka_06", "pick": "a" },
+        { "kind": "complete", "targetId": "B" }
+      ],
+      "expected": { "phase": "completed", "basket": "delivered", "answerIds": ["moka_01", "moka_02", "moka_03", "moka_04", "moka_05", "moka_06"], "placementCount": 6, "completedEpisodes": ["moka"] }
+    }
+  ],
+  "rejections": [
+    { "name": "choice before opening", "after": 0, "command": { "kind": "choice", "itemId": "moka_01", "pick": "a" } },
+    { "name": "wrong item order", "after": 1, "command": { "kind": "choice", "itemId": "moka_02", "pick": "a" } },
+    { "name": "wrong basket", "after": 2, "command": { "kind": "pickup", "targetId": "other-basket" } },
+    { "name": "delivery while basket is on rest", "after": 4, "command": { "kind": "deliver", "targetId": "moka-workshop-dropoff" } },
+    { "name": "complete before delivery", "after": 3, "command": { "kind": "complete", "targetId": "B" } },
+    { "name": "wrong action for answer", "after": 7, "command": { "kind": "act", "targetId": "moka-reservation-bread" } },
+    { "name": "wrong shape", "after": 9, "command": { "kind": "place", "breadId": "roll-1", "slotId": "walnut-left" } },
+    { "name": "unknown bread", "after": 9, "command": { "kind": "place", "breadId": "unknown", "slotId": "walnut-left" } },
+    { "name": "prototype names are not IDs", "after": 9, "command": { "kind": "place", "breadId": "toString", "slotId": "toString" } },
+    { "name": "bread already used", "after": 10, "command": { "kind": "place", "breadId": "flower-2", "slotId": "flower-right" } },
+    { "name": "occupied slot", "after": 10, "command": { "kind": "place", "breadId": "flower-1", "slotId": "flower-left" } },
+    { "name": "incomplete arrangement", "after": 10, "command": { "kind": "choice", "itemId": "moka_04", "pick": "a" } },
+    { "name": "finish segment cannot skip report", "after": 17, "command": { "kind": "finish_segment" } }
+  ],
+  "transportCases": [
+    { "name": "same key and body", "expected": "original_receipt_no_change" },
+    { "name": "same key different body", "expected": "idempotency_conflict" },
+    { "name": "same answer with stale revision and new key", "expected": "no_change" },
+    { "name": "different answer for answered item", "expected": "choice_locked" },
+    { "name": "completed again with stale revision and new key", "expected": "no_change" },
+    { "name": "new action with stale revision", "expected": "revision_conflict" }
+  ]
+}

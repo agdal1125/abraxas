@@ -4,9 +4,9 @@ const axes = ["A", "B", "C", "D", "E"] as const;
 type Axis = typeof axes[number];
 type Scores = Record<Axis, number>;
 type Item = { id: string; axis: Axis; npc?: string | null; picks: Record<string, { w: Partial<Scores> }> };
-type Rules = { scoreLimit: number; tieThreshold: number; npcStep: number; affinityStart: number; affinityGain: number; affinityMin: number; affinityMax: number };
+type Rules = { scoreLimit: number; tieThreshold: number; npcStep: number; affinityStart: number; affinityGain: number; errandAffinityGain: number; affinityMin: number; affinityMax: number };
 export type Data = { items: Item[]; tiebreakers: Item[]; npcs: { id: string; start: Scores }[]; rules: Rules };
-export type Input = { playId: string; log: { id: string; pick: string }[] };
+export type Input = { playId: string; log: { id: string; pick: string }[]; completedErrands?: string[] };
 
 function expectedPole(current: number, playId: string, id: string): number {
   let hash = 2166136261;
@@ -26,13 +26,14 @@ export function npcMatches(input: Input, data: Data, entry: Input["log"][number]
   return expectedPole(current, input.playId, item.id) === Math.sign(item.picks[entry.pick]!.w[item.axis] ?? 0);
 }
 
-export function score(input: Input, data: Data) {
+function accumulate(input: Input, data: Data) {
   if (typeof input?.playId !== "string" || !Array.isArray(input.log)) throw new Error("Invalid input");
   const { rules } = data;
   const s: Scores = { A: 0, B: 0, C: 0, D: 0, E: 0 };
   const npcs: Record<string, { s: Scores; affinity: number }> = Object.fromEntries(data.npcs.map((npc) => [npc.id, { s: { ...npc.start }, affinity: rules.affinityStart }]));
   const items = new Map([...data.items, ...data.tiebreakers].map((item) => [item.id, item]));
   const gates = new Map<string, { item: Item; weights: Partial<Scores> }>();
+  const reactions: Record<string, "empathy" | "thinking"> = {};
   const seen = new Set<string>();
   const limit = (value: number) => clamp(value, -rules.scoreLimit, rules.scoreLimit);
   for (const entry of input.log) {
@@ -48,10 +49,28 @@ export function score(input: Input, data: Data) {
       const current = npc.s[item.axis];
       const expected = expectedPole(current, input.playId, item.id);
       const chosen = Math.sign(pick.w[item.axis] ?? 0);
+      reactions[item.id] = expected === chosen ? "empathy" : "thinking";
       npc.s[item.axis] = limit(current + chosen * rules.npcStep);
       if (expected === chosen) npc.affinity = clamp(npc.affinity + rules.affinityGain, rules.affinityMin, rules.affinityMax);
     }
   }
+  if (input.completedErrands !== undefined && !Array.isArray(input.completedErrands)) throw new Error("Invalid completed errands");
+  for (const id of new Set(input.completedErrands ?? [])) {
+    if (id !== "moka" || !npcs[id]) throw new Error("Unknown completed errand");
+    npcs[id].affinity = clamp(npcs[id].affinity + rules.errandAffinityGain, rules.affinityMin, rules.affinityMax);
+  }
+  return { s, npcs, gates, seen, items, reactions };
+}
+
+export function progress(input: Input, data: Data) {
+  const { npcs, reactions } = accumulate(input, data);
+  return { npcs, reactions };
+}
+
+export function score(input: Input, data: Data) {
+  const { rules } = data;
+  const { s, npcs, gates, seen, items } = accumulate(input, data);
+  const limit = (value: number) => clamp(value, -rules.scoreLimit, rules.scoreLimit);
   if (seen.size !== items.size) throw new Error("Incomplete answers");
   const letters = ["OI", "HL", "VK", "GC"];
   let type = "";
