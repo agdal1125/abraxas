@@ -235,7 +235,7 @@ func parseCommand(body map[string]json.RawMessage) (commandRequest, error) {
 	if err := json.Unmarshal(fields["kind"], &kind); err != nil {
 		return out, err
 	}
-	required := map[string][]string{"open_episode": {"npcId"}, "choice": {"itemId", "pick"}, "pickup": {"targetId"}, "set_down": {"targetId"}, "deliver": {"targetId"}, "act": {"targetId"}, "talk": {"targetId"}, "complete": {"targetId"}, "place": {"breadId", "slotId"}, "auto_arrange": {}, "finish_segment": {}}
+	required := map[string][]string{"open_episode": {"npcId"}, "choice": {"itemId", "pick"}, "pickup": {"targetId"}, "set_down": {"targetId"}, "deliver": {"targetId"}, "act": {"targetId"}, "talk": {"targetId"}, "complete": {"targetId"}, "place": {"breadId", "slotId"}, "place_piece": {"pieceId", "slotId"}, "auto_arrange": {}, "finish_segment": {}}
 	want, ok := required[kind]
 	if !ok || len(fields) != len(want)+1 {
 		return out, errors.New("kind")
@@ -301,8 +301,11 @@ func (h *playHandler) command(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		}
-		if req.Command.Kind == "complete" && req.Command.TargetID == "B" && d.Events["moka-errand-completed"] {
-			duplicate = true
+		if req.Command.Kind == "complete" {
+			npc := map[string]string{"A": "lumi", "B": "moka", "C": "echo", "D": "or"}[req.Command.TargetID]
+			if npc != "" && d.Events[npc+"-errand-completed"] {
+				duplicate = true
+			}
 		}
 		if duplicate {
 			for _, old := range d.Receipts {

@@ -10,7 +10,7 @@ const root = path.resolve(client, "..");
 const json = file => JSON.parse(fs.readFileSync(path.join(root, file), "utf8"));
 const manifest = json("content/assets/manifest.json").assets;
 const map = json("content/world/village.json");
-const metadata = { ...json("assets/source/characters/asset-metadata.json").assets, ...json("assets/source/environment/asset-metadata.json").assets, ...json("assets/source/moka-errand/asset-metadata.json").assets };
+const metadata = { ...json("assets/source/characters/asset-metadata.json").assets, ...json("assets/source/environment/asset-metadata.json").assets, ...json("assets/source/moka-errand/asset-metadata.json").assets, ...json("assets/source/residents-errands/lumi/asset-metadata.json").assets, ...json("assets/source/residents-errands/echo/asset-metadata.json").assets, ...json("assets/source/residents-errands/or/asset-metadata.json").assets };
 
 function parseGlb(data, clips = []) {
   assert(data.length >= 20 && data.readUInt32LE(0) === 0x46546c67 && data.readUInt32LE(4) === 2 && data.readUInt32LE(8) === data.length, "invalid GLB header");

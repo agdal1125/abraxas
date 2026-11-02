@@ -1,8 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 import { confirmedCommand } from "./moka-errand";
-import type { PlaySnapshot } from "../core/moka-errand";
+import type { PlaySnapshot } from "../core/play";
+import { initialLumi } from "../core/lumi-errand";
+import { initialEcho } from "../core/echo-errand";
+import { initialOr } from "../core/or-errand";
 
-const snapshot = { playId: "play", contentVersion: "v", revision: 1, segment: "ep_moka", completedEpisodes: [], answers: [], moka: { phase: "choose_route", basket: "source", placements: {}, completedAt: null } } as PlaySnapshot;
+const snapshot = { playId: "play", contentVersion: "v", revision: 1, segment: "ep_moka", completedEpisodes: [], answers: [], moka: { phase: "choose_route", basket: "source", placements: {}, completedAt: null }, lumi: initialLumi(), echo: initialEcho(), or: initialOr() } as PlaySnapshot;
 
 describe("confirmed command", () => {
   it("does not expose progress or a reaction before the server confirms it", async () => {

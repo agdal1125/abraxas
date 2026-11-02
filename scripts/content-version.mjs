@@ -3,7 +3,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 
 export function contentVersion(root) {
-  const paths = ["content/scoring/items.json", "content/scoring/npcs.json", "content/scoring/rules.json", "content/quests/moka-errand.json"];
+  const paths = ["content/scoring/items.json", "content/scoring/npcs.json", "content/scoring/rules.json", "content/quests/moka-errand.json", "content/quests/lumi-errand.json", "content/quests/echo-errand.json", "content/quests/or-errand.json"];
   for (const lang of ["ko", "en"]) for (const [dir, ext] of [["i18n", ".json"], ["ink", ".ink"]]) {
     const prefix = `content/${dir}/${lang}`;
     paths.push(...readdirSync(resolve(root, prefix)).filter(name => name.endsWith(ext)).map(name => `${prefix}/${name}`));

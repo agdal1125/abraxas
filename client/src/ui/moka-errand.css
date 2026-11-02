@@ -1,5 +1,5 @@
 .moka-carry { display: block; margin-top: .25rem; }
-.moka-board { display: grid; gap: .5rem; max-height: 80vh; overflow: auto; }
+.dialogue .panel.moka-board { display: grid; gap: .5rem; max-height: 80vh; overflow: auto; }
 .moka-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .35rem; }
 .moka-grid.moka-low { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 .moka-grid.moka-high { grid-template-columns: repeat(2, minmax(0, 1fr)); }

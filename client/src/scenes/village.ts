@@ -11,6 +11,10 @@ import { DreamEffects } from "./dream-effects";
 import { dialogueFocus } from "./feedback";
 import type { MokaView } from "../core/moka-errand";
 import { MokaProps } from "./moka-props";
+import { ResidentProps } from "./resident-props";
+import type { lumiView } from "../core/lumi-errand";
+import type { echoView } from "../core/echo-errand";
+import type { orView } from "../core/or-errand";
 import quest from "../../../content/quests/moka-errand.json";
 
 type Placement = Vec2 & { asset: string; rot?: number; scale?: number; zone?: string };
@@ -50,6 +54,11 @@ export class Village {
   private mokaView: MokaView | null = null;
   private mokaProps?: MokaProps;
   private mokaLoading?: Promise<void>;
+  public lumiView: ReturnType<typeof lumiView> | null = null;
+  public echoView: ReturnType<typeof echoView> | null = null;
+  public orView: ReturnType<typeof orView> | null = null;
+  private residentProps: Partial<Record<"lumi" | "echo" | "or", ResidentProps>> = {};
+  private residentLoading: Partial<Record<"lumi" | "echo" | "or", Promise<void>>> = {};
   private ready = false;
   readonly whenReady: Promise<void>;
   private auto?: { id: string; path: Vec2[]; best: number; stalled: number };
@@ -85,7 +94,7 @@ export class Village {
     this.player.position.set(map.spawn.x, 0, map.spawn.z); this.cameraTarget.copy(this.player.position); this.scene.add(this.player);
     loading.push(this.character("player", this.player).then(character => { this.playerCharacter = character; }));
     for (const prop of map.props) {
-      if (prop.id.startsWith("moka-")) continue;
+      if (/^(moka|lumi|echo|or)-/.test(prop.id)) continue;
       const register = () => { this.addColliders(prop, prop.id); if (translations("ko").examine[prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset]) this.props.set(prop.id, prop); };
       if (prop.asset === "signboard") loading.push(this.place(prop).then(object => { this.propObjects.set(prop.id, object); register(); }).catch(error => console.warn(`Village prop failed to load: ${prop.id}`, error)));
       else { register(); loading.push(this.place(prop).then(object => { this.propObjects.set(prop.id, object); })); }
@@ -144,6 +153,7 @@ export class Village {
   setMokaView(view: MokaView | null): void {
     this.mokaView = view;
     this.auto = undefined;
+    this.positionResidents();
     const guide = this.actors.get("v1j2");
     const originalGuide = map.actors.find(actor => actor.id === "v1j2");
     if (guide && originalGuide) {
@@ -176,6 +186,112 @@ export class Village {
       }).finally(() => { this.mokaLoading = undefined; });
     }
   }
+  setLumiView(view: ReturnType<typeof lumiView> | null): void { this.lumiView = view; this.setResidentView("lumi"); }
+  setEchoView(view: ReturnType<typeof echoView> | null): void { this.echoView = view; this.setResidentView("echo"); }
+  setOrView(view: ReturnType<typeof orView> | null): void { this.orView = view; this.setResidentView("or"); }
+  private activeTargets(id: string): boolean {
+    return [this.mokaView, this.lumiView, this.echoView, this.orView].some(view => view?.activeTargetIds.includes(id));
+  }
+  private residentActor(id: string): boolean { return ["lumi-neighbor-1", "lumi-neighbor-2", "echo-borrower", "or-fisher", "or-merchant"].includes(id); }
+  private retryResidentLoading(): void {
+    for (const npc of ["lumi", "echo", "or"] as const) {
+      const view = this[`${npc}View`];
+      if (view && view.phase !== "locked" && !this.residentProps[npc] && !this.residentLoading[npc]) this.setResidentView(npc);
+    }
+  }
+  private positionResidents(): void {
+    const active = (view: { phase: string } | null) => !!view && view.phase !== "locked" && view.phase !== "completed";
+    const move = (id: string, zone?: string) => {
+      const actor = this.actors.get(id), original = map.actors.find(entry => entry.id === id);
+      if (!actor || !original) return;
+      const point = zone ? map.zones[zone] : original;
+      if (!point) throw new Error(`Missing actor zone: ${zone}`);
+      actor.object.position.set(point.x, 0, point.z);
+      this.colliders = this.colliders.filter((_, index) => this.colliderOwners[index] !== id);
+      this.colliderOwners = this.colliderOwners.filter(owner => owner !== id);
+      this.addColliders({ ...original, ...point }, id);
+    };
+    move("s1j2", active(this.lumiView) ? "lumi-stagekeeper" : undefined);
+    move("t1p2", active(this.echoView) ? "echo-organizer" : undefined);
+    move("s2j2", active(this.orView) ? "or-assistant" : undefined);
+    const elsewhere = active(this.lumiView) || active(this.echoView) || active(this.mokaView);
+    const plaza = !elsewhere && this.orView && ["report", "completed"].includes(this.orView.phase) && this.orView.choices[5] === "b";
+    move("D", plaza ? "or-report" : undefined);
+    for (const [npc, ids] of Object.entries({ lumi: ["lumi-neighbor-1", "lumi-neighbor-2"], echo: ["echo-borrower"], or: ["or-fisher", "or-merchant"] }) as ["lumi" | "echo" | "or", string[]][]) {
+      const view = this[`${npc}View`];
+      for (const id of ids) {
+        const actor = this.actors.get(id); if (!actor) continue;
+        const shown = active(view); actor.object.visible = shown;
+        this.colliders = this.colliders.filter((_, index) => this.colliderOwners[index] !== id);
+        this.colliderOwners = this.colliderOwners.filter(owner => owner !== id);
+        if (!shown) continue;
+        const review = npc === "or" && this.orView?.phase === "review" && this.orView.choices[3] === "a";
+        const zone = review ? id.replace("or-", "or-review-") : id;
+        const point = map.zones[zone]; if (!point) throw new Error(`Missing actor zone: ${zone}`);
+        actor.object.position.set(point.x, 0, point.z); this.addColliders({ ...point, asset: "quest-npc" }, id);
+      }
+    }
+  }
+  private setResidentView(npc: "lumi" | "echo" | "or"): void {
+    const view = this[`${npc}View`]; this.auto = undefined;
+    this.positionResidents();
+    for (const prop of map.props) if (prop.id.startsWith(`${npc}-`)) this.props.delete(prop.id);
+    this.residentProps[npc]?.setView(view);
+    this.colliders = this.colliders.filter((_, index) => !this.colliderOwners[index]?.startsWith(`${npc}-`) || this.actors.has(this.colliderOwners[index]!));
+    this.colliderOwners = this.colliderOwners.filter(owner => !owner?.startsWith(`${npc}-`) || this.actors.has(owner));
+    if (!view || view.phase === "locked") return;
+    const residentProps = this.residentProps[npc];
+    if (residentProps) {
+      for (const prop of map.props) if (prop.id.startsWith(`${npc}-`)) {
+        const object = residentProps.objects.get(prop.id);
+        let visible = !!object;
+        for (let node = object; node; node = node.parent ?? undefined) visible &&= node.visible;
+        if (view.activeTargetIds.includes(prop.id)) {
+          if (!visible) throw new Error(`Active resident prop is not visible: ${prop.id}`);
+          this.props.set(prop.id, prop);
+        }
+        if (visible) this.addColliders(prop, prop.id);
+      }
+      return;
+    }
+    if (!this.residentLoading[npc]) {
+      const ids = npc === "lumi" ? ["lumi-neighbor-1", "lumi-neighbor-2"] : npc === "echo" ? ["echo-borrower"] : ["or-fisher", "or-merchant"];
+      const loading = Promise.all([
+        ResidentProps.load(npc, this.scene, this.player, map.props.filter(prop => prop.id.startsWith(`${npc}-`)), key => this.load(key)),
+        ...ids.map(async id => {
+          let actor = this.actors.get(id);
+          if (!actor) { const object = new THREE.Group(), marker = this.label(); object.userData.id = id; object.visible = false; object.add(marker); this.scene.add(object); actor = { object, marker }; this.actors.set(id, actor); }
+          if (!actor.character) actor.character = await this.character("quest-npc", actor.object);
+        }),
+      ]).then(([props]) => {
+        this.residentProps[npc] = props;
+        for (const [id, object] of props.objects) this.propObjects.set(id, object);
+        this.setResidentView(npc); this.setAvailable([...this.available]);
+      }).finally(() => { delete this.residentLoading[npc]; });
+      this.residentLoading[npc] = loading;
+      void loading.catch(error => { console.error(`${npc} assets failed to load`, error); this.onPathBlocked(); });
+    }
+  }
+  private async resumeResident(npc: "lumi" | "echo" | "or"): Promise<void> {
+    const view = this[`${npc}View`]; if (!view?.resumePointId) return;
+    await this.whenReady;
+    if (view !== this[`${npc}View`]) return;
+    if (!this.residentProps[npc] && !this.residentLoading[npc]) this.setResidentView(npc);
+    await this.residentLoading[npc];
+    if (view !== this[`${npc}View`] || !this.residentProps[npc]) return;
+    const id = view.resumePointId;
+    const placement = this.target(id) ?? [...map.actors, ...map.props].find(entry => entry.id === id);
+    if (!placement) throw new Error(`Missing resume point: ${id}`);
+    const target = { x: placement.x, z: placement.z, colliders: this.actors.has(id) ? [] : this.colliders.filter((_, index) => this.colliderOwners[index] === id) };
+    const position = new THREE.Vector3(target.x, 0, target.z);
+    const path = findPath(this.player.position, target, this.colliders, map.bounds, point => this.visible(id, position, point));
+    if (!path) { this.onPathBlocked(); return; }
+    const destination = path.at(-1) ?? this.player.position;
+    this.player.position.set(destination.x, 0, destination.z); this.cameraTarget.copy(this.player.position);
+  }
+  async resumeLumi(): Promise<void> { await this.resumeResident("lumi"); }
+  async resumeEcho(): Promise<void> { await this.resumeResident("echo"); }
+  async resumeOr(): Promise<void> { await this.resumeResident("or"); }
   async resumeMoka(): Promise<boolean> {
     const view = this.mokaView;
     if (!view?.resumePointId) return false;
@@ -226,30 +342,32 @@ export class Village {
     });
   }
   private findNearby(previous?: string | null): string | null {
-    const active = [...this.props.values()].filter(prop => this.mokaView?.activeTargetIds.includes(prop.id) && this.visible(prop.id, new THREE.Vector3(prop.x, 0, prop.z))).map(prop => ({ ...prop, colliders: this.colliders.filter((_, index) => this.colliderOwners[index] === prop.id) }));
+    const active = [...this.props.values()].filter(prop => this.activeTargets(prop.id) && this.available.has(prop.id) && this.visible(prop.id, new THREE.Vector3(prop.x, 0, prop.z))).map(prop => ({ ...prop, colliders: this.colliders.filter((_, index) => this.colliderOwners[index] === prop.id) }));
     const activeId = nearest(this.player.position, active, .85, previous);
     if (activeId) return activeId;
-    const targets = [...this.actors].filter(([id, actor]) => this.visible(id, actor.object.position) && (this.available.has(id) || ![...this.actors].some(([otherId, other]) => this.available.has(otherId) && other.object.position.distanceToSquared(actor.object.position) < 1e-8))).map(([id, actor]) => ({ id, x: actor.object.position.x, z: actor.object.position.z }));
+    const targets = [...this.actors].filter(([id, actor]) => actor.object.visible && (!this.residentActor(id) || this.available.has(id)) && this.visible(id, actor.object.position) && (this.available.has(id) || ![...this.actors].some(([otherId, other]) => other.object.visible && this.available.has(otherId) && other.object.position.distanceToSquared(actor.object.position) < 1e-8))).map(([id, actor]) => ({ id, x: actor.object.position.x, z: actor.object.position.z }));
     const pos = { x: this.player.position.x, z: this.player.position.z };
     const actor = nearest(pos, targets, .85, previous);
     if (actor) return actor;
-    const props = [...this.props.values()].filter(prop => this.visible(prop.id, new THREE.Vector3(prop.x, 0, prop.z))).map(prop => ({ ...prop, colliders: this.colliders.filter((_, index) => this.colliderOwners[index] === prop.id) }));
+    const props = [...this.props.values()].filter(prop => (!this.activeTargets(prop.id) || this.available.has(prop.id)) && this.visible(prop.id, new THREE.Vector3(prop.x, 0, prop.z))).map(prop => ({ ...prop, colliders: this.colliders.filter((_, index) => this.colliderOwners[index] === prop.id) }));
     return nearest(pos, props, .85, previous);
   }
   interactNearby(): void {
     if (!this.enabled || !this.ready || this.portrait || this.talking) return;
+    this.retryResidentLoading();
     const id = this.findNearby(); if (!id) return;
     this.interactTarget(id);
   }
   private target(id: string): (Vec2 & { colliders?: Collider[] }) | undefined {
     const actor = this.actors.get(id), prop = this.props.get(id);
-    if (actor) return { x: actor.object.position.x, z: actor.object.position.z };
+    if (actor && actor.object.visible !== false) return { x: actor.object.position.x, z: actor.object.position.z };
     if (prop) return { x: prop.x, z: prop.z, colliders: this.colliders.filter((_, index) => this.colliderOwners[index] === id) };
     return undefined;
   }
   interactTarget(id: string): void {
     if (!this.enabled || !this.ready || this.portrait || this.talking) return;
     const target = this.target(id); if (!target) return;
+    if ((this.activeTargets(id) || this.residentActor(id)) && !this.available.has(id)) return;
     const actorAtTarget = this.actors.get(id);
     if (actorAtTarget && !this.available.has(id) && [...this.actors].some(([otherId, other]) => this.available.has(otherId) && other.object.position.distanceToSquared(actorAtTarget.object.position) < 1e-8)) return;
     this.tapMarker.position.set(target.x, .05, target.z); this.tapScale = this.targetRingScale(id); this.tapTime = .3;
@@ -268,15 +386,16 @@ export class Village {
     if (!this.visible(id, targetPosition)) return;
     const actor = this.actors.get(id); const prop = this.props.get(id); const position = actor?.object.position ?? prop!; const dx = position.x - this.player.position.x, dz = position.z - this.player.position.z;
     this.input = { x: 0, z: 0 }; if (dx || dz) { this.player.rotation.y = Math.atan2(dx, dz); if (actor?.character) actor.object.rotation.y = Math.atan2(-dx, -dz); }
-    this.talking = id; this.speaker = id; this.onInteract(prop && !this.mokaView?.activeTargetIds.includes(id) ? `examine:${prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset}` : id);
+    this.talking = id; this.speaker = id; this.onInteract(prop && !this.activeTargets(id) ? `examine:${prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset}` : id);
   }
   hitTargetAt(clientX: number, clientY: number): string | null {
     if (!this.enabled || !this.ready || this.portrait || this.talking) return null;
+    this.retryResidentLoading();
     const rect = this.renderer.domElement.getBoundingClientRect();
     if (!rect.width || !rect.height || clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) return null;
     const candidates: { id: string; distance: number; available: boolean }[] = [];
     for (const id of [...this.actors.keys(), ...this.props.keys()]) {
-      const target = this.target(id)!;
+      const target = this.target(id); if (!target || ((this.activeTargets(id) || this.residentActor(id)) && !this.available.has(id))) continue;
       const actor = this.actors.get(id), object = actor?.character?.object ?? this.propObjects.get(id);
       const box = object ? new THREE.Box3().setFromObject(object) : new THREE.Box3();
       if (box.isEmpty()) box.set(new THREE.Vector3(target.x, 0, target.z), new THREE.Vector3(target.x, .6, target.z));
@@ -287,7 +406,7 @@ export class Village {
         left = Math.min(left, sx); right = Math.max(right, sx); top = Math.min(top, sy); bottom = Math.max(bottom, sy);
       }
       const cx = (left + right) / 2, cy = (top + bottom) / 2;
-      if (Math.abs(clientX - cx) <= Math.max(24, (right - left) / 2) && Math.abs(clientY - cy) <= Math.max(24, (bottom - top) / 2)) candidates.push({ id, distance: Math.hypot(clientX - cx, clientY - cy), available: this.available.has(id) || !!this.mokaView?.activeTargetIds.includes(id) });
+      if (Math.abs(clientX - cx) <= Math.max(24, (right - left) / 2) && Math.abs(clientY - cy) <= Math.max(24, (bottom - top) / 2)) candidates.push({ id, distance: Math.hypot(clientX - cx, clientY - cy), available: this.available.has(id) });
     }
     candidates.sort((a, b) => Number(b.available) - Number(a.available) || a.distance - b.distance || a.id.localeCompare(b.id));
     return candidates[0]?.id ?? null;
@@ -307,7 +426,7 @@ export class Village {
   private load(key: string): Promise<GLTF> {
     const asset = manifest[key];
     if (!asset || !/^assets\/abraxas\/[\w/-]+\.glb$/.test(asset.path) || asset.path.includes("..")) return Promise.reject(new Error(`Invalid asset: ${key}`));
-    if (!this.models.has(key)) this.models.set(key, this.loader.loadAsync(`${import.meta.env.BASE_URL}${asset.path}`));
+    if (!this.models.has(key)) this.models.set(key, this.loader.loadAsync(`${import.meta.env.BASE_URL}${asset.path}`).catch(error => { this.models.delete(key); throw error; }));
     return this.models.get(key)!;
   }
   private async place(placement: Placement): Promise<THREE.Object3D> {
@@ -410,7 +529,7 @@ export class Village {
     if (moving && this.playerCharacter) this.playerCharacter.actions.get("walk")?.setEffectiveTimeScale(distance / (1.4 * dt));
     for (const [id, actor] of this.actors) this.animate(actor.character, !this.enabled && this.talking === id ? "talk" : "idle");
     const nearby = this.enabled && this.ready && !this.portrait && !this.talking ? this.findNearby(this.nearby) : null;
-    if (nearby !== this.nearby) { this.nearby = nearby; if (nearby) this.nearbyMarker.scale.setScalar(this.targetRingScale(nearby)); this.onNearbyChange(nearby ? { id: nearby, available: true, examine: this.props.has(nearby) && !this.mokaView?.activeTargetIds.includes(nearby) } : null); }
+    if (nearby !== this.nearby) { this.nearby = nearby; if (nearby) this.nearbyMarker.scale.setScalar(this.targetRingScale(nearby)); this.onNearbyChange(nearby ? { id: nearby, available: true, examine: this.props.has(nearby) && !this.activeTargets(nearby) } : null); }
     this.nearbyMarker.visible = !!nearby;
     if (nearby) { const target = this.target(nearby)!; this.nearbyMarker.position.set(target.x, .04, target.z); }
     this.tapTime = Math.max(0, this.tapTime - dt); this.tapMarker.visible = this.tapTime > 0;

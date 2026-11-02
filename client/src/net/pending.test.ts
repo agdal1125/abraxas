@@ -23,3 +23,33 @@ test("storage failure prevents treating a command as saved", () => {
   vi.stubGlobal("localStorage", { getItem: () => { throw new Error("disabled"); } });
   expect(() => savePending("play", pending)).toThrow();
 });
+
+test("cleanup preserves a record for another play or key", () => {
+  savePending("play", pending);
+  expect(() => clearPending("another-play", pending.key)).toThrow("pending_mismatch");
+  expect(() => clearPending("play", "another-key")).toThrow("pending_mismatch");
+  expect(loadPending()).toEqual({ playId: "play", pending });
+});
+
+test("cleanup reports storage read, removal and verification failures", () => {
+  savePending("play", pending);
+  const raw = localStorage.getItem("abraxas:pending-command");
+  vi.stubGlobal("localStorage", { getItem: () => { throw new Error("disabled"); } });
+  expect(() => clearPending("play", pending.key)).toThrow("pending_unavailable");
+  vi.stubGlobal("localStorage", { getItem: () => raw, removeItem: () => { throw new Error("disabled"); } });
+  expect(() => clearPending("play", pending.key)).toThrow("pending_unavailable");
+  vi.stubGlobal("localStorage", { getItem: () => raw, removeItem: () => {} });
+  expect(() => clearPending("play", pending.key)).toThrow("pending_unavailable");
+});
+
+test("restores only a valid resident puzzle command", () => {
+  const piece = { ...pending, command: { kind: "place_piece" as const, pieceId: "gear-circle", slotId: "axle-circle" } };
+  savePending("play", piece);
+  expect(loadPending()?.pending).toEqual(piece);
+  clearPending("play", piece.key);
+  for (const command of [
+    { ...piece.command, pieceId: "missing" },
+    { ...piece.command, slotId: "circle-1" },
+    { ...piece.command, extra: true }
+  ]) expect(() => savePending("play", { ...piece, command })).toThrow();
+});

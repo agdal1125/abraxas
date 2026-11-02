@@ -1,6 +1,61 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { demoEnv, e2eSucceeded, outputDirectory, responseClassifier, consoleClassifier, stderrClassifier, canInteract } from "./e2e-play.mjs";
+import { readFileSync } from "node:fs";
+import * as harness from "./e2e-play.mjs";
+import { demoEnv, e2eSucceeded, outputDirectory, responseClassifier, consoleClassifier, stderrClassifier, canInteract, parseArgs, choiceIndex, boardPair, finalErrors } from "./e2e-play.mjs";
+
+test("board viewport measurements reject clipped boards, overflow, small buttons and unreachable close", () => {
+  const measured = { viewport: { width: 740, height: 360 }, fontSize: 15, board: { left: 10, top: 10, right: 730, bottom: 350 }, horizontalOverflow: 0, buttonHeights: [48, 52], closeVisible: true };
+  assert.deepEqual(harness.viewportFailures(measured, 740, 360, 15), []);
+  assert.ok(harness.viewportFailures({ ...measured, board: { ...measured.board, right: 741 } }, 740, 360, 15).length);
+  assert.ok(harness.viewportFailures({ ...measured, horizontalOverflow: 2 }, 740, 360, 15).length);
+  assert.ok(harness.viewportFailures({ ...measured, buttonHeights: [47] }, 740, 360, 15).length);
+  assert.ok(harness.viewportFailures({ ...measured, closeVisible: false }, 740, 360, 15).length);
+  assert.ok(harness.viewportFailures(measured, 844, 390, 15).length);
+  assert.ok(harness.viewportFailures(measured, 740, 360, 18).length);
+});
+
+test("only b-manual uses touch for world pointer interactions", () => {
+  assert.equal(harness.pointerInput("a-auto"), "mouse");
+  assert.equal(harness.pointerInput("b-manual"), "touch");
+  assert.equal(harness.pointerInput("resume"), "mouse");
+});
+
+test("preflight loads repository quests and both languages with the game's choice fallback", () => {
+  assert.equal(typeof harness.loadHarnessContent, "function");
+  const scoring = JSON.parse(readFileSync(new URL("../content/scoring/items.json", import.meta.url), "utf8"));
+  const english = JSON.parse(readFileSync(new URL("../content/i18n/en/items.json", import.meta.url), "utf8"));
+  for (const lang of ["ko", "en"]) {
+    const { quests, itemText } = harness.loadHarnessContent(lang);
+    for (const id of ["lumi", "moka", "echo", "or"]) assert.ok(Object.keys(quests[id].slots).length > 0);
+    for (const item of [...scoring.items, ...scoring.tiebreakers]) for (const pick of ["a", "b"]) {
+      assert.equal(itemText[item.id].picks[pick], (lang === "en" ? english[item.id]?.picks[pick] : undefined) ?? item.picks[pick].text);
+    }
+  }
+});
+
+test("arguments accept only the three fixed scenarios", () => {
+  assert.equal(parseArgs([]).scenario, "a-auto");
+  assert.equal(parseArgs(["--emulators", "en", "evidence", "b-manual"]).scenario, "b-manual");
+  assert.equal(parseArgs(["ko", "evidence", "resume", "--emulators"]).emulators, true);
+  for (const args of [["fr"], ["ko", "out", "other"], ["ko", "out", "resume", "extra"], ["--unknown"]]) assert.throws(() => parseArgs(args));
+});
+
+test("choice and manual board selection follow scenario and saved placements", () => {
+  assert.equal(choiceIndex("a-auto"), 0);
+  assert.equal(choiceIndex("b-manual"), 1);
+  assert.equal(choiceIndex("resume"), 0);
+  assert.deepEqual(boardPair({ a: "round", b: "square", c: "round" }, { x: "square", y: "round" }, { x: "b" }), [0, 1]);
+  assert.equal(boardPair({ a: "round" }, { x: "square" }, {}), null);
+});
+
+test("final snapshot requires all answers and completed residents", () => {
+  const snapshot = { segment: "result", answers: Array.from({ length: 42 }, (_, i) => ({ id: String(i), pick: "a" })), completedEpisodes: ["lumi", "moka", "echo", "or"], ...Object.fromEntries(["lumi", "moka", "echo", "or"].map(n => [n, { phase: "completed" }])) };
+  assert.deepEqual(finalErrors(snapshot), []);
+  assert.ok(finalErrors({ ...snapshot, answers: snapshot.answers.slice(1) }).length);
+  assert.ok(finalErrors({ ...snapshot, completedEpisodes: ["lumi", "moka", "echo", "echo"] }).length);
+  assert.ok(finalErrors({ ...snapshot, or: { phase: "report" } }).length);
+});
 
 test("demo child environment drops inherited Firebase and credential configuration", () => {
   const env = demoEnv({ PATH: "path", GOOGLE_APPLICATION_CREDENTIALS: "private", GOOGLE_CLOUD_PROJECT: "real", VITE_FIREBASE_APP_CHECK_SITE_KEY: "real", FIREBASE_APPCHECK_DEBUG_TOKEN: "real", ABRAXAS_STORE: "firestore", CLOUDSDK_CONFIG: "private" });

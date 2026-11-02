@@ -1,0 +1,337 @@
+{
+  "initial": {
+    "playId": "fixture-play",
+    "contentVersion": "fixture-version",
+    "revision": 0,
+    "segment": "hub",
+    "completedEpisodes": [],
+    "answers": [],
+    "moka": {
+      "phase": "locked",
+      "basket": "source",
+      "placements": {},
+      "completedAt": null
+    },
+    "lumi": {
+      "phase": "locked",
+      "objects": {
+        "notice": "source",
+        "material": "source",
+        "score": "source"
+      },
+      "placements": {},
+      "completedAt": null
+    },
+    "echo": {
+      "phase": "locked",
+      "objects": {
+        "book": "source",
+        "record": "source",
+        "notebook": "source",
+        "legend": "source"
+      },
+      "placements": {},
+      "completedAt": null
+    },
+    "or": {
+      "phase": "locked",
+      "objects": {
+        "bucket": "source",
+        "bell": "source"
+      },
+      "placements": {},
+      "completedAt": null
+    }
+  },
+  "completedAt": "2026-11-02T00:00:00Z",
+  "success": [
+    {
+      "name": "manual_a",
+      "commands": [
+        {
+          "kind": "open_episode",
+          "npcId": "or"
+        },
+        {
+          "kind": "choice",
+          "itemId": "or_01",
+          "pick": "a"
+        },
+        {
+          "kind": "act",
+          "targetId": "or-fire-strong"
+        },
+        {
+          "kind": "choice",
+          "itemId": "or_02",
+          "pick": "a"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "or-bucket"
+        },
+        {
+          "kind": "act",
+          "targetId": "or-map"
+        },
+        {
+          "kind": "act",
+          "targetId": "or-sand"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "or-grinding-bench"
+        },
+        {
+          "kind": "place_piece",
+          "pieceId": "gear-circle",
+          "slotId": "axle-circle"
+        },
+        {
+          "kind": "place_piece",
+          "pieceId": "gear-triangle",
+          "slotId": "axle-triangle"
+        },
+        {
+          "kind": "place_piece",
+          "pieceId": "gear-square",
+          "slotId": "axle-square"
+        },
+        {
+          "kind": "choice",
+          "itemId": "or_03",
+          "pick": "a"
+        },
+        {
+          "kind": "act",
+          "targetId": "or-weight-light"
+        },
+        {
+          "kind": "talk",
+          "targetId": "s2j2"
+        },
+        {
+          "kind": "choice",
+          "itemId": "or_04",
+          "pick": "a"
+        },
+        {
+          "kind": "act",
+          "targetId": "or-review-together"
+        },
+        {
+          "kind": "act",
+          "targetId": "or-lantern-link"
+        },
+        {
+          "kind": "choice",
+          "itemId": "or_05",
+          "pick": "a"
+        },
+        {
+          "kind": "act",
+          "targetId": "or-hook-branches"
+        },
+        {
+          "kind": "talk",
+          "targetId": "D"
+        },
+        {
+          "kind": "choice",
+          "itemId": "or_06",
+          "pick": "a"
+        },
+        {
+          "kind": "act",
+          "targetId": "or-tools"
+        },
+        {
+          "kind": "complete",
+          "targetId": "D"
+        }
+      ],
+      "expected": {
+        "phase": "completed",
+        "answerIds": [
+          "or_01",
+          "or_02",
+          "or_03",
+          "or_04",
+          "or_05",
+          "or_06"
+        ],
+        "completedEpisodes": [
+          "or"
+        ]
+      }
+    },
+    {
+      "name": "automatic_b",
+      "commands": [
+        {
+          "kind": "open_episode",
+          "npcId": "or"
+        },
+        {
+          "kind": "choice",
+          "itemId": "or_01",
+          "pick": "b"
+        },
+        {
+          "kind": "act",
+          "targetId": "or-fire-gentle"
+        },
+        {
+          "kind": "choice",
+          "itemId": "or_02",
+          "pick": "b"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "or-bucket"
+        },
+        {
+          "kind": "talk",
+          "targetId": "or-fisher"
+        },
+        {
+          "kind": "talk",
+          "targetId": "or-merchant"
+        },
+        {
+          "kind": "act",
+          "targetId": "or-sand"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "or-grinding-bench"
+        },
+        {
+          "kind": "auto_arrange"
+        },
+        {
+          "kind": "choice",
+          "itemId": "or_03",
+          "pick": "b"
+        },
+        {
+          "kind": "act",
+          "targetId": "or-weight-heavy"
+        },
+        {
+          "kind": "talk",
+          "targetId": "s2j2"
+        },
+        {
+          "kind": "choice",
+          "itemId": "or_04",
+          "pick": "b"
+        },
+        {
+          "kind": "act",
+          "targetId": "or-review-alone"
+        },
+        {
+          "kind": "act",
+          "targetId": "or-lantern-link"
+        },
+        {
+          "kind": "choice",
+          "itemId": "or_05",
+          "pick": "b"
+        },
+        {
+          "kind": "act",
+          "targetId": "or-hook-reinforce"
+        },
+        {
+          "kind": "talk",
+          "targetId": "D"
+        },
+        {
+          "kind": "choice",
+          "itemId": "or_06",
+          "pick": "b"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "or-bell"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "or-plaza-stand"
+        },
+        {
+          "kind": "complete",
+          "targetId": "D"
+        }
+      ],
+      "expected": {
+        "phase": "completed",
+        "answerIds": [
+          "or_01",
+          "or_02",
+          "or_03",
+          "or_04",
+          "or_05",
+          "or_06"
+        ],
+        "completedEpisodes": [
+          "or"
+        ]
+      }
+    }
+  ],
+  "rejections": [
+    {
+      "name": "choice before opening",
+      "after": 0,
+      "command": {
+        "kind": "choice",
+        "itemId": "or_01",
+        "pick": "a"
+      }
+    },
+    {
+      "name": "wrong item order",
+      "after": 1,
+      "command": {
+        "kind": "choice",
+        "itemId": "or_02",
+        "pick": "a"
+      }
+    },
+    {
+      "name": "finish cannot skip",
+      "after": 21,
+      "command": {
+        "kind": "finish_segment"
+      }
+    },
+    {
+      "name": "final action required",
+      "after": 21,
+      "command": {
+        "kind": "complete",
+        "targetId": "D"
+      }
+    },
+    {
+      "name": "unknown puzzle IDs",
+      "after": 8,
+      "command": {
+        "kind": "place_piece",
+        "pieceId": "toString",
+        "slotId": "toString"
+      }
+    }
+  ],
+  "transportCases": [
+    "same_key_same_body",
+    "same_key_different_body",
+    "same_answer_new_key",
+    "different_answer",
+    "recomplete_new_key",
+    "stale_revision"
+  ]
+}

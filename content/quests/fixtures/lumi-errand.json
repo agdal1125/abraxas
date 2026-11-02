@@ -1,0 +1,352 @@
+{
+  "initial": {
+    "playId": "fixture-play",
+    "contentVersion": "fixture-version",
+    "revision": 0,
+    "segment": "hub",
+    "completedEpisodes": [],
+    "answers": [],
+    "moka": {
+      "phase": "locked",
+      "basket": "source",
+      "placements": {},
+      "completedAt": null
+    },
+    "lumi": {
+      "phase": "locked",
+      "objects": {
+        "notice": "source",
+        "material": "source",
+        "score": "source"
+      },
+      "placements": {},
+      "completedAt": null
+    },
+    "echo": {
+      "phase": "locked",
+      "objects": {
+        "book": "source",
+        "record": "source",
+        "notebook": "source",
+        "legend": "source"
+      },
+      "placements": {},
+      "completedAt": null
+    },
+    "or": {
+      "phase": "locked",
+      "objects": {
+        "bucket": "source",
+        "bell": "source"
+      },
+      "placements": {},
+      "completedAt": null
+    }
+  },
+  "completedAt": "2026-11-02T00:00:00Z",
+  "success": [
+    {
+      "name": "manual_a",
+      "commands": [
+        {
+          "kind": "open_episode",
+          "npcId": "lumi"
+        },
+        {
+          "kind": "choice",
+          "itemId": "lumi_01",
+          "pick": "a"
+        },
+        {
+          "kind": "act",
+          "targetId": "lumi-table-alone"
+        },
+        {
+          "kind": "choice",
+          "itemId": "lumi_02",
+          "pick": "a"
+        },
+        {
+          "kind": "act",
+          "targetId": "lumi-card-new"
+        },
+        {
+          "kind": "choice",
+          "itemId": "lumi_03",
+          "pick": "a"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "lumi-horn"
+        },
+        {
+          "kind": "talk",
+          "targetId": "lumi-neighbor-1"
+        },
+        {
+          "kind": "talk",
+          "targetId": "lumi-neighbor-2"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "lumi-notice-return"
+        },
+        {
+          "kind": "talk",
+          "targetId": "s1j2"
+        },
+        {
+          "kind": "choice",
+          "itemId": "lumi_04",
+          "pick": "a"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "lumi-ribbon-source"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "lumi-stage-workbench"
+        },
+        {
+          "kind": "place_piece",
+          "pieceId": "circle-1",
+          "slotId": "circle-1"
+        },
+        {
+          "kind": "place_piece",
+          "pieceId": "circle-2",
+          "slotId": "circle-2"
+        },
+        {
+          "kind": "place_piece",
+          "pieceId": "triangle-1",
+          "slotId": "triangle-1"
+        },
+        {
+          "kind": "place_piece",
+          "pieceId": "triangle-2",
+          "slotId": "triangle-2"
+        },
+        {
+          "kind": "place_piece",
+          "pieceId": "square-1",
+          "slotId": "square-1"
+        },
+        {
+          "kind": "place_piece",
+          "pieceId": "square-2",
+          "slotId": "square-2"
+        },
+        {
+          "kind": "choice",
+          "itemId": "lumi_05",
+          "pick": "a"
+        },
+        {
+          "kind": "act",
+          "targetId": "lumi-welcome-postcard"
+        },
+        {
+          "kind": "talk",
+          "targetId": "A"
+        },
+        {
+          "kind": "choice",
+          "itemId": "lumi_06",
+          "pick": "a"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "lumi-score-new"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "lumi-musician-stand"
+        },
+        {
+          "kind": "complete",
+          "targetId": "A"
+        }
+      ],
+      "expected": {
+        "phase": "completed",
+        "answerIds": [
+          "lumi_01",
+          "lumi_02",
+          "lumi_03",
+          "lumi_04",
+          "lumi_05",
+          "lumi_06"
+        ],
+        "completedEpisodes": [
+          "lumi"
+        ]
+      }
+    },
+    {
+      "name": "automatic_b",
+      "commands": [
+        {
+          "kind": "open_episode",
+          "npcId": "lumi"
+        },
+        {
+          "kind": "choice",
+          "itemId": "lumi_01",
+          "pick": "b"
+        },
+        {
+          "kind": "act",
+          "targetId": "lumi-table-together"
+        },
+        {
+          "kind": "choice",
+          "itemId": "lumi_02",
+          "pick": "b"
+        },
+        {
+          "kind": "act",
+          "targetId": "lumi-card-traditional"
+        },
+        {
+          "kind": "choice",
+          "itemId": "lumi_03",
+          "pick": "b"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "lumi-notices"
+        },
+        {
+          "kind": "act",
+          "targetId": "lumi-board"
+        },
+        {
+          "kind": "act",
+          "targetId": "lumi-mailbox"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "lumi-notice-return"
+        },
+        {
+          "kind": "talk",
+          "targetId": "s1j2"
+        },
+        {
+          "kind": "choice",
+          "itemId": "lumi_04",
+          "pick": "b"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "lumi-field-source"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "lumi-stage-workbench"
+        },
+        {
+          "kind": "auto_arrange"
+        },
+        {
+          "kind": "choice",
+          "itemId": "lumi_05",
+          "pick": "b"
+        },
+        {
+          "kind": "act",
+          "targetId": "lumi-welcome-plaza"
+        },
+        {
+          "kind": "talk",
+          "targetId": "A"
+        },
+        {
+          "kind": "choice",
+          "itemId": "lumi_06",
+          "pick": "b"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "lumi-score-old"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "lumi-musician-stand"
+        },
+        {
+          "kind": "complete",
+          "targetId": "A"
+        }
+      ],
+      "expected": {
+        "phase": "completed",
+        "answerIds": [
+          "lumi_01",
+          "lumi_02",
+          "lumi_03",
+          "lumi_04",
+          "lumi_05",
+          "lumi_06"
+        ],
+        "completedEpisodes": [
+          "lumi"
+        ]
+      }
+    }
+  ],
+  "rejections": [
+    {
+      "name": "choice before opening",
+      "after": 0,
+      "command": {
+        "kind": "choice",
+        "itemId": "lumi_01",
+        "pick": "a"
+      }
+    },
+    {
+      "name": "wrong item order",
+      "after": 1,
+      "command": {
+        "kind": "choice",
+        "itemId": "lumi_02",
+        "pick": "a"
+      }
+    },
+    {
+      "name": "finish cannot skip",
+      "after": 24,
+      "command": {
+        "kind": "finish_segment"
+      }
+    },
+    {
+      "name": "final action required",
+      "after": 24,
+      "command": {
+        "kind": "complete",
+        "targetId": "A"
+      }
+    },
+    {
+      "name": "unknown puzzle IDs",
+      "after": 14,
+      "command": {
+        "kind": "place_piece",
+        "pieceId": "toString",
+        "slotId": "toString"
+      }
+    }
+  ],
+  "transportCases": [
+    "same_key_same_body",
+    "same_key_different_body",
+    "same_answer_new_key",
+    "different_answer",
+    "recomplete_new_key",
+    "stale_revision"
+  ]
+}

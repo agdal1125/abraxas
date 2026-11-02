@@ -31,6 +31,17 @@ Java 21 이상과 루트 npm 의존성이 필요하다. 저장소 루트에서 `
 
 Abraxas Go API 서버 (Cloud Run 배포 대상). 표준 라이브러리 `net/http`를 중심으로 구성한다.
 
+## 컨테이너 빌드와 콘텐츠 버전
+
+저장소 루트를 빌드 컨텍스트로 사용한다. `server/`를 컨텍스트로 지정하면 런타임 콘텐츠가 빠진다.
+
+```text
+docker build -f server/Dockerfile -t abraxas-api .
+node --input-type=module -e "import { contentVersion } from './scripts/content-version.mjs'; console.log(contentVersion(process.cwd()))"
+```
+
+같은 커밋과 콘텐츠로 클라이언트를 빌드하고, 위 명령의 해시를 서버 런타임의 `ABRAXAS_CONTENT_VERSION`에 지정한다. 클라이언트 Vite 빌드는 같은 함수로 버전을 주입한다. 콘텐츠가 바뀌면 이미지와 클라이언트를 같은 버전으로 다시 빌드해 함께 맞춘다. 실행 이미지는 서버가 읽는 점수 및 네 심부름 JSON을 `/content`에 포함하고 `ABRAXAS_CONTENT_DIR=/content`를 사용한다. 버전이 다르면 클라이언트는 회차를 적용하지 않는다. 운영 환경 설정과 배포는 별도 승인 절차를 따른다.
+
 ## 구조
 
 - `cmd/api/`: 서버 진입점 (`PORT` 환경변수 기본값 `8080`, `log/slog` JSON 로거, graceful shutdown)

@@ -1,0 +1,621 @@
+{
+  "language": "ko",
+  "scenario": "resume",
+  "reached": true,
+  "answersCount": 42,
+  "completed": [
+    "lumi",
+    "moka",
+    "echo",
+    "or"
+  ],
+  "phases": {
+    "lumi": "completed",
+    "moka": "completed",
+    "echo": "completed",
+    "or": "completed"
+  },
+  "recovery": {
+    "lumi": {
+      "choice": true,
+      "rest": true,
+      "puzzle": true,
+      "report": true
+    },
+    "echo": {
+      "choice": true,
+      "rest": true,
+      "puzzle": true,
+      "report": true
+    },
+    "or": {
+      "choice": true,
+      "rest": true,
+      "puzzle": true,
+      "report": true
+    }
+  },
+  "reportResponseLossInjected": false,
+  "pointerEvidence": {
+    "lumi": 1,
+    "moka": 1,
+    "echo": 1,
+    "or": 1
+  },
+  "touchEvidence": {
+    "lumi": 0,
+    "moka": 0,
+    "echo": 0,
+    "or": 0
+  },
+  "interactionEvidence": {
+    "direct": 90,
+    "pointer": 4,
+    "touch": 0,
+    "mouse": 4,
+    "walked": 65
+  },
+  "viewportEvidence": {
+    "language": "ko",
+    "count": 32,
+    "results": [
+      {
+        "npc": "lumi",
+        "width": 844,
+        "height": 390,
+        "font": 15,
+        "fontSize": 15,
+        "board": {
+          "left": 212,
+          "top": 66,
+          "right": 632,
+          "bottom": 378
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "lumi",
+        "width": 844,
+        "height": 390,
+        "font": 18,
+        "fontSize": 18,
+        "board": {
+          "left": 212,
+          "top": 66,
+          "right": 632,
+          "bottom": 378
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "lumi",
+        "width": 740,
+        "height": 360,
+        "font": 15,
+        "fontSize": 15,
+        "board": {
+          "left": 160,
+          "top": 60,
+          "right": 580,
+          "bottom": 348
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "lumi",
+        "width": 740,
+        "height": 360,
+        "font": 18,
+        "fontSize": 18,
+        "board": {
+          "left": 160,
+          "top": 60,
+          "right": 580,
+          "bottom": 348
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "lumi",
+        "width": 960,
+        "height": 540,
+        "font": 15,
+        "fontSize": 15,
+        "board": {
+          "left": 270,
+          "top": 96,
+          "right": 690,
+          "bottom": 528
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "lumi",
+        "width": 960,
+        "height": 540,
+        "font": 18,
+        "fontSize": 18,
+        "board": {
+          "left": 270,
+          "top": 96,
+          "right": 690,
+          "bottom": 528
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "lumi",
+        "width": 1280,
+        "height": 720,
+        "font": 15,
+        "fontSize": 15,
+        "board": {
+          "left": 430,
+          "top": 260.0625,
+          "right": 850,
+          "bottom": 708
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "lumi",
+        "width": 1280,
+        "height": 720,
+        "font": 18,
+        "fontSize": 18,
+        "board": {
+          "left": 430,
+          "top": 215.796875,
+          "right": 850,
+          "bottom": 708
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "moka",
+        "width": 844,
+        "height": 390,
+        "font": 15,
+        "fontSize": 15,
+        "board": {
+          "left": 212,
+          "top": 66,
+          "right": 632,
+          "bottom": 378
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "moka",
+        "width": 844,
+        "height": 390,
+        "font": 18,
+        "fontSize": 18,
+        "board": {
+          "left": 212,
+          "top": 66,
+          "right": 632,
+          "bottom": 378
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "moka",
+        "width": 740,
+        "height": 360,
+        "font": 15,
+        "fontSize": 15,
+        "board": {
+          "left": 160,
+          "top": 60,
+          "right": 580,
+          "bottom": 348
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "moka",
+        "width": 740,
+        "height": 360,
+        "font": 18,
+        "fontSize": 18,
+        "board": {
+          "left": 160,
+          "top": 60,
+          "right": 580,
+          "bottom": 348
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "moka",
+        "width": 960,
+        "height": 540,
+        "font": 15,
+        "fontSize": 15,
+        "board": {
+          "left": 270,
+          "top": 138.65625,
+          "right": 690,
+          "bottom": 528
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "moka",
+        "width": 960,
+        "height": 540,
+        "font": 18,
+        "fontSize": 18,
+        "board": {
+          "left": 270,
+          "top": 96.84375,
+          "right": 690,
+          "bottom": 528
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "moka",
+        "width": 1280,
+        "height": 720,
+        "font": 15,
+        "fontSize": 15,
+        "board": {
+          "left": 430,
+          "top": 318.65625,
+          "right": 850,
+          "bottom": 708
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "moka",
+        "width": 1280,
+        "height": 720,
+        "font": 18,
+        "fontSize": 18,
+        "board": {
+          "left": 430,
+          "top": 276.84375,
+          "right": 850,
+          "bottom": 708
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "echo",
+        "width": 844,
+        "height": 390,
+        "font": 15,
+        "fontSize": 15,
+        "board": {
+          "left": 212,
+          "top": 66,
+          "right": 632,
+          "bottom": 378
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "echo",
+        "width": 844,
+        "height": 390,
+        "font": 18,
+        "fontSize": 18,
+        "board": {
+          "left": 212,
+          "top": 66,
+          "right": 632,
+          "bottom": 378
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "echo",
+        "width": 740,
+        "height": 360,
+        "font": 15,
+        "fontSize": 15,
+        "board": {
+          "left": 160,
+          "top": 60,
+          "right": 580,
+          "bottom": 348
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "echo",
+        "width": 740,
+        "height": 360,
+        "font": 18,
+        "fontSize": 18,
+        "board": {
+          "left": 160,
+          "top": 60,
+          "right": 580,
+          "bottom": 348
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "echo",
+        "width": 960,
+        "height": 540,
+        "font": 15,
+        "fontSize": 15,
+        "board": {
+          "left": 270,
+          "top": 96,
+          "right": 690,
+          "bottom": 528
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "echo",
+        "width": 960,
+        "height": 540,
+        "font": 18,
+        "fontSize": 18,
+        "board": {
+          "left": 270,
+          "top": 96,
+          "right": 690,
+          "bottom": 528
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "echo",
+        "width": 1280,
+        "height": 720,
+        "font": 15,
+        "fontSize": 15,
+        "board": {
+          "left": 430,
+          "top": 262.5625,
+          "right": 850,
+          "bottom": 708
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "echo",
+        "width": 1280,
+        "height": 720,
+        "font": 18,
+        "fontSize": 18,
+        "board": {
+          "left": 430,
+          "top": 160.015625,
+          "right": 850,
+          "bottom": 708
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "or",
+        "width": 844,
+        "height": 390,
+        "font": 15,
+        "fontSize": 15,
+        "board": {
+          "left": 212,
+          "top": 66,
+          "right": 632,
+          "bottom": 378
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "or",
+        "width": 844,
+        "height": 390,
+        "font": 18,
+        "fontSize": 18,
+        "board": {
+          "left": 212,
+          "top": 66,
+          "right": 632,
+          "bottom": 378
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "or",
+        "width": 740,
+        "height": 360,
+        "font": 15,
+        "fontSize": 15,
+        "board": {
+          "left": 160,
+          "top": 60,
+          "right": 580,
+          "bottom": 348
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "or",
+        "width": 740,
+        "height": 360,
+        "font": 18,
+        "fontSize": 18,
+        "board": {
+          "left": 160,
+          "top": 60,
+          "right": 580,
+          "bottom": 348
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "or",
+        "width": 960,
+        "height": 540,
+        "font": 15,
+        "fontSize": 15,
+        "board": {
+          "left": 270,
+          "top": 192.25,
+          "right": 690,
+          "bottom": 528
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "or",
+        "width": 960,
+        "height": 540,
+        "font": 18,
+        "fontSize": 18,
+        "board": {
+          "left": 270,
+          "top": 166.546875,
+          "right": 690,
+          "bottom": 528
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "or",
+        "width": 1280,
+        "height": 720,
+        "font": 15,
+        "fontSize": 15,
+        "board": {
+          "left": 430,
+          "top": 372.25,
+          "right": 850,
+          "bottom": 708
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      },
+      {
+        "npc": "or",
+        "width": 1280,
+        "height": 720,
+        "font": 18,
+        "fontSize": 18,
+        "board": {
+          "left": 430,
+          "top": 346.546875,
+          "right": 850,
+          "bottom": 708
+        },
+        "minButtonHeight": 48,
+        "horizontalOverflow": 0,
+        "closeVisible": true,
+        "failures": []
+      }
+    ],
+    "keyboard": {
+      "lumi": true,
+      "moka": true,
+      "echo": true,
+      "or": true
+    }
+  },
+  "pointerMismatches": [
+    "moka-basket-source -> none"
+  ],
+  "steps": 1232,
+  "errors": [],
+  "abnormalResponses": 0,
+  "source": ".e2e/rs1-ko-resume/run-summary.json"
+}

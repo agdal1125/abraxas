@@ -72,6 +72,8 @@ func TestMokaTransportAndConcurrency(t *testing.T) {
 	if err = json.Unmarshal(raw, &fixture); err != nil {
 		t.Fatal(err)
 	}
+	initial := play.NewSnapshot(fixture.Initial.PlayID, fixture.Initial.ContentVersion)
+	fixture.Initial.Lumi, fixture.Initial.Echo, fixture.Initial.Or = initial.Lumi, initial.Echo, initial.Or
 	fixture.Initial.PlayID = id
 	mem := store.NewMemory()
 	if _, _, err = mem.Create(context.Background(), "one", "create", play.NewDoc(fixture.Initial)); err != nil {
@@ -154,6 +156,108 @@ func TestMokaTransportAndConcurrency(t *testing.T) {
 	mismatch := request(key(200), commands[0])
 	if mismatch.Code != 409 || !strings.Contains(mismatch.Body.String(), "content_version_unavailable") {
 		t.Fatal(mismatch.Code, mismatch.Body)
+	}
+}
+
+func TestResidentReceiptsAndStrictCommands(t *testing.T) {
+	const id = "11111111-1111-4111-8111-111111111111"
+	engine, err := play.Load("../../../content", "fixture-version")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, npc := range []string{"lumi", "moka", "echo", "or"} {
+		t.Run(npc, func(t *testing.T) {
+			raw, err := os.ReadFile("../../../content/quests/fixtures/" + npc + "-errand.json")
+			if err != nil {
+				t.Fatal(err)
+			}
+			var f struct {
+				Initial play.Snapshot `json:"initial"`
+				Success []struct {
+					Commands []play.Command `json:"commands"`
+				} `json:"success"`
+			}
+			if err := json.Unmarshal(raw, &f); err != nil {
+				t.Fatal(err)
+			}
+			if npc == "moka" {
+				initial := play.NewSnapshot(id, "fixture-version")
+				f.Initial.Lumi, f.Initial.Echo, f.Initial.Or = initial.Lumi, initial.Echo, initial.Or
+			}
+			f.Initial.PlayID = id
+			mem := store.NewMemory()
+			if _, _, err := mem.Create(context.Background(), "one", "create", play.NewDoc(f.Initial)); err != nil {
+				t.Fatal(err)
+			}
+			router := httpapi.NewPlayRouter(nil, httpapi.PlayConfig{Store: mem, Engine: engine, Auth: &fakeVerifier{tokens: map[string]string{"one": "one"}}, AllowMissingAppCheck: true})
+			request := func(key int, body string) *httptest.ResponseRecorder {
+				t.Helper()
+				req := httptest.NewRequest("POST", "/v1/plays/"+id+"/commands", strings.NewReader(body))
+				req.Header.Set("Authorization", "Bearer one")
+				req.Header.Set("Idempotency-Key", fmt.Sprintf("00000000-0000-4000-8000-%012d", key))
+				rec := httptest.NewRecorder()
+				router.ServeHTTP(rec, req)
+				return rec
+			}
+			var firstChoice, lastBody string
+			var lastKey int
+			var original string
+			for i, cmd := range f.Success[0].Commands {
+				if cmd.Kind == "place_piece" {
+					before, _ := mem.Get(context.Background(), "one", id)
+					bad, _ := json.Marshal(map[string]any{"expectedRevision": i, "command": map[string]string{"kind": "place_piece", "pieceId": "unknown", "slotId": cmd.SlotID}})
+					got := request(800+i, string(bad))
+					if got.Code != 422 {
+						t.Fatalf("unknown piece: %d %s", got.Code, got.Body)
+					}
+					after, _ := mem.Get(context.Background(), "one", id)
+					b, _ := json.Marshal(before)
+					a, _ := json.Marshal(after)
+					if string(a) != string(b) {
+						t.Fatal("invalid piece mutated state")
+					}
+				}
+				body, _ := json.Marshal(map[string]any{"expectedRevision": i, "command": cmd})
+				got := request(i+1, string(body))
+				if got.Code != 200 {
+					t.Fatalf("%d: %d %s", i, got.Code, got.Body)
+				}
+				if cmd.Kind == "choice" && firstChoice == "" {
+					firstChoice = string(body)
+				}
+				if cmd.Kind == "complete" {
+					lastBody, lastKey, original = string(body), i+1, got.Body.String()
+				}
+			}
+			before, _ := mem.Get(context.Background(), "one", id)
+			saved, _ := json.Marshal(before)
+			if got := request(lastKey, lastBody); got.Code != 200 || got.Body.String() != original {
+				t.Fatalf("lost response retry: %d %s", got.Code, got.Body)
+			}
+			if got := request(lastKey, firstChoice); got.Code != 409 || !strings.Contains(got.Body.String(), "idempotency_conflict") {
+				t.Fatal(got.Code, got.Body)
+			}
+			if got := request(500, lastBody); got.Code != 200 || got.Body.String() != original {
+				t.Fatalf("semantic complete: %d %s", got.Code, got.Body)
+			}
+			if got := request(501, firstChoice); got.Code != 200 {
+				t.Fatal(got.Code, got.Body)
+			}
+			changed := strings.Replace(firstChoice, `"pick":"a"`, `"pick":"b"`, 1)
+			if got := request(502, changed); got.Code != 409 || !strings.Contains(got.Body.String(), "choice_locked") {
+				t.Fatal(got.Code, got.Body)
+			}
+			for _, body := range []string{`{"expectedRevision":0,"command":{"kind":"place_piece","pieceId":"x","slotId":"y","extra":"z"}}`, `{"expectedRevision":0,"command":{"kind":"place_piece","pieceId":null,"slotId":"y"}}`, `{"expectedRevision":0,"command":{"kind":"place_piece","pieceId":"x","slotId":"bad id"}}`} {
+				if got := request(503, body); got.Code != 400 {
+					t.Fatal(got.Code, got.Body)
+				}
+			}
+			after, _ := mem.Get(context.Background(), "one", id)
+			current, _ := json.Marshal(after)
+			if string(saved) != string(current) {
+				t.Fatal("retry or error mutated state")
+			}
+		})
 	}
 }
 
