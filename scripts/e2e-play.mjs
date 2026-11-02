@@ -26,6 +26,16 @@ export function parseArgs(argv) {
 }
 export const choiceIndex = scenario => scenario === "b-manual" ? 1 : 0;
 export const pointerInput = scenario => scenario === "b-manual" ? "touch" : "mouse";
+export function viewportFailures(measured, width, height, font) {
+  const failures = [], { viewport, fontSize, board, horizontalOverflow, buttonHeights, closeVisible } = measured;
+  if (Math.abs(viewport.width - width) > 1 || Math.abs(viewport.height - height) > 1) failures.push("viewport size");
+  if (Math.abs(fontSize - font) > .05) failures.push("font size");
+  if (board.left < -0.5 || board.top < -0.5 || board.right > viewport.width + 0.5 || board.bottom > viewport.height + 0.5 || board.right <= board.left || board.bottom <= board.top) failures.push("board outside viewport");
+  if (horizontalOverflow > 1) failures.push("horizontal overflow");
+  if (!buttonHeights.length || buttonHeights.some(height => height < 47.95)) failures.push("button height below 48px");
+  if (!closeVisible) failures.push("close button unreachable");
+  return failures;
+}
 export function boardPair(pieces, slots, placements) {
   const slot = Object.keys(slots).find(id => !placements[id]);
   const piece = Object.keys(pieces).find(id => slot && pieces[id] === slots[slot] && !Object.values(placements).includes(id));
@@ -97,6 +107,7 @@ const pointerEvidence = Object.fromEntries(allResidents.map(id => [id, 0]));
 const touchEvidence = Object.fromEntries(allResidents.map(id => [id, 0]));
 const interactionEvidence = { direct: 0, pointer: 0, touch: 0, mouse: 0, walked: 0 };
 const captures = new Set();
+const viewportEvidence = { language: lang, count: 0, results: [], keyboard: {} };
 const pointerMismatches = [];
 let lastSnapshot = null;
 const abnormalStatuses = {};
@@ -210,6 +221,7 @@ try {
     return result.result.value;
   };
   const shot = async name => writeFileSync(join(output, `${name}.png`), Buffer.from((await send("Page.captureScreenshot", { format: "png" })).data, "base64"));
+  const frames = () => evaluate("new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))");
   await send("Runtime.enable"); await send("Network.enable"); await send("Page.enable");
   await send("Emulation.setDeviceMetricsOverride", { width: 844, height: 390, deviceScaleFactor: 1, mobile: true });
   if (pointerInput(scenario) === "touch") await send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 1 });
@@ -227,6 +239,36 @@ try {
   }
   await startPage();
   let pendingWalk = null;
+  async function checkBoardViewport(npc) {
+    await evaluate("(() => { const board = document.querySelector('.resident-board, .moka-board'), style = document.documentElement.style; window.__e2eBoardRestore = { board, focus: document.activeElement, font: style.getPropertyValue('--body-size'), priority: style.getPropertyPriority('--body-size'), scrollTop: board.scrollTop }; })()");
+    try {
+      await evaluate("document.querySelector(':is(.resident-board, .moka-board) button:not(:disabled)')?.focus({ preventScroll: true })");
+      await send("Input.dispatchKeyEvent", { type: "keyDown", key: "Tab", code: "Tab", windowsVirtualKeyCode: 9, nativeVirtualKeyCode: 9 });
+      await send("Input.dispatchKeyEvent", { type: "keyUp", key: "Tab", code: "Tab", windowsVirtualKeyCode: 9, nativeVirtualKeyCode: 9 });
+      const keyboard = await evaluate("(() => { const board = document.querySelector('.resident-board, .moka-board'), first = board?.querySelector('button:not(:disabled)'); return board?.contains(document.activeElement) && document.activeElement !== first && document.activeElement?.matches('button:not(:disabled)'); })()");
+      viewportEvidence.keyboard[npc] = !!keyboard;
+      if (!keyboard) errors.push(`Board keyboard Tab failed: ${npc}`);
+      for (const [width, height] of [[844, 390], [740, 360], [960, 540], [1280, 720]]) for (const font of [15, 18]) {
+        await send("Emulation.setDeviceMetricsOverride", { width, height, deviceScaleFactor: 1, mobile: true });
+        await evaluate(`document.documentElement.style.setProperty('--body-size', '${font}px')`);
+        await frames();
+        await evaluate(`(async () => { const board = document.querySelector('.resident-board, .moka-board'); await Promise.allSettled(board.getAnimations({ subtree: true }).filter(a => a.playState === 'running' && Number.isFinite(a.effect?.getComputedTiming().endTime)).map(a => a.finished)); })()`);
+        await evaluate("(() => { const board = document.querySelector('.resident-board, .moka-board'); board.scrollTop = board.scrollHeight; })()");
+        await frames();
+        const measured = await evaluate(`(() => { const board = document.querySelector('.resident-board, .moka-board'), rect = board.getBoundingClientRect(), close = board.querySelector(':scope > button:last-child'), end = close.getBoundingClientRect(), vv = window.visualViewport; const x = (end.left + end.right) / 2, y = (end.top + end.bottom) / 2, hit = document.elementFromPoint(x, y); return { viewport: { width: vv.width, height: vv.height }, fontSize: parseFloat(getComputedStyle(document.body).fontSize), board: { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom }, horizontalOverflow: Math.max(board.scrollWidth - board.clientWidth, document.documentElement.scrollWidth - document.documentElement.clientWidth), buttonHeights: [...board.querySelectorAll('button')].map(b => b.getBoundingClientRect().height), closeVisible: !close.disabled && end.top >= rect.top + board.clientTop - .5 && end.bottom <= rect.top + board.clientTop + board.clientHeight + .5 && end.left >= 0 && end.right <= vv.width && end.top >= 0 && end.bottom <= vv.height && (hit === close || close.contains(hit)) }; })()`);
+        const failures = viewportFailures(measured, width, height, font);
+        viewportEvidence.results.push({ npc, width, height, font, fontSize: measured.fontSize, board: measured.board, minButtonHeight: Math.min(...measured.buttonHeights), horizontalOverflow: measured.horizontalOverflow, closeVisible: measured.closeVisible, failures });
+        viewportEvidence.count++;
+        await shot(`viewport-${npc}-${width}x${height}-${font}`);
+        if (failures.length) errors.push(`Board viewport ${npc} ${width}x${height} ${font}px: ${failures.join(', ')}`);
+      }
+    } finally {
+      await send("Emulation.setDeviceMetricsOverride", { width: 844, height: 390, deviceScaleFactor: 1, mobile: true });
+      await evaluate("(() => { const saved = window.__e2eBoardRestore, style = document.documentElement.style; if (saved.font) style.setProperty('--body-size', saved.font, saved.priority); else style.removeProperty('--body-size'); })()");
+      await frames();
+      await evaluate("(() => { const saved = window.__e2eBoardRestore; saved.focus?.focus?.({ preventScroll: true }); saved.board.scrollTop = saved.scrollTop; delete window.__e2eBoardRestore; })()");
+    }
+  }
   async function reloadAt(npc, checkpoint, before) {
     await shot(`resume-${npc}-${checkpoint}`);
     const createsBefore = createdPlays;
@@ -274,6 +316,7 @@ try {
     if (board) {
       const boardNpc = board.type === "moka" ? "moka" : npc;
       if (!captures.has(`board-${boardNpc}`)) { await shot(`board-${boardNpc}`); captures.add(`board-${boardNpc}`); }
+      if (scenario === "resume" && !Object.hasOwn(viewportEvidence.keyboard, boardNpc)) await checkBoardViewport(boardNpc);
       const manual = scenario === "b-manual" || (scenario === "resume" && residents.includes(boardNpc) && !recovery[boardNpc].puzzle);
       if (manual) {
         const quest = quests[boardNpc], pair = boardPair(quest.pieces ?? quest.bread, quest.slots, snapshot[boardNpc].placements);
@@ -317,7 +360,7 @@ finally {
   await sleep(500);
   try { rmSync(temp, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }); } catch (error) { errors.push(`Temporary cleanup: ${error.message}`); }
   if (!reached && browserLog) errors.push(`Browser stderr: ${browserLog}`);
-  const summary = { language: lang, scenario, reached, answersCount: lastSnapshot?.answers?.length ?? null, completed: lastSnapshot?.completedEpisodes ?? [], phases: Object.fromEntries(allResidents.map(id => [id, lastSnapshot?.[id]?.phase ?? null])), recovery, reportResponseLossInjected: false, pointerEvidence, touchEvidence, interactionEvidence, pointerMismatches, steps, segments, errors, warnings, abnormalResponses: abnormal, abnormalStatuses, abnormalDetails, captures: output };
+  const summary = { language: lang, scenario, reached, answersCount: lastSnapshot?.answers?.length ?? null, completed: lastSnapshot?.completedEpisodes ?? [], phases: Object.fromEntries(allResidents.map(id => [id, lastSnapshot?.[id]?.phase ?? null])), recovery, reportResponseLossInjected: false, pointerEvidence, touchEvidence, interactionEvidence, viewportEvidence, pointerMismatches, steps, segments, errors, warnings, abnormalResponses: abnormal, abnormalStatuses, abnormalDetails, captures: output };
   const serialize = () => JSON.stringify(summary, (_key, value) => typeof value === "string" ? value.replace(/\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b/g, "[redacted]").replace(/\bdev-[A-Za-z0-9_-]+\b/g, "[redacted]").replace(/(bearer\s+)[^\s]+/ig, "$1[redacted]") : value, 2);
   try { mkdirSync(output, { recursive: true }); writeFileSync(join(output, "run-summary.json"), serialize()); } catch (error) { errors.push(`Summary write: ${error.message}`); }
   console.log(serialize());
