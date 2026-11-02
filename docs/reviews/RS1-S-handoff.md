@@ -23,3 +23,11 @@
 - `gofmt`, `git diff --check`: 통과. 기존 저장소 설치본에서 클라이언트 의존성만 비삭제 복사했다. 네트워크 설치, 설정·ACL·비밀값 변경은 없다.
 - 브라우저·E2E·에뮬레이터와 `govulncheck`는 실행하지 않았다. 현재 게이트는 `Score`의 완전성을 검증하며 공식 결과 저장은 별도 통합 범위다. 통합·CI·공유 기억·개발 일지와 git 작업은 감독 담당이다.
 - agy `gemini-4-argon-medium` 사용량 한도 이후 승인된 대체 모델 `gpt-6.1-terra`, xhigh, priority로 구현했다.
+
+## 2026-11-03 후속 측정보존 검증
+
+`server/internal/play/residents_combinations_test.go`에서 기존 세 주민의 수동 a·자동 b fixture를 선택지 기준으로 나누어 주민별 64개 혼합 답 조합을 만들었다. 계약 확인 결과 행동 분기는 해당 청크의 선택을 참조한다. 오르의 첫 퍼즐은 두 번째 선택 뒤에 있으므로 그 청크에 유지한다. 각 조합에서 fixture의 수동 조각, `auto_arrange`, 운반 중 가능한 각 단계의 받침대 내려놓기·다시 집기를 실제 `Engine.Apply`로 실행했다.
+
+각 경로의 여섯 답과 순서, 완료 사건·완료 목록 각 한 건, 해당 주민에게만 적용되는 기존 +8과 상한, NPC 성향·반응을 검사하고 경로별 `Progress`와 `Score` 전체 결과를 비교했다. `Score`의 유형 계산에 필요한 다른 주민·구간 답은 기존 골든 로그에서 채웠다. 이는 실제 회차 전체를 재현한 유형 검증은 아니며 기존 24가지 주민 순서 테스트는 그대로 유지했다.
+
+서버의 기존 `server/.e2e/go-cache`와 `GOMAXPROCS=2`를 사용한 `go test -p 2 ./internal/play ./internal/scoring -run 'TestResidentCombinationsPreserveScoring|TestAllEpisodeOrders|TestGolden|TestAllResidentsCompletionGolden' -count=1` 통과. 제품 코드·점수 데이터·UI는 변경하지 않았고 브라우저·E2E·전체 검사는 실행하지 않았다.
