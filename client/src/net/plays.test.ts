@@ -2,9 +2,12 @@ import { beforeEach, expect, test, vi } from "vitest";
 import { configurePlayTransport, createPlay, loadCurrentPlay, recoverPending, sendCommand, PlayApiError } from "./plays";
 import { loadPending, savePending } from "./pending";
 import { DevAuthTokenSource } from "./auth";
+import { initialLumi } from "../core/lumi-errand";
+import { initialEcho } from "../core/echo-errand";
+import { initialOr } from "../core/or-errand";
 
 const pending = { key: "3dbd7b9c-9c94-4acb-9e3b-7b37c3d6df81", expectedRevision: 0, command: { kind: "choice" as const, itemId: "moka_01", pick: "a" as const } };
-const snapshot = { playId: "play", contentVersion: "hash", revision: 1, segment: "ep_moka", completedEpisodes: [], answers: [{ id: "moka_01", pick: "a" }], moka: { phase: "pick_up", basket: "source", placements: {}, completedAt: null } };
+const snapshot = { playId: "play", contentVersion: "hash", revision: 1, segment: "ep_moka", completedEpisodes: [], answers: [{ id: "moka_01", pick: "a" }], moka: { phase: "pick_up", basket: "source", placements: {}, completedAt: null }, lumi: initialLumi(), echo: initialEcho(), or: initialOr() };
 const receipt = { key: pending.key, appliedRevision: 1, reaction: "empathy" };
 const response = (value: unknown, status = 200) => new Response(JSON.stringify(value), { status });
 

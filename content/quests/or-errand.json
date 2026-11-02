@@ -1,0 +1,19 @@
+{
+  "episode": "or",
+  "items": ["or_01", "or_02", "or_03", "or_04", "or_05", "or_06"],
+  "pieces": { "gear-circle": "circle", "gear-triangle": "triangle", "gear-square": "square" },
+  "slots": { "axle-circle": "circle", "axle-triangle": "triangle", "axle-square": "square" },
+  "objects": { "bucket": ["source", "player", "or-rest", "delivered"], "bell": ["source", "player", "or-rest", "delivered"] },
+  "objectiveKeys": {"locked":"or.objective.locked","choose_01":"or.objective.choose_01","fire":"or.objective.fire","choose_02":"or.objective.choose_02","bucket_pickup":"or.objective.bucket_pickup","find_sand":"or.objective.find_sand","merchant":"or.objective.merchant","sand":"or.objective.sand","sand_delivery":"or.objective.sand_delivery","gears":"or.objective.gears","choose_03":"or.objective.choose_03","weight":"or.objective.weight","assistant":"or.objective.assistant","choose_04":"or.objective.choose_04","review":"or.objective.review","lantern_link":"or.objective.lantern_link","choose_05":"or.objective.choose_05","hook":"or.objective.hook","return":"or.objective.return","choose_06":"or.objective.choose_06","finish":"or.objective.finish","bell_delivery":"or.objective.bell_delivery","report":"or.objective.report","completed":"or.objective.completed"},
+  "resumePoints": {"locked":[],"choose_01":["D"],"fire":["or-fire-strong","or-fire-gentle"],"choose_02":["D"],"bucket_pickup":["or-bucket"],"find_sand":["or-map","or-fisher"],"merchant":["or-merchant"],"sand":["or-sand"],"sand_delivery":["or-grinding-bench"],"gears":["or-clock-board"],"choose_03":["D"],"weight":["or-weight-light","or-weight-heavy"],"assistant":["s2j2"],"choose_04":["D"],"review":["or-review-together","or-review-alone"],"lantern_link":["or-lantern-link"],"choose_05":["D"],"hook":["or-hook-branches","or-hook-reinforce"],"return":["D"],"choose_06":["D"],"finish":["or-tools","or-bell"],"bell_delivery":["or-plaza-stand"],"report":["D"],"completed":["D"]},
+  "restObjectiveKey": "or.objective.pick_up_rest",
+  "phases": {
+    "locked": [], "choose_01": ["D"], "fire": ["or-fire-strong", "or-fire-gentle"], "choose_02": ["D"],
+    "bucket_pickup": ["or-bucket"], "find_sand": ["or-map", "or-fisher"], "merchant": ["or-merchant"],
+    "sand": ["or-sand"], "sand_delivery": ["or-grinding-bench"], "gears": ["or-clock-board"],
+    "choose_03": ["D"], "weight": ["or-weight-light", "or-weight-heavy"], "assistant": ["s2j2"],
+    "choose_04": ["D"], "review": ["or-review-together", "or-review-alone"], "lantern_link": ["or-lantern-link"],
+    "choose_05": ["D"], "hook": ["or-hook-branches", "or-hook-reinforce"], "return": ["D"],
+    "choose_06": ["D"], "finish": ["or-tools", "or-bell"], "bell_delivery": ["or-plaza-stand"], "report": ["D"], "completed": []
+  }
+}

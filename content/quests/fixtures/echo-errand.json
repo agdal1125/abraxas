@@ -1,0 +1,360 @@
+{
+  "initial": {
+    "playId": "fixture-play",
+    "contentVersion": "fixture-version",
+    "revision": 0,
+    "segment": "hub",
+    "completedEpisodes": [],
+    "answers": [],
+    "moka": {
+      "phase": "locked",
+      "basket": "source",
+      "placements": {},
+      "completedAt": null
+    },
+    "lumi": {
+      "phase": "locked",
+      "objects": {
+        "notice": "source",
+        "material": "source",
+        "score": "source"
+      },
+      "placements": {},
+      "completedAt": null
+    },
+    "echo": {
+      "phase": "locked",
+      "objects": {
+        "book": "source",
+        "record": "source",
+        "notebook": "source",
+        "legend": "source"
+      },
+      "placements": {},
+      "completedAt": null
+    },
+    "or": {
+      "phase": "locked",
+      "objects": {
+        "bucket": "source",
+        "bell": "source"
+      },
+      "placements": {},
+      "completedAt": null
+    }
+  },
+  "completedAt": "2026-11-02T00:00:00Z",
+  "success": [
+    {
+      "name": "manual_a",
+      "commands": [
+        {
+          "kind": "open_episode",
+          "npcId": "echo"
+        },
+        {
+          "kind": "choice",
+          "itemId": "echo_01",
+          "pick": "a"
+        },
+        {
+          "kind": "act",
+          "targetId": "echo-kind-note"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "echo-picture-book"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "echo-borrower"
+        },
+        {
+          "kind": "choice",
+          "itemId": "echo_02",
+          "pick": "a"
+        },
+        {
+          "kind": "act",
+          "targetId": "echo-history-shelf"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "echo-history-record"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "echo-reading-desk"
+        },
+        {
+          "kind": "choice",
+          "itemId": "echo_03",
+          "pick": "a"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "echo-notebook"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "echo-cooking-shelf"
+        },
+        {
+          "kind": "talk",
+          "targetId": "t1p2"
+        },
+        {
+          "kind": "choice",
+          "itemId": "echo_04",
+          "pick": "a"
+        },
+        {
+          "kind": "place_piece",
+          "pieceId": "plant-1",
+          "slotId": "plant-1"
+        },
+        {
+          "kind": "place_piece",
+          "pieceId": "plant-2",
+          "slotId": "plant-2"
+        },
+        {
+          "kind": "place_piece",
+          "pieceId": "cooking-1",
+          "slotId": "cooking-1"
+        },
+        {
+          "kind": "place_piece",
+          "pieceId": "cooking-2",
+          "slotId": "cooking-2"
+        },
+        {
+          "kind": "place_piece",
+          "pieceId": "stars-1",
+          "slotId": "stars-1"
+        },
+        {
+          "kind": "place_piece",
+          "pieceId": "stars-2",
+          "slotId": "stars-2"
+        },
+        {
+          "kind": "act",
+          "targetId": "echo-story"
+        },
+        {
+          "kind": "choice",
+          "itemId": "echo_05",
+          "pick": "a"
+        },
+        {
+          "kind": "act",
+          "targetId": "echo-bookmark-words"
+        },
+        {
+          "kind": "talk",
+          "targetId": "C"
+        },
+        {
+          "kind": "choice",
+          "itemId": "echo_06",
+          "pick": "a"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "echo-legend"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "echo-glass-case"
+        },
+        {
+          "kind": "complete",
+          "targetId": "C"
+        }
+      ],
+      "expected": {
+        "phase": "completed",
+        "answerIds": [
+          "echo_01",
+          "echo_02",
+          "echo_03",
+          "echo_04",
+          "echo_05",
+          "echo_06"
+        ],
+        "completedEpisodes": [
+          "echo"
+        ]
+      }
+    },
+    {
+      "name": "automatic_b",
+      "commands": [
+        {
+          "kind": "open_episode",
+          "npcId": "echo"
+        },
+        {
+          "kind": "choice",
+          "itemId": "echo_01",
+          "pick": "b"
+        },
+        {
+          "kind": "act",
+          "targetId": "echo-rules-note"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "echo-picture-book"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "echo-borrower"
+        },
+        {
+          "kind": "choice",
+          "itemId": "echo_02",
+          "pick": "b"
+        },
+        {
+          "kind": "act",
+          "targetId": "echo-attic-door"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "echo-attic-record"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "echo-reading-desk"
+        },
+        {
+          "kind": "choice",
+          "itemId": "echo_03",
+          "pick": "b"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "echo-notebook"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "echo-story-table"
+        },
+        {
+          "kind": "talk",
+          "targetId": "t1p2"
+        },
+        {
+          "kind": "choice",
+          "itemId": "echo_04",
+          "pick": "b"
+        },
+        {
+          "kind": "auto_arrange"
+        },
+        {
+          "kind": "act",
+          "targetId": "echo-story"
+        },
+        {
+          "kind": "choice",
+          "itemId": "echo_05",
+          "pick": "b"
+        },
+        {
+          "kind": "act",
+          "targetId": "echo-bookmark-clues"
+        },
+        {
+          "kind": "talk",
+          "targetId": "C"
+        },
+        {
+          "kind": "choice",
+          "itemId": "echo_06",
+          "pick": "b"
+        },
+        {
+          "kind": "pickup",
+          "targetId": "echo-legend"
+        },
+        {
+          "kind": "deliver",
+          "targetId": "echo-open-display"
+        },
+        {
+          "kind": "complete",
+          "targetId": "C"
+        }
+      ],
+      "expected": {
+        "phase": "completed",
+        "answerIds": [
+          "echo_01",
+          "echo_02",
+          "echo_03",
+          "echo_04",
+          "echo_05",
+          "echo_06"
+        ],
+        "completedEpisodes": [
+          "echo"
+        ]
+      }
+    }
+  ],
+  "rejections": [
+    {
+      "name": "choice before opening",
+      "after": 0,
+      "command": {
+        "kind": "choice",
+        "itemId": "echo_01",
+        "pick": "a"
+      }
+    },
+    {
+      "name": "wrong item order",
+      "after": 1,
+      "command": {
+        "kind": "choice",
+        "itemId": "echo_02",
+        "pick": "a"
+      }
+    },
+    {
+      "name": "finish cannot skip",
+      "after": 25,
+      "command": {
+        "kind": "finish_segment"
+      }
+    },
+    {
+      "name": "final action required",
+      "after": 25,
+      "command": {
+        "kind": "complete",
+        "targetId": "C"
+      }
+    },
+    {
+      "name": "unknown puzzle IDs",
+      "after": 14,
+      "command": {
+        "kind": "place_piece",
+        "pieceId": "toString",
+        "slotId": "toString"
+      }
+    }
+  ],
+  "transportCases": [
+    "same_key_same_body",
+    "same_key_different_body",
+    "same_answer_new_key",
+    "different_answer",
+    "recomplete_new_key",
+    "stale_revision"
+  ]
+}

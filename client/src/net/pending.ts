@@ -1,4 +1,4 @@
-import type { Command, PendingCommand } from "../core/moka-errand";
+import type { Command, PendingCommand } from "../core/play";
 import content from "../../../content/quests/moka-errand.json";
 
 const storageKey = "abraxas:pending-command";

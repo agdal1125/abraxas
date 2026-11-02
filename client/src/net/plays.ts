@@ -1,5 +1,5 @@
 import content from "../../../content/quests/moka-errand.json";
-import type { PendingCommand, PlaySnapshot } from "../core/moka-errand";
+import type { PendingCommand, PlaySnapshot } from "../core/play";
 import { DevAuthTokenSource, type AppCheckTokenSource, type AuthTokenSource } from "./auth";
 import { clearPending, loadPending, savePending } from "./pending";
 

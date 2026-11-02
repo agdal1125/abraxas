@@ -1,26 +1,12 @@
 import content from "../../../content/quests/moka-errand.json";
+import type { Command, PlaySnapshot } from "./play";
 
 export type MokaPhase = keyof typeof content.phases;
 export type BasketLocation = "source" | "player" | "moka-rest" | "delivered";
 export type BreadId = keyof typeof content.bread;
 export type SlotId = keyof typeof content.slots;
-export type Pick = "a" | "b";
-export type Choice = { id: string; pick: Pick };
 export type MokaState = { phase: MokaPhase; basket: BasketLocation; placements: Partial<Record<SlotId, BreadId>>; completedAt: string | null };
-export type Command =
-  | { kind: "open_episode"; npcId: string }
-  | { kind: "choice"; itemId: string; pick: Pick }
-  | { kind: "pickup" | "set_down" | "deliver" | "act" | "talk" | "complete"; targetId: string }
-  | { kind: "place"; breadId: BreadId; slotId: SlotId }
-  | { kind: "auto_arrange" | "finish_segment" };
-export type PlaySnapshot = { playId: string; contentVersion: string; revision: number; segment: string; completedEpisodes: string[]; answers: Choice[]; moka: MokaState; episodeEnd?: { npcId: string; hearts: number } };
-export type PendingCommand = { key: string; expectedRevision: number; command: Command };
-export type LocalSync = { status: "ready" } | { status: "saving" | "retry"; pending: PendingCommand };
 export type MokaView = { phase: MokaPhase; basket: BasketLocation; placements: MokaState["placements"]; objectiveKey: string; activeTargetIds: string[]; resumePointId: string | null; route: "shortcut" | "gentle" | null; display: "low" | "high" | null };
-
-export function contentVersionMatches(snapshot: PlaySnapshot, buildVersion: string): boolean {
-  return buildVersion.length > 0 && snapshot.contentVersion === buildVersion;
-}
 
 export function mokaView(snapshot: PlaySnapshot): MokaView {
   const { phase, basket, placements } = snapshot.moka;

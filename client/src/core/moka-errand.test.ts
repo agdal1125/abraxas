@@ -1,10 +1,18 @@
 import { describe, expect, it } from "vitest";
 import fixture from "../../../content/quests/fixtures/moka-errand.json";
-import { contentVersionMatches, mokaView, transitionMoka, type Command, type PlaySnapshot } from "./moka-errand";
+import { mokaView, transitionMoka } from "./moka-errand";
+import { contentVersionMatches, type Command, type PlaySnapshot } from "./play";
+import { initialLumi } from "./lumi-errand";
+import { initialEcho } from "./echo-errand";
+import { initialOr } from "./or-errand";
+
+const residents = () => ({ lumi: initialLumi(), echo: initialEcho(), or: initialOr() });
+const fixtureStart = () => ({ ...structuredClone(fixture.initial), ...residents() }) as PlaySnapshot;
 
 const start = (): PlaySnapshot => ({
   playId: "play", contentVersion: "hash", revision: 0, segment: "hub", completedEpisodes: [], answers: [],
   moka: { phase: "locked", basket: "source", placements: {}, completedAt: null },
+  ...residents(),
 });
 
 describe("Moka errand", () => {
@@ -43,7 +51,7 @@ describe("Moka errand", () => {
 
   it("runs the shared successful and rejected command sequences", () => {
     for (const scenario of fixture.success) {
-      let snapshot = structuredClone(fixture.initial) as PlaySnapshot;
+      let snapshot = fixtureStart();
       for (const command of scenario.commands) snapshot = transitionMoka(snapshot, command as Command, fixture.completedAt);
       expect(snapshot.moka.phase, scenario.name).toBe(scenario.expected.phase);
       expect(snapshot.moka.basket, scenario.name).toBe(scenario.expected.basket);
@@ -53,7 +61,7 @@ describe("Moka errand", () => {
       expect(snapshot.moka.completedAt, scenario.name).toBe(fixture.completedAt);
     }
     for (const scenario of fixture.rejections) {
-      let snapshot = structuredClone(fixture.initial) as PlaySnapshot;
+      let snapshot = fixtureStart();
       for (const command of fixture.success[0]!.commands.slice(0, scenario.after)) snapshot = transitionMoka(snapshot, command as Command, fixture.completedAt);
       const before = structuredClone(snapshot);
       expect(() => transitionMoka(snapshot, scenario.command as Command, fixture.completedAt), scenario.name).toThrow("invalid_moka_transition");
@@ -62,7 +70,7 @@ describe("Moka errand", () => {
   });
 
   it("does not complete a report with missing or invalid placements", () => {
-    let snapshot = structuredClone(fixture.initial) as PlaySnapshot;
+    let snapshot = fixtureStart();
     for (const command of fixture.success[0]!.commands.slice(0, -1)) snapshot = transitionMoka(snapshot, command as Command, fixture.completedAt);
     const incomplete = structuredClone(snapshot);
     delete incomplete.moka.placements["walnut-left"];
@@ -77,7 +85,7 @@ describe("Moka errand", () => {
     for (let bits = 0; bits < 64; bits++) {
       const picks = Array.from({ length: 6 }, (_, index) => (bits & (1 << index)) ? "b" : "a");
       const results = fixture.success.map((scenario) => {
-        let snapshot = structuredClone(fixture.initial) as PlaySnapshot;
+        let snapshot = fixtureStart();
         let choiceIndex = 0;
         for (const original of scenario.commands) {
           let command = original as Command;

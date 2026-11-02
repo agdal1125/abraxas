@@ -1,0 +1,19 @@
+{
+  "episode": "echo",
+  "items": ["echo_01", "echo_02", "echo_03", "echo_04", "echo_05", "echo_06"],
+  "pieces": { "plant-1": "plant", "plant-2": "plant", "cooking-1": "cooking", "cooking-2": "cooking", "stars-1": "stars", "stars-2": "stars" },
+  "slots": { "plant-1": "plant", "plant-2": "plant", "cooking-1": "cooking", "cooking-2": "cooking", "stars-1": "stars", "stars-2": "stars" },
+  "objects": { "book": ["source", "player", "echo-rest", "delivered"], "record": ["source", "player", "echo-rest", "delivered"], "notebook": ["source", "player", "echo-rest", "delivered"], "legend": ["source", "player", "echo-rest", "delivered"] },
+  "objectiveKeys": {"locked":"echo.objective.locked","choose_01":"echo.objective.choose_01","enclose":"echo.objective.enclose","book_pickup":"echo.objective.book_pickup","book_delivery":"echo.objective.book_delivery","choose_02":"echo.objective.choose_02","search":"echo.objective.search","record_pickup":"echo.objective.record_pickup","record_delivery":"echo.objective.record_delivery","choose_03":"echo.objective.choose_03","notebook_pickup":"echo.objective.notebook_pickup","notebook_delivery":"echo.objective.notebook_delivery","organizer":"echo.objective.organizer","choose_04":"echo.objective.choose_04","arrange":"echo.objective.arrange","reading":"echo.objective.reading","choose_05":"echo.objective.choose_05","bookmark":"echo.objective.bookmark","return":"echo.objective.return","choose_06":"echo.objective.choose_06","legend_pickup":"echo.objective.legend_pickup","legend_delivery":"echo.objective.legend_delivery","report":"echo.objective.report","completed":"echo.objective.completed"},
+  "resumePoints": {"locked":[],"choose_01":["C"],"enclose":["echo-kind-note","echo-rules-note"],"book_pickup":["echo-picture-book"],"book_delivery":["echo-borrower"],"choose_02":["C"],"search":["echo-history-shelf","echo-attic-door"],"record_pickup":["echo-history-record","echo-attic-record"],"record_delivery":["echo-reading-desk"],"choose_03":["C"],"notebook_pickup":["echo-notebook"],"notebook_delivery":["echo-cooking-shelf","echo-story-table"],"organizer":["t1p2"],"choose_04":["C"],"arrange":["echo-bookshelf"],"reading":["echo-story"],"choose_05":["C"],"bookmark":["echo-bookmark-words","echo-bookmark-clues"],"return":["C"],"choose_06":["C"],"legend_pickup":["echo-legend"],"legend_delivery":["echo-glass-case","echo-open-display"],"report":["C"],"completed":["C"]},
+  "restObjectiveKey": "echo.objective.pick_up_rest",
+  "phases": {
+    "locked": [], "choose_01": ["C"], "enclose": ["echo-kind-note", "echo-rules-note"],
+    "book_pickup": ["echo-picture-book"], "book_delivery": ["echo-borrower"], "choose_02": ["C"],
+    "search": ["echo-history-shelf", "echo-attic-door"], "record_pickup": ["echo-history-record", "echo-attic-record"], "record_delivery": ["echo-reading-desk"],
+    "choose_03": ["C"], "notebook_pickup": ["echo-notebook"], "notebook_delivery": ["echo-cooking-shelf", "echo-story-table"],
+    "organizer": ["t1p2"], "choose_04": ["C"], "arrange": ["echo-bookshelf"], "reading": ["echo-story"],
+    "choose_05": ["C"], "bookmark": ["echo-bookmark-words", "echo-bookmark-clues"], "return": ["C"],
+    "choose_06": ["C"], "legend_pickup": ["echo-legend"], "legend_delivery": ["echo-glass-case", "echo-open-display"], "report": ["C"], "completed": []
+  }
+}
