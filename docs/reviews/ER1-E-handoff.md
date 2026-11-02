@@ -23,6 +23,13 @@
 - 추가 측정: Vite `build.modulePreload: false`와 `build.modulePreload: { polyfill: false }`는 모두 초기 JS 969,357바이트 / Node gzip 250,943바이트였다. 기준보다 각각 1,186바이트 / 337바이트 커서 두 설정 모두 유지하지 않았다. 전자는 청크 의존성 사전 로딩을 꺼 첫 인증 시 요청이 더 순차화될 수 있고, 후자는 네이티브 modulepreload 미지원 브라우저의 폴리필을 제거한다. Vite가 빈 사전 로딩 목록에도 동적 import 보조 코드를 남기는 점을 설치된 구현에서 확인했다. 기본 설정으로 되돌린 뒤에도 크기 조건 해결이 필요하다.
 ## 감독 최종 로컬 검증 · 2026-11-03
 
+### ink 파서 지연 로딩 후속 · 2026-11-03
+
+- `client/src/ui/game.ts`의 `open`, `openMoka`, `mokaNarrative` 세 `Story` 생성 지점에서만 `inkjs`를 동적으로 불러온다. 기존 오류 화면·재시도·선택 진행을 유지하고 `open`의 오래된 로딩이 현재 대사를 덮어쓰지 않도록 검사한다. 파서 import 실패와 재시도 회귀 테스트를 추가했다. RS1 통합본에는 별도 `residentNarrative` 생성 지점이 있으므로 통합 후 해당 지점도 같은 방식으로 지연 로딩해야 한다.
+- typecheck, 테스트 78개, build, check:size 7.04 MiB 통과. Node gzip 기준 초기 JS는 이전 Firebase 빌드 969,889 / 251,316바이트에서 842,460 / 219,959바이트로 각각 127,429 / 31,357바이트 감소했고 main `271be63`의 968,171 / 250,606바이트보다 각각 125,711 / 30,647바이트 작다. 이 수치는 JS 엔트리 비교이며 HTML은 이전에 favicon 때문에 38바이트 증가했다. 이전 증가량 허용 질문에는 아직 답변이 없다.
+- 빌드의 JS 파일 전체 (파일명, 바이트 / Node gzip 바이트): `index-B3vhEbBF.js` 842,460 / 219,959; `ink-C7JblRi7.js` 127,088 / 31,090; `select-auth-CZD8ZaMu.js` 1,661 / 800; `index.esm-CVKTbXPC.js` 107 / 117; `index.esm-B29Qa1vf.js` 16,394 / 5,490; `index.esm-CuNmzGuq.js` 27,536 / 9,040; `index.esm-gz2AyGYT.js` 127,113 / 35,916; `draco_decoder-fzg4nYZr.js` 719,410 / 148,812; `draco_wasm_wrapper-DxJM36Ib.js` 58,763 / 11,903; `draco_wasm_wrapper-fZCQGLGb.js` 58,456 / 11,748. 인증 선택 청크의 해시는 참조 변경으로 바뀌었고 크기는 같다. HTML에는 ink 사전 로딩이 없으며 엔트리의 세 대사 경로에만 동적 import가 있다.
+- 브라우저·포트는 실행하지 않았다. 부모가 새 빌드 제목 화면의 실제 ink·Firebase 요청 부재와 ko/en 에뮬레이터 E2E를 확인해야 한다. 실기기 성능은 측정하지 않았다.
+
 - PR46 보안 검사: `@firebase/firestore`가 고정한 취약한 `@grpc/grpc-js` 1.9.16을 해당 하위 범위에서 1.14.7로 override하고 오프라인 lockfile을 갱신했다. 잠금된 전이 의존성은 `@grpc/proto-loader` 0.8.1과 `@js-sdsl/ordered-map` 4.4.2다. 실제 오프라인 설치는 캐시에 `@grpc/proto-loader` 0.8.1 tarball이 없어 실패했고, npm의 부분 설치 정리 중 EPERM도 발생했다. 권한 변경·수동 정리는 하지 않았다. 기존 설치본으로 typecheck, 테스트 77개, 하네스 테스트 6개, build, check:size는 통과했지만 수정된 설치본의 검증은 아니다. 초기 JS는 전후 969,889바이트 / Node gzip 251,316바이트로 같고 main 대비 +1,718 / gzip +710바이트의 승인 대기는 그대로다. 부모가 누락 패키지를 준비한 뒤 설치와 온라인 감사·ko/en을 재검증해야 한다. 원인과 override 제거 조건은 ADR-0006에 기록했다.
 
 - 부모 Astra가 직접 실행한 Auth·Firestore 에뮬레이터 E2E는 ko 145단계, en 159단계에서 결과 화면 도달 및 종료 코드 0이었다. 두 실행 모두 errors 0건, 예상 밖 HTTP 응답 0건이다. 증거는 `.e2e/orchestrator-firebase-ko/run.log`, `.e2e/orchestrator-firebase-en/run.log`이며 이 로컬 경로는 저장소에 배포하지 않는다. 이전 실패의 캡처가 ko 폴더에 함께 남아 있어 최종 run.log를 기준으로 판정한다.

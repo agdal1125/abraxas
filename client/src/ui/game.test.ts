@@ -4,6 +4,7 @@ import { configurePlayTransport } from "../net/plays";
 import fixture from "../../../content/quests/fixtures/lumi-errand.json";
 import type { PlaySnapshot } from "../core/play";
 declare const __CONTENT_VERSION__: string;
+import { Compiler } from "inkjs/full";
 
 test("an invalid command response shows one error without a retry action", async () => {
   const data = new Map<string, string>();
@@ -58,4 +59,46 @@ test("snapshot sends completed and locked resident views to the world", () => {
   expect(village.setLumiView.mock.calls[0]![0].phase).toBe("completed");
   expect(village.setEchoView.mock.calls[0]![0].phase).toBe("locked");
   expect(village.setOrView.mock.calls[0]![0].phase).toBe("locked");
+});
+
+test("dialogue parser load failure offers a retry", async () => {
+  vi.doMock("inkjs", () => { throw new Error("module unavailable"); });
+  const ink = new Compiler("Hello.\n-> END").Compile().ToJson() || "";
+  vi.stubGlobal("fetch", vi.fn(async () => new Response(ink)));
+  const panel = vi.fn(), advance = vi.fn();
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko", segment: "title", log: [] }, story: null, resumed: false, token: 0, controls: { setActive: vi.fn() }, village: { setEnabled: vi.fn() }, save: vi.fn(), answered: () => 0, panel, advance });
+  try {
+    await game.open("prologue");
+    expect(panel).toHaveBeenCalledOnce();
+    expect(advance).not.toHaveBeenCalled();
+    vi.doUnmock("inkjs");
+    panel.mock.calls[0]![1][0][1]();
+    await vi.waitFor(() => expect(advance).toHaveBeenCalledOnce());
+  } finally {
+    vi.doUnmock("inkjs");
+    vi.unstubAllGlobals();
+  }
+});
+
+test("title does not request ink content", () => {
+  const fetcher = vi.fn(); vi.stubGlobal("fetch", fetcher);
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko" }, localSave: null, village: {}, panel: vi.fn() });
+  try { game.title(); expect(fetcher).not.toHaveBeenCalled(); } finally { vi.unstubAllGlobals(); }
+});
+
+test("resident dialogue parser failure offers a retry and resumes the selected knot", async () => {
+  vi.doMock("inkjs", () => { throw new Error("module unavailable"); });
+  const ink = new Compiler("-> END\n=== lumi_choose_01 ===\nHello.\n-> END").Compile().ToJson() || "";
+  const fetcher = vi.fn(async () => new Response(ink)); vi.stubGlobal("fetch", fetcher);
+  const panel = vi.fn(), advance = vi.fn();
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko" }, token: 0, panel, advance });
+  try {
+    await game.residentNarrative("lumi", "lumi_choose_01", vi.fn(), true);
+    expect(panel).toHaveBeenCalledOnce(); expect(advance).not.toHaveBeenCalled();
+    vi.doUnmock("inkjs");
+    panel.mock.calls[0]![1][0][1]();
+    await vi.waitFor(() => expect(advance).toHaveBeenCalledOnce());
+    expect(fetcher).toHaveBeenCalledTimes(2);
+    expect(game.story).not.toBeNull();
+  } finally { vi.doUnmock("inkjs"); vi.unstubAllGlobals(); }
 });

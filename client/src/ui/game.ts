@@ -1,4 +1,4 @@
-import { Story } from "inkjs";
+import type { Story } from "inkjs";
 import { data, translations } from "../content";
 import { episodeStage, nextSegment } from "../core/flow";
 import { npcMatches, score, type Input } from "../core/scoring";
@@ -234,7 +234,7 @@ export class Game {
     this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.state.segment = segment; this.save(); if (!continuing) { this.story = null; this.lastLine = ""; } const token = ++this.token;
     const answered = this.answered(segment); this.episodeLimit = answered < 3 ? 3 : answered < 5 ? 5 : 6;
     if (!continuing && !this.resumed && (segment === "prologue" || (segment === "ep_lumi" && this.answered(segment) === 0))) {
-      try { const response = await fetch(`./ink/${this.state.lang}/${segment}.json`); if (!response.ok) throw new Error("ink_unavailable"); this.story = new Story(await response.text()); } catch { if (token === this.token) this.panel(translations(this.state.lang).moka.status.contentUnavailable, [[translations(this.state.lang).moka.status.tryAgain, () => void this.open(segment)]]); return; }
+      try { const response = await fetch(`./ink/${this.state.lang}/${segment}.json`); if (!response.ok) throw new Error("ink_unavailable"); const { Story } = await import("inkjs"); const content = await response.text(); if (token !== this.token) return; this.story = new Story(content); } catch { if (token === this.token) this.panel(translations(this.state.lang).moka.status.contentUnavailable, [[translations(this.state.lang).moka.status.tryAgain, () => void this.open(segment)]]); return; }
     }
     if (token !== this.token) return; this.resumed = false; this.advance();
   }
@@ -247,6 +247,7 @@ export class Game {
     try {
       const response = await fetch(`./ink/${this.state.lang}/ep_moka.json`);
       if (!response.ok) throw new Error("ink_unavailable");
+      const { Story } = await import("inkjs");
       const story = new Story(await response.text()); story.ChoosePathString(knot);
       if (token !== this.token) return;
       this.story = story; this.lastLine = ""; this.advance();
@@ -257,6 +258,7 @@ export class Game {
     try {
       const response = await fetch(`./ink/${this.state.lang}/ep_moka.json`);
       if (!response.ok) throw new Error("ink_unavailable");
+      const { Story } = await import("inkjs");
       const story = new Story(await response.text()); story.ChoosePathString(knot);
       if (token !== this.token) return;
       const next = () => { while (story.canContinue) { const line = (story.Continue() ?? "").trim(); if (line) { this.panel(line, [[this.ui.next, next]]); return; } } after(); };
@@ -270,6 +272,7 @@ export class Game {
     try {
       const response = await fetch(`./ink/${this.state.lang}/ep_${npc}.json`);
       if (!response.ok) throw new Error("ink_unavailable");
+      const { Story } = await import("inkjs");
       const story = new Story(await response.text()); story.ChoosePathString(knot);
       if (token !== this.token) return;
       if (choice) { this.story = story; this.lastLine = ""; this.advance(); return; }
