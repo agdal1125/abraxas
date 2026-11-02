@@ -25,6 +25,7 @@ export function parseArgs(argv) {
   return { emulators, lang, output: resolve(directory ?? outputDirectory(lang)), scenario };
 }
 export const choiceIndex = scenario => scenario === "b-manual" ? 1 : 0;
+export const pointerInput = scenario => scenario === "b-manual" ? "touch" : "mouse";
 export function boardPair(pieces, slots, placements) {
   const slot = Object.keys(slots).find(id => !placements[id]);
   const piece = Object.keys(pieces).find(id => slot && pieces[id] === slots[slot] && !Object.values(placements).includes(id));
@@ -93,7 +94,9 @@ let abnormal = 0, socket, steps = 0, reached = false, stopping = false, browserL
 const residents = ["lumi", "echo", "or"], allResidents = ["lumi", "moka", "echo", "or"];
 const recovery = Object.fromEntries(residents.map(id => [id, { choice: false, rest: false, puzzle: false, report: false }]));
 const pointerEvidence = Object.fromEntries(allResidents.map(id => [id, 0]));
-const interactionEvidence = { direct: 0, pointer: 0, walked: 0 };
+const touchEvidence = Object.fromEntries(allResidents.map(id => [id, 0]));
+const interactionEvidence = { direct: 0, pointer: 0, touch: 0, mouse: 0, walked: 0 };
+const captures = new Set();
 const pointerMismatches = [];
 let lastSnapshot = null;
 const abnormalStatuses = {};
@@ -209,6 +212,7 @@ try {
   const shot = async name => writeFileSync(join(output, `${name}.png`), Buffer.from((await send("Page.captureScreenshot", { format: "png" })).data, "base64"));
   await send("Runtime.enable"); await send("Network.enable"); await send("Page.enable");
   await send("Emulation.setDeviceMetricsOverride", { width: 844, height: 390, deviceScaleFactor: 1, mobile: true });
+  if (pointerInput(scenario) === "touch") await send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 1 });
   await send("Page.navigate", { url: "http://127.0.0.1:5173/" });
   async function startPage() {
     for (let i = 0; i < 150 && !await evaluate("!!window.__abraxas?.game"); i++) await sleep(200);
@@ -249,7 +253,7 @@ try {
     const snapshot = info.snapshot, segment = snapshot?.segment ?? "unknown", npc = segment.startsWith("ep_") ? segment.slice(3) : null, key = segment + (info.view ? `:${info.view.phase}` : "");
     lastSnapshot = snapshot;
     if (pendingWalk && info.walking) pendingWalk.walked = true;
-    if (pendingWalk && info.arrivals.includes(pendingWalk.id)) { if (pendingWalk.pointer && pendingWalk.npc) pointerEvidence[pendingWalk.npc]++; interactionEvidence[pendingWalk.pointer ? "pointer" : "direct"]++; if (pendingWalk.walked) interactionEvidence.walked++; pendingWalk = null; }
+    if (pendingWalk && info.arrivals.includes(pendingWalk.id)) { if (pendingWalk.pointer && pendingWalk.npc) { pointerEvidence[pendingWalk.npc]++; if (pendingWalk.input === "touch") touchEvidence[pendingWalk.npc]++; } interactionEvidence[pendingWalk.pointer ? "pointer" : "direct"]++; if (pendingWalk.pointer) interactionEvidence[pendingWalk.input]++; if (pendingWalk.walked) interactionEvidence.walked++; pendingWalk = null; }
     if (pendingWalk && !info.walking && !info.arrivals.includes(pendingWalk.id)) { errors.push(`Interaction did not arrive: ${pendingWalk.id}`); break; }
     if (segments.at(-1) !== key) { segments.push(key); await shot(`${String(segments.length).padStart(2, "0")}-${key.replace(/[^a-z0-9_]/gi, "-")}`); }
     if (scenario === "resume" && snapshot && !info.pending) {
@@ -263,12 +267,13 @@ try {
       }
       if (checkpoint) { await reloadAt(...checkpoint, snapshot); stuck = 0; continue; }
     }
-    if (segment === "result") { errors.push(...finalErrors(snapshot)); if (scenario === "resume") for (const id of residents) for (const [checkpoint, done] of Object.entries(recovery[id])) if (!done) errors.push(`Missing resume verification: ${id}/${checkpoint}`); for (const id of allResidents) if (!pointerEvidence[id]) errors.push(`Missing pointer interaction: ${id}`); if (snapshot.answers.some(a => a.pick !== (choiceIndex(scenario) ? "b" : "a"))) errors.push("Unexpected scenario choice"); for (const id of residents) if (snapshot.answers.filter(a => a.id.startsWith(`${id}_`)).length !== 6) errors.push(`Unexpected answer count: ${id}`); await shot("99-result"); reached = true; break; }
+    if (segment === "result") { errors.push(...finalErrors(snapshot)); if (scenario === "resume") for (const id of residents) for (const [checkpoint, done] of Object.entries(recovery[id])) if (!done) errors.push(`Missing resume verification: ${id}/${checkpoint}`); for (const id of allResidents) { if (!pointerEvidence[id]) errors.push(`Missing pointer interaction: ${id}`); for (const kind of ["board", "choice", "report"]) if (!captures.has(`${kind}-${id}`)) errors.push(`Missing UI capture: ${kind}-${id}`); } if (snapshot.answers.some(a => a.pick !== (choiceIndex(scenario) ? "b" : "a"))) errors.push("Unexpected scenario choice"); for (const id of residents) if (snapshot.answers.filter(a => a.id.startsWith(`${id}_`)).length !== 6) errors.push(`Unexpected answer count: ${id}`); await shot("99-result"); reached = true; break; }
     if (info.walking || info.pending) { if (++stuck > 240) throw new Error(`Walking or command timed out at ${key}`); await sleep(250); continue; }
     const board = await evaluate("(() => { const board = document.querySelector('.resident-board, .moka-board'); return board ? { type: board.classList.contains('moka-board') ? 'moka' : 'resident' } : null; })()");
     let action;
     if (board) {
       const boardNpc = board.type === "moka" ? "moka" : npc;
+      if (!captures.has(`board-${boardNpc}`)) { await shot(`board-${boardNpc}`); captures.add(`board-${boardNpc}`); }
       const manual = scenario === "b-manual" || (scenario === "resume" && residents.includes(boardNpc) && !recovery[boardNpc].puzzle);
       if (manual) {
         const quest = quests[boardNpc], pair = boardPair(quest.pieces ?? quest.bread, quest.slots, snapshot[boardNpc].placements);
@@ -276,6 +281,10 @@ try {
         action = await evaluate(`(() => { const b = document.querySelector(${JSON.stringify(board.type === "moka" ? ".moka-board" : ".resident-board")}), grids = b?.querySelectorAll(${JSON.stringify(board.type === "moka" ? ".moka-grid" : ".resident-grid")}); const p = grids?.[0]?.querySelectorAll('button')[${pair[0]}], s = grids?.[1]?.querySelectorAll('button')[${pair[1]}]; if (!p || !s || p.disabled || s.disabled) return 'waiting'; p.click(); s.click(); return 'acted'; })()`);
       } else action = await evaluate("(() => { const b = [...document.querySelectorAll('.resident-board > button, .moka-board > button')].find(x => /자동|automat/i.test(x.textContent)); if (!b || b.disabled) return 'waiting'; b.click(); return 'acted'; })()");
     } else {
+      if (allResidents.includes(npc) && (!captures.has(`choice-${npc}`) || !captures.has(`report-${npc}`))) {
+        const visibleUI = await evaluate(`(() => { const { game } = window.__abraxas, overlay = document.querySelector('.overlay'); if (game.exploring || !game.settingsMenu.hidden || overlay.inert) return {}; const buttons = [...overlay.querySelectorAll('.choices button')].filter(b => !b.disabled && b.getClientRects().length && getComputedStyle(b).visibility === 'visible'); const texts = buttons.map(b => b.textContent.trim()); const items = ${JSON.stringify(itemText)}; const story = game.story?.currentChoices; const choice = texts.length === 2 && (Object.values(items).some(item => texts[0] === item.picks?.a && texts[1] === item.picks?.b) || (story?.length === 2 && story.every((c, i) => c.text.trim() === texts[i] && c.tags?.some(tag => tag.startsWith('item:'))))); return { choice, report: ${JSON.stringify(info.view?.phase)} === 'report' && texts.length === 1 && texts[0] === game.ui.finishErrand }; })()`);
+        for (const kind of ["choice", "report"]) if (visibleUI[kind] && !captures.has(`${kind}-${npc}`)) { await shot(`${kind}-${npc}`); captures.add(`${kind}-${npc}`); }
+      }
       action = await evaluate(`(() => { const { game, village: v } = window.__abraxas, overlay = document.querySelector('.overlay'); if (!game.settingsMenu.hidden || overlay.inert) return 'waiting'; if (!game.exploring) { const buttons = [...overlay.querySelectorAll('.choices button')].filter(b => !b.disabled); if (buttons.length) { if (/^(다시 연결|Reconnect)$/.test(buttons[0].textContent.trim())) return 'retry'; const texts = buttons.map(b => b.textContent.trim()), items = ${JSON.stringify(itemText)}; const choice = Object.values(items).some(item => texts.length === 2 && texts[0] === item.picks?.a && texts[1] === item.picks?.b) || (game.story?.currentChoices?.length === 2 && game.story.currentChoices.every((c, i) => c.text.trim() === texts[i])); buttons[choice ? ${choiceIndex(scenario)} : 0].click(); return 'acted'; } const p = overlay.querySelector('.panel.continue'); if (p) { p.click(); return 'acted'; } return 'waiting'; } if (!(${canInteract.toString()})(game, v) || v.auto) return 'waiting'; return 'world'; })()`);
       if (action === "world") {
         const forceRest = scenario === "resume" && residents.includes(npc) && !recovery[npc].rest && Object.values(snapshot[npc].objects).includes("player");
@@ -286,8 +295,9 @@ try {
           const wantsPointer = pointerNpc && !pointerEvidence[pointerNpc] && targetInfo.pos?.onScreen;
           if (wantsPointer && targetInfo.hit !== targetInfo.id) { const mismatch = `${targetInfo.id} -> ${targetInfo.hit ?? "none"}`; if (!pointerMismatches.includes(mismatch)) pointerMismatches.push(mismatch); }
           const usePointer = wantsPointer && targetInfo.hit === targetInfo.id;
-          pendingWalk = { id: targetInfo.id, pointer: !!usePointer, npc: pointerNpc };
-          if (usePointer) { await send("Input.dispatchMouseEvent", { type: "mousePressed", x: targetInfo.pos.x, y: targetInfo.pos.y, button: "left", clickCount: 1 }); await send("Input.dispatchMouseEvent", { type: "mouseReleased", x: targetInfo.pos.x, y: targetInfo.pos.y, button: "left", clickCount: 1 }); }
+          pendingWalk = { id: targetInfo.id, pointer: !!usePointer, npc: pointerNpc, input: pointerInput(scenario) };
+          if (usePointer && pendingWalk.input === "touch") { await send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: targetInfo.pos.x, y: targetInfo.pos.y }] }); await send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] }); }
+          else if (usePointer) { await send("Input.dispatchMouseEvent", { type: "mousePressed", x: targetInfo.pos.x, y: targetInfo.pos.y, button: "left", clickCount: 1 }); await send("Input.dispatchMouseEvent", { type: "mouseReleased", x: targetInfo.pos.x, y: targetInfo.pos.y, button: "left", clickCount: 1 }); }
           else await evaluate(`window.__abraxas.village.interactTarget(${JSON.stringify(targetInfo.id)})`);
           action = "acted";
         }
@@ -307,7 +317,7 @@ finally {
   await sleep(500);
   try { rmSync(temp, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }); } catch (error) { errors.push(`Temporary cleanup: ${error.message}`); }
   if (!reached && browserLog) errors.push(`Browser stderr: ${browserLog}`);
-  const summary = { language: lang, scenario, reached, answersCount: lastSnapshot?.answers?.length ?? null, completed: lastSnapshot?.completedEpisodes ?? [], phases: Object.fromEntries(allResidents.map(id => [id, lastSnapshot?.[id]?.phase ?? null])), recovery, reportResponseLossInjected: false, pointerEvidence, interactionEvidence, pointerMismatches, steps, segments, errors, warnings, abnormalResponses: abnormal, abnormalStatuses, abnormalDetails, captures: output };
+  const summary = { language: lang, scenario, reached, answersCount: lastSnapshot?.answers?.length ?? null, completed: lastSnapshot?.completedEpisodes ?? [], phases: Object.fromEntries(allResidents.map(id => [id, lastSnapshot?.[id]?.phase ?? null])), recovery, reportResponseLossInjected: false, pointerEvidence, touchEvidence, interactionEvidence, pointerMismatches, steps, segments, errors, warnings, abnormalResponses: abnormal, abnormalStatuses, abnormalDetails, captures: output };
   const serialize = () => JSON.stringify(summary, (_key, value) => typeof value === "string" ? value.replace(/\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b/g, "[redacted]").replace(/\bdev-[A-Za-z0-9_-]+\b/g, "[redacted]").replace(/(bearer\s+)[^\s]+/ig, "$1[redacted]") : value, 2);
   try { mkdirSync(output, { recursive: true }); writeFileSync(join(output, "run-summary.json"), serialize()); } catch (error) { errors.push(`Summary write: ${error.message}`); }
   console.log(serialize());
