@@ -1,6 +1,7 @@
 You wake at the edge of an unfamiliar village.
-Your name and the journey here have slipped from memory.
-You wake at the edge of an unfamiliar village. A lively square lies one way, a quiet lakeside path the other.
+You can't remember your name or how you got here.
+A breeze comes off the water, carrying voices from the distance.
+The square is lively, while the lakeside path is quiet.
 * [Head to the square and take in the scene # item:prologue_01 # pick:a]
 * [Walk by the lake and collect your thoughts # item:prologue_01 # pick:b]
 -
@@ -12,5 +13,6 @@ A wooden board at the square shows a village map and pictures of today’s event
 * [Explore the market while it is open # item:prologue_03 # pick:a]
 * [Study the map and plan your day # item:prologue_03 # pick:b]
 -
-You continue into the village.
+Beyond the board, the square is busy with festival preparations.
+Your memories are still hazy. For now, you decide to look around.
 -> END

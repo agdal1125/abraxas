@@ -8,6 +8,7 @@ import { nearest } from "../core/world/nearby";
 import type { Bounds, Collider, Vec2 } from "../core/world/types";
 import { translations } from "../content";
 import { DreamEffects } from "./dream-effects";
+import { dialogueFocus } from "./feedback";
 
 type Placement = Vec2 & { asset: string; rot?: number; scale?: number; zone?: string };
 type MapData = { spawn: Vec2; terrain: Placement; bounds: Bounds; zones: Record<string, Vec2>; actors: (Placement & { id: string })[]; props: (Placement & { id: string })[] };
@@ -41,11 +42,16 @@ export class Village {
   private colliderOwners: (string | undefined)[] = [];
   private nearby: string | null = null;
   private talking?: string;
+  private speaker: string | null = null;
   private available = new Set<string>();
   private ready = false;
   readonly whenReady: Promise<void>;
   private auto?: { id: string; path: Vec2[]; best: number; stalled: number };
-  private nearbyMarker = this.label();
+  private nearbyMarker = this.ring("#BFE3F2", .38);
+  private tapMarker = this.ring("#F4A7B9", .8);
+  private destinationMarker = this.ring("#FFF6E9", .55);
+  private tapTime = 0;
+  private tapScale = 1;
   private portrait = false;
   onNearbyChange: (target: { id: string; available: boolean; examine?: boolean } | null) => void = () => {};
   private lastTime = 0;
@@ -69,7 +75,7 @@ export class Village {
     app.append(this.renderer.domElement);
     this.effects = new DreamEffects(this.scene, map.props, map.zones.lake);
     const loading: Promise<unknown>[] = [this.ground()];
-    this.nearbyMarker.visible = false; this.nearbyMarker.scale.set(.13, .13, 1); this.scene.add(this.nearbyMarker);
+    this.scene.add(this.nearbyMarker, this.tapMarker, this.destinationMarker);
     this.player.position.set(map.spawn.x, 0, map.spawn.z); this.cameraTarget.copy(this.player.position); this.scene.add(this.player);
     loading.push(this.character("player", this.player).then(character => { this.playerCharacter = character; }));
     for (const prop of map.props) {
@@ -119,7 +125,14 @@ export class Village {
     });
     if (!document.hidden) this.frame = requestAnimationFrame(() => this.tick());
   }
-  setEnabled(value: boolean): void { this.enabled = value; if (value) this.talking = undefined; else { this.auto = undefined; this.input = { x: 0, z: 0 }; this.nearby = null; this.onNearbyChange(null); } }
+  setEnabled(value: boolean): void { this.enabled = value; if (value) { this.talking = undefined; this.speaker = null; } else { this.auto = undefined; this.input = { x: 0, z: 0 }; this.nearby = null; this.onNearbyChange(null); } }
+  focusSpeaker(id: string | null): void { this.speaker = id && this.target(id) ? id : null; }
+  targetScreenPos(id: string): { x: number; y: number; onScreen: boolean } | null {
+    const target = this.target(id); if (!target) return null;
+    const point = new THREE.Vector3(target.x, 0, target.z).project(this.camera);
+    const rect = this.renderer.domElement.getBoundingClientRect();
+    return { x: rect.left + (point.x + 1) * rect.width / 2, y: rect.top + (1 - point.y) * rect.height / 2, onScreen: Math.abs(point.x) <= 1 && Math.abs(point.y) <= 1 && Math.abs(point.z) <= 1 };
+  }
   setAvailable(ids: string[]): void { this.available = new Set(ids); for (const [id, actor] of this.actors) actor.marker.visible = this.available.has(id); }
   setMoveInput(x: number, y: number): void { if (x || y) this.auto = undefined; this.input = !this.ready || !this.enabled || this.portrait ? { x: 0, z: 0 } : { x: (x - y) / Math.SQRT2, z: (-x - y) / Math.SQRT2 }; }
   private addColliders(placement: Placement, owner?: string): void {
@@ -175,6 +188,7 @@ export class Village {
     const target = this.target(id); if (!target) return;
     const actorAtTarget = this.actors.get(id);
     if (actorAtTarget && !this.available.has(id) && [...this.actors].some(([otherId, other]) => this.available.has(otherId) && other.object.position.distanceToSquared(actorAtTarget.object.position) < 1e-8)) return;
+    this.tapMarker.position.set(target.x, .05, target.z); this.tapScale = this.targetRingScale(id); this.tapTime = .3;
     const playerPosition = this.player.position;
     const targetPosition = new THREE.Vector3(target.x, 0, target.z);
     if (!nearest(playerPosition, [{ id, ...target }]) || !this.visible(id, targetPosition)) {
@@ -188,7 +202,7 @@ export class Village {
     if (!this.visible(id, targetPosition)) return;
     const actor = this.actors.get(id); const prop = this.props.get(id); const position = actor?.object.position ?? prop!; const dx = position.x - this.player.position.x, dz = position.z - this.player.position.z;
     this.input = { x: 0, z: 0 }; if (dx || dz) { this.player.rotation.y = Math.atan2(dx, dz); if (actor?.character) actor.object.rotation.y = Math.atan2(-dx, -dz); }
-    this.talking = id; this.onInteract(prop ? `examine:${prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset}` : id);
+    this.talking = id; this.speaker = id; this.onInteract(prop ? `examine:${prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset}` : id);
   }
   hitTargetAt(clientX: number, clientY: number): string | null {
     if (!this.enabled || !this.ready || this.portrait || this.talking) return null;
@@ -261,6 +275,16 @@ export class Village {
     ctx.fillStyle = "#3B2A22"; ctx.font = "bold 96px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("!", 64, 68);
     const marker = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true })); marker.scale.set(.25, .25, 1); marker.position.y = .95; return marker;
   }
+  private ring(color: string, opacity: number): THREE.Mesh<THREE.RingGeometry, THREE.MeshBasicMaterial> {
+    const ring = new THREE.Mesh(new THREE.RingGeometry(.25, .3, 32), new THREE.MeshBasicMaterial({ color, transparent: true, opacity, depthWrite: false, side: THREE.DoubleSide }));
+    ring.rotation.x = -Math.PI / 2; ring.visible = false; return ring;
+  }
+  private targetRingScale(id: string): number {
+    const object = this.actors.get(id)?.character?.object ?? this.propObjects.get(id);
+    if (!object) return 1;
+    const size = new THREE.Box3().setFromObject(object).getSize(new THREE.Vector3());
+    return Math.max(1, Math.hypot(size.x, size.z) / .6);
+  }
   private resize(): void {
     const w = this.renderer.domElement.parentElement!.clientWidth, h = this.renderer.domElement.parentElement!.clientHeight;
     if (!w || !h) return;
@@ -279,14 +303,11 @@ export class Village {
     this.updateCamera(0, true);
   }
   private updateCamera(dt: number, snap = false): void {
-    const actor = this.talking ? this.actors.get(this.talking)?.object.position : undefined;
-    const prop = this.talking ? this.props.get(this.talking) : undefined;
-    const focus = this.player.position.clone();
-    if (!this.enabled && actor) focus.lerp(actor, .5);
-    else if (!this.enabled && prop) focus.lerp(new THREE.Vector3(prop.x, 0, prop.z), .35);
-    else if (this.enabled) focus.add(new THREE.Vector3(this.input.x, 0, this.input.z).multiplyScalar(.25));
+    const speaker = this.speaker ? this.target(this.speaker) : undefined;
+    const focus = !this.enabled && speaker ? dialogueFocus(this.player.position, new THREE.Vector3(speaker.x, 0, speaker.z), this.viewHalfHeight)
+      : this.enabled ? this.player.position.clone().add(new THREE.Vector3(this.input.x, 0, this.input.z).multiplyScalar(.25)).add(new THREE.Vector3(1, -Math.sqrt(2) / Math.tan(THREE.MathUtils.degToRad(35)), 1).normalize().multiplyScalar(this.viewHalfHeight * -.12)) : this.cameraTarget;
     this.cameraTarget.lerp(focus, snap ? 1 : 1 - Math.exp(-5 * dt));
-    const target = this.cameraTarget.clone().add(new THREE.Vector3(1, -Math.sqrt(2) / Math.tan(THREE.MathUtils.degToRad(35)), 1).normalize().multiplyScalar(this.viewHalfHeight * -.12));
+    const target = this.cameraTarget.clone();
     this.camera.position.copy(target).add(new THREE.Vector3(10, 10 * Math.tan(THREE.MathUtils.degToRad(35)) * Math.sqrt(2), 10)); this.camera.lookAt(target); this.camera.updateMatrixWorld();
     if (snap && this.playerCharacter) {
       const size = new THREE.Box3().setFromObject(this.playerCharacter.object).getSize(new THREE.Vector3());
@@ -294,7 +315,7 @@ export class Village {
       const height = Math.abs(m[1]! * size.x) + Math.abs(m[5]! * size.y) + Math.abs(m[9]! * size.z);
       if (height > 0) this.viewHalfHeight = height * this.renderer.domElement.clientHeight / 140;
     }
-    const desired = this.viewHalfHeight * (!this.enabled && this.talking ? .88 : 1);
+    const desired = this.viewHalfHeight;
     this.cameraHalfHeight = snap ? desired : this.cameraHalfHeight + (desired - this.cameraHalfHeight) * (1 - Math.exp(-5 * dt));
     this.camera.left = -this.cameraHalfHeight * this.viewAspect; this.camera.right = -this.camera.left; this.camera.top = this.cameraHalfHeight; this.camera.bottom = -this.cameraHalfHeight; this.camera.updateProjectionMatrix();
     this.light.target.position.copy(this.player.position); this.light.position.copy(this.player.position).add(new THREE.Vector3(4, 10, 5));
@@ -323,9 +344,13 @@ export class Village {
     if (moving && this.playerCharacter) this.playerCharacter.actions.get("walk")?.setEffectiveTimeScale(distance / (1.4 * dt));
     for (const [id, actor] of this.actors) this.animate(actor.character, !this.enabled && this.talking === id ? "talk" : "idle");
     const nearby = this.enabled && this.ready && !this.portrait && !this.talking ? this.findNearby(this.nearby) : null;
-    if (nearby !== this.nearby) { this.nearby = nearby; this.onNearbyChange(nearby ? { id: nearby, available: true, examine: this.props.has(nearby) } : null); }
+    if (nearby !== this.nearby) { this.nearby = nearby; if (nearby) this.nearbyMarker.scale.setScalar(this.targetRingScale(nearby)); this.onNearbyChange(nearby ? { id: nearby, available: true, examine: this.props.has(nearby) } : null); }
     this.nearbyMarker.visible = !!nearby;
-    if (nearby) { const target = this.target(nearby)!; const object = this.actors.get(nearby)?.character?.object ?? this.propObjects.get(nearby); const box = object ? new THREE.Box3().setFromObject(object) : undefined; this.nearbyMarker.position.set(target.x, box && !box.isEmpty() ? box.max.y + .15 : .8, target.z); }
+    if (nearby) { const target = this.target(nearby)!; this.nearbyMarker.position.set(target.x, .04, target.z); }
+    this.tapTime = Math.max(0, this.tapTime - dt); this.tapMarker.visible = this.tapTime > 0;
+    if (this.tapMarker.visible) { const progress = 1 - this.tapTime / .3; this.tapMarker.scale.setScalar(this.tapScale * (1 + progress * .6)); this.tapMarker.material.opacity = .8 * (1 - progress); }
+    const destination = this.auto?.path.at(-1); this.destinationMarker.visible = !!destination;
+    if (destination) this.destinationMarker.position.set(destination.x, .04, destination.z);
     for (const character of this.characters) character.mixer.update(dt);
     this.updateCamera(dt);
     this.effects?.update(dt, this.player.position, this.camera);
