@@ -1,0 +1,65 @@
+{
+  "language": "ko",
+  "scenario": "b-manual",
+  "reached": true,
+  "answersCount": 42,
+  "completed": [
+    "lumi",
+    "moka",
+    "echo",
+    "or"
+  ],
+  "phases": {
+    "lumi": "completed",
+    "moka": "completed",
+    "echo": "completed",
+    "or": "completed"
+  },
+  "recovery": {
+    "lumi": {
+      "choice": false,
+      "rest": false,
+      "puzzle": false,
+      "report": false
+    },
+    "echo": {
+      "choice": false,
+      "rest": false,
+      "puzzle": false,
+      "report": false
+    },
+    "or": {
+      "choice": false,
+      "rest": false,
+      "puzzle": false,
+      "report": false
+    }
+  },
+  "reportResponseLossInjected": false,
+  "pointerEvidence": {
+    "lumi": 1,
+    "moka": 1,
+    "echo": 1,
+    "or": 1
+  },
+  "touchEvidence": {
+    "lumi": 1,
+    "moka": 1,
+    "echo": 1,
+    "or": 1
+  },
+  "interactionEvidence": {
+    "direct": 83,
+    "pointer": 4,
+    "touch": 4,
+    "mouse": 0,
+    "walked": 69
+  },
+  "pointerMismatches": [
+    "moka-basket-source -> none"
+  ],
+  "steps": 1377,
+  "errors": [],
+  "abnormalResponses": 0,
+  "source": ".e2e/rs1-ko-b-manual/run-summary.json"
+}
