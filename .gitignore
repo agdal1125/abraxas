@@ -33,3 +33,4 @@ assets/_generated/**/*.webp
 .vscode/*
 !.vscode/extensions.json
 *.blend1
+firestore-debug.log

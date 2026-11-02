@@ -11,5 +11,8 @@
     "doctor": "node scripts/doctor.mjs",
     "check:scoring": "node scripts/check-scoring.mjs",
     "e2e:play": "node scripts/e2e-play.mjs"
+  },
+  "devDependencies": {
+    "firebase-tools": "^15.34.2"
   }
 }
