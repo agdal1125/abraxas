@@ -7,7 +7,9 @@ import { fileURLToPath } from "node:url";
 import { contentVersion } from "./content-version.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const lang = process.argv[2] ?? "ko", output = resolve(process.argv[3] ?? `e2e-${lang}`);
+const emulators = process.argv.includes("--emulators");
+const args = process.argv.slice(2).filter(arg => arg !== "--emulators");
+const lang = args[0] ?? "ko", output = resolve(args[1] ?? `e2e-${lang}`);
 if (!["ko", "en"].includes(lang)) throw new Error("Usage: node scripts/e2e-play.mjs ko|en output-directory");
 const candidates = process.platform === "win32" ? [
   join(process.env["PROGRAMFILES(X86)"] ?? "C:/Program Files (x86)", "Microsoft/Edge/Application/msedge.exe"),
@@ -56,14 +58,20 @@ async function requireFreePort(port) {
 try {
   mkdirSync(output, { recursive: true });
   await requireFreePort(8080); await requireFreePort(5173);
+  if (emulators) {
+    await requireFreePort(9099); await requireFreePort(8081);
+    const firebase = start(process.execPath, [join(root, "node_modules/firebase-tools/lib/bin/firebase.js"), "emulators:start", "--only", "auth,firestore", "--project", "demo-abraxas"], { cwd: root, env: { ...process.env, PATH: process.env.JAVA_HOME ? `${join(process.env.JAVA_HOME, "bin")}${process.platform === "win32" ? ";" : ":"}${process.env.PATH}` : process.env.PATH }, reportStderr: true });
+    await ready("http://127.0.0.1:9099/emulator/v1/projects/demo-abraxas/config", firebase);
+    await ready("http://127.0.0.1:8081/v1/projects/demo-abraxas/databases/(default)/documents", firebase);
+  }
   const ink = spawnSync(process.execPath, ["scripts/compile-ink.mjs"], { cwd: join(root, "client"), encoding: "utf8" });
   if (ink.status !== 0) throw new Error(`Ink compilation failed: ${ink.stderr || ink.stdout}`);
   const exe = join(temp, process.platform === "win32" ? "server.exe" : "server");
   const build = spawnSync("go", ["build", "-o", exe, "./cmd/api"], { cwd: join(root, "server"), encoding: "utf8", env: { ...process.env, GOCACHE: process.env.GOCACHE || join(temp, "go-cache") } });
   if (build.status !== 0) throw new Error(`Go build failed: ${build.stderr || build.error?.message}`);
-  const server = start(exe, [], { cwd: join(root, "server"), env: { ...process.env, ABRAXAS_BIND_ADDR: "127.0.0.1:8080", ABRAXAS_DEV_FAKE_AUTH: "1", ABRAXAS_DEV_SKIP_APP_CHECK: "1", ABRAXAS_CONTENT_VERSION: contentVersion(root) } });
+  const server = start(exe, [], { cwd: join(root, "server"), env: { ...process.env, ABRAXAS_BIND_ADDR: "127.0.0.1:8080", ABRAXAS_DEV_FAKE_AUTH: emulators ? "0" : "1", ABRAXAS_DEV_SKIP_APP_CHECK: "1", ABRAXAS_CONTENT_VERSION: contentVersion(root), ...(emulators ? { ABRAXAS_STORE: "firestore", GOOGLE_CLOUD_PROJECT: "demo-abraxas", FIRESTORE_EMULATOR_HOST: "127.0.0.1:8081", FIREBASE_AUTH_EMULATOR_HOST: "127.0.0.1:9099" } : {}) } });
   await ready("http://127.0.0.1:8080/healthz", server);
-  const vite = start(process.execPath, [join(root, "client/node_modules/vite/bin/vite.js"), "--host", "127.0.0.1", "--port", "5173", "--strictPort"], { cwd: join(root, "client"), env: { ...process.env, VITE_ABRAXAS_DEV_FAKE_AUTH: "1" }, reportStderr: true });
+  const vite = start(process.execPath, [join(root, "client/node_modules/vite/bin/vite.js"), "--host", "127.0.0.1", "--port", "5173", "--strictPort"], { cwd: join(root, "client"), env: { ...process.env, VITE_ABRAXAS_DEV_FAKE_AUTH: emulators ? "0" : "1", ...(emulators ? { VITE_FIREBASE_API_KEY: "demo-api-key", VITE_FIREBASE_AUTH_DOMAIN: "demo-abraxas.firebaseapp.com", VITE_FIREBASE_PROJECT_ID: "demo-abraxas", VITE_FIREBASE_APP_ID: "demo-app", VITE_FIREBASE_AUTH_EMULATOR_HOST: "127.0.0.1:9099" } : {}) }, reportStderr: true });
   await ready("http://127.0.0.1:5173/", vite);
   const debugPort = 9400 + Math.floor(Math.random() * 500);
   const chrome = start(browser, ["--headless=new", `--remote-debugging-port=${debugPort}`, "--use-angle=swiftshader", "--enable-unsafe-swiftshader", ...(process.env.ABRAXAS_BROWSER_NO_SANDBOX === "1" ? ["--no-sandbox", "--disable-gpu-sandbox"] : []), `--user-data-dir=${join(temp, "browser")}`, "about:blank"]);
