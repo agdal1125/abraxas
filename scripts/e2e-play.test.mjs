@@ -4,6 +4,17 @@ import { readFileSync } from "node:fs";
 import * as harness from "./e2e-play.mjs";
 import { demoEnv, e2eSucceeded, outputDirectory, responseClassifier, consoleClassifier, stderrClassifier, canInteract, parseArgs, choiceIndex, boardPair, finalErrors } from "./e2e-play.mjs";
 
+test("board viewport measurements reject clipped boards, overflow, small buttons and unreachable close", () => {
+  const measured = { viewport: { width: 740, height: 360 }, fontSize: 15, board: { left: 10, top: 10, right: 730, bottom: 350 }, horizontalOverflow: 0, buttonHeights: [48, 52], closeVisible: true };
+  assert.deepEqual(harness.viewportFailures(measured, 740, 360, 15), []);
+  assert.ok(harness.viewportFailures({ ...measured, board: { ...measured.board, right: 741 } }, 740, 360, 15).length);
+  assert.ok(harness.viewportFailures({ ...measured, horizontalOverflow: 2 }, 740, 360, 15).length);
+  assert.ok(harness.viewportFailures({ ...measured, buttonHeights: [47] }, 740, 360, 15).length);
+  assert.ok(harness.viewportFailures({ ...measured, closeVisible: false }, 740, 360, 15).length);
+  assert.ok(harness.viewportFailures(measured, 844, 390, 15).length);
+  assert.ok(harness.viewportFailures(measured, 740, 360, 18).length);
+});
+
 test("only b-manual uses touch for world pointer interactions", () => {
   assert.equal(harness.pointerInput("a-auto"), "mouse");
   assert.equal(harness.pointerInput("b-manual"), "touch");
