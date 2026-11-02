@@ -1,6 +1,29 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { demoEnv, e2eSucceeded, outputDirectory, responseClassifier, consoleClassifier, stderrClassifier, canInteract } from "./e2e-play.mjs";
+import { demoEnv, e2eSucceeded, outputDirectory, responseClassifier, consoleClassifier, stderrClassifier, canInteract, parseArgs, choiceIndex, boardPair, finalErrors } from "./e2e-play.mjs";
+
+test("arguments accept only the three fixed scenarios", () => {
+  assert.equal(parseArgs([]).scenario, "a-auto");
+  assert.equal(parseArgs(["--emulators", "en", "evidence", "b-manual"]).scenario, "b-manual");
+  assert.equal(parseArgs(["ko", "evidence", "resume", "--emulators"]).emulators, true);
+  for (const args of [["fr"], ["ko", "out", "other"], ["ko", "out", "resume", "extra"], ["--unknown"]]) assert.throws(() => parseArgs(args));
+});
+
+test("choice and manual board selection follow scenario and saved placements", () => {
+  assert.equal(choiceIndex("a-auto"), 0);
+  assert.equal(choiceIndex("b-manual"), 1);
+  assert.equal(choiceIndex("resume"), 0);
+  assert.deepEqual(boardPair({ a: "round", b: "square", c: "round" }, { x: "square", y: "round" }, { x: "b" }), [0, 1]);
+  assert.equal(boardPair({ a: "round" }, { x: "square" }, {}), null);
+});
+
+test("final snapshot requires all answers and completed residents", () => {
+  const snapshot = { segment: "result", answers: Array.from({ length: 42 }, (_, i) => ({ id: String(i), pick: "a" })), completedEpisodes: ["lumi", "moka", "echo", "or"], ...Object.fromEntries(["lumi", "moka", "echo", "or"].map(n => [n, { phase: "completed" }])) };
+  assert.deepEqual(finalErrors(snapshot), []);
+  assert.ok(finalErrors({ ...snapshot, answers: snapshot.answers.slice(1) }).length);
+  assert.ok(finalErrors({ ...snapshot, completedEpisodes: ["lumi", "moka", "echo", "echo"] }).length);
+  assert.ok(finalErrors({ ...snapshot, or: { phase: "report" } }).length);
+});
 
 test("demo child environment drops inherited Firebase and credential configuration", () => {
   const env = demoEnv({ PATH: "path", GOOGLE_APPLICATION_CREDENTIALS: "private", GOOGLE_CLOUD_PROJECT: "real", VITE_FIREBASE_APP_CHECK_SITE_KEY: "real", FIREBASE_APPCHECK_DEBUG_TOKEN: "real", ABRAXAS_STORE: "firestore", CLOUDSDK_CONFIG: "private" });
