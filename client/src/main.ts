@@ -1,7 +1,6 @@
 import { Village } from "./scenes/village";
 import { Game } from "./ui/game";
 import { configurePlayTransport } from "./net/plays";
-import { createAuthSource } from "./net/select-auth";
 import "./style.css";
 
 const app = document.querySelector<HTMLElement>("#app")!;
@@ -53,7 +52,14 @@ if (document.fullscreenEnabled && document.documentElement.requestFullscreen) {
 
 const village = new Village(app);
 void ((village as { whenReady?: Promise<void> }).whenReady ?? Promise.resolve()).then(async () => {
-  configurePlayTransport({ auth: await createAuthSource() });
+  let source: Promise<Awaited<ReturnType<typeof import("./net/select-auth").createAuthSource>>> | undefined;
+  configurePlayTransport({ auth: { getIdToken: async forceRefresh => {
+    const config = await (source ??= import("./net/select-auth").then(({ createAuthSource }) => createAuthSource()).then(config => {
+      configurePlayTransport(config);
+      return config;
+    }).catch(error => { source = undefined; throw error; }));
+    return config.auth.getIdToken(forceRefresh);
+  } } });
   const game = new Game(app, village);
   updateViewport();
   if (import.meta.env.DEV) Object.assign(window, { __abraxas: { village, game } });

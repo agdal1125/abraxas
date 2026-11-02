@@ -1,10 +1,31 @@
 # server
 
+## ER1-E Firebase 연결
+
+Firestore 저장과 Firebase 익명 인증·App Check가 연결되어 있다. 운영에 사용하기 전에는 아래 승인이 필요하다. `ABRAXAS_STORE=firestore`, `GOOGLE_CLOUD_PROJECT`와 ADC를 사용한다. 에뮬레이터에서는 데모 프로젝트와 `FIRESTORE_EMULATOR_HOST`, `FIREBASE_AUTH_EMULATOR_HOST`를 지정한다. App Check 생략은 루프백에서만 허용된다.
+
+추가 의존성: Firebase Admin Go SDK v4.22.0은 ID 토큰과 App Check 검증, Firestore Go 클라이언트 v1.29.2는 원자적 서버 저장, Firebase Web SDK v13.1.0은 익명 인증과 App Check에 사용한다. 자세한 근거는 `docs/adr/0006-firebase-backend.md`에 있다.
+
+대안인 메모리 저장소는 재시작과 다중 인스턴스에서 기록을 보존하지 못한다. 토큰 검증을 직접 구현하면 보안 검증과 유지보수 부담이 커지고, 클라이언트의 Firestore 직접 접근은 서버 권위 경계에 맞지 않는다. Firebase CLI v15.34.2는 로컬 에뮬레이터 실행에만 쓰는 루트 개발 의존성이다.
+
+### 에뮬레이터 실행
+
+Java 21 이상과 루트 npm 의존성이 필요하다. 저장소 루트에서 `node scripts/test-firestore-emulator.mjs`로 Firestore 통합 테스트를 실행한다. `npm run e2e:play -- --emulators ko` 또는 `en`은 Auth·Firestore 에뮬레이터, 서버와 브라우저를 실행하며 캡처는 기본적으로 `.e2e/<언어>`에 저장한다. `JAVA_HOME`을 우선하고 Windows에서는 지정된 Java 21 설치 경로를 대안으로 사용한다. 데모 실행은 상속된 Firebase·Google 설정을 제거하고 `demo-abraxas`만 사용한다. Vite 환경 파일이 있으면 읽지 않고 실행을 중단한다. App Check는 루프백에서만 생략하며 디버그 토큰을 자동으로 활성화하지 않는다.
+
+### 운영 배포 전 사람 승인
+
+- Firebase 프로젝트와 익명 인증 및 App Check 공급자 설정을 확인한다.
+- Cloud Run 서비스 계정의 최소 권한, Firestore 규칙과 Hosting 연결을 검토한다.
+- 운영 도메인, 보안 헤더, 환경 변수 및 비밀값 관리 방식을 확인한다.
+- 인증·저장·재시도와 배포 절차를 검증하고 배포를 별도로 승인한다.
+
+배포는 실행하지 않았다.
+
 ## ER1 서버 저장 경계
 
 `POST /v1/plays`, `GET /v1/plays/current`, `GET /v1/plays/{playId}`, `POST /v1/plays/{playId}/commands`는 `docs/design/moka-errand-api.md` 계약을 사용한다. 서버가 선택 순서와 심부름 전이를 판정하고, 상태·영수증·완료 사건을 같은 저장 갱신에서 처리한다. 모카 완료 명령은 완료 화면 정보와 함께 다음 막간 또는 축제 구간으로 진행한다.
 
-현재 저장소는 프로세스 안의 메모리만 사용하므로 재시작하면 기록이 사라지며 여러 인스턴스에서 공유되지 않는다. Firebase ID 토큰과 App Check의 실제 검증기, Firestore 구현 및 배포용 콘텐츠 포함은 ER1-E에서 연결해야 한다. 검증기가 없으면 API는 인증 또는 App Check를 거부한다. `Store.Update` 콜백은 Firestore 트랜잭션에서 재실행될 수 있으므로 외부 동작 없이 상태만 갱신해야 한다.
+기본 메모리 저장소는 재시작하면 기록이 사라지며 여러 인스턴스에서 공유되지 않는다. Firebase 연결의 운영 설정과 브라우저 통합 검증은 남아 있다. `Store.Update` 콜백은 Firestore 트랜잭션에서 재실행될 수 있으므로 외부 동작 없이 상태만 갱신해야 한다.
 
 서버는 `ABRAXAS_CONTENT_DIR`에서 콘텐츠를 읽고 `ABRAXAS_CONTENT_VERSION`으로 지정한 빌드 버전을 회차에 고정한다. 버전 해시의 생성과 클라이언트 빌드 주입은 ER1-E 담당이다. 버전이 없거나 콘텐츠가 없으면 서버가 시작하지 않는다. 로컬에서만 `ABRAXAS_BIND_ADDR=127.0.0.1:8080`, `ABRAXAS_DEV_FAKE_AUTH=1`, `ABRAXAS_DEV_SKIP_APP_CHECK=1`을 지정하면 `Bearer dev-<uid>`를 사용할 수 있다. 개발 인증이나 App Check 생략을 켠 상태에서 루프백 이외의 주소를 사용하면 시작이 실패한다.
 
