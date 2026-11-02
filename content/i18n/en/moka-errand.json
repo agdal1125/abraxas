@@ -1,0 +1,57 @@
+{
+  "objective": {
+    "locked": "Talk to B",
+    "choose_route": "Talk to B",
+    "pick_up": "Pick up the walnut bread basket",
+    "deliver": "Deliver the bread to the workshop",
+    "pick_up_rest": "Pick up the basket again",
+    "reservation": "Meet the customer outside the bakery",
+    "reservation_action": "Sort out the reservation",
+    "choose_display": "Choose how to arrange the display",
+    "arrange": "Place each bread on a matching shape",
+    "share": "Share the remaining bread",
+    "share_action": "Put the tasting bread where you chose",
+    "order": "Prepare dough for the festival",
+    "order_action": "Prepare the amount of dough you chose",
+    "return": "Return to B",
+    "feedback": "Talk with B about the cookies",
+    "report": "Finish talking about the errand",
+    "completed": "You finished B's errand"
+  },
+  "items": {
+    "empty": "Empty hands",
+    "basket": "Walnut bread basket",
+    "moka-basket-source": "Walnut bread basket",
+    "moka-rest": "Basket stand",
+    "moka-workshop-dropoff": "Workshop stand",
+    "moka-ledger": "Reservation ledger",
+    "moka-reservation-bread": "Bread for the customer",
+    "customer": "Reservation customer",
+    "tastingGuide": "Tasting guide",
+    "moka-tired-neighbor": "Tired neighbor",
+    "moka-tasting-plate": "Tasting plate",
+    "moka-dough-double": "Extra dough preparation bundle",
+    "moka-dough-reserved": "Reserved dough preparation bundle",
+    "walnut": "Walnut bread",
+    "roll": "Round bread",
+    "flower": "Flower-shaped bread"
+  },
+  "reaction": {
+    "empathy": "I see. I think so too.",
+    "thinking": "Hmm, that's another way to look at it."
+  },
+  "puzzle": {
+    "hint": "Hint",
+    "auto": "Arrange automatically",
+    "close": "Close for now",
+    "wrong": "Shall we take another look at the shapes?"
+  },
+  "status": {
+    "saving": "Saving your choice.",
+    "retry": "You can continue when you're connected.",
+    "reconnect": "Reconnect",
+    "version": "Load the new version to continue.",
+    "otherTab": "We loaded the progress from your other screen.",
+    "wrongItem": "That isn't the bread to deliver here."
+  }
+}
