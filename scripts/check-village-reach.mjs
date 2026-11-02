@@ -34,7 +34,7 @@ const canMove = (a, b) => safe(b) && edges.every(e => segmentDistance(a, b, e) >
   && circles.every(c => distanceToSegment(c, { a, b }) >= radius + c.radius - eps)
   && boxes.every(box => box.edges.every(e => segmentDistance(a, b, e) >= radius - eps));
 const coreTargets = [...map.actors, ...['lake', 'plaza', 'gate'].map(id => ({ id, ...map.zones[id] }))];
-const targets = [...coreTargets, ...map.props.filter(p => p.asset === 'signboard').map(p => ({ ...p, colliders: colliders.filter(c => c.owner === p.id) }))];
+const targets = [...coreTargets, ...map.props.filter(p => p.asset === 'signboard' || p.id.startsWith('moka-')).map(p => ({ ...p, colliders: colliders.filter(c => c.owner === p.id) })), ...['moka-route-shortcut', 'moka-route-gentle', 'moka-route-join'].map(id => ({ id, ...map.zones[id] }))];
 const visible = (p, target) => colliders.every(c => {
   if (c.owner === target.id || map.actors.some(a => a.id === c.owner && a.x === target.x && a.z === target.z)) return true;
   if (c.type === 'circle') return distanceToSegment(c, { a: p, b: target }) >= c.radius;
@@ -55,5 +55,6 @@ for (let head = 0; head < queue.length; head++) {
   }
 }
 const missing = targets.filter(t => !found.has(t.id)).map(t => t.id);
-console.log(`Reachable: ${coreTargets.filter(t => found.has(t.id)).length}/${coreTargets.length}; including signboards: ${found.size}/${targets.length}, grid ${spacing}m, corridor ${radius * 2}m, visited ${queue.length}`);
+const signboards = map.props.filter(p => p.asset === 'signboard');
+console.log(`Reachable: ${coreTargets.filter(t => found.has(t.id)).length}/${coreTargets.length}; including signboards: ${coreTargets.filter(t => found.has(t.id)).length + signboards.filter(t => found.has(t.id)).length}/${coreTargets.length + signboards.length}; all targets: ${found.size}/${targets.length}, grid ${spacing}m, corridor ${radius * 2}m, visited ${queue.length}`);
 if (missing.length) throw new Error(`Unreachable: ${missing.join(', ')}`);

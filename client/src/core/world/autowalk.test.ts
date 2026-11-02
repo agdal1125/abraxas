@@ -1,10 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { findPath, followPath } from "./autowalk";
+import { findPath, findPathVia, followPath } from "./autowalk";
 import type { Bounds, Collider } from "./types";
 
 const bounds: Bounds = { outer: [{ x: -5, z: -5 }, { x: 5, z: -5 }, { x: 5, z: 5 }, { x: -5, z: 5 }], holes: [], bridges: [] };
 
 describe("autowalk", () => {
+  it("visits waypoints in order and refuses a blocked leg", () => {
+    const start = { x: 0, z: 0 }, via = [{ x: -3, z: 0 }, { x: -3, z: 3 }], target = { x: 3, z: 3 };
+    const path = findPathVia(start, via, target, [], bounds)!;
+    const first = path.findIndex(p => Math.hypot(p.x + 3, p.z) <= .85);
+    const second = path.findIndex((p, index) => index > first && Math.hypot(p.x + 3, p.z - 3) <= .85);
+    expect(first).toBeGreaterThanOrEqual(0);
+    expect(second).toBeGreaterThan(first);
+    expect(findPathVia(start, via, target, [{ type: "circle", x: -3, z: 3, radius: 1 }], bounds)).toBeNull();
+  });
   it("finds a route around an obstacle to interaction range", () => {
     const wall: Collider[] = [{ type: "box", x: 1.5, z: 0, halfX: .3, halfZ: 1.5, rot: 0 }];
     const path = findPath({ x: 0, z: 0 }, { x: 3, z: 0 }, wall, bounds);
