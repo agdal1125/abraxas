@@ -54,7 +54,8 @@ export function savePending(playId: string, pending: PendingCommand): void {
 
 export function clearPending(playId: string, key: string): void {
   const existing = loadPending();
-  if (!existing || existing.playId !== playId || existing.pending.key !== key) throw new Error("pending_mismatch");
+  if (!existing) return;
+  if (existing.playId !== playId || existing.pending.key !== key) throw new Error("pending_mismatch");
   try {
     localStorage.removeItem(storageKey);
     if (localStorage.getItem(storageKey) !== null) throw new Error("storage_unavailable");

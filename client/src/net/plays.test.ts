@@ -200,6 +200,25 @@ test("recovery loads the server state before resending the saved command", async
   expect(fetcher.mock.calls[1]![1].headers["Idempotency-Key"]).toBe(pending.key);
 });
 
+test("concurrent recovery clears the same pending command for both responses", async () => {
+  const retry = { ...pending, expectedRevision: 10, command: { kind: "pickup" as const, targetId: "lumi-horn" } };
+  let state = structuredClone(lumiFixture.initial) as PlaySnapshot;
+  for (const command of lumiFixture.success[0]!.commands) {
+    state = transitionLumi(state, command as Command, lumiFixture.completedAt);
+    if (command.kind === "pickup" && "targetId" in command && command.targetId === "lumi-horn") break;
+  }
+  const current = { ...state, playId: "play", revision: 11 };
+  expect(current.lumi.objects.notice).toBe("player");
+  const original = { ...receipt, appliedRevision: 11, reaction: null };
+  savePending("play", retry);
+  const fetcher = vi.fn().mockImplementation((_url: string, init: RequestInit) => Promise.resolve(response(init.method === "GET" ? current : { receipt: original, snapshot: current })));
+  vi.stubGlobal("fetch", fetcher);
+  const results = await Promise.all([recoverPending(), recoverPending()]);
+  expect(results).toEqual([expect.objectContaining({ receipt: original, snapshot: current, pendingCleared: true }), expect.objectContaining({ receipt: original, snapshot: current, pendingCleared: true })]);
+  expect(fetcher.mock.calls.filter(([, init]) => init.method === "POST").map(([, init]) => init.headers["Idempotency-Key"])).toEqual([retry.key, retry.key]);
+  expect(loadPending()).toBeNull();
+});
+
 test("reports a successful receipt even if clearing local storage fails", async () => {
   const data = new Map<string, string>();
   vi.stubGlobal("localStorage", { getItem: (key: string) => data.has(key) ? data.get(key)! : null, setItem: (key: string, value: string) => data.set(key, value), removeItem: () => { throw new Error("disabled"); } });
