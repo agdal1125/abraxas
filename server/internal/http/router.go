@@ -19,10 +19,10 @@ func NewRouter(logger *slog.Logger) http.Handler {
 	mux.HandleFunc("GET /healthz", handleHealthz)
 
 	var handler http.Handler = mux
-	handler = MaxBodyBytesMiddleware(DefaultMaxBodyBytes)(handler)
-	handler = TimeoutMiddleware(DefaultRequestTimeout)(handler)
 	handler = RecoverMiddleware(logger)(handler)
 	handler = RequestLogMiddleware(logger)(handler)
+	handler = MaxBodyBytesMiddleware(DefaultMaxBodyBytes)(handler)
+	handler = TimeoutMiddleware(DefaultRequestTimeout)(handler)
 
 	return handler
 }

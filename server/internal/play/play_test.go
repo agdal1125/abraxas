@@ -114,8 +114,14 @@ func TestFullExistingFlow(t *testing.T) {
 			for _, cmd := range fixture.Success[0].Commands {
 				apply(cmd)
 			}
+			if doc.Snapshot.EpisodeEnd == nil || doc.Snapshot.EpisodeEnd.NPCID != "moka" {
+				t.Fatal("moka completion must include episode end")
+			}
 		} else {
 			apply(Command{Kind: "open_episode", NPCID: npc})
+			if npc == "echo" && (doc.Snapshot.Moka.Phase != "completed" || doc.Snapshot.EpisodeEnd != nil) {
+				t.Fatal("opening another episode must clear the optional episode end")
+			}
 			finish()
 		}
 		if doc.Snapshot.Segment != "festival" {

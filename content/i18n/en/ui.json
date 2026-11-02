@@ -25,6 +25,10 @@
   },
   "next": "Next",
   "pathBlocked": "You can't get there from here.",
+  "localExperience": "Local experience: this progress is not saved on the server.",
+  "continueLocal": "Continue local experience",
+  "carrying": "Carrying",
+  "finishErrand": "Finish the errand",
   "result": {
     "title": "Who you are beyond the shell",
     "poles": {

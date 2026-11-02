@@ -40,6 +40,18 @@ func TestDevelopmentAuthRequiresLoopback(t *testing.T) {
 	}
 }
 
+func TestPlayRequestLogUsesRoutePattern(t *testing.T) {
+	logger, logs := newSilentLogger()
+	router := httpapi.NewPlayRouter(logger, httpapi.PlayConfig{})
+	req := httptest.NewRequest("POST", "/v1/plays/private-play-id/commands?token=secret-query", nil)
+	req.Header.Set("Authorization", "Bearer secret-token")
+	router.ServeHTTP(httptest.NewRecorder(), req)
+	log := logs.String()
+	if !strings.Contains(log, `"route":"POST /v1/plays/{playId}/commands"`) || strings.Contains(log, "private-play-id") || strings.Contains(log, "secret-") {
+		t.Fatalf("unsafe or missing route: %s", log)
+	}
+}
+
 func TestMokaTransportAndConcurrency(t *testing.T) {
 	const id = "11111111-1111-4111-8111-111111111111"
 	engine, err := play.Load("../../../content", "fixture-version")

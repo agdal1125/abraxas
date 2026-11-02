@@ -4,7 +4,7 @@
 
 ## 공통 타입과 콘텐츠
 
-클라이언트 타입은 `client/src/core/moka-errand.ts`, 언어 없는 대상·문항·모양 데이터는 `content/quests/moka-errand.json`이다. `MokaState`는 `phase`, `basket`, `placements`, `completedAt`을 가진다. `placements`는 자리 ID에서 빵 ID로 향하는 부분 객체다. `completedAt`은 완료 전 `null`, 완료 후 서버가 정한 UTC RFC 3339 시각이다. `PlaySnapshot`은 `playId`, `contentVersion`, 정수 `revision`, `segment`, `completedEpisodes`, 순서가 있는 `answers`, `moka`를 가진다. `answers`에는 이전 구간의 답도 들어간다. 완료 후에만 `episodeEnd: { npcId: "moka", hearts: 0..5의 정수 }`를 포함한다. 진행 중 원점수·축·NPC 기대 답·호감도 수치는 응답에 넣지 않는다.
+클라이언트 타입은 `client/src/core/moka-errand.ts`, 언어 없는 대상·문항·모양 데이터는 `content/quests/moka-errand.json`이다. `MokaState`는 `phase`, `basket`, `placements`, `completedAt`을 가진다. `placements`는 자리 ID에서 빵 ID로 향하는 부분 객체다. `completedAt`은 완료 전 `null`, 완료 후 서버가 정한 UTC RFC 3339 시각이다. `PlaySnapshot`은 `playId`, `contentVersion`, 정수 `revision`, `segment`, `completedEpisodes`, 순서가 있는 `answers`, `moka`를 가진다. `answers`에는 이전 구간의 답도 들어간다. `episodeEnd: { npcId: "moka", hearts: 0..5의 정수 }`는 모카 완료 직후 화면에 쓰는 선택 필드이며, 완료 상태에서도 이후 응답에는 없을 수 있다. 완료 전에는 포함하지 않는다. 진행 중 원점수·축·NPC 기대 답·호감도 수치는 응답에 넣지 않는다.
 
 `Command`의 종류별 필드는 다음뿐이다. 다른 필드나 `null`은 허용하지 않는다.
 

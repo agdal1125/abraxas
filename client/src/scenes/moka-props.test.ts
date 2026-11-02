@@ -18,11 +18,13 @@ describe("moka props", () => {
     const basket = props.objects.get("moka-basket-source")!;
     props.setView(view);
     expect(basket.parent).toBe(player);
-    expect(basket.position.toArray()).toEqual([0, .3, .3]);
+    expect(basket.position.toArray()).toEqual([0, .3, .5]);
+    expect(basket.scale.x).toBe(.65);
     const group = scene.children[0]!;
     expect(group.children.at(-1)!.children).toHaveLength(3);
     props.setView({ ...view, basket: "moka-rest", display: "low" });
     expect(basket.position.toArray()).toEqual([3, .51, 3]);
+    expect(basket.scale.x).toBe(1);
     expect(group.children.find(child => child.children.length === 1)).toBeDefined();
     props.setView({ ...view, basket: "delivered" });
     expect(basket.position.toArray()).toEqual([4, .51, 4]);

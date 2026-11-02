@@ -60,32 +60,31 @@ func NewPlayRouter(logger *slog.Logger, c PlayConfig) http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /healthz", handleHealthz)
 	h := &playHandler{c}
-	protected := http.NewServeMux()
-	protected.HandleFunc("POST /v1/plays", h.create)
-	protected.HandleFunc("GET /v1/plays/current", h.current)
-	protected.HandleFunc("GET /v1/plays/{playId}", h.get)
-	protected.HandleFunc("POST /v1/plays/{playId}/commands", h.command)
-	var api http.Handler = protected
-	api = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if c.AppCheck == nil {
-			if !c.AllowMissingAppCheck {
+	protect := func(next http.HandlerFunc) http.Handler {
+		api := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if c.AppCheck == nil {
+				if !c.AllowMissingAppCheck {
+					WriteError(w, 403, "app_check_failed")
+					return
+				}
+			} else if err := c.AppCheck.VerifyAppCheck(r.Context(), r.Header.Get("X-Firebase-AppCheck")); err != nil {
 				WriteError(w, 403, "app_check_failed")
 				return
 			}
-		} else if err := c.AppCheck.VerifyAppCheck(r.Context(), r.Header.Get("X-Firebase-AppCheck")); err != nil {
-			WriteError(w, 403, "app_check_failed")
-			return
-		}
-		protected.ServeHTTP(w, r)
-	})
-	auth := AuthMiddleware(c.Auth)(api)
-	mux.Handle("/v1/plays", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { auth.ServeHTTP(&authResponse{ResponseWriter: w}, r) }))
-	mux.Handle("/v1/plays/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { auth.ServeHTTP(&authResponse{ResponseWriter: w}, r) }))
+			next.ServeHTTP(w, r)
+		})
+		auth := AuthMiddleware(c.Auth)(api)
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { auth.ServeHTTP(&authResponse{ResponseWriter: w}, r) })
+	}
+	mux.Handle("POST /v1/plays", protect(h.create))
+	mux.Handle("GET /v1/plays/current", protect(h.current))
+	mux.Handle("GET /v1/plays/{playId}", protect(h.get))
+	mux.Handle("POST /v1/plays/{playId}/commands", protect(h.command))
 	var handler http.Handler = mux
-	handler = MaxBodyBytesMiddleware(DefaultMaxBodyBytes)(handler)
-	handler = TimeoutMiddleware(DefaultRequestTimeout)(handler)
 	handler = RecoverMiddleware(logger)(handler)
 	handler = RequestLogMiddleware(logger)(handler)
+	handler = MaxBodyBytesMiddleware(DefaultMaxBodyBytes)(handler)
+	handler = TimeoutMiddleware(DefaultRequestTimeout)(handler)
 	return handler
 }
 

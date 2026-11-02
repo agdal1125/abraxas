@@ -25,6 +25,10 @@
   },
   "next": "계속",
   "pathBlocked": "여기서는 갈 수 없어요",
+  "localExperience": "로컬 체험: 서버에 저장되지 않는 체험입니다.",
+  "continueLocal": "로컬 체험 이어하기",
+  "carrying": "들고 있는 물건",
+  "finishErrand": "심부름 이야기 마치기",
   "result": {
     "title": "껍질 너머의 나",
     "poles": {

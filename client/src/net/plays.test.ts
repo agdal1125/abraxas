@@ -59,6 +59,14 @@ test("rejects an invalid receipt without discarding the saved command", async ()
   expect(loadPending()).toEqual({ playId: "play", pending });
 });
 
+test("accepts completed moka with or without the optional episode end, but validates it when present", async () => {
+  const completed = { ...snapshot, segment: "ep_echo", moka: { ...snapshot.moka, phase: "completed", completedAt: "2026-11-02T00:00:00Z" } };
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(response(completed)).mockResolvedValueOnce(response({ ...completed, episodeEnd: { npcId: "moka", hearts: 4 } })).mockResolvedValueOnce(response({ ...completed, episodeEnd: { npcId: "moka", hearts: 6 } })));
+  expect(await loadCurrentPlay()).toEqual(completed);
+  expect((await loadCurrentPlay()).episodeEnd?.hearts).toBe(4);
+  await expect(loadCurrentPlay()).rejects.toThrow("invalid_response");
+});
+
 test("does not regress to an older confirmed revision", async () => {
   vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(response(snapshot)).mockResolvedValueOnce(response({ ...snapshot, revision: 0, answers: [] })));
   await loadCurrentPlay();
