@@ -144,6 +144,15 @@ export class Village {
   setMokaView(view: MokaView | null): void {
     this.mokaView = view;
     this.auto = undefined;
+    const guide = this.actors.get("v1j2");
+    const originalGuide = map.actors.find(actor => actor.id === "v1j2");
+    if (guide && originalGuide) {
+      const point = view && view.phase !== "locked" && view.phase !== "completed" ? map.zones["moka-guide"]! : originalGuide;
+      guide.object.position.set(point.x, 0, point.z);
+      this.colliders = this.colliders.filter((_, index) => this.colliderOwners[index] !== "v1j2");
+      this.colliderOwners = this.colliderOwners.filter(owner => owner !== "v1j2");
+      this.addColliders({ ...originalGuide, ...point }, "v1j2");
+    }
     for (const prop of map.props) if (prop.id.startsWith("moka-")) this.props.delete(prop.id);
     this.mokaProps?.setView(view);
     if (!view || view.phase === "locked") {
@@ -152,7 +161,7 @@ export class Village {
       return;
     }
     if (this.mokaProps) {
-      if (!this.colliderOwners.some(owner => owner?.startsWith("moka-"))) for (const prop of map.props) if (prop.id.startsWith("moka-")) this.addColliders(prop, prop.id);
+      if (!this.colliderOwners.some(owner => owner?.startsWith("moka-"))) for (const prop of map.props) if (prop.id.startsWith("moka-")) this.addColliders(prop.id === "moka-basket-source" ? { ...prop, asset: "prop-moka-dropoff" } : prop, prop.id);
       for (const prop of map.props) if (view.activeTargetIds.includes(prop.id) && prop.id.startsWith("moka-")) this.props.set(prop.id, prop);
       return;
     }
@@ -175,7 +184,9 @@ export class Village {
     const id = view.resumePointId;
     const placement = [...map.actors, ...map.props].find(entry => entry.id === id);
     if (!placement) return false;
-    const target = { x: placement.x, z: placement.z, colliders: this.colliders.filter((_, index) => this.colliderOwners[index] === id) };
+    const actor = this.actors.get(id);
+    const actorPosition = actor?.object.position || placement;
+    const target = { x: actorPosition.x, z: actorPosition.z, colliders: actor ? [] : this.colliders.filter((_, index) => this.colliderOwners[index] === id) };
     const position = new THREE.Vector3(target.x, 0, target.z);
     const path = findPath(this.player.position, target, this.colliders, map.bounds, point => this.visible(id, position, point));
     if (!path) return false;

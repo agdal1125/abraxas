@@ -46,10 +46,10 @@ export class MokaProps {
     if (!this.group.visible || !view) return;
     for (const [id, object] of this.objects) if (!["moka-display", "moka-rest", "moka-workshop-dropoff", "moka-basket-source", "moka-tired-neighbor"].includes(id)) object.visible = view.activeTargetIds.includes(id);
     if (view.basket === "player") {
-      this.player.add(this.basket); this.basket.position.set(0, .3, .3);
+      this.player.add(this.basket); this.basket.position.set(0, .3, .5); this.basket.scale.setScalar(.65);
     } else {
       const point = this.point(view.basket === "source" ? "moka-basket-source" : view.basket === "moka-rest" ? "moka-rest" : "moka-workshop-dropoff");
-      this.group.add(this.basket); this.basket.position.set(point.x, .51, point.z);
+      this.group.add(this.basket); this.basket.position.set(point.x, .51, point.z); this.basket.scale.setScalar(1);
     }
     const base = this.point("moka-display");
     if (view.display === "high") for (const height of [.29, .58]) {
@@ -61,7 +61,8 @@ export class MokaProps {
       const key = bread.startsWith("walnut") ? "bread-round" : bread.startsWith("roll") ? "bread-long" : "bread-flower";
       const object = this.make(`prop-moka-${key}`); object.scale.setScalar(.45);
       const tier = view.display === "high" ? Math.floor(index / 2) : 0;
-      object.position.set(base.x + (view.display === "high" ? (index % 2 ? .15 : -.15) : (index - 2.5) * .13), .345 + tier * .29, base.z);
+      const front = view.display === "high" ? (2 - tier) * .08 : 0;
+      object.position.set(base.x + (view.display === "high" ? (index % 2 ? .15 : -.15) : (index - 2.5) * .13) + front, .345 + tier * .29, base.z + front);
       this.extras.add(object);
     });
   }
