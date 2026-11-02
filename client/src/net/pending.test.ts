@@ -23,3 +23,15 @@ test("storage failure prevents treating a command as saved", () => {
   vi.stubGlobal("localStorage", { getItem: () => { throw new Error("disabled"); } });
   expect(() => savePending("play", pending)).toThrow();
 });
+
+test("restores only a valid resident puzzle command", () => {
+  const piece = { ...pending, command: { kind: "place_piece" as const, pieceId: "gear-circle", slotId: "axle-circle" } };
+  savePending("play", piece);
+  expect(loadPending()?.pending).toEqual(piece);
+  clearPending("play", piece.key);
+  for (const command of [
+    { ...piece.command, pieceId: "missing" },
+    { ...piece.command, slotId: "circle-1" },
+    { ...piece.command, extra: true }
+  ]) expect(() => savePending("play", { ...piece, command })).toThrow();
+});
