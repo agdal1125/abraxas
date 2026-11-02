@@ -3,12 +3,15 @@ import { GLTFLoader, type GLTF } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { clone } from "three/addons/utils/SkeletonUtils.js";
 import { step } from "../core/world/move";
-import { findPath, followPath } from "../core/world/autowalk";
+import { findPath, findPathVia, followPath } from "../core/world/autowalk";
 import { nearest } from "../core/world/nearby";
 import type { Bounds, Collider, Vec2 } from "../core/world/types";
 import { translations } from "../content";
 import { DreamEffects } from "./dream-effects";
 import { dialogueFocus } from "./feedback";
+import type { MokaView } from "../core/moka-errand";
+import { MokaProps } from "./moka-props";
+import quest from "../../../content/quests/moka-errand.json";
 
 type Placement = Vec2 & { asset: string; rot?: number; scale?: number; zone?: string };
 type MapData = { spawn: Vec2; terrain: Placement; bounds: Bounds; zones: Record<string, Vec2>; actors: (Placement & { id: string })[]; props: (Placement & { id: string })[] };
@@ -44,6 +47,9 @@ export class Village {
   private talking?: string;
   private speaker: string | null = null;
   private available = new Set<string>();
+  private mokaView: MokaView | null = null;
+  private mokaProps?: MokaProps;
+  private mokaLoading?: Promise<void>;
   private ready = false;
   readonly whenReady: Promise<void>;
   private auto?: { id: string; path: Vec2[]; best: number; stalled: number };
@@ -79,6 +85,7 @@ export class Village {
     this.player.position.set(map.spawn.x, 0, map.spawn.z); this.cameraTarget.copy(this.player.position); this.scene.add(this.player);
     loading.push(this.character("player", this.player).then(character => { this.playerCharacter = character; }));
     for (const prop of map.props) {
+      if (prop.id.startsWith("moka-")) continue;
       const register = () => { this.addColliders(prop, prop.id); if (translations("ko").examine[prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset]) this.props.set(prop.id, prop); };
       if (prop.asset === "signboard") loading.push(this.place(prop).then(object => { this.propObjects.set(prop.id, object); register(); }).catch(error => console.warn(`Village prop failed to load: ${prop.id}`, error)));
       else { register(); loading.push(this.place(prop).then(object => { this.propObjects.set(prop.id, object); })); }
@@ -134,6 +141,49 @@ export class Village {
     return { x: rect.left + (point.x + 1) * rect.width / 2, y: rect.top + (1 - point.y) * rect.height / 2, onScreen: Math.abs(point.x) <= 1 && Math.abs(point.y) <= 1 && Math.abs(point.z) <= 1 };
   }
   setAvailable(ids: string[]): void { this.available = new Set(ids); for (const [id, actor] of this.actors) actor.marker.visible = this.available.has(id); }
+  setMokaView(view: MokaView | null): void {
+    this.mokaView = view;
+    this.auto = undefined;
+    for (const prop of map.props) if (prop.id.startsWith("moka-")) this.props.delete(prop.id);
+    this.mokaProps?.setView(view);
+    if (!view || view.phase === "locked") {
+      this.colliders = this.colliders.filter((_, index) => !this.colliderOwners[index]?.startsWith("moka-"));
+      this.colliderOwners = this.colliderOwners.filter(owner => !owner?.startsWith("moka-"));
+      return;
+    }
+    if (this.mokaProps) {
+      if (!this.colliderOwners.some(owner => owner?.startsWith("moka-"))) for (const prop of map.props) if (prop.id.startsWith("moka-")) this.addColliders(prop, prop.id);
+      for (const prop of map.props) if (view.activeTargetIds.includes(prop.id) && prop.id.startsWith("moka-")) this.props.set(prop.id, prop);
+      return;
+    }
+    if (!this.mokaLoading) {
+      this.mokaLoading = MokaProps.load(this.scene, this.player, map.props.filter(prop => prop.id.startsWith("moka-")), key => this.load(key)).then(props => {
+        this.mokaProps = props;
+        for (const [id, object] of props.objects) this.propObjects.set(id, object);
+        this.setMokaView(this.mokaView);
+      }).catch(error => {
+        console.error("Moka assets failed to load", error);
+        for (const key of this.models.keys()) if (key.startsWith("prop-moka-")) this.models.delete(key);
+      }).finally(() => { this.mokaLoading = undefined; });
+    }
+  }
+  async resumeMoka(): Promise<boolean> {
+    const view = this.mokaView;
+    if (!view?.resumePointId) return false;
+    await this.mokaLoading;
+    if (view !== this.mokaView || !this.mokaProps) return false;
+    const id = view.resumePointId;
+    const placement = [...map.actors, ...map.props].find(entry => entry.id === id);
+    if (!placement) return false;
+    const target = { x: placement.x, z: placement.z, colliders: this.colliders.filter((_, index) => this.colliderOwners[index] === id) };
+    const position = new THREE.Vector3(target.x, 0, target.z);
+    const path = findPath(this.player.position, target, this.colliders, map.bounds, point => this.visible(id, position, point));
+    if (!path) return false;
+    const destination = path.at(-1) ?? this.player.position;
+    this.player.position.set(destination.x, 0, destination.z);
+    this.cameraTarget.copy(this.player.position);
+    return true;
+  }
   setMoveInput(x: number, y: number): void { if (x || y) this.auto = undefined; this.input = !this.ready || !this.enabled || this.portrait ? { x: 0, z: 0 } : { x: (x - y) / Math.SQRT2, z: (-x - y) / Math.SQRT2 }; }
   private addColliders(placement: Placement, owner?: string): void {
     const asset = manifest[placement.asset]; if (!asset) throw new Error(`Missing asset: ${placement.asset}`);
@@ -165,6 +215,9 @@ export class Village {
     });
   }
   private findNearby(previous?: string | null): string | null {
+    const active = [...this.props.values()].filter(prop => this.mokaView?.activeTargetIds.includes(prop.id) && this.visible(prop.id, new THREE.Vector3(prop.x, 0, prop.z))).map(prop => ({ ...prop, colliders: this.colliders.filter((_, index) => this.colliderOwners[index] === prop.id) }));
+    const activeId = nearest(this.player.position, active, .85, previous);
+    if (activeId) return activeId;
     const targets = [...this.actors].filter(([id, actor]) => this.visible(id, actor.object.position) && (this.available.has(id) || ![...this.actors].some(([otherId, other]) => this.available.has(otherId) && other.object.position.distanceToSquared(actor.object.position) < 1e-8))).map(([id, actor]) => ({ id, x: actor.object.position.x, z: actor.object.position.z }));
     const pos = { x: this.player.position.x, z: this.player.position.z };
     const actor = nearest(pos, targets, .85, previous);
@@ -193,7 +246,9 @@ export class Village {
     const targetPosition = new THREE.Vector3(target.x, 0, target.z);
     if (!nearest(playerPosition, [{ id, ...target }]) || !this.visible(id, targetPosition)) {
       this.input = { x: 0, z: 0 };
-      const path = findPath(playerPosition, target, this.colliders, map.bounds, position => this.visible(id, targetPosition, position));
+      const route = id === "moka-workshop-dropoff" && this.mokaView?.basket === "player" ? this.mokaView.route : null;
+      const waypoints = route ? quest.routes[route === "shortcut" ? "a" : "b"].waypoints.map(key => map.zones[key]!) : [];
+      const path = waypoints.length ? findPathVia(playerPosition, waypoints, target, this.colliders, map.bounds, position => this.visible(id, targetPosition, position)) : findPath(playerPosition, target, this.colliders, map.bounds, position => this.visible(id, targetPosition, position));
       this.auto = path ? { id, path, best: Infinity, stalled: 0 } : undefined;
       if (!path) this.onPathBlocked();
       return;
@@ -202,7 +257,7 @@ export class Village {
     if (!this.visible(id, targetPosition)) return;
     const actor = this.actors.get(id); const prop = this.props.get(id); const position = actor?.object.position ?? prop!; const dx = position.x - this.player.position.x, dz = position.z - this.player.position.z;
     this.input = { x: 0, z: 0 }; if (dx || dz) { this.player.rotation.y = Math.atan2(dx, dz); if (actor?.character) actor.object.rotation.y = Math.atan2(-dx, -dz); }
-    this.talking = id; this.speaker = id; this.onInteract(prop ? `examine:${prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset}` : id);
+    this.talking = id; this.speaker = id; this.onInteract(prop && !this.mokaView?.activeTargetIds.includes(id) ? `examine:${prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset}` : id);
   }
   hitTargetAt(clientX: number, clientY: number): string | null {
     if (!this.enabled || !this.ready || this.portrait || this.talking) return null;
@@ -221,7 +276,7 @@ export class Village {
         left = Math.min(left, sx); right = Math.max(right, sx); top = Math.min(top, sy); bottom = Math.max(bottom, sy);
       }
       const cx = (left + right) / 2, cy = (top + bottom) / 2;
-      if (Math.abs(clientX - cx) <= Math.max(24, (right - left) / 2) && Math.abs(clientY - cy) <= Math.max(24, (bottom - top) / 2)) candidates.push({ id, distance: Math.hypot(clientX - cx, clientY - cy), available: this.available.has(id) });
+      if (Math.abs(clientX - cx) <= Math.max(24, (right - left) / 2) && Math.abs(clientY - cy) <= Math.max(24, (bottom - top) / 2)) candidates.push({ id, distance: Math.hypot(clientX - cx, clientY - cy), available: this.available.has(id) || !!this.mokaView?.activeTargetIds.includes(id) });
     }
     candidates.sort((a, b) => Number(b.available) - Number(a.available) || a.distance - b.distance || a.id.localeCompare(b.id));
     return candidates[0]?.id ?? null;
@@ -344,7 +399,7 @@ export class Village {
     if (moving && this.playerCharacter) this.playerCharacter.actions.get("walk")?.setEffectiveTimeScale(distance / (1.4 * dt));
     for (const [id, actor] of this.actors) this.animate(actor.character, !this.enabled && this.talking === id ? "talk" : "idle");
     const nearby = this.enabled && this.ready && !this.portrait && !this.talking ? this.findNearby(this.nearby) : null;
-    if (nearby !== this.nearby) { this.nearby = nearby; if (nearby) this.nearbyMarker.scale.setScalar(this.targetRingScale(nearby)); this.onNearbyChange(nearby ? { id: nearby, available: true, examine: this.props.has(nearby) } : null); }
+    if (nearby !== this.nearby) { this.nearby = nearby; if (nearby) this.nearbyMarker.scale.setScalar(this.targetRingScale(nearby)); this.onNearbyChange(nearby ? { id: nearby, available: true, examine: this.props.has(nearby) && !this.mokaView?.activeTargetIds.includes(nearby) } : null); }
     this.nearbyMarker.visible = !!nearby;
     if (nearby) { const target = this.target(nearby)!; this.nearbyMarker.position.set(target.x, .04, target.z); }
     this.tapTime = Math.max(0, this.tapTime - dt); this.tapMarker.visible = this.tapTime > 0;
