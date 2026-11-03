@@ -60,10 +60,6 @@
     "festival": "Festival night",
     "gate": "The Gate of Memory"
   },
-  "reaction": {
-    "empathy": ["Right? I feel the same.", "Yeah, that sounds good to me."],
-    "thinking": ["Huh, I never thought of it that way...", "Hm, I can see that too."]
-  },
   "next": "Next",
   "pathBlocked": "You can't get there from here.",
   "localExperience": "Local experience: this progress is not saved on the server.",

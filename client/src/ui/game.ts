@@ -11,7 +11,7 @@ import { lumiView } from "../core/lumi-errand";
 import { echoView } from "../core/echo-errand";
 import { orView } from "../core/or-errand";
 import { residentBoard, residentCommand, type Resident } from "./residents-errands";
-import { contentVersionMatches, type Command, type PlaySnapshot } from "../core/play";
+import { contentVersionMatches, type Command, type PlaySnapshot, type EndingNPC, type ConfessionReason } from "../core/play";
 import { createPlay, loadCurrentPlay, recoverPending, sendCommand, PlayApiError, ResponseValidationError, type CommandResult } from "../net/plays";
 import { clearPending, loadPending } from "../net/pending";
 import { confirmedCommand } from "./moka-errand";
@@ -22,7 +22,7 @@ import { openingSequence, validName } from "./opening";
 declare const __CONTENT_VERSION__: string;
 
 type Lang = "ko" | "en";
-type Save = { lang: Lang; playId: string; log: Input["log"]; completed: string[]; segment: string; festivalCompanion?: "lumi" | "moka" | "echo" | "or" };
+type Save = { lang: Lang; playId: string; log: Input["log"]; completed: string[]; segment: string; festivalCompanion?: EndingNPC; confession?: { npcId: EndingNPC; reason: ConfessionReason; outcome: "accepted" | "waiting" } };
 type Item = typeof data.items[number] | typeof data.tiebreakers[number];
 const ids = ["lumi", "moka", "echo", "or"];
 const quests = ["s1j2", "v1j2", "t1p2", "s2j2"];
@@ -43,6 +43,8 @@ export class Game {
   private hubActive = false;
   private lastWorldSegment = "";
   private playerName = "";
+  private demiRevealed = false;
+  private reloadDialogue: (() => void) | null = null;
   private episodeLimit = 6;
   private largeText = false;
   private controls: Controls;
@@ -86,7 +88,7 @@ export class Game {
     const close = () => { this.settingsMenu.hidden = true; this.overlay.inert = false; if (this.exploring) { this.controls.setActive(true, this.state.lang); this.village.setEnabled(true); } this.settingsButton.focus(); };
     if (confirm) { add(this.ui.hud.restart, () => { close(); this.restart(); }); add(this.ui.hud.cancel, () => this.settings()); }
     else {
-      add(`${this.ui.hud.language}: ${this.state.lang === "ko" ? "한국어" : "English"}`, () => { this.state.lang = this.state.lang === "ko" ? "en" : "ko"; this.save(); this.updateHud(); this.settings(); });
+      add(`${this.ui.hud.language}: ${this.state.lang === "ko" ? "한국어" : "English"}`, () => { this.state.lang = this.state.lang === "ko" ? "en" : "ko"; this.save(); this.updateHud(); this.reloadDialogue?.(); this.settings(); });
       add(`${this.ui.hud.largeText}: ${this.largeText ? this.ui.hud.on : this.ui.hud.off}`, () => { this.setTextSize(!this.largeText); this.settings(); });
       add(this.ui.hud.restart, () => this.settings(true)); add(this.ui.hud.close, close);
     }
@@ -121,7 +123,7 @@ export class Game {
     requestAnimationFrame(this.updateDirection);
   };
   private panel(text: string, buttons: [string, () => void, string?][], kind: "dialogue" | "title" | "result" = "dialogue", speaker?: string): void {
-    this.exploring = false; this.updateHud(); this.token++; const token = this.token; this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.replaceChildren(); this.overlay.className = `overlay ${kind}`;
+    this.exploring = false; this.updateHud(); this.token++; const token = this.token; this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.replaceChildren(); if (this.overlay.dataset) delete this.overlay.dataset.scene; this.overlay.className = `overlay ${kind}`;
     const panel = document.createElement("div"); panel.className = "panel";
     const run = (action: () => void) => { if (token === this.token) { this.token++; action(); } };
     const button = (label: string, action: () => void, itemId?: string) => { const element = document.createElement("button"); element.textContent = label; if (itemId) element.dataset.itemId = itemId; else element.dataset.action = label === this.ui.next ? "next" : "select"; element.addEventListener("click", () => run(action)); return element; };
@@ -134,7 +136,7 @@ export class Game {
     }
     const match = text.match(/^([^:\n]+):\s*([\s\S]*)$/); const p = document.createElement("p"); p.textContent = match ? match[2]! : text;
     const rawSpeaker = match?.[1]?.trim() ?? speaker;
-    const speakerName = rawSpeaker === "주인공" || rawSpeaker === "You" ? this.playerName || this.ui.names.player : rawSpeaker === "데미" || rawSpeaker === "Demi" ? this.ui.names.dogUnknown : rawSpeaker;
+    const speakerName = rawSpeaker === "주인공" || rawSpeaker === "You" ? this.playerName || this.ui.names.player : rawSpeaker === "데미" || rawSpeaker === "Demi" ? this.demiRevealed ? this.ui.names.demi : this.ui.names.dogUnknown : rawSpeaker;
     const residentNames = Object.values(this.ui.npc), questNames = Object.values(this.ui.questNpc);
     const residentIndex = speakerName ? Math.max(residentNames.indexOf(speakerName), "ABCD".split("").indexOf(speakerName)) : -1;
     const questIndex = speakerName ? Math.max(questNames.indexOf(speakerName), quests.indexOf(speakerName)) : -1;
@@ -198,14 +200,14 @@ export class Game {
   private title(): void {
     this.worldApi.focusSpeaker?.(null); this.state.segment = "title";
     const buttons: [string, () => void][] = [[this.ui.title.language, () => { this.state.lang = this.state.lang === "ko" ? "en" : "ko"; this.title(); }], [this.ui.title.start, () => void this.startServer()]];
-    buttons.push([this.ui.localExperience, () => { this.local = true; this.snapshot = null; this.clearViews(); this.state = { lang: this.state.lang, playId: this.newId(), log: [], completed: [], segment: "prologue" }; this.resumed = false; this.lastWorldSegment = ""; this.playerName = ""; this.save(); this.panel(this.ui.localExperience, [[this.ui.next, () => this.world()]]); }]);
+    buttons.push([this.ui.localExperience, () => { this.local = true; this.snapshot = null; this.clearViews(); this.state = { lang: this.state.lang, playId: this.newId(), log: [], completed: [], segment: "prologue" }; this.resumed = false; this.lastWorldSegment = ""; this.playerName = ""; this.demiRevealed = false; this.save(); this.panel(this.ui.localExperience, [[this.ui.next, () => this.world()]]); }]);
     if (this.localSave && this.localSave.segment !== "title") buttons.push([this.ui.continueLocal, () => { this.local = true; this.snapshot = null; this.clearViews(); this.state = structuredClone(this.localSave!); this.resumed = true; this.loadDisplay(); this.panel(this.ui.localExperience, [[this.ui.next, () => this.world()]]); }]);
     this.panel(`${this.ui.title.name}\n\n${this.ui.title.subtitle}`, buttons, "title");
   }
   private world(): void {
     const segment = this.state.segment;
     if (segment !== "hub") this.lastWorldSegment = segment;
-    if (segment === "result" || segment === "confession") { this.result(); return; }
+    if (segment === "result" || segment === "confession") { void this.ending(); return; }
     if (segment === "prologue") { if (!this.openingActive) void this.opening(); return; }
     if (segment === "ep_moka" && this.snapshot) { this.village.setMokaView(mokaView(this.snapshot)); this.showWorld(mokaView(this.snapshot).activeTargetIds); return; }
     if (this.snapshot && this.resident()) { this.showWorld(this.residentView(this.resident()!).activeTargetIds); return; }
@@ -222,9 +224,9 @@ export class Game {
     this.showWorld(ids.flatMap((id, index) => this.state.completed.includes(id) ? [] : ["ABCD"[index]!]));
   }
   private displayKey(): string { return `abraxas-display-${this.state.playId}`; }
-  private display(): { introSeen?: boolean; hubSeen?: boolean; name?: string } { try { return JSON.parse(localStorage.getItem(this.displayKey()) || "{}"); } catch { return {}; } }
-  private saveDisplay(value: { introSeen?: boolean; hubSeen?: boolean; name?: string }): void { try { localStorage.setItem(this.displayKey(), JSON.stringify({ ...this.display(), ...value })); } catch { /* Display state can be replayed. */ } }
-  private loadDisplay(): void { this.playerName = this.display().name ?? ""; }
+  private display(): { introSeen?: boolean; hubSeen?: boolean; name?: string; demiRevealed?: boolean } { try { return JSON.parse(localStorage.getItem(this.displayKey()) || "{}"); } catch { return {}; } }
+  private saveDisplay(value: { introSeen?: boolean; hubSeen?: boolean; name?: string; demiRevealed?: boolean }): void { try { localStorage.setItem(this.displayKey(), JSON.stringify({ ...this.display(), ...value })); } catch { /* Display state can be replayed. */ } }
+  private loadDisplay(): void { this.playerName = this.display().name ?? ""; this.demiRevealed = this.display().demiRevealed ?? false; }
   private async narrative(file: string, knot: string, choice = false): Promise<void> {
     const token = ++this.token;
     try {
@@ -233,9 +235,10 @@ export class Game {
       const { Story } = await import("inkjs");
       const story = new Story(await response.text()); story.ChoosePathString(knot);
       if (token !== this.token) return;
-      if (choice) { this.story = story; this.lastLine = ""; await new Promise<void>(resolve => { this.openingDone = resolve; this.advance(); }); return; }
+      if (choice) { this.story = story; this.lastLine = ""; await new Promise<void>(resolve => { this.openingDone = () => { this.reloadDialogue = null; resolve(); }; this.reloadDialogue = () => { void this.narrative(file, knot, true).then(resolve); }; this.advance(); }); return; }
       await new Promise<void>(resolve => {
-        const next = () => { while (story.canContinue) { const line = (story.Continue() ?? "").trim(); if (line) { this.panel(line, [[this.ui.next, next]]); return; } } resolve(); };
+        this.reloadDialogue = () => { void this.narrative(file, knot).then(resolve); };
+        const next = () => { while (story.canContinue) { const line = (story.Continue() ?? "").trim(); if (line) { if (knot === "demi_reveal" && (line.includes("‘데미’") || line.includes('"Demi."'))) { this.demiRevealed = true; this.saveDisplay({ demiRevealed: true }); } this.panel(line, [[this.ui.next, next]]); return; } } this.reloadDialogue = null; resolve(); };
         next();
       });
     } catch {
@@ -254,6 +257,7 @@ export class Game {
   }
   private async opening(): Promise<void> {
     this.openingActive = true; this.loadDisplay();
+    if (this.resumed && this.display().name === undefined) await this.nameInput();
     await openingSequence({
       prelude: async () => { if (!this.display().introSeen) { this.panel("", []); const { playPrelude } = await import("./cinematic"); const playback = playPrelude(this.overlay, this.state.lang, this.ui.cinematic); this.overlay.querySelectorAll(".cinematic button").forEach((button, index) => { (button as HTMLButtonElement).dataset.action = ["play", "mute", "skip"][index]!; }); await playback; this.saveDisplay({ introSeen: true }); } },
       scene: scene => this.village.setStoryScene(scene), mode: mode => this.village.setDemiMode(mode),
@@ -313,7 +317,7 @@ export class Game {
     await this.narrative(segment, segment === "interlude_2" ? `${segment}_outro_${lastPick}` : `${segment}_outro`);
     this.village.setDemiMode("follow"); this.finish();
   }
-  private showWorld(available: string[]): void { this.village.setDemiMode("follow"); this.worldApi.focusSpeaker?.(null); this.exploring = true; this.targets = available; this.updateHud(); this.token++; this.overlay.replaceChildren(); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
+  private showWorld(available: string[]): void { this.reloadDialogue = null; this.village.setDemiMode("follow"); this.worldApi.focusSpeaker?.(null); this.exploring = true; this.targets = available; this.updateHud(); this.token++; this.overlay.replaceChildren(); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
   private answered(segment: string): number { return data.items.filter(item => item.segment === segment && this.state.log.some(entry => entry.id === item.id)).length; }
   private interact(id: string): void {
     if (this.snapshot?.segment === "ep_moka") { this.interactMoka(id); return; }
@@ -363,6 +367,7 @@ export class Game {
       const { Story } = await import("inkjs");
       const story = new Story(await response.text()); story.ChoosePathString(knot);
       if (token !== this.token) return;
+      this.reloadDialogue = () => { void this.openMoka(); };
       this.story = story; this.lastLine = ""; this.advance();
     } catch { if (token === this.token) this.panel(translations(this.state.lang).moka.status.contentUnavailable, [[translations(this.state.lang).moka.status.tryAgain, () => void this.openMoka()]]); }
   }
@@ -374,7 +379,8 @@ export class Game {
       const { Story } = await import("inkjs");
       const story = new Story(await response.text()); story.ChoosePathString(knot);
       if (token !== this.token) return;
-      const next = () => { while (story.canContinue) { const line = (story.Continue() ?? "").trim(); if (line) { this.panel(line, [[this.ui.next, next]]); return; } } after(); };
+      this.reloadDialogue = () => { void this.mokaNarrative(knot, after); };
+      const next = () => { while (story.canContinue) { const line = (story.Continue() ?? "").trim(); if (line) { this.panel(line, [[this.ui.next, next]]); return; } } this.reloadDialogue = null; after(); };
       next();
     } catch { if (token === this.token) this.panel(translations(this.state.lang).moka.status.contentUnavailable, [[translations(this.state.lang).moka.status.tryAgain, () => void this.mokaNarrative(knot, after)]]); }
   }
@@ -389,8 +395,9 @@ export class Game {
       const { Story } = await import("inkjs");
       const story = new Story(await response.text()); story.ChoosePathString(knot);
       if (token !== this.token) return;
+      this.reloadDialogue = () => { void this.residentNarrative(npc, knot, after, choice); };
       if (choice) { this.story = story; this.lastLine = ""; this.advance(); return; }
-      const next = () => { while (story.canContinue) { const line = (story.Continue() ?? "").trim(); if (line) { this.panel(line, [[this.ui.next, next]]); return; } } after(); };
+      const next = () => { while (story.canContinue) { const line = (story.Continue() ?? "").trim(); if (line) { this.panel(line, [[this.ui.next, next]]); return; } } this.reloadDialogue = null; after(); };
       next();
     } catch { if (token === this.token) { const status = translations(this.state.lang).residents[npc].status; this.panel(status.contentUnavailable, [[status.tryAgain, () => void this.residentNarrative(npc, knot, after, choice)]]); } }
   }
@@ -478,9 +485,10 @@ export class Game {
   }
   private choose(item: Item, pick: string, proceed = () => {}): void {
     const showReaction = (kind: "empathy" | "thinking") => {
+      this.reloadDialogue = () => showReaction(kind);
       const reaction = translations(this.state.lang).dialogue.reactions[item.id]!;
       const name = reaction.speaker === "player" ? this.ui.names.player : this.ui.npc[reaction.speaker as keyof typeof this.ui.npc];
-      this.panel(`${name}: ${reaction[kind]}`, [[this.ui.next, () => this.state.segment.startsWith("ep_") && this.snapshot ? this.world() : this.advance()]]);
+      this.panel(`${name}: ${reaction[kind]}`, [[this.ui.next, () => { this.reloadDialogue = null; this.state.segment.startsWith("ep_") && this.snapshot ? this.world() : this.advance(); }]]);
     };
     if (this.snapshot) {
       if (pick !== "a" && pick !== "b") return;
@@ -492,8 +500,62 @@ export class Game {
     this.state = next; this.localSave = next; proceed(); showReaction(match ? "empathy" : "thinking");
   }
   private finish(): void { if (this.snapshot) { void this.command({ kind: "finish_segment" }, () => this.world()); return; } const segment = this.state.segment; if (segment.startsWith("ep_") && !this.state.completed.includes(segment.slice(3))) this.state.completed.push(segment.slice(3)); this.state.segment = nextSegment(segment, this.state.completed.length); this.save(); this.world(); }
-  private result(): void {
-    const result = score({ ...this.state, completedErrands: this.snapshot?.completedEpisodes }, data); const axes = ["A", "B", "C", "D"] as const; const lines = axes.map((axis, i) => this.ui.result.poles[axis][result.type[i] === "OHVG"[i] ? "plus" : "minus"]);
-    this.panel([this.ui.result.title, this.ui.result.modifier[result.modifier], ...lines, this.ui.result.disclaimer].join("\n\n"), [[this.ui.result.restart, () => this.restart()]], "result");
+  private selectEnding<T extends string>(prompt: string, values: readonly T[], label: (value: T) => string, action: string): Promise<T> {
+    return new Promise(resolve => {
+      this.panel(prompt, values.map(value => [label(value), () => resolve(value), `${action}-${value}`]));
+      this.overlay.querySelectorAll<HTMLElement>(`[data-item-id^='${action}-']`).forEach(button => { button.dataset.action = button.dataset.itemId; delete button.dataset.itemId; });
+    });
+  }
+  private async ending(): Promise<void> {
+    this.village.setStoryScene("confession"); this.village.setDemiMode("sit");
+    if (!this.demiRevealed) await this.narrative("confession", "demi_reveal");
+    let confession = this.snapshot?.confession ?? this.state.confession;
+    if (!confession) {
+      await this.narrative("confession", "confession_intro");
+      const npcId = await this.selectEnding(this.ui.confession.targetPrompt, ["lumi", "moka", "echo", "or"] as const, npc => this.ui.npc[npc], "confess-target");
+      const reason = await this.selectEnding(this.ui.confession.reasonPrompt, ["similar", "drawn", "both", "unsure"] as const, value => this.ui.confession.reason[value], "confess-reason");
+      await this.narrative("confession", "confession_send");
+      if (this.snapshot) {
+        confession = await new Promise(resolve => { void this.command({ kind: "confess", npcId, reason }, result => resolve(result.snapshot.confession!)); });
+      } else {
+        const local = score({ ...this.state, completedErrands: this.state.completed }, data);
+        const affinity = local.npcs[npcId]!.affinity + (this.state.festivalCompanion === npcId ? data.rules.festivalAffinityGain : 0);
+        confession = { npcId, reason, outcome: affinity >= data.rules.confessionThreshold ? "accepted" : "waiting" };
+        this.state.confession = confession; this.state.segment = "result"; this.save();
+      }
+    }
+    if (!confession) return;
+    await this.narrative("confession", `confession_${confession.npcId}_${confession.outcome}`);
+    this.panel("", []); const egg = document.createElement("div"); egg.className = "ending-egg"; egg.setAttribute("aria-hidden", "true"); egg.append(document.createElement("span"), document.createElement("span")); this.overlay.append(egg);
+    await new Promise<void>(resolve => window.setTimeout(resolve, matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 900));
+    await this.narrative("ending", "ending_shell");
+    await this.narrative("ending", "ending_cards");
+    this.result(0);
+  }
+  private result(card = 0): void {
+    const confession = this.snapshot?.confession ?? this.state.confession;
+    if (!confession) return;
+    const local = this.snapshot ? null : score({ ...this.state, completedErrands: this.state.completed }, data);
+    const result = this.snapshot?.result ?? (local && { type: local.type, modifier: local.modifier, npcTypes: Object.fromEntries(ids.map(id => [id, (["A", "B", "C", "D"] as const).map((axis, i) => ["OI", "HL", "VK", "GC"][i]![local.npcs[id]!.s[axis] >= 0 ? 0 : 1]).join("")])) as Record<EndingNPC, string> });
+    if (!result) return;
+    const axes = ["A", "B", "C", "D"] as const;
+    const lines = axes.map((axis, i) => this.ui.result.poles[axis][result.type[i] === "OHVG"[i] ? "plus" : "minus"]);
+    const other = axes.map((axis, i) => this.ui.result.poles[axis][result.npcTypes[confession.npcId][i] === "OHVG"[i] ? "plus" : "minus"]);
+    const shared = other.filter((_, i) => result.type[i] === result.npcTypes[confession.npcId][i]);
+    const different = other.filter((_, i) => result.type[i] !== result.npcTypes[confession.npcId][i]);
+    const tasks = this.state.lang === "ko" ? ["루미와 축제 준비", "모카와 빵 나누기", "에코와 책 정리", "오르와 종 고치기"] : ["Preparing the festival with Lumi", "Sharing bread with Moka", "Organizing books with Echo", "Repairing the bell with Or"];
+    const copy = card === 0 ? [this.ui.result.title, ...(this.snapshot ? [this.ui.result.first] : []), this.ui.result.modifier[result.modifier as keyof typeof this.ui.result.modifier], ...lines, this.ui.result.disclaimer] : card === 1 ? [this.ui.npc[confession.npcId], ...(shared.length ? [this.state.lang === "ko" ? "닮은 점" : "In common", ...shared] : []), ...(different.length ? [this.state.lang === "ko" ? "다른 점" : "Differences", ...different] : []), this.ui.result.reflection[confession.reason]] : [this.ui.result.cards.village, ...tasks, this.ui.festival.companion[(this.snapshot?.festivalCompanion ?? this.state.festivalCompanion)!]];
+    const buttons: [string, () => void, string?][] = [];
+    if (card < 2) buttons.push([this.ui.next, () => this.result(card + 1), "result-next"]);
+    else buttons.push([this.ui.result.continueEnding, () => void this.finalWalk(), "result-continue"]);
+    if (typeof navigator.share === "function") buttons.push([this.ui.hud.share, () => { void navigator.share({ text: copy.join("\n") }).catch(() => {}); this.result(card); }, "result-share"]);
+    buttons.push([this.ui.result.restart, () => this.restart(), "result-restart"]);
+    this.panel([this.ui.result.cards[(["self", "other", "village"] as const)[card]!], ...copy].join("\n\n"), buttons);
+    this.overlay.querySelectorAll<HTMLElement>("[data-item-id^='result-']").forEach(button => { button.dataset.action = button.dataset.itemId; delete button.dataset.itemId; });
+  }
+  private async finalWalk(): Promise<void> {
+    this.village.setStoryScene("ending"); this.village.setDemiMode("ending");
+    await this.narrative("ending", "ending_walk");
+    this.panel("", [[this.ui.result.restart, () => this.restart()]]); this.overlay.dataset.scene = "ending-done";
   }
 }

@@ -57,10 +57,6 @@
     "triangle": "Triangle loop",
     "square": "Square loop"
   },
-  "reaction": {
-    "empathy": "I see. I think so too.",
-    "thinking": "Hmm, that's another way to look at it."
-  },
   "puzzle": {
     "hint": "Hint",
     "auto": "Finish automatically",
