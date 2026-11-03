@@ -556,6 +556,6 @@ export class Game {
   private async finalWalk(): Promise<void> {
     this.village.setStoryScene("ending"); this.village.setDemiMode("ending");
     await this.narrative("ending", "ending_walk");
-    this.panel("", [[this.ui.result.restart, () => this.restart()]]); this.overlay.dataset.scene = "ending-done";
+    this.panel(this.ui.result.disclaimer, [[this.ui.result.restart, () => this.restart()]]); this.overlay.dataset.scene = "ending-done";
   }
 }
