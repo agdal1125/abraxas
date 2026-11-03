@@ -307,7 +307,7 @@ func TestPlayHTTP(t *testing.T) {
 	if bad.Code != 400 {
 		t.Fatal(bad.Code, bad.Body)
 	}
-	for _, body := range []string{`{"expectedRevision":0,"command":{"kind":"finish_segment"},"uid":"two"}`, `{"expectedRevision":null,"command":{"kind":"finish_segment"}}`, `{"expectedRevision":1.5,"command":{"kind":"finish_segment"}}`, `{"expectedRevision":0,"command":{"kind":"finish_segment","targetId":"B"}}`, `{"expectedRevision":0,"command":{"kind":"choice","itemId":null,"pick":"a"}}`} {
+	for _, body := range []string{`{"expectedRevision":0,"command":{"kind":"finish_segment"},"uid":"two"}`, `{"expectedRevision":null,"command":{"kind":"finish_segment"}}`, `{"expectedRevision":1.5,"command":{"kind":"finish_segment"}}`, `{"expectedRevision":0,"command":{"kind":"finish_segment","targetId":"B"}}`, `{"expectedRevision":0,"command":{"kind":"choice","itemId":null,"pick":"a"}}`, `{"expectedRevision":0,"command":{"kind":"confess","npcId":"moka","reason":"invalid"}}`, `{"expectedRevision":0,"command":{"kind":"confess","npcId":"moka","reason":"both","outcome":"accepted"}}`, `{"expectedRevision":0,"command":{"kind":"festival_companion","npcId":"lumi","result":{}}}`} {
 		got := request("POST", path+"/commands", "one", "00000000-0000-4000-8000-000000000002", body)
 		if got.Code != 400 {
 			t.Fatalf("%s: %d %s", body, got.Code, got.Body)

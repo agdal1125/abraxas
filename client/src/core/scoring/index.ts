@@ -4,7 +4,7 @@ const axes = ["A", "B", "C", "D", "E"] as const;
 type Axis = typeof axes[number];
 type Scores = Record<Axis, number>;
 type Item = { id: string; axis: Axis; npc?: string | null; picks: Record<string, { w: Partial<Scores> }> };
-type Rules = { scoreLimit: number; tieThreshold: number; npcStep: number; affinityStart: number; affinityGain: number; errandAffinityGain: number; affinityMin: number; affinityMax: number };
+type Rules = { scoreLimit: number; tieThreshold: number; npcStep: number; affinityStart: number; affinityGain: number; errandAffinityGain: number; affinityMin: number; affinityMax: number; festivalAffinityGain: number; confessionThreshold: number };
 export type Data = { items: Item[]; tiebreakers: Item[]; npcs: { id: string; start: Scores }[]; rules: Rules };
 export type Input = { playId: string; log: { id: string; pick: string }[]; completedErrands?: string[] };
 

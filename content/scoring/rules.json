@@ -6,5 +6,7 @@
   "affinityGain": 12,
   "errandAffinityGain": 8,
   "affinityMin": 0,
-  "affinityMax": 100
+  "affinityMax": 100,
+  "festivalAffinityGain": 10,
+  "confessionThreshold": 60
 }
