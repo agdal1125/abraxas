@@ -22,7 +22,7 @@ import { openingSequence, validName } from "./opening";
 declare const __CONTENT_VERSION__: string;
 
 type Lang = "ko" | "en";
-type Save = { lang: Lang; playId: string; log: Input["log"]; completed: string[]; segment: string };
+type Save = { lang: Lang; playId: string; log: Input["log"]; completed: string[]; segment: string; festivalCompanion?: "lumi" | "moka" | "echo" | "or" };
 type Item = typeof data.items[number] | typeof data.tiebreakers[number];
 const ids = ["lumi", "moka", "echo", "or"];
 const quests = ["s1j2", "v1j2", "t1p2", "s2j2"];
@@ -205,13 +205,13 @@ export class Game {
   private world(): void {
     const segment = this.state.segment;
     if (segment !== "hub") this.lastWorldSegment = segment;
-    if (segment === "result") { this.result(); return; }
+    if (segment === "result" || segment === "confession") { this.result(); return; }
     if (segment === "prologue") { if (!this.openingActive) void this.opening(); return; }
     if (segment === "ep_moka" && this.snapshot) { this.village.setMokaView(mokaView(this.snapshot)); this.showWorld(mokaView(this.snapshot).activeTargetIds); return; }
     if (this.snapshot && this.resident()) { this.showWorld(this.residentView(this.resident()!).activeTargetIds); return; }
     if (segment.startsWith("ep_")) {
       const index = ids.indexOf(segment.slice(3)); const stage = episodeStage(this.answered(segment));
-      if (stage === "done") { this.finish(); return; }
+      if (stage === "done") { this.village.setDemiMode("follow"); this.finish(); return; }
       this.showWorld([stage === "quest" ? quests[index]! : "ABCD"[index]!]); return;
     }
     if (segment.startsWith("interlude_")) { this.showWorld(["lake"]); return; }
@@ -274,7 +274,46 @@ export class Game {
     await this.narrative("hub", seen ? "hub_return" : "hub_intro");
     this.saveDisplay({ hubSeen: true }); this.hubActive = false; this.world();
   }
-  private showWorld(available: string[]): void { this.worldApi.focusSpeaker?.(null); this.exploring = true; this.targets = available; this.updateHud(); this.token++; this.overlay.replaceChildren(); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
+  private async question(file: string, knot: string, id: string): Promise<void> {
+    while (!this.state.log.some(answer => answer.id === id)) {
+      await this.narrative(file, knot, true);
+      if (!this.state.log.some(answer => answer.id === id)) await new Promise<void>(resolve => { const status = translations(this.state.lang).moka.status; this.panel(status.contentUnavailable, [[status.tryAgain, resolve]]); });
+    }
+  }
+  private companion(): Promise<NonNullable<Save["festivalCompanion"]>> {
+    return new Promise(resolve => {
+      const npcs = ["lumi", "moka", "echo", "or"] as const;
+      this.panel("", npcs.map(npc => [this.ui.festival.companion[npc], () => {
+        if (this.snapshot) void this.command({ kind: "festival_companion", npcId: npc }, () => resolve(npc));
+        else {
+          const next = { ...this.state, festivalCompanion: npc };
+          try { localStorage.setItem(storageKey, JSON.stringify(next)); } catch { const status = translations(this.state.lang).moka.status; this.panel(status.retry, [[status.reconnect, () => { void this.companion().then(resolve); }]]); return; }
+          this.state = next; this.localSave = next; resolve(npc);
+        }
+      }, `companion-${npc}`]));
+      this.overlay.querySelectorAll<HTMLElement>("[data-item-id^='companion-']").forEach(button => { button.dataset.action = button.dataset.itemId; delete button.dataset.itemId; });
+    });
+  }
+  private async lateScene(): Promise<void> {
+    const segment = this.state.segment;
+    this.village.setStoryScene(segment.startsWith("interlude_") ? "interlude" : segment === "festival" ? "festival" : "gate");
+    this.village.setDemiMode(segment === "gate" ? "gate" : "sit");
+    await this.narrative(segment, `${segment}_intro`);
+    const items = segment === "gate" ? data.tiebreakers : data.items.filter(item => item.segment === segment);
+    for (const item of items) {
+      if (segment === "festival" && item.id === "festival_05") await this.narrative(segment, "festival_lights");
+      await this.question(segment, item.id, item.id);
+    }
+    if (segment === "festival") {
+      await this.narrative(segment, "festival_companion_intro");
+      const npc = this.snapshot?.festivalCompanion ?? this.state.festivalCompanion ?? await this.companion();
+      await this.narrative(segment, `festival_companion_${npc}`);
+    }
+    const lastPick = this.state.log.find(answer => answer.id === "interlude_2_02")?.pick;
+    await this.narrative(segment, segment === "interlude_2" ? `${segment}_outro_${lastPick}` : `${segment}_outro`);
+    this.village.setDemiMode("follow"); this.finish();
+  }
+  private showWorld(available: string[]): void { this.village.setDemiMode("follow"); this.worldApi.focusSpeaker?.(null); this.exploring = true; this.targets = available; this.updateHud(); this.token++; this.overlay.replaceChildren(); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
   private answered(segment: string): number { return data.items.filter(item => item.segment === segment && this.state.log.some(entry => entry.id === item.id)).length; }
   private interact(id: string): void {
     if (this.snapshot?.segment === "ep_moka") { this.interactMoka(id); return; }
@@ -291,15 +330,23 @@ export class Game {
     const segment = this.state.segment;
     if (segment === "hub") { const index = "ABCD".indexOf(id); if (index >= 0 && !this.state.completed.includes(ids[index]!)) { const npcId = ids[index]!; if (this.snapshot) void this.command({ kind: "open_episode", npcId }, () => { if (npcId === "moka") void this.openMoka(); else this.world(); }); else void this.open(`ep_${npcId}`); return; } }
     else if (segment.startsWith("ep_")) { const index = ids.indexOf(segment.slice(3)); const stage = episodeStage(this.answered(segment)); if (id === (stage === "quest" ? quests[index] : "ABCD"[index])) { void this.open(segment); return; } }
-    else if ((segment.startsWith("interlude_") && id === "lake") || (segment === "festival" && id === "plaza") || (segment === "gate" && id === "gate")) { void this.open(segment); return; }
+    else if ((segment.startsWith("interlude_") && id === "lake") || (segment === "festival" && id === "plaza") || (segment === "gate" && id === "gate")) { void this.lateScene(); return; }
     const idle = (this.ui as typeof this.ui & { idle?: Record<string, string> }).idle?.[id];
     this.panel(idle ?? (this.state.lang === "ko" ? "지금은 다른 곳을 살펴보자." : "Let's look somewhere else for now."), [[this.ui.next, () => this.world()]], "dialogue", id);
   }
   private async open(segment: string): Promise<void> {
+    if (segment.startsWith("ep_") && !this.snapshot) {
+      this.state.segment = segment; this.save(); this.village.setDemiMode("sit");
+      const answered = this.answered(segment), limit = answered < 3 ? 3 : answered < 5 ? 5 : 6;
+      const npc = segment.slice(3), mokaKnots = ["moka_meet", "moka_reservation", "moka_choose_display", "moka_share", "moka_order", "moka_feedback"];
+      const items = data.items.filter(item => item.segment === segment);
+      for (let i = answered; i < limit; i++) await this.question(segment, npc === "moka" ? mokaKnots[i]! : `${npc}_choose_0${i + 1}`, items[i]!.id);
+      this.world(); return;
+    }
     const continuing = segment === this.state.segment && this.story !== null;
     this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.state.segment = segment; this.save(); if (!continuing) { this.story = null; this.lastLine = ""; } const token = ++this.token;
     const answered = this.answered(segment); this.episodeLimit = answered < 3 ? 3 : answered < 5 ? 5 : 6;
-    if (!continuing && !this.resumed && (segment === "prologue" || (segment === "ep_lumi" && this.answered(segment) === 0))) {
+    if (!continuing && !this.resumed && segment === "prologue") {
       try { const response = await fetch(`./ink/${this.state.lang}/${segment}.json`); if (!response.ok) throw new Error("ink_unavailable"); const { Story } = await import("inkjs"); const content = await response.text(); if (token !== this.token) return; this.story = new Story(content); } catch { if (token === this.token) this.panel(translations(this.state.lang).moka.status.contentUnavailable, [[translations(this.state.lang).moka.status.tryAgain, () => void this.open(segment)]]); return; }
     }
     if (token !== this.token) return; this.resumed = false; this.advance();
@@ -309,7 +356,7 @@ export class Game {
     const knots: Partial<Record<PlaySnapshot["moka"]["phase"], string>> = { choose_route: "moka_meet", reservation: "moka_reservation", choose_display: "moka_choose_display", share: "moka_share", order: "moka_order", feedback: "moka_feedback" };
     const knot = knots[this.snapshot.moka.phase];
     if (!knot) { this.world(); return; }
-    const token = ++this.token;
+    this.village.setDemiMode("sit"); const token = ++this.token;
     try {
       const response = await fetch(`./ink/${this.state.lang}/ep_moka.json`);
       if (!response.ok) throw new Error("ink_unavailable");
@@ -334,6 +381,7 @@ export class Game {
   private resident(): Resident | null { const id = this.state.segment.slice(3); return this.state.segment.startsWith("ep_") && (id === "lumi" || id === "echo" || id === "or") ? id : null; }
   private residentView(npc: Resident) { return npc === "lumi" ? lumiView(this.snapshot!) : npc === "echo" ? echoView(this.snapshot!) : orView(this.snapshot!); }
   private async residentNarrative(npc: Resident, knot: string, after: () => void, choice = false): Promise<void> {
+    if (choice) this.village.setDemiMode("sit");
     const token = ++this.token;
     try {
       const response = await fetch(`./ink/${this.state.lang}/ep_${npc}.json`);
@@ -413,15 +461,15 @@ export class Game {
   }
   private advance(): void {
     const segment = this.state.segment;
-    if (!this.snapshot && segment.startsWith("ep_") && segment !== "ep_moka" && this.episodeLimit < 6 && this.answered(segment) >= this.episodeLimit) { this.world(); return; }
+    if (!this.openingDone && !this.snapshot && segment.startsWith("ep_") && segment !== "ep_moka" && this.episodeLimit < 6 && this.answered(segment) >= this.episodeLimit) { this.world(); return; }
     if (this.story) {
       try {
         while (this.story.canContinue) { const line = (this.story.Continue() ?? "").trim(); if (line) { this.lastLine = line; this.panel(line, [[this.ui.next, () => this.advance()]]); return; } }
-        if (this.story.currentChoices.length) { const choices = this.story.currentChoices; this.panel(this.lastLine, choices.map(choice => [choice.text, () => { const id = choice.tags?.find(tag => tag.startsWith("item:"))?.slice(5).trim(); const pick = choice.tags?.find(tag => tag.startsWith("pick:"))?.slice(5).trim(); const item = data.items.find(candidate => candidate.id === id && candidate.segment === segment); if ((id || pick) && (!item || !pick || !item.picks[pick] || this.state.log.some(entry => entry.id === id))) { this.story = null; this.advance(); return; } const proceed = () => { try { this.story?.ChooseChoiceIndex(choice.index); } catch { this.story = null; } }; if (item && pick) this.choose(item, pick, proceed); else { proceed(); this.advance(); } }, choice.tags?.find(tag => tag.startsWith("item:"))?.slice(5).trim()])); return; }
+        if (this.story.currentChoices.length) { const choices = this.story.currentChoices; this.panel(this.lastLine, choices.map(choice => [choice.text, () => { const id = choice.tags?.find(tag => tag.startsWith("item:"))?.slice(5).trim(); const pick = choice.tags?.find(tag => tag.startsWith("pick:"))?.slice(5).trim(); const item = (segment === "gate" ? data.tiebreakers : data.items.filter(candidate => candidate.segment === segment)).find(candidate => candidate.id === id); if ((id || pick) && (!item || !pick || !item.picks[pick] || this.state.log.some(entry => entry.id === id))) { this.story = null; this.advance(); return; } const proceed = () => { try { this.story?.ChooseChoiceIndex(choice.index); } catch { this.story = null; } }; if (item && pick) this.choose(item, pick, proceed); else { proceed(); this.advance(); } }, choice.tags?.find(tag => tag.startsWith("item:"))?.slice(5).trim()])); return; }
       } catch { /* Continue with remaining questions. */ }
       this.story = null;
     }
-    if (segment === "prologue" && this.openingDone) { const done = this.openingDone; this.openingDone = null; done(); return; }
+    if (this.openingDone) { const done = this.openingDone; this.openingDone = null; done(); return; }
     if (segment.startsWith("ep_") && this.snapshot) { this.world(); return; }
     const items = segment === "gate" ? data.tiebreakers : data.items.filter(item => item.segment === segment);
     const item = items.find(candidate => !this.state.log.some(entry => entry.id === candidate.id));
