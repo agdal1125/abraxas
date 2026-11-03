@@ -41,14 +41,16 @@ type item struct {
 	} `json:"picks"`
 }
 type rules struct {
-	ScoreLimit         int `json:"scoreLimit"`
-	TieThreshold       int `json:"tieThreshold"`
-	NPCStep            int `json:"npcStep"`
-	AffinityStart      int `json:"affinityStart"`
-	AffinityGain       int `json:"affinityGain"`
-	ErrandAffinityGain int `json:"errandAffinityGain"`
-	AffinityMin        int `json:"affinityMin"`
-	AffinityMax        int `json:"affinityMax"`
+	ScoreLimit           int `json:"scoreLimit"`
+	TieThreshold         int `json:"tieThreshold"`
+	NPCStep              int `json:"npcStep"`
+	AffinityStart        int `json:"affinityStart"`
+	AffinityGain         int `json:"affinityGain"`
+	ErrandAffinityGain   int `json:"errandAffinityGain"`
+	AffinityMin          int `json:"affinityMin"`
+	AffinityMax          int `json:"affinityMax"`
+	FestivalAffinityGain int `json:"festivalAffinityGain"`
+	ConfessionThreshold  int `json:"confessionThreshold"`
 }
 type Data struct {
 	Items       []item `json:"items"`

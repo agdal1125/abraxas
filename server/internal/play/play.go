@@ -42,6 +42,9 @@ type Snapshot struct {
 	Echo              ResidentState    `json:"echo"`
 	Or                ResidentState    `json:"or"`
 	EpisodeEnd        *EpisodeEnd      `json:"episodeEnd,omitempty"`
+	FestivalCompanion *string          `json:"festivalCompanion"`
+	Confession        *Confession      `json:"confession"`
+	Result            *EndingResult    `json:"result"`
 }
 type Command struct {
 	Kind     string `json:"kind"`
@@ -52,6 +55,7 @@ type Command struct {
 	BreadID  string `json:"breadId,omitempty"`
 	PieceID  string `json:"pieceId,omitempty"`
 	SlotID   string `json:"slotId,omitempty"`
+	Reason   string `json:"reason,omitempty"`
 }
 type Receipt struct {
 	Key             string  `json:"key"`
@@ -68,6 +72,7 @@ type Doc struct {
 	CompletedErrands []string
 	Events           map[string]bool
 	Receipts         map[string]StoredReceipt
+	FirstResult      *EndingResult
 }
 
 func NewDoc(snapshot Snapshot) Doc {
@@ -407,14 +412,21 @@ func (e *Engine) Apply(doc *Doc, cmd Command, completedAt string) (*string, erro
 			case s.Segment == "prologue" || strings.HasPrefix(s.Segment, "interlude_"):
 				s.Segment = "hub"
 			case s.Segment == "festival":
+				if s.FestivalCompanion == nil {
+					return nil, ErrTransition
+				}
 				s.Segment = "gate"
 			case s.Segment == "gate":
 				if _, err := e.data.Score(scoring.Input{PlayID: s.PlayID, Log: s.Answers, CompletedErrands: next.CompletedErrands}); err != nil {
 					return nil, err
 				}
-				s.Segment = "result"
+				s.Segment = "confession"
 			default:
 				return nil, ErrTransition
+			}
+		case "festival_companion", "confess":
+			if err := e.ending(&next, cmd); err != nil {
+				return nil, err
 			}
 		default:
 			return nil, ErrTransition

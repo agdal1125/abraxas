@@ -124,6 +124,9 @@ func TestAllEpisodeOrders(t *testing.T) {
 				for _, item := range engine.segmentItems(doc.Snapshot.Segment) {
 					apply(Command{Kind: "choice", ItemID: item.ID, Pick: "a"})
 				}
+				if doc.Snapshot.Segment == "festival" {
+					apply(Command{Kind: "festival_companion", NPCID: "lumi"})
+				}
 				apply(Command{Kind: "finish_segment"})
 			}
 			finish()
@@ -144,6 +147,7 @@ func TestAllEpisodeOrders(t *testing.T) {
 			}
 			finish()
 			finish()
+			apply(Command{Kind: "confess", NPCID: "moka", Reason: "both"})
 			if doc.Snapshot.Segment != "result" || len(doc.Snapshot.Answers) != 42 {
 				t.Fatalf("result: %+v", doc.Snapshot)
 			}

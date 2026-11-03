@@ -235,7 +235,7 @@ func parseCommand(body map[string]json.RawMessage) (commandRequest, error) {
 	if err := json.Unmarshal(fields["kind"], &kind); err != nil {
 		return out, err
 	}
-	required := map[string][]string{"open_episode": {"npcId"}, "choice": {"itemId", "pick"}, "pickup": {"targetId"}, "set_down": {"targetId"}, "deliver": {"targetId"}, "act": {"targetId"}, "talk": {"targetId"}, "complete": {"targetId"}, "place": {"breadId", "slotId"}, "place_piece": {"pieceId", "slotId"}, "auto_arrange": {}, "finish_segment": {}}
+	required := map[string][]string{"festival_companion": {"npcId"}, "confess": {"npcId", "reason"}, "open_episode": {"npcId"}, "choice": {"itemId", "pick"}, "pickup": {"targetId"}, "set_down": {"targetId"}, "deliver": {"targetId"}, "act": {"targetId"}, "talk": {"targetId"}, "complete": {"targetId"}, "place": {"breadId", "slotId"}, "place_piece": {"pieceId", "slotId"}, "auto_arrange": {}, "finish_segment": {}}
 	want, ok := required[kind]
 	if !ok || len(fields) != len(want)+1 {
 		return out, errors.New("kind")
@@ -248,6 +248,9 @@ func parseCommand(body map[string]json.RawMessage) (commandRequest, error) {
 		}
 		if key == "pick" && value != "a" && value != "b" {
 			return out, errors.New("pick")
+		}
+		if key == "reason" && value != "similar" && value != "drawn" && value != "both" && value != "unsure" {
+			return out, errors.New("reason")
 		}
 	}
 	if err := json.Unmarshal(body["command"], &out.Command); err != nil {
@@ -306,6 +309,12 @@ func (h *playHandler) command(w http.ResponseWriter, r *http.Request) {
 			if npc != "" && d.Events[npc+"-errand-completed"] {
 				duplicate = true
 			}
+		}
+		if req.Command.Kind == "festival_companion" && d.Snapshot.FestivalCompanion != nil && *d.Snapshot.FestivalCompanion == req.Command.NPCID {
+			duplicate = true
+		}
+		if req.Command.Kind == "confess" && d.Snapshot.Confession != nil && d.Snapshot.Confession.NPCID == req.Command.NPCID && d.Snapshot.Confession.Reason == req.Command.Reason {
+			duplicate = true
 		}
 		if duplicate {
 			for _, old := range d.Receipts {
