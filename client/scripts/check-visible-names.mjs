@@ -25,7 +25,7 @@ function strings(value, path = "") {
 }
 const speakers = {
   ko: new Set(["주인공", "우체부", "???", "데미", "루미", "모카", "에코", "오르", "주민", "무대지기", "시식 안내인", "책 정리인", "낚시꾼", "상인", "공방 조수"]),
-  en: new Set(["You", "Mail Carrier", "???", "Demi", "Lumi", "Moka", "Echo", "Or", "Neighbor", "Stagehand", "Tasting Guide", "Book Keeper", "Fisher", "Merchant", "Workshop Apprentice"]),
+  en: new Set(["You", "Mail Carrier", "???", "Demi", "Lumi", "Moka", "Echo", "Or", "Neighbor", "Villager", "Stagehand", "Tasting Guide", "Book Keeper", "Fisher", "Angler", "Merchant", "Workshop Apprentice"]),
 };
 const broken = (text, unknown = false) => /\uFFFD|[\u1100-\u11ff]|\?{2,}/u.test(unknown ? text.replaceAll('???', '') : text);
 assert.ok(broken('??') && broken('\uFFFD') && broken('???') && !broken('???', true));

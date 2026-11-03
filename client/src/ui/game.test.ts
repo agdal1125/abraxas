@@ -5,6 +5,23 @@ import fixture from "../../../content/quests/fixtures/lumi-errand.json";
 import type { PlaySnapshot } from "../core/play";
 declare const __CONTENT_VERSION__: string;
 import { Compiler } from "inkjs/full";
+import { data, translations } from "../content";
+
+test("a confirmed non-NPC choice shows its thinking reaction", () => {
+  const item = data.items.find(candidate => candidate.id === "prologue_01")!;
+  const panel = vi.fn();
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko", segment: "prologue", log: [] }, snapshot: {}, panel, command: (_command: unknown, after: (result: unknown) => void) => after({ receipt: { reaction: null } }) });
+  game.choose(item, "a");
+  expect(panel.mock.calls[0]![0]).toContain(translations("ko").dialogue.reactions.prologue_01!.thinking);
+});
+
+test("a local choice is not confirmed when storage fails", () => {
+  vi.stubGlobal("localStorage", { setItem: () => { throw new Error("storage unavailable"); } });
+  const item = data.items.find(candidate => candidate.id === "prologue_01")!;
+  const panel = vi.fn(), proceed = vi.fn();
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko", segment: "prologue", log: [] }, snapshot: null, panel });
+  try { game.choose(item, "a", proceed); expect(game.state.log).toEqual([]); expect(proceed).not.toHaveBeenCalled(); expect(panel).toHaveBeenCalledOnce(); } finally { vi.unstubAllGlobals(); }
+});
 
 test("an invalid command response shows one error without a retry action", async () => {
   const data = new Map<string, string>();

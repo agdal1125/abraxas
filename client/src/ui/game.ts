@@ -362,13 +362,19 @@ export class Game {
     this.finish();
   }
   private choose(item: Item, pick: string, proceed = () => {}): void {
+    const showReaction = (kind: "empathy" | "thinking") => {
+      const reaction = translations(this.state.lang).dialogue.reactions[item.id]!;
+      const name = reaction.speaker === "player" ? this.ui.names.player : this.ui.npc[reaction.speaker as keyof typeof this.ui.npc];
+      this.panel(`${name}: ${reaction[kind]}`, [[this.ui.next, () => this.state.segment.startsWith("ep_") && this.snapshot ? this.world() : this.advance()]]);
+    };
     if (this.snapshot) {
       if (pick !== "a" && pick !== "b") return;
-      void this.command({ kind: "choice", itemId: item.id, pick }, result => { proceed(); const reaction = result.receipt.reaction, npc = this.resident(); if (reaction && item.npc) { const text = npc ? translations(this.state.lang).residents[npc].reaction[reaction] : this.state.segment === "ep_moka" ? translations(this.state.lang).moka.reaction[reaction] : this.ui.reaction[reaction][0]; this.panel(`${this.ui.npc[item.npc as keyof typeof this.ui.npc]}: ${text}`, [[this.ui.next, () => this.state.segment.startsWith("ep_") ? this.world() : this.advance()]]); } else if (this.state.segment.startsWith("ep_")) this.world(); else this.advance(); }); return;
+      void this.command({ kind: "choice", itemId: item.id, pick }, result => { proceed(); showReaction(item.npc ? result.receipt.reaction ?? "thinking" : "thinking"); }); return;
     }
-    proceed();
-    const entry = { id: item.id, pick }; const match = item.npc ? npcMatches(this.state, data, entry) : false; this.state.log.push(entry); this.save();
-    if (item.npc) { const name = this.ui.npc[item.npc as keyof typeof this.ui.npc]; this.panel(`${name}: ${this.ui.reaction[match ? "empathy" : "thinking"][0]}`, [[this.ui.next, () => this.advance()]]); } else this.advance();
+    const entry = { id: item.id, pick }; const match = item.npc ? npcMatches(this.state, data, entry) : false;
+    const next = { ...this.state, log: [...this.state.log, entry] };
+    try { localStorage.setItem(storageKey, JSON.stringify(next)); } catch { const status = translations(this.state.lang).moka.status; this.panel(status.retry, [[status.reconnect, () => this.choose(item, pick, proceed)]]); return; }
+    this.state = next; this.localSave = next; proceed(); showReaction(match ? "empathy" : "thinking");
   }
   private finish(): void { if (this.snapshot) { void this.command({ kind: "finish_segment" }, () => this.world()); return; } const segment = this.state.segment; if (segment.startsWith("ep_") && !this.state.completed.includes(segment.slice(3))) this.state.completed.push(segment.slice(3)); this.state.segment = nextSegment(segment, this.state.completed.length); this.save(); this.world(); }
   private result(): void {
