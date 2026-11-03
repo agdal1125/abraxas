@@ -1,0 +1,214 @@
+{
+  "reactions": {
+    "prologue_01": {
+      "speaker": "player",
+      "empathy": "Either way gives me a look around.",
+      "thinking": "What kind of day awaits me in this village?"
+    },
+    "prologue_02": {
+      "speaker": "player",
+      "empathy": "Any path my feet choose is fine.",
+      "thinking": "What will I find down this road?"
+    },
+    "prologue_03": {
+      "speaker": "player",
+      "empathy": "I'll follow whatever catches my eye.",
+      "thinking": "How will today's journey unfold?"
+    },
+    "lumi_01": {
+      "speaker": "lumi",
+      "empathy": "Yes! That spot will be wonderful!",
+      "thinking": "Oh, I wonder what stories will bloom there!"
+    },
+    "lumi_02": {
+      "speaker": "lumi",
+      "empathy": "Wow! I can't wait to see that stage!",
+      "thinking": "What will that performance look like!"
+    },
+    "lumi_03": {
+      "speaker": "lumi",
+      "empathy": "Yes! Let's get the word out like that!",
+      "thinking": "Aha! Who will hear it first!"
+    },
+    "lumi_04": {
+      "speaker": "lumi",
+      "empathy": "Great! That will make lovely decorations!",
+      "thinking": "Wow, what kind of garland will come together!"
+    },
+    "lumi_05": {
+      "speaker": "lumi",
+      "empathy": "Yes! Let's give everyone a warm welcome!",
+      "thinking": "Oh, what faces will we see today!"
+    },
+    "lumi_06": {
+      "speaker": "lumi",
+      "empathy": "Nice! Let's listen together!",
+      "thinking": "Wow, I'm already curious about the opening note!"
+    },
+    "interlude_1_01": {
+      "speaker": "player",
+      "empathy": "Keeping a note like this feels good.",
+      "thinking": "What will I remember when I open this page again?"
+    },
+    "interlude_1_02": {
+      "speaker": "player",
+      "empathy": "That scene caught my eye.",
+      "thinking": "Ah, looking at it that way brings something new."
+    },
+    "moka_01": {
+      "speaker": "moka",
+      "empathy": "Yes, let's take that path.",
+      "thinking": "I wonder what the path looks like right now."
+    },
+    "moka_02": {
+      "speaker": "moka",
+      "empathy": "Sure, let's look through it together.",
+      "thinking": "Ah, that is a thoughtful way to look at it."
+    },
+    "moka_03": {
+      "speaker": "moka",
+      "empathy": "Yes, the bread will fit right in.",
+      "thinking": "Ah, I wonder how the display will turn out."
+    },
+    "moka_04": {
+      "speaker": "moka",
+      "empathy": "Yes, let's share every warm bite.",
+      "thinking": "Ah, I wonder who will enjoy these slices."
+    },
+    "moka_05": {
+      "speaker": "moka",
+      "empathy": "Yes, let's knead just that much.",
+      "thinking": "Ah, what rich aroma will fill the oven today."
+    },
+    "moka_06": {
+      "speaker": "moka",
+      "empathy": "Thank you, your words warm my heart.",
+      "thinking": "Ah, you see that kind of story in the cookies too."
+    },
+    "interlude_2_01": {
+      "speaker": "player",
+      "empathy": "This quiet moment belongs to me.",
+      "thinking": "Even a small pause has so many sides to it."
+    },
+    "interlude_2_02": {
+      "speaker": "player",
+      "empathy": "Handling it like this works too.",
+      "thinking": "There was a story hidden in this box after all."
+    },
+    "echo_01": {
+      "speaker": "echo",
+      "empathy": "Yes, that note is worth sending along.",
+      "thinking": "Those words will become part of this book's story."
+    },
+    "echo_02": {
+      "speaker": "echo",
+      "empathy": "Good, let's check that section first.",
+      "thinking": "I wonder what records await us there."
+    },
+    "echo_03": {
+      "speaker": "echo",
+      "empathy": "Yes, that shelf holds a meaning of its own.",
+      "thinking": "I wonder how the notebook will be read there."
+    },
+    "echo_04": {
+      "speaker": "echo",
+      "empathy": "Good, that arrangement works nicely.",
+      "thinking": "I wonder which book will catch someone's eye."
+    },
+    "echo_05": {
+      "speaker": "echo",
+      "empathy": "Yes, that passage stays with you.",
+      "thinking": "I would like to read that scene once more."
+    },
+    "echo_06": {
+      "speaker": "echo",
+      "empathy": "Good, let's present it that way.",
+      "thinking": "I wonder what the next reader will discover."
+    },
+    "interlude_3_01": {
+      "speaker": "player",
+      "empathy": "That moment comes back to me.",
+      "thinking": "There was a feeling like that in that moment too."
+    },
+    "interlude_3_02": {
+      "speaker": "player",
+      "empathy": "Finding this marble is nice.",
+      "thinking": "Even a small marble carries a story."
+    },
+    "or_01": {
+      "speaker": "or",
+      "empathy": "Good. Let's try it.",
+      "thinking": "Let's see how the fire turns out."
+    },
+    "or_02": {
+      "speaker": "or",
+      "empathy": "Good. Go ahead.",
+      "thinking": "Curious what you will find out there."
+    },
+    "or_03": {
+      "speaker": "or",
+      "empathy": "Good. Let's hang it.",
+      "thinking": "Let's see how the bell chimes."
+    },
+    "or_04": {
+      "speaker": "or",
+      "empathy": "Good. Let's look it over.",
+      "thinking": "Let's see what that way reveals."
+    },
+    "or_05": {
+      "speaker": "or",
+      "empathy": "Good. Let's work on it.",
+      "thinking": "Let's see how the hook turns out."
+    },
+    "or_06": {
+      "speaker": "or",
+      "empathy": "Good. Let's do that.",
+      "thinking": "Let's see what sounds fill that hour."
+    },
+    "festival_01": {
+      "speaker": "lumi",
+      "empathy": "Yes! That would be wonderful!",
+      "thinking": "Oh, what a story could begin there!"
+    },
+    "festival_02": {
+      "speaker": "echo",
+      "empathy": "Yes, that way carries meaning too.",
+      "thinking": "I wonder what story will follow on that stage."
+    },
+    "festival_03": {
+      "speaker": "moka",
+      "empathy": "Yes, that will be a cozy sight.",
+      "thinking": "Ah, I wonder whose faces that light will touch."
+    },
+    "festival_04": {
+      "speaker": "or",
+      "empathy": "Good. Let's try it.",
+      "thinking": "Let's see how far the light reaches."
+    },
+    "festival_05": {
+      "speaker": "player",
+      "empathy": "So it is that kind of night.",
+      "thinking": "So many different sights under the same night sky."
+    },
+    "gate_a": {
+      "speaker": "player",
+      "empathy": "That scenery is part of my day too.",
+      "thinking": "There was a feeling like that in that scenery."
+    },
+    "gate_b": {
+      "speaker": "player",
+      "empathy": "It is fine to hold that dear.",
+      "thinking": "That moment can be looked at from here as well."
+    },
+    "gate_c": {
+      "speaker": "player",
+      "empathy": "That path stayed with me too.",
+      "thinking": "I wonder what sights await along that path."
+    },
+    "gate_d": {
+      "speaker": "player",
+      "empathy": "My steps brought me this far.",
+      "thinking": "There was such meaning in each step I took."
+    }
+  }
+}

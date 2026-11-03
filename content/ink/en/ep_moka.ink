@@ -1,90 +1,91 @@
 -> END
 
 === moka_meet ===
-Moka: This walnut bread just came out of the oven. Could you take it to the workshop up the hill?
-Moka: Here's the basket. When you get back, let's arrange the display together.
+Moka: Freshly baked walnut bread! Could you take it to the workshop?
+Moka: I checked the basket. Which path will you take?
 * [Run up the steep shortcut to deliver it warm # item:moka_01 # pick:a]
+-> END
 * [Take the gentler path to keep it from getting crushed # item:moka_01 # pick:b]
--
 -> END
 
 === moka_pick_up ===
-The basket of walnut bread is waiting outside the bakery.
+The walnut bread basket sits outside the bakery.
 -> END
 
 === moka_deliver ===
-Take the basket of walnut bread to the stand outside the smithy.
+Deliver the basket to the stand outside the forge.
 -> END
 
 === moka_delivered ===
-Tasting Guide: You're from the bakery. I've been waiting for you.
-Tasting Guide: Thank you. I was getting hungry at work, so you've come at just the right time.
+Tasting Guide: From the bakery? I was waiting for this!
+Tasting Guide: Thanks! Just in time for a break.
 -> END
 
 === moka_reservation ===
-A regular has come for bread they ordered yesterday, but the ledger lists a different kind.
+A regular came for bread they ordered.
+The ledger lists a different kind of loaf.
 Moka: What should we do?
 * [Check the order with them # item:moka_02 # pick:a]
+-> END
 * [Reassure them and give them the bread they asked for # item:moka_02 # pick:b]
--
 -> END
 
 === moka_reservation_action ===
-Follow through by checking the ledger or giving the customer their bread.
+Check the ledger or hand the bread to the customer.
 -> END
 
 === moka_choose_display ===
-Moka: Welcome back! Shall we put these breads on display now?
-Stacking them high makes them easy to see, but they could fall.
+Moka: Would you help with the display? How should we arrange it?
 * [Stack one layer safely # item:moka_03 # pick:a]
+-> END
 * [Try a taller three-layer display # item:moka_03 # pick:b]
--
 -> END
 
 === moka_arrange ===
-Moka: Take your time. If it's confusing, we can look together.
-Choose a bread, then choose a place with the same shape.
+Moka: Take your time.
+Pick a pastry, then place it on the matching shape.
 -> END
 
 === moka_share ===
-Moka: That's everything. Thanks to your help, we're ready for our customers.
-Some tasting bread is left. A tasting guide and a tired neighbor are nearby.
-Moka: How should we share the bread that's left?
+Moka: The display is all set. Thank you.
+Moka: How should we share what is left?
 * [Offer it first to a tired neighbor # item:moka_04 # pick:a]
+-> END
 * [Cut equal portions for everyone # item:moka_04 # pick:b]
--
 -> END
 
 === moka_share_action ===
-Follow through by giving the neighbor bread or putting it on the plate.
+Hand the bread to the neighbor or plate the slices.
 -> END
 
 === moka_order ===
-Moka: How many special pies should we prepare for tonight's festival?
+Moka: Time to bake evening pies. How much should we make?
 * [Bake extra for a possible rush # item:moka_05 # pick:a]
+-> END
 * [Bake the reserved amount to avoid waste # item:moka_05 # pick:b]
--
 -> END
 
 === moka_order_action ===
-Pick up the dough preparation bundle for the amount you chose.
+Collect the dough bundle for the chosen quantity.
 -> END
 
 === moka_return ===
-The dough is ready to prepare. Return to Moka at the bakery.
+The dough is ready. Return to Moka at the bakery.
 -> END
 
 === moka_feedback ===
-Moka: The flower cookies I practiced came out a little crooked. What do you think?
+Moka: These blossom cookies tilted slightly in the oven.
+Moka: How do they look to you?
 * [Point out what may have caused the tilt # item:moka_06 # pick:a]
+-> END
 * [Praise the care and delicious aroma # item:moka_06 # pick:b]
--
 -> END
 
 === moka_report ===
-Finish talking with Moka about the errand.
+Finish wrapping up the errand with Moka.
 -> END
 
 === moka_completed ===
-Moka: Thank you for helping. The bakery feels a little warmer today because of you.
+Moka: Thank you for helping.
+Moka: The bakery feels so much warmer now.
 -> END

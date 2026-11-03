@@ -1,55 +1,51 @@
-VAR local_story = false
-~ local_story = true
 -> lumi_choose_01
 
 === lumi_choose_01 ===
-Lumi: Hi! I'm Lumi. I'm helping organize the festival.
-You: Hi. My memory's hazy. I'm not even sure where I am.
-Lumi: You can't remember? That must feel strange. If you'd like, we could get ready for the festival together.
-Lumi points to the ribbons and flowers in the tent.
+Lumi: Hi! We're getting ready for the festival!
+Lumi: Wow! You look just like a fluffy white cloud!
+Lumi: There's a spot for you too. Where shall we work together?
 * [Tie ribbons quietly at a table # item:lumi_01 # pick:a]
+-> END
 * [Join the group weaving flower garlands # item:lumi_01 # pick:b]
--
-{ local_story: -> lumi_choose_02 }
 -> END
 
 === lumi_choose_02 ===
-Lumi lays out two ideas for the stage.
+Lumi: Let's check the show cards too! Which should we put on?
 * [Put on a new colorful shadow play # item:lumi_02 # pick:a]
+-> END
 * [Continue the traditional lantern play # item:lumi_02 # pick:b]
--
-{ local_story: -> lumi_choose_03 }
 -> END
 
 === lumi_choose_03 ===
-Lumi: We need to spread the festival's start time. Here are the notices and the horn.
+Lumi: The notices are blowing away in the wind!
+Lumi: Got them! How should we spread the word?
 * [Tell villagers in the market streets # item:lumi_03 # pick:a]
+-> END
 * [Post notices on boards and mailboxes # item:lumi_03 # pick:b]
--
-{ local_story: -> lumi_choose_04 }
 -> END
 
 === lumi_choose_04 ===
-One garland is missing from a stage post. Choose materials with Lumi.
+Lumi: We're short one garland for the stage!
+Lumi: What kind of material should we go find?
 * [Fetch familiar ribbons from storage # item:lumi_04 # pick:a]
+-> END
 * [Weave something new from leaves and pinecones # item:lumi_04 # pick:b]
--
-{ local_story: -> lumi_choose_05 }
 -> END
 
 === lumi_choose_05 ===
-Lumi: The guests will be here soon. How should we welcome them?
+Lumi: I hear footsteps already! Time to greet our guests!
+Lumi: Where should we welcome the guests?
 * [Hand out welcome cards by the entrance # item:lumi_05 # pick:a]
+-> END
 * [Call out greetings from the square # item:lumi_05 # pick:b]
--
-{ local_story: -> lumi_choose_06 }
 -> END
 
 === lumi_choose_06 ===
-The musicians lay out two scores for the opening march.
+Lumi: The musicians have laid out their scores!
+Lumi: Which song should we open with?
 * [Start with their lively new song # item:lumi_06 # pick:a]
+-> END
 * [Start with the village’s familiar old march # item:lumi_06 # pick:b]
--
 -> END
 
 === lumi_table ===
@@ -73,11 +69,11 @@ Share the festival news at the second stop.
 -> END
 
 === lumi_notice_first_a ===
-Neighbor: Thanks for telling me. I'll come when it starts.
+Villager: Thanks for telling me. I'll come when it starts.
 -> END
 
 === lumi_notice_second_a ===
-Neighbor: Festival news! I'll remember.
+Villager: Festival news! I'll remember.
 -> END
 
 === lumi_notice_first_b ===
@@ -129,5 +125,5 @@ Tell Lumi the preparations are finished.
 -> END
 
 === lumi_completed ===
-Lumi: Thank you for helping. Take a rest, and I'll see you at the festival.
+Lumi: Thank you for helping! I'll see you at the festival!
 -> END

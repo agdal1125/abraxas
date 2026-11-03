@@ -8,6 +8,46 @@
   "hub": {
     "prompt": "Who will you visit next?"
   },
+  "names": {
+    "player": "You",
+    "postman": "Mail Carrier",
+    "dogUnknown": "???",
+    "demi": "Demi",
+    "village": "Dori Village"
+  },
+  "nameInput": {
+    "prompt": "What name should I call you by?",
+    "label": "Name",
+    "confirm": "Confirm",
+    "skip": "Skip",
+    "error": "Please enter a valid name (1-12 characters)."
+  },
+  "cinematic": {
+    "play": "Play",
+    "pause": "Pause",
+    "skip": "Skip",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "fallback": "You wake up in the meadow. A small white dog is by your side."
+  },
+  "festival": {
+    "companion": {
+      "lumi": "Walk with Lumi",
+      "moka": "Walk with Moka",
+      "echo": "Walk with Echo",
+      "or": "Walk with Or"
+    }
+  },
+  "confession": {
+    "targetPrompt": "Choose who to share your feelings with.",
+    "reasonPrompt": "Why were you drawn to them?",
+    "reason": {
+      "similar": "Because they are like me",
+      "drawn": "Because they are different and intriguing",
+      "both": "Both for our similarities and differences",
+      "unsure": "Not sure, but drawn all the same"
+    }
+  },
   "npc": {
     "lumi": "Lumi",
     "moka": "Moka",
@@ -32,6 +72,19 @@
   "finishErrand": "Finish the errand",
   "result": {
     "title": "Who you are beyond the shell",
+    "cards": {
+      "self": "You",
+      "other": "The other",
+      "village": "Village"
+    },
+    "reflection": {
+      "similar": "In what ways do we mirror each other?",
+      "drawn": "What did we learn from our differences?",
+      "both": "How do our similarities and differences blend?",
+      "unsure": "What remains at the end of being drawn in?"
+    },
+    "first": "First Self",
+    "continueEnding": "To the final scene",
     "poles": {
       "A": { "plus": "Recharged by being around people", "minus": "Recharged by time alone" },
       "B": { "plus": "Checks the heart first", "minus": "Checks the facts first" },
