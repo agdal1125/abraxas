@@ -16,6 +16,7 @@ import type { lumiView } from "../core/lumi-errand";
 import type { echoView } from "../core/echo-errand";
 import type { orView } from "../core/or-errand";
 import quest from "../../../content/quests/moka-errand.json";
+import { Demi, whitenPlayer, type DemiMode } from "./demi";
 
 type Placement = Vec2 & { asset: string; rot?: number; scale?: number; zone?: string };
 type MapData = { spawn: Vec2; terrain: Placement; bounds: Bounds; zones: Record<string, Vec2>; actors: (Placement & { id: string })[]; props: (Placement & { id: string })[] };
@@ -38,6 +39,10 @@ export class Village {
   private propObjects = new Map<string, THREE.Object3D>();
   private characters: Character[] = [];
   private player = new THREE.Group();
+  private demi = new Demi(map.spawn);
+  private demiMode: DemiMode = "hidden";
+  private demiPath?: { path: Vec2[]; target: Vec2; best: number; stalled: number };
+  private postman = new THREE.Group();
   private cameraTarget = new THREE.Vector3();
   private viewHalfHeight = 1.55;
   private cameraHalfHeight = 1.55;
@@ -91,7 +96,12 @@ export class Village {
     this.effects = new DreamEffects(this.scene, map.props, map.zones.lake);
     const loading: Promise<unknown>[] = [this.ground()];
     this.scene.add(this.nearbyMarker, this.tapMarker, this.destinationMarker);
-    this.player.position.set(map.spawn.x, 0, map.spawn.z); this.cameraTarget.copy(this.player.position); this.scene.add(this.player);
+    this.player.position.set(map.spawn.x, 0, map.spawn.z); this.cameraTarget.copy(this.player.position); this.scene.add(this.player, this.demi.object, this.postman);
+    this.postman.visible = false;
+    this.postman.position.set(map.spawn.x - .8, 0, map.spawn.z - .8);
+    const bag = new THREE.Mesh(new THREE.BoxGeometry(.16, .18, .08), new THREE.MeshStandardMaterial({ color: "#c99470", roughness: 1 }));
+    bag.position.set(.18, .24, 0); this.postman.add(bag);
+    loading.push(this.character("quest-npc", this.postman));
     loading.push(this.character("player", this.player).then(character => { this.playerCharacter = character; }));
     for (const prop of map.props) {
       if (/^(moka|lumi|echo|or)-/.test(prop.id)) continue;
@@ -142,6 +152,20 @@ export class Village {
     if (!document.hidden) this.frame = requestAnimationFrame(() => this.tick());
   }
   setEnabled(value: boolean): void { this.enabled = value; if (value) { this.talking = undefined; this.speaker = null; } else { this.auto = undefined; this.input = { x: 0, z: 0 }; this.nearby = null; this.onNearbyChange(null); } }
+  setDemiMode(mode: DemiMode): void {
+    if (mode === this.demiMode) return;
+    if (mode === "follow") this.demi.reset(this.player.position);
+    this.demiMode = mode; this.demi.setMode(mode, this.player.position); this.demiPath = undefined;
+    if (mode === "lead" || mode === "ending") {
+      const target = { x: this.player.position.x - 1.5, z: this.player.position.z - 1.5 };
+      const path = findPath(this.demi.object.position, target, this.colliders, map.bounds);
+      if (path?.length) this.demiPath = { path, target, best: Infinity, stalled: 0 };
+    }
+  }
+  setStoryScene(scene: "entrance" | "hub" | "interlude" | "festival" | "gate" | "confession" | "ending"): void {
+    this.postman.visible = scene === "entrance";
+    this.positionResidents();
+  }
   focusSpeaker(id: string | null): void { this.speaker = id && this.target(id) ? id : null; }
   targetScreenPos(id: string): { x: number; y: number; onScreen: boolean } | null {
     const target = this.target(id); if (!target) return null;
@@ -287,7 +311,7 @@ export class Village {
     const path = findPath(this.player.position, target, this.colliders, map.bounds, point => this.visible(id, position, point));
     if (!path) { this.onPathBlocked(); return; }
     const destination = path.at(-1) ?? this.player.position;
-    this.player.position.set(destination.x, 0, destination.z); this.cameraTarget.copy(this.player.position);
+    this.player.position.set(destination.x, 0, destination.z); this.cameraTarget.copy(this.player.position); this.demi?.reset(this.player.position);
   }
   async resumeLumi(): Promise<void> { await this.resumeResident("lumi"); }
   async resumeEcho(): Promise<void> { await this.resumeResident("echo"); }
@@ -308,6 +332,7 @@ export class Village {
     if (!path) return false;
     const destination = path.at(-1) ?? this.player.position;
     this.player.position.set(destination.x, 0, destination.z);
+    this.demi?.reset(this.player.position);
     this.cameraTarget.copy(this.player.position);
     return true;
   }
@@ -439,6 +464,7 @@ export class Village {
   }
   private async character(key: string, parent: THREE.Group): Promise<Character> {
     const gltf = await this.load(key); const object = clone(gltf.scene); object.scale.setScalar(manifest[key]!.scale); parent.add(object);
+    if (key === "player") whitenPlayer(object);
     object.traverse(child => { if (child instanceof THREE.Mesh) { child.castShadow = true; child.receiveShadow = true; } });
     const canvas = document.createElement("canvas"); canvas.width = canvas.height = 64; const ctx = canvas.getContext("2d")!;
     const gradient = ctx.createRadialGradient(32, 32, 2, 32, 32, 32); gradient.addColorStop(0, "rgba(55,38,42,.26)"); gradient.addColorStop(1, "rgba(55,38,42,0)");
@@ -526,6 +552,15 @@ export class Village {
       if (moving) { this.player.rotation.y = Math.atan2(dx, dz); this.player.position.set(next.x, 0, next.z); }
     }
     this.animate(this.playerCharacter, moving ? "walk" : "idle");
+    this.demi.update(this.player.position, dt);
+    if (this.demiPath && Math.hypot(this.player.position.x - this.demi.object.position.x, this.player.position.z - this.demi.object.position.z) < 1.5) {
+      const result = followPath({ position: this.demi.object.position, ...this.demiPath, status: "walking" }, this.demiPath.target, this.colliders, map.bounds, dt);
+      const dx = result.position.x - this.demi.object.position.x, dz = result.position.z - this.demi.object.position.z;
+      this.demi.object.position.set(result.position.x, 0, result.position.z);
+      if (dx || dz) this.demi.object.rotation.y = Math.atan2(dx, dz);
+      this.demiPath = result.status === "walking" ? { ...this.demiPath, path: result.path, best: result.best, stalled: result.stalled } : undefined;
+      if (!this.demiPath) this.demi.object.rotation.y = Math.atan2(this.player.position.x - result.position.x, this.player.position.z - result.position.z);
+    }
     if (moving && this.playerCharacter) this.playerCharacter.actions.get("walk")?.setEffectiveTimeScale(distance / (1.4 * dt));
     for (const [id, actor] of this.actors) this.animate(actor.character, !this.enabled && this.talking === id ? "talk" : "idle");
     const nearby = this.enabled && this.ready && !this.portrait && !this.talking ? this.findNearby(this.nearby) : null;
