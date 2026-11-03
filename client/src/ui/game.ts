@@ -17,6 +17,7 @@ import { clearPending, loadPending } from "../net/pending";
 import { confirmedCommand } from "./moka-errand";
 import quest from "../../../content/quests/moka-errand.json";
 import "./moka-errand.css";
+import { openingSequence, validName } from "./opening";
 
 declare const __CONTENT_VERSION__: string;
 
@@ -37,6 +38,11 @@ export class Game {
   private story: Story | null = null;
   private lastLine = "";
   private resumed = false;
+  private openingActive = false;
+  private openingDone: (() => void) | null = null;
+  private hubActive = false;
+  private lastWorldSegment = "";
+  private playerName = "";
   private episodeLimit = 6;
   private largeText = false;
   private controls: Controls;
@@ -114,11 +120,11 @@ export class Game {
     }
     requestAnimationFrame(this.updateDirection);
   };
-  private panel(text: string, buttons: [string, () => void][], kind: "dialogue" | "title" | "result" = "dialogue", speaker?: string): void {
+  private panel(text: string, buttons: [string, () => void, string?][], kind: "dialogue" | "title" | "result" = "dialogue", speaker?: string): void {
     this.exploring = false; this.updateHud(); this.token++; const token = this.token; this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.replaceChildren(); this.overlay.className = `overlay ${kind}`;
     const panel = document.createElement("div"); panel.className = "panel";
     const run = (action: () => void) => { if (token === this.token) { this.token++; action(); } };
-    const button = (label: string, action: () => void) => { const element = document.createElement("button"); element.textContent = label; element.addEventListener("click", () => run(action)); return element; };
+    const button = (label: string, action: () => void, itemId?: string) => { const element = document.createElement("button"); element.textContent = label; if (itemId) element.dataset.itemId = itemId; else element.dataset.action = label === this.ui.next ? "next" : "select"; element.addEventListener("click", () => run(action)); return element; };
     if (kind === "title") {
       const [name, subtitle] = text.split("\n\n"); const heading = document.createElement("h1"); heading.textContent = name ?? ""; const p = document.createElement("p"); p.textContent = subtitle ?? ""; panel.append(heading, p);
       const controls = document.createElement("div"); controls.className = "title-controls"; for (const [label, action] of [...buttons].reverse()) controls.append(button(label, action)); const size = document.createElement("button"); size.textContent = this.largeText ? "가+" : "가"; size.setAttribute("aria-label", this.state.lang === "ko" ? "글자 크기 변경" : "Change text size"); size.setAttribute("aria-pressed", String(this.largeText)); size.addEventListener("click", () => { this.largeText = !this.largeText; document.documentElement.style.setProperty("--body-size", this.largeText ? "18px" : "15px"); try { localStorage.setItem("abraxas-large-text", String(this.largeText)); } catch { /* Continue in memory if storage is unavailable. */ } size.textContent = this.largeText ? "가+" : "가"; size.setAttribute("aria-pressed", String(this.largeText)); }); controls.append(size); this.overlay.append(panel, controls); return;
@@ -127,16 +133,17 @@ export class Game {
       const [title, modifier, ...rest] = text.split("\n\n"); const intro = document.createElement("div"); intro.className = "result-intro"; const details = document.createElement("div"); details.className = "result-details"; const heading = document.createElement("h2"); heading.textContent = title ?? ""; const badge = document.createElement("span"); badge.className = "modifier"; badge.textContent = modifier ?? ""; const list = document.createElement("ul"); for (const line of rest.slice(0, 4)) { const item = document.createElement("li"); item.textContent = line; list.append(item); } const disclaimer = document.createElement("p"); disclaimer.className = "disclaimer"; disclaimer.textContent = rest[4] ?? ""; const actions = document.createElement("div"); actions.className = "result-actions"; if (typeof navigator.share === "function") actions.append(button(this.ui.hud.share, () => { void navigator.share({ text: [title, modifier, ...rest.slice(0, 4)].join("\n") }).catch(() => {}); this.result(); })); for (const [label, action] of buttons) actions.append(button(label, action)); intro.append(heading, badge); details.append(list, disclaimer, actions); panel.append(intro, details); this.overlay.append(panel); return;
     }
     const match = text.match(/^([^:\n]+):\s*([\s\S]*)$/); const p = document.createElement("p"); p.textContent = match ? match[2]! : text;
-    const speakerName = match?.[1]?.trim() ?? speaker;
+    const rawSpeaker = match?.[1]?.trim() ?? speaker;
+    const speakerName = rawSpeaker === "주인공" || rawSpeaker === "You" ? this.playerName || this.ui.names.player : rawSpeaker === "데미" || rawSpeaker === "Demi" ? this.ui.names.dogUnknown : rawSpeaker;
     const residentNames = Object.values(this.ui.npc), questNames = Object.values(this.ui.questNpc);
     const residentIndex = speakerName ? Math.max(residentNames.indexOf(speakerName), "ABCD".split("").indexOf(speakerName)) : -1;
     const questIndex = speakerName ? Math.max(questNames.indexOf(speakerName), quests.indexOf(speakerName)) : -1;
     if (residentIndex >= 0 || questIndex >= 0) this.worldApi.focusSpeaker?.(residentIndex >= 0 ? "ABCD"[residentIndex]! : quests[questIndex]!);
     if (speakerName && (match || residentIndex >= 0 || questIndex >= 0)) { const name = document.createElement("span"); name.className = "speaker"; name.textContent = residentNames[residentIndex] ?? questNames[questIndex] ?? speakerName; name.style.backgroundColor = ["var(--char-a)", "var(--char-b)", "var(--char-c)", "var(--char-d)"][residentIndex] ?? "var(--char-npc)"; if (residentIndex < 0) name.style.color = "var(--paper)"; panel.append(name); }
     panel.append(p);
-    if (buttons.length === 1 && buttons[0]![0] === this.ui.next) { panel.classList.add("continue"); panel.tabIndex = 0; panel.setAttribute("role", "button"); panel.setAttribute("aria-label", this.ui.next); panel.addEventListener("click", () => run(buttons[0]![1])); panel.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); if (!event.repeat) run(buttons[0]![1]); } }); const indicator = document.createElement("span"); indicator.className = "indicator"; indicator.textContent = "▼"; indicator.setAttribute("aria-hidden", "true"); panel.append(indicator); }
+    if (buttons.length === 1 && buttons[0]![0] === this.ui.next) { panel.classList.add("continue"); panel.dataset.action = "next"; panel.tabIndex = 0; panel.setAttribute("role", "button"); panel.setAttribute("aria-label", this.ui.next); panel.addEventListener("click", () => run(buttons[0]![1])); panel.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); if (!event.repeat) run(buttons[0]![1]); } }); const indicator = document.createElement("span"); indicator.className = "indicator"; indicator.textContent = "▼"; indicator.setAttribute("aria-hidden", "true"); panel.append(indicator); }
     this.overlay.append(panel);
-    if (!(buttons.length === 1 && buttons[0]![0] === this.ui.next)) { this.overlay.classList.add("has-choices"); const choices = document.createElement("div"); choices.className = "choices"; for (const [label, action] of buttons) choices.append(button(label, action)); this.overlay.append(choices); }
+    if (!(buttons.length === 1 && buttons[0]![0] === this.ui.next)) { this.overlay.classList.add("has-choices"); const choices = document.createElement("div"); choices.className = "choices"; for (const [label, action, itemId] of buttons) choices.append(button(label, action, itemId)); this.overlay.append(choices); }
   }
   private applySnapshot(snapshot: PlaySnapshot): boolean {
     if (!contentVersionMatches(snapshot, __CONTENT_VERSION__)) { this.panel(translations(this.state.lang).moka.status.version, []); return false; }
@@ -149,16 +156,18 @@ export class Game {
   private async startServer(key = crypto.randomUUID()): Promise<void> {
     this.panel(translations(this.state.lang).moka.status.saving, []);
     try {
-      let snapshot: PlaySnapshot;
+      let snapshot: PlaySnapshot; let created = false;
       try { snapshot = await loadCurrentPlay(); } catch (error) {
         if (!(error instanceof PlayApiError) || error.status !== 404) throw error;
-        snapshot = await createPlay(key);
+        snapshot = await createPlay(key); created = true;
       }
       this.local = false;
       if (!this.applySnapshot(snapshot)) return;
       const recovered = await recoverPending();
       if (recovered) { if (!recovered.pendingCleared) throw new Error("pending_unavailable"); if (!this.applySnapshot(recovered.snapshot)) return; snapshot = recovered.snapshot; }
-      this.resumed = snapshot.answers.length > 0;
+      this.resumed = !created || snapshot.answers.length > 0;
+      this.lastWorldSegment = "";
+      this.loadDisplay();
       if (snapshot.segment === "ep_moka") await this.village.resumeMoka();
       else if (snapshot.segment === "ep_lumi") await this.worldApi.resumeLumi();
       else if (snapshot.segment === "ep_echo") await this.worldApi.resumeEcho();
@@ -189,13 +198,15 @@ export class Game {
   private title(): void {
     this.worldApi.focusSpeaker?.(null); this.state.segment = "title";
     const buttons: [string, () => void][] = [[this.ui.title.language, () => { this.state.lang = this.state.lang === "ko" ? "en" : "ko"; this.title(); }], [this.ui.title.start, () => void this.startServer()]];
-    if (this.localSave && this.localSave.segment !== "title") buttons.push([this.ui.continueLocal, () => { this.local = true; this.snapshot = null; this.clearViews(); this.state = structuredClone(this.localSave!); this.resumed = true; this.panel(this.ui.localExperience, [[this.ui.next, () => this.world()]]); }]);
+    buttons.push([this.ui.localExperience, () => { this.local = true; this.snapshot = null; this.clearViews(); this.state = { lang: this.state.lang, playId: this.newId(), log: [], completed: [], segment: "prologue" }; this.resumed = false; this.lastWorldSegment = ""; this.playerName = ""; this.save(); this.panel(this.ui.localExperience, [[this.ui.next, () => this.world()]]); }]);
+    if (this.localSave && this.localSave.segment !== "title") buttons.push([this.ui.continueLocal, () => { this.local = true; this.snapshot = null; this.clearViews(); this.state = structuredClone(this.localSave!); this.resumed = true; this.loadDisplay(); this.panel(this.ui.localExperience, [[this.ui.next, () => this.world()]]); }]);
     this.panel(`${this.ui.title.name}\n\n${this.ui.title.subtitle}`, buttons, "title");
   }
   private world(): void {
     const segment = this.state.segment;
+    if (segment !== "hub") this.lastWorldSegment = segment;
     if (segment === "result") { this.result(); return; }
-    if (segment === "prologue") { void this.open(segment); return; }
+    if (segment === "prologue") { if (!this.openingActive) void this.opening(); return; }
     if (segment === "ep_moka" && this.snapshot) { this.village.setMokaView(mokaView(this.snapshot)); this.showWorld(mokaView(this.snapshot).activeTargetIds); return; }
     if (this.snapshot && this.resident()) { this.showWorld(this.residentView(this.resident()!).activeTargetIds); return; }
     if (segment.startsWith("ep_")) {
@@ -206,7 +217,62 @@ export class Game {
     if (segment.startsWith("interlude_")) { this.showWorld(["lake"]); return; }
     if (segment === "festival") { this.showWorld(["plaza"]); return; }
     if (segment === "gate") { this.showWorld(["gate"]); return; }
-    this.state.segment = "hub"; this.save(); this.showWorld(ids.flatMap((id, index) => this.state.completed.includes(id) ? [] : ["ABCD"[index]!]));
+    this.state.segment = "hub"; this.save();
+    if (this.lastWorldSegment !== "hub" && !this.hubActive) { this.lastWorldSegment = "hub"; this.hubActive = true; this.village.setStoryScene("hub"); void this.hub(); return; }
+    this.showWorld(ids.flatMap((id, index) => this.state.completed.includes(id) ? [] : ["ABCD"[index]!]));
+  }
+  private displayKey(): string { return `abraxas-display-${this.state.playId}`; }
+  private display(): { introSeen?: boolean; hubSeen?: boolean; name?: string } { try { return JSON.parse(localStorage.getItem(this.displayKey()) || "{}"); } catch { return {}; } }
+  private saveDisplay(value: { introSeen?: boolean; hubSeen?: boolean; name?: string }): void { try { localStorage.setItem(this.displayKey(), JSON.stringify({ ...this.display(), ...value })); } catch { /* Display state can be replayed. */ } }
+  private loadDisplay(): void { this.playerName = this.display().name ?? ""; }
+  private async narrative(file: string, knot: string, choice = false): Promise<void> {
+    const token = ++this.token;
+    try {
+      const response = await fetch(`./ink/${this.state.lang}/${file}.json`);
+      if (!response.ok) throw new Error("ink_unavailable");
+      const { Story } = await import("inkjs");
+      const story = new Story(await response.text()); story.ChoosePathString(knot);
+      if (token !== this.token) return;
+      if (choice) { this.story = story; this.lastLine = ""; await new Promise<void>(resolve => { this.openingDone = resolve; this.advance(); }); return; }
+      await new Promise<void>(resolve => {
+        const next = () => { while (story.canContinue) { const line = (story.Continue() ?? "").trim(); if (line) { this.panel(line, [[this.ui.next, next]]); return; } } resolve(); };
+        next();
+      });
+    } catch {
+      if (token === this.token) await new Promise<void>(resolve => { const status = translations(this.state.lang).moka.status; this.panel(status.contentUnavailable, [[status.tryAgain, () => { void this.narrative(file, knot, choice).then(resolve); }]]); });
+    }
+  }
+  private nameInput(): Promise<void> {
+    this.panel(this.ui.nameInput.prompt, []);
+    const panel = this.overlay.querySelector(".panel")!;
+    const form = document.createElement("form"), label = document.createElement("label"), input = document.createElement("input"), error = document.createElement("p"), confirm = document.createElement("button"), skip = document.createElement("button");
+    label.textContent = this.ui.nameInput.label; input.name = "name"; input.autocomplete = "off"; label.append(input); error.setAttribute("role", "alert"); confirm.type = "submit"; confirm.textContent = this.ui.nameInput.confirm; confirm.dataset.action = "name-confirm"; skip.type = "button"; skip.textContent = this.ui.nameInput.skip; skip.dataset.action = "name-skip"; form.append(label, error, confirm, skip); panel.append(form); input.focus();
+    return new Promise(resolve => {
+      const finish = (value: string) => { const name = validName(value); if (name === null) { error.textContent = this.ui.nameInput.error; return; } this.playerName = name; this.saveDisplay({ name }); resolve(); };
+      form.addEventListener("submit", event => { event.preventDefault(); finish(input.value); }); skip.addEventListener("click", () => finish(""));
+    });
+  }
+  private async opening(): Promise<void> {
+    this.openingActive = true; this.loadDisplay();
+    await openingSequence({
+      prelude: async () => { if (!this.display().introSeen) { this.panel("", []); const { playPrelude } = await import("./cinematic"); const playback = playPrelude(this.overlay, this.state.lang, this.ui.cinematic); this.overlay.querySelectorAll(".cinematic button").forEach((button, index) => { (button as HTMLButtonElement).dataset.action = ["play", "mute", "skip"][index]!; }); await playback; this.saveDisplay({ introSeen: true }); } },
+      scene: scene => this.village.setStoryScene(scene), mode: mode => this.village.setDemiMode(mode),
+      knot: knot => this.narrative("prologue", knot), name: () => this.nameInput(),
+      questions: async () => {
+        for (const item of data.items.filter(item => item.segment === "prologue")) {
+          while (!this.state.log.some(answer => answer.id === item.id)) {
+            await this.narrative("prologue", item.id, true);
+            if (!this.state.log.some(answer => answer.id === item.id)) await new Promise<void>(resolve => { const status = translations(this.state.lang).moka.status; this.panel(status.contentUnavailable, [[status.tryAgain, resolve]]); });
+          }
+        }
+      },
+    }, !this.resumed && this.state.log.length === 0);
+    this.openingActive = false; this.resumed = false; this.finish();
+  }
+  private async hub(): Promise<void> {
+    const seen = this.display().hubSeen;
+    await this.narrative("hub", seen ? "hub_return" : "hub_intro");
+    this.saveDisplay({ hubSeen: true }); this.hubActive = false; this.world();
   }
   private showWorld(available: string[]): void { this.worldApi.focusSpeaker?.(null); this.exploring = true; this.targets = available; this.updateHud(); this.token++; this.overlay.replaceChildren(); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
   private answered(segment: string): number { return data.items.filter(item => item.segment === segment && this.state.log.some(entry => entry.id === item.id)).length; }
@@ -351,14 +417,15 @@ export class Game {
     if (this.story) {
       try {
         while (this.story.canContinue) { const line = (this.story.Continue() ?? "").trim(); if (line) { this.lastLine = line; this.panel(line, [[this.ui.next, () => this.advance()]]); return; } }
-        if (this.story.currentChoices.length) { const choices = this.story.currentChoices; this.panel(this.lastLine, choices.map(choice => [choice.text, () => { const id = choice.tags?.find(tag => tag.startsWith("item:"))?.slice(5).trim(); const pick = choice.tags?.find(tag => tag.startsWith("pick:"))?.slice(5).trim(); const item = data.items.find(candidate => candidate.id === id && candidate.segment === segment); if ((id || pick) && (!item || !pick || !item.picks[pick] || this.state.log.some(entry => entry.id === id))) { this.story = null; this.advance(); return; } const proceed = () => { try { this.story?.ChooseChoiceIndex(choice.index); } catch { this.story = null; } }; if (item && pick) this.choose(item, pick, proceed); else { proceed(); this.advance(); } }])); return; }
+        if (this.story.currentChoices.length) { const choices = this.story.currentChoices; this.panel(this.lastLine, choices.map(choice => [choice.text, () => { const id = choice.tags?.find(tag => tag.startsWith("item:"))?.slice(5).trim(); const pick = choice.tags?.find(tag => tag.startsWith("pick:"))?.slice(5).trim(); const item = data.items.find(candidate => candidate.id === id && candidate.segment === segment); if ((id || pick) && (!item || !pick || !item.picks[pick] || this.state.log.some(entry => entry.id === id))) { this.story = null; this.advance(); return; } const proceed = () => { try { this.story?.ChooseChoiceIndex(choice.index); } catch { this.story = null; } }; if (item && pick) this.choose(item, pick, proceed); else { proceed(); this.advance(); } }, choice.tags?.find(tag => tag.startsWith("item:"))?.slice(5).trim()])); return; }
       } catch { /* Continue with remaining questions. */ }
       this.story = null;
     }
+    if (segment === "prologue" && this.openingDone) { const done = this.openingDone; this.openingDone = null; done(); return; }
     if (segment.startsWith("ep_") && this.snapshot) { this.world(); return; }
     const items = segment === "gate" ? data.tiebreakers : data.items.filter(item => item.segment === segment);
     const item = items.find(candidate => !this.state.log.some(entry => entry.id === candidate.id));
-    if (item) { const copy = translations(this.state.lang).items[item.id]; const index = ids.indexOf(segment.slice(3)); const speaker = index >= 0 && episodeStage(this.answered(segment)) === "quest" ? quests[index] : item.npc ? this.ui.npc[item.npc as keyof typeof this.ui.npc] : undefined; this.panel(copy?.situation ?? item.situation, Object.entries(item.picks).map(([pick, value]) => [copy?.picks[pick] ?? value.text, () => this.choose(item, pick)]), "dialogue", speaker); return; }
+    if (item) { const copy = translations(this.state.lang).items[item.id]; const index = ids.indexOf(segment.slice(3)); const speaker = index >= 0 && episodeStage(this.answered(segment)) === "quest" ? quests[index] : item.npc ? this.ui.npc[item.npc as keyof typeof this.ui.npc] : undefined; this.panel(copy?.situation ?? item.situation, Object.entries(item.picks).map(([pick, value]) => [copy?.picks[pick] ?? value.text, () => this.choose(item, pick), item.id]), "dialogue", speaker); return; }
     this.finish();
   }
   private choose(item: Item, pick: string, proceed = () => {}): void {
