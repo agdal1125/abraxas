@@ -5,6 +5,87 @@ import fixture from "../../../content/quests/fixtures/lumi-errand.json";
 import type { PlaySnapshot } from "../core/play";
 declare const __CONTENT_VERSION__: string;
 import { Compiler } from "inkjs/full";
+import { data, translations } from "../content";
+
+test("interlude resumes at each unanswered knot with Demi seated", async () => {
+  const events: string[] = [];
+  const game = Object.assign(Object.create(Game.prototype), { state: { segment: "interlude_1", log: [{ id: "interlude_1_01", pick: "a" }] }, village: { setStoryScene: (x: string) => events.push(x), setDemiMode: (x: string) => events.push(x) }, narrative: async (_file: string, knot: string, choice: boolean) => { events.push(knot); if (choice) game.state.log.push({ id: knot, pick: "a" }); }, finish: () => events.push("finish") });
+  await game.lateScene();
+  expect(events).toEqual(["interlude", "sit", "interlude_1_intro", "interlude_1_02", "interlude_1_outro", "follow", "finish"]);
+});
+
+test("gate asks all unanswered questions in order while Demi waits", async () => {
+  const events: string[] = [];
+  const game = Object.assign(Object.create(Game.prototype), { state: { segment: "gate", log: [] }, village: { setStoryScene: (x: string) => events.push(x), setDemiMode: (x: string) => events.push(x) }, narrative: async (_file: string, knot: string, choice: boolean) => { events.push(knot); if (choice) game.state.log.push({ id: knot, pick: "a" }); }, finish: () => events.push("finish") });
+  await game.lateScene();
+  expect(events).toEqual(["gate", "gate", "gate_intro", "gate_a", "gate_b", "gate_c", "gate_d", "gate_outro", "follow", "finish"]);
+});
+
+test("festival skips a companion command already confirmed by the server", async () => {
+  const events: string[] = [];
+  const game = Object.assign(Object.create(Game.prototype), { state: { segment: "festival", log: data.items.filter(x => x.segment === "festival").map(x => ({ id: x.id, pick: "a" })) }, snapshot: { festivalCompanion: "echo" }, village: { setStoryScene: vi.fn(), setDemiMode: vi.fn() }, narrative: async (_file: string, knot: string) => { events.push(knot); }, companion: vi.fn(), finish: vi.fn() });
+  await game.lateScene();
+  expect(game.companion).not.toHaveBeenCalled();
+  expect(events).toContain("festival_companion_echo");
+});
+
+test("a double click sends the festival companion command once", async () => {
+  const nodes: { textContent: string; dataset: Record<string, string>; listeners: Record<string, () => void> }[] = [];
+  const element = () => { const node = { textContent: "", className: "", dataset: {} as Record<string, string>, listeners: {} as Record<string, () => void>, style: {}, classList: { add: vi.fn() }, append: vi.fn(), replaceChildren: vi.fn(), setAttribute: vi.fn(), addEventListener: (name: string, action: () => void) => { node.listeners[name] = action; }, querySelectorAll: () => nodes.filter(value => value.dataset.itemId?.startsWith("companion-")) }; nodes.push(node); return node; };
+  vi.stubGlobal("document", { createElement: element });
+  const command = vi.fn((_command: unknown, after: () => void) => after());
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko" }, snapshot: {}, token: 0, overlay: element(), controls: { setActive: vi.fn() }, village: { setEnabled: vi.fn() }, updateHud: vi.fn(), command });
+  try {
+    const result = game.companion();
+    const button = nodes.find(node => node.dataset.action === "companion-lumi")!;
+    button.listeners.click!(); button.listeners.click!();
+    await expect(result).resolves.toBe("lumi");
+    expect(command).toHaveBeenCalledOnce();
+    expect(command.mock.calls[0]![0]).toEqual({ kind: "festival_companion", npcId: "lumi" });
+  } finally { vi.unstubAllGlobals(); }
+});
+
+test("a confirmed non-NPC choice shows its thinking reaction", () => {
+  const item = data.items.find(candidate => candidate.id === "prologue_01")!;
+  const panel = vi.fn();
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko", segment: "prologue", log: [] }, snapshot: {}, panel, command: (_command: unknown, after: (result: unknown) => void) => after({ receipt: { reaction: null } }) });
+  game.choose(item, "a");
+  expect(panel.mock.calls[0]![0]).toContain(translations("ko").dialogue.reactions.prologue_01!.thinking);
+});
+
+test("result cards use the server result without displaying its codes or numbers", () => {
+  const panel = vi.fn();
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko", log: [] }, snapshot: { confession: { npcId: "lumi", reason: "both", outcome: "waiting" }, result: { type: "OHVG", modifier: "today", npcTypes: { lumi: "ILKC", moka: "OHKC", echo: "ILVC", or: "ILKG" } }, festivalCompanion: "moka" }, panel, overlay: { querySelectorAll: () => [] } });
+  for (let card = 0; card < 3; card++) game.result(card);
+  for (const call of panel.mock.calls) expect(call[0]).not.toMatch(/OHVG|ILKC|\d/);
+  expect(panel.mock.calls[0]![0]).toContain(translations("ko").ui.result.first);
+  expect(panel.mock.calls[1]![0]).toContain(translations("ko").ui.result.reflection.both);
+});
+
+test("resuming before the name was saved asks for it again", async () => {
+  const nameInput = vi.fn(async () => { throw new Error("name requested"); });
+  const game = Object.assign(Object.create(Game.prototype), { resumed: true, display: () => ({}), loadDisplay: vi.fn(), nameInput });
+  await expect(game.opening()).rejects.toThrow("name requested");
+  expect(nameInput).toHaveBeenCalledOnce();
+});
+
+test.each(["accepted", "waiting"])("confession follows the server outcome %s", async outcome => {
+  const events: string[] = [];
+  const command = vi.fn((_command: unknown, after: (result: unknown) => void) => after({ snapshot: { confession: { npcId: "echo", reason: "both", outcome } } }));
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko" }, snapshot: {}, demiRevealed: true, village: { setStoryScene: vi.fn(), setDemiMode: vi.fn() }, selectEnding: vi.fn().mockResolvedValueOnce("echo").mockResolvedValueOnce("both"), command, narrative: async (_file: string, knot: string) => { events.push(knot); if (knot.startsWith("confession_echo_")) throw new Error("stop"); } });
+  await expect(game.ending()).rejects.toThrow("stop");
+  expect(command).toHaveBeenCalledOnce();
+  expect(command.mock.calls[0]![0]).toEqual({ kind: "confess", npcId: "echo", reason: "both" });
+  expect(events.at(-1)).toBe(`confession_echo_${outcome}`);
+});
+
+test("a local choice is not confirmed when storage fails", () => {
+  vi.stubGlobal("localStorage", { setItem: () => { throw new Error("storage unavailable"); } });
+  const item = data.items.find(candidate => candidate.id === "prologue_01")!;
+  const panel = vi.fn(), proceed = vi.fn();
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko", segment: "prologue", log: [] }, snapshot: null, panel });
+  try { game.choose(item, "a", proceed); expect(game.state.log).toEqual([]); expect(proceed).not.toHaveBeenCalled(); expect(panel).toHaveBeenCalledOnce(); } finally { vi.unstubAllGlobals(); }
+});
 
 test("an invalid command response shows one error without a retry action", async () => {
   const data = new Map<string, string>();
@@ -32,6 +113,17 @@ test("dialogue focuses the actor named by the speaker", () => {
   game.panel("안녕", [], "dialogue", "B");
   expect(focusSpeaker.mock.calls).toEqual([["B"], ["v1j2"], ["s1j2"], ["B"]]);
   expect(elements.filter(node => node.className === "speaker").map(node => node.textContent)).toEqual(["모카", "시식 안내인", "무대지기", "모카"]);
+});
+
+test("Demi's displayed name changes only after the reveal", () => {
+  const elements: { className: string; textContent: string }[] = [];
+  const element = () => { const node = { className: "", textContent: "", dataset: {}, style: {}, classList: { add: vi.fn() }, append: vi.fn(), replaceChildren: vi.fn(), setAttribute: vi.fn(), addEventListener: vi.fn() }; elements.push(node); return node; };
+  vi.stubGlobal("document", { createElement: element });
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko" }, overlay: element(), controls: { setActive: vi.fn() }, village: { setEnabled: vi.fn() }, updateHud: vi.fn(), token: 0, demiRevealed: false });
+  try {
+    game.panel("데미: ...", []); game.demiRevealed = true; game.panel("데미: ...", []);
+    expect(elements.filter(node => node.className === "speaker").map(node => node.textContent)).toEqual(["???", "데미"]);
+  } finally { vi.unstubAllGlobals(); }
 });
 
 test("resident interaction uses the confirmed branch and rejects inactive targets", () => {
@@ -91,7 +183,7 @@ test("resident dialogue parser failure offers a retry and resumes the selected k
   const ink = new Compiler("-> END\n=== lumi_choose_01 ===\nHello.\n-> END").Compile().ToJson() || "";
   const fetcher = vi.fn(async () => new Response(ink)); vi.stubGlobal("fetch", fetcher);
   const panel = vi.fn(), advance = vi.fn();
-  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko" }, token: 0, panel, advance });
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko" }, token: 0, panel, advance, village: { setDemiMode: vi.fn() } });
   try {
     await game.residentNarrative("lumi", "lumi_choose_01", vi.fn(), true);
     expect(panel).toHaveBeenCalledOnce(); expect(advance).not.toHaveBeenCalled();

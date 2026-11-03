@@ -65,6 +65,14 @@ test("rejects missing fields and unknown phases", async () => {
   await expect(loadCurrentPlay()).rejects.toThrow();
 });
 
+test("validates ending fields and hides results during confession", async () => {
+  const ending = { festivalCompanion: "lumi", confession: { npcId: "moka", reason: "both", outcome: "waiting" }, result: { type: "OHVG", modifier: "today", npcTypes: { lumi: "OHVG", moka: "OHKC", echo: "ILVC", or: "ILKG" } } };
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(response({ ...snapshot, ...ending, segment: "result" })).mockResolvedValueOnce(response({ ...snapshot, ...ending, segment: "confession" })).mockResolvedValueOnce(response({ ...snapshot, ...ending, confession: { ...ending.confession, outcome: "invalid" } })));
+  expect((await loadCurrentPlay()).confession?.npcId).toBe("moka");
+  await expect(loadCurrentPlay()).rejects.toThrow("invalid_response");
+  await expect(loadCurrentPlay()).rejects.toThrow("invalid_response");
+});
+
 test("rejects an invalid receipt without discarding the saved command", async () => {
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue(response({ receipt: { ...receipt, key: "other" }, snapshot: { ...snapshot, answers: [] } })));
   await expect(sendCommand("play", pending)).rejects.toThrow();

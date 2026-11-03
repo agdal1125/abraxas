@@ -1,0 +1,214 @@
+{
+  "reactions": {
+    "prologue_01": {
+      "speaker": "player",
+      "empathy": "어느 쪽이든 둘러볼 수 있어.",
+      "thinking": "이 마을에선 어떤 하루가 기다릴까?"
+    },
+    "prologue_02": {
+      "speaker": "player",
+      "empathy": "발길이 닿는 길도 괜찮아.",
+      "thinking": "이 길에서는 뭘 만나게 될까?"
+    },
+    "prologue_03": {
+      "speaker": "player",
+      "empathy": "마음 가는 대로 살펴보자.",
+      "thinking": "오늘의 풍경이 어떻게 펼쳐질까?"
+    },
+    "lumi_01": {
+      "speaker": "lumi",
+      "empathy": "응! 그 자리도 좋겠다!",
+      "thinking": "오, 거기선 어떤 이야기가 생길까!"
+    },
+    "lumi_02": {
+      "speaker": "lumi",
+      "empathy": "와! 그 무대도 기대돼!",
+      "thinking": "그 공연은 어떤 모습일까!"
+    },
+    "lumi_03": {
+      "speaker": "lumi",
+      "empathy": "응! 그렇게 알려 보자!",
+      "thinking": "아하! 누구에게 먼저 닿을까!"
+    },
+    "lumi_04": {
+      "speaker": "lumi",
+      "empathy": "좋아! 멋진 재료가 되겠다!",
+      "thinking": "와, 어떤 장식이 나올까!"
+    },
+    "lumi_05": {
+      "speaker": "lumi",
+      "empathy": "응! 반갑게 맞이하자!",
+      "thinking": "오, 어떤 얼굴들을 만나게 될까!"
+    },
+    "lumi_06": {
+      "speaker": "lumi",
+      "empathy": "좋아! 같이 귀 기울이자!",
+      "thinking": "와, 첫 음이 벌써 궁금해!"
+    },
+    "interlude_1_01": {
+      "speaker": "player",
+      "empathy": "이렇게 남겨도 좋겠다.",
+      "thinking": "다시 펼치면 뭘 떠올리게 될까?"
+    },
+    "interlude_1_02": {
+      "speaker": "player",
+      "empathy": "그 모습이 눈에 들어왔어.",
+      "thinking": "아, 그때의 모습이 새롭게 보이네."
+    },
+    "moka_01": {
+      "speaker": "moka",
+      "empathy": "응, 그 길로 전해 보자.",
+      "thinking": "그 길의 풍경도 궁금하네."
+    },
+    "moka_02": {
+      "speaker": "moka",
+      "empathy": "그래, 함께 살펴보자.",
+      "thinking": "아, 그런 마음으로도 볼 수 있구나."
+    },
+    "moka_03": {
+      "speaker": "moka",
+      "empathy": "응, 빵이 잘 어울리겠다.",
+      "thinking": "아, 빵들이 어떤 모습일지 궁금해."
+    },
+    "moka_04": {
+      "speaker": "moka",
+      "empathy": "그래, 맛있게 나누자.",
+      "thinking": "아, 그 빵을 만날 얼굴들이 궁금해."
+    },
+    "moka_05": {
+      "speaker": "moka",
+      "empathy": "응, 그만큼 반죽해 보자.",
+      "thinking": "아, 오늘 오븐에 어떤 향이 가득할까."
+    },
+    "moka_06": {
+      "speaker": "moka",
+      "empathy": "고마워, 네 말이 와닿아.",
+      "thinking": "아, 쿠키에서 그런 이야기도 보이는구나."
+    },
+    "interlude_2_01": {
+      "speaker": "player",
+      "empathy": "이 시간도 내 것이야.",
+      "thinking": "이 틈에도 여러 모습이 있구나."
+    },
+    "interlude_2_02": {
+      "speaker": "player",
+      "empathy": "이렇게 해도 괜찮아.",
+      "thinking": "상자에 이런 이야기도 숨어 있었네."
+    },
+    "echo_01": {
+      "speaker": "echo",
+      "empathy": "응, 그 말도 전할 만해.",
+      "thinking": "그런 말도 이 책의 이야기가 되겠네."
+    },
+    "echo_02": {
+      "speaker": "echo",
+      "empathy": "좋아, 그곳부터 확인하자.",
+      "thinking": "거기서 어떤 기록을 만날지 궁금해."
+    },
+    "echo_03": {
+      "speaker": "echo",
+      "empathy": "응, 그 자리에도 뜻이 있네.",
+      "thinking": "그 자리에서 수첩이 어떻게 읽힐까."
+    },
+    "echo_04": {
+      "speaker": "echo",
+      "empathy": "좋아, 그런 배열도 가능해.",
+      "thinking": "그 배열이면 어떤 책이 눈에 들어올까."
+    },
+    "echo_05": {
+      "speaker": "echo",
+      "empathy": "응, 그 대목이 마음에 남겠어.",
+      "thinking": "그 장면을 다시 읽어 보고 싶네."
+    },
+    "echo_06": {
+      "speaker": "echo",
+      "empathy": "좋아, 그 방식으로 전하자.",
+      "thinking": "다음 독자는 어떤 이야기를 만날까."
+    },
+    "interlude_3_01": {
+      "speaker": "player",
+      "empathy": "그 순간이 떠오르네.",
+      "thinking": "그 순간엔 이런 느낌도 있었구나."
+    },
+    "interlude_3_02": {
+      "speaker": "player",
+      "empathy": "이 구슬도 반갑네.",
+      "thinking": "작은 구슬에도 이야기가 생기네."
+    },
+    "or_01": {
+      "speaker": "or",
+      "empathy": "좋아. 해 보자.",
+      "thinking": "불이 어떻게 달라질지 보자."
+    },
+    "or_02": {
+      "speaker": "or",
+      "empathy": "좋아. 다녀와.",
+      "thinking": "뭘 만나고 올지 궁금하군."
+    },
+    "or_03": {
+      "speaker": "or",
+      "empathy": "좋아. 달아 보자.",
+      "thinking": "종이 어떻게 울릴까."
+    },
+    "or_04": {
+      "speaker": "or",
+      "empathy": "좋아. 살펴보자.",
+      "thinking": "그 방법이면 뭐가 보일까."
+    },
+    "or_05": {
+      "speaker": "or",
+      "empathy": "좋아. 손대 보자.",
+      "thinking": "걸이가 어떻게 달라질까."
+    },
+    "or_06": {
+      "speaker": "or",
+      "empathy": "좋아. 그러자.",
+      "thinking": "그 시간엔 어떤 소리가 날까."
+    },
+    "festival_01": {
+      "speaker": "lumi",
+      "empathy": "응! 그것도 좋겠다!",
+      "thinking": "오, 거기서 어떤 이야기가 시작될까!"
+    },
+    "festival_02": {
+      "speaker": "echo",
+      "empathy": "응, 그 방식도 의미 있어.",
+      "thinking": "그 무대에서 어떤 이야기가 이어질까."
+    },
+    "festival_03": {
+      "speaker": "moka",
+      "empathy": "응, 따뜻한 풍경이 되겠다.",
+      "thinking": "아, 그 빛에 비친 얼굴들이 궁금해."
+    },
+    "festival_04": {
+      "speaker": "or",
+      "empathy": "좋아. 해 보자.",
+      "thinking": "빛이 어디까지 닿을까."
+    },
+    "festival_05": {
+      "speaker": "player",
+      "empathy": "그런 밤이구나.",
+      "thinking": "같은 밤에도 이렇게 많은 풍경이 있구나."
+    },
+    "gate_a": {
+      "speaker": "player",
+      "empathy": "그 풍경도 내 하루야.",
+      "thinking": "그 풍경에 이런 느낌도 있었구나."
+    },
+    "gate_b": {
+      "speaker": "player",
+      "empathy": "소중하게 생각해도 좋아.",
+      "thinking": "그 순간을 이렇게도 바라볼 수 있구나."
+    },
+    "gate_c": {
+      "speaker": "player",
+      "empathy": "그 길도 내게 남았네.",
+      "thinking": "그 길에서 만날 풍경이 궁금해."
+    },
+    "gate_d": {
+      "speaker": "player",
+      "empathy": "내 발걸음이 여기까지 왔어.",
+      "thinking": "내 발걸음에 이런 뜻도 담겼구나."
+    }
+  }
+}

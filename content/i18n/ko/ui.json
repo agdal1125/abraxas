@@ -8,6 +8,46 @@
   "hub": {
     "prompt": "누구를 만나러 갈까?"
   },
+  "names": {
+    "player": "주인공",
+    "postman": "우체부",
+    "dogUnknown": "???",
+    "demi": "데미",
+    "village": "도리마을"
+  },
+  "nameInput": {
+    "prompt": "부를 이름이 있을까?",
+    "label": "이름",
+    "confirm": "확인",
+    "skip": "건너뛰기",
+    "error": "1~12자의 올바른 이름을 입력해 주세요."
+  },
+  "cinematic": {
+    "play": "재생",
+    "pause": "일시정지",
+    "skip": "건너뛰기",
+    "mute": "음소거",
+    "unmute": "소리 켜기",
+    "fallback": "풀밭에서 눈을 떴다. 작은 흰 강아지가 곁에 있다."
+  },
+  "festival": {
+    "companion": {
+      "lumi": "루미와 함께 걷는다",
+      "moka": "모카와 함께 걷는다",
+      "echo": "에코와 함께 걷는다",
+      "or": "오르와 함께 걷는다"
+    }
+  },
+  "confession": {
+    "targetPrompt": "마음을 전할 사람을 고르자.",
+    "reasonPrompt": "그 사람에게 끌린 이유는 무엇일까?",
+    "reason": {
+      "similar": "나와 닮아서",
+      "drawn": "나와 달라서 끌려서",
+      "both": "닮은 점과 다른 점 둘 다",
+      "unsure": "잘 모르겠지만 마음이 가서"
+    }
+  },
   "npc": {
     "lumi": "루미",
     "moka": "모카",
@@ -20,10 +60,6 @@
     "festival": "축제의 밤",
     "gate": "기억의 문"
   },
-  "reaction": {
-    "empathy": ["그렇지, 나도 그렇게 생각해.", "역시 그쪽이 좋겠다."],
-    "thinking": ["그런 생각은 못 해 봤네…", "음, 그렇게 볼 수도 있겠다."]
-  },
   "next": "계속",
   "pathBlocked": "여기서는 갈 수 없어요",
   "localExperience": "로컬 체험: 서버에 저장되지 않는 체험입니다.",
@@ -32,6 +68,19 @@
   "finishErrand": "심부름 이야기 마치기",
   "result": {
     "title": "껍질 너머의 나",
+    "cards": {
+      "self": "나",
+      "other": "그 사람",
+      "village": "마을"
+    },
+    "reflection": {
+      "similar": "우리는 어떤 점에서 닮았을까?",
+      "drawn": "서로 다른 모습에서 무엇을 배웠을까?",
+      "both": "닮은 점과 다른 점은 어떻게 어우러졌을까?",
+      "unsure": "이끌림의 끝에는 어떤 마음이 남았을까?"
+    },
+    "first": "처음의 나",
+    "continueEnding": "마지막 장면으로",
     "poles": {
       "A": { "plus": "사람들 속에서 힘이 나는", "minus": "혼자만의 시간에 힘을 채우는" },
       "B": { "plus": "마음을 먼저 살피는", "minus": "사실과 원칙을 먼저 따지는" },

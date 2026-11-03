@@ -56,10 +56,6 @@
     "triangle": "세모 축",
     "square": "네모 축"
   },
-  "reaction": {
-    "empathy": "그렇구나. 나도 그렇게 생각해.",
-    "thinking": "음, 그렇게 생각할 수도 있겠네."
-  },
   "puzzle": {
     "hint": "힌트",
     "auto": "자동으로 마치기",

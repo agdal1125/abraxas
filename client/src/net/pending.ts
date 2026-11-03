@@ -13,6 +13,9 @@ const exact = (value: Record<string, unknown>, keys: string[]) => Object.keys(va
 function validCommand(value: unknown): value is Command {
   if (!object(value)) return false;
   if (value.kind === "open_episode") return exact(value, ["kind", "npcId"]) && nonempty(value.npcId);
+  const npcs = ["lumi", "moka", "echo", "or"];
+  if (value.kind === "festival_companion") return exact(value, ["kind", "npcId"]) && npcs.includes(String(value.npcId));
+  if (value.kind === "confess") return exact(value, ["kind", "npcId", "reason"]) && npcs.includes(String(value.npcId)) && ["similar", "drawn", "both", "unsure"].includes(String(value.reason));
   if (value.kind === "choice") return exact(value, ["kind", "itemId", "pick"]) && nonempty(value.itemId) && (value.pick === "a" || value.pick === "b");
   if (["pickup", "set_down", "deliver", "act", "talk", "complete"].includes(String(value.kind))) return exact(value, ["kind", "targetId"]) && nonempty(value.targetId);
   if (value.kind === "place") return exact(value, ["kind", "breadId", "slotId"]) && nonempty(value.breadId) && Object.hasOwn(content.bread, value.breadId) && nonempty(value.slotId) && Object.hasOwn(content.slots, value.slotId);

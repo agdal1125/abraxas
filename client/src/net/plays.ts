@@ -30,13 +30,19 @@ export function configurePlayTransport(config: { auth: AuthTokenSource; appCheck
 const object = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 const nonempty = (value: unknown): value is string => typeof value === "string" && value.length > 0;
 const integer = (value: unknown): value is number => Number.isSafeInteger(value) && (value as number) >= 0;
-const segments = new Set(["title", "prologue", "hub", "ep_lumi", "ep_moka", "ep_echo", "ep_or", "interlude_1", "interlude_2", "interlude_3", "festival", "gate", "result"]);
+const segments = new Set(["title", "prologue", "hub", "ep_lumi", "ep_moka", "ep_echo", "ep_or", "interlude_1", "interlude_2", "interlude_3", "festival", "gate", "confession", "result"]);
 const residents = { lumi, echo, or };
 const timestamp = (value: unknown) => typeof value === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/.test(value) && !Number.isNaN(Date.parse(value)) && new Date(value).toISOString().slice(0, 19) === value.slice(0, 19);
 
 function parseSnapshot(value: unknown): PlaySnapshot {
   if (!object(value) || !nonempty(value.playId) || !nonempty(value.contentVersion) || !integer(value.revision) || !nonempty(value.segment) || !segments.has(value.segment) || !Array.isArray(value.completedEpisodes) || !value.completedEpisodes.every(nonempty) || !Array.isArray(value.answers) || !value.answers.every((a: unknown) => object(a) && nonempty(a.id) && (a.pick === "a" || a.pick === "b")) || !object(value.moka)) throw new ResponseValidationError();
   if (new Set(value.answers.map((a: { id: string }) => a.id)).size !== value.answers.length || new Set(value.completedEpisodes).size !== value.completedEpisodes.length || value.completedEpisodes.some((id: string) => !["lumi", "moka", "echo", "or"].includes(id))) throw new ResponseValidationError();
+  const npc = (v: unknown) => typeof v === "string" && ["lumi", "moka", "echo", "or"].includes(v);
+  const type = (v: unknown) => typeof v === "string" && /^[OI][HL][VK][GC]$/.test(v);
+  if (value.festivalCompanion != null && !npc(value.festivalCompanion)) throw new ResponseValidationError();
+  if (value.confession != null && (!object(value.confession) || Object.keys(value.confession).length !== 3 || !npc(value.confession.npcId) || !["similar", "drawn", "both", "unsure"].includes(String(value.confession.reason)) || !["accepted", "waiting"].includes(String(value.confession.outcome)))) throw new ResponseValidationError();
+  if (value.result != null && (!object(value.result) || Object.keys(value.result).length !== 3 || !type(value.result.type) || !["today", "tomorrow", "between"].includes(String(value.result.modifier)) || !object(value.result.npcTypes) || Object.keys(value.result.npcTypes).length !== 4 || !["lumi", "moka", "echo", "or"].every((id) => type((value.result as { npcTypes: Record<string, unknown> }).npcTypes[id])))) throw new ResponseValidationError();
+  if (value.segment === "confession" && (value.result != null || value.confession != null)) throw new ResponseValidationError();
   const m = value.moka;
   if (!nonempty(m.phase) || !Object.hasOwn(content.phases, m.phase) || !["source", "player", "moka-rest", "delivered"].includes(String(m.basket)) || !object(m.placements) || !(m.completedAt === null || timestamp(m.completedAt))) throw new ResponseValidationError();
   const placements = Object.entries(m.placements);
@@ -149,7 +155,9 @@ export async function sendCommand(playId: string, pending: PendingCommand): Prom
       const validChoice = command.kind === "choice" && snapshot.answers.some((answer) => answer.id === command.itemId && answer.pick === command.pick);
       const npc = command.kind === "complete" ? completed[command.targetId] : undefined;
       const validComplete = npc !== undefined && result.receipt.reaction === null && snapshot.completedEpisodes.includes(npc) && snapshot[npc as "lumi" | "moka" | "echo" | "or"].phase === "completed";
-      if (!validChoice && !validComplete) throw new ResponseValidationError();
+      const validCompanion = command.kind === "festival_companion" && snapshot.festivalCompanion === command.npcId;
+      const validConfession = command.kind === "confess" && snapshot.confession?.npcId === command.npcId && snapshot.confession.reason === command.reason;
+      if (!validChoice && !validComplete && !validCompanion && !validConfession) throw new ResponseValidationError();
     }
     let pendingCleared = true;
     try { clearPending(playId, key); } catch { pendingCleared = false; }

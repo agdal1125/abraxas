@@ -18,22 +18,33 @@ assert.ok(forbidden("Return to B", "en"));
 assert.ok(forbidden("v1j2: Hello", "en"));
 assert.ok(!forbidden("A warm breeze arrives.", "en"));
 
-function strings(value) {
-  if (typeof value === "string") return [value];
-  if (value && typeof value === "object") return Object.values(value).flatMap(strings);
+function strings(value, path = "") {
+  if (typeof value === "string") return [[path, value]];
+  if (value && typeof value === "object") return Object.entries(value).flatMap(([key, entry]) => strings(entry, path ? `${path}.${key}` : key));
   return [];
 }
+const speakers = {
+  ko: new Set(["주인공", "우체부", "???", "데미", "루미", "모카", "에코", "오르", "주민", "무대지기", "시식 안내인", "책 정리인", "낚시꾼", "상인", "공방 조수"]),
+  en: new Set(["You", "Mail Carrier", "???", "Demi", "Lumi", "Moka", "Echo", "Or", "Neighbor", "Villager", "Stagehand", "Tasting Guide", "Book Keeper", "Fisher", "Angler", "Merchant", "Workshop Apprentice"]),
+};
+const broken = (text, unknown = false) => /\uFFFD|[\u1100-\u11ff]|\?{2,}/u.test(unknown ? text.replaceAll('???', '') : text);
+assert.ok(broken('??') && broken('\uFFFD') && broken('???') && !broken('???', true));
 for (const lang of ["ko", "en"]) {
   for (const file of await readdir(join(root, "content/i18n", lang))) {
     if (!file.endsWith(".json")) continue;
     const values = strings(JSON.parse(await readFile(join(root, "content/i18n", lang, file), "utf8")));
-    for (const text of values) assert.ok(!forbidden(text, lang), `${lang}/${file}: ${text}`);
+    for (const [key, text] of values) assert.ok(!forbidden(text, lang) && !broken(text, file === 'ui.json' && key === 'names.dogUnknown' && text === '???'), `${lang}/${file}: ${text}`);
   }
   for (const file of await readdir(join(root, "content/ink", lang))) {
     if (!file.endsWith(".ink")) continue;
     const source = await readFile(join(root, "content/ink", lang, file), "utf8");
     const visible = source.replace(/^\s*(?:===.*|->.*)$/gm, "").replace(/#\s*(?:item|pick):[\w]+/g, "");
-    for (const line of visible.split(/\r?\n/)) assert.ok(!forbidden(line.trim(), lang), `${lang}/${file}: ${line}`);
+    for (const line of visible.split(/\r?\n/)) {
+      const text = line.trim();
+      assert.ok(!forbidden(text, lang) && !broken(text, /^\?\?\?[:：]/.test(text) || /^(?:\?\?\?가|\?\?\?는|\?\?\?이|\?\?\?\s)/.test(text)), `${lang}/${file}: ${line}`);
+      const speaker = text.match(/^([^:{}]+):\s+/)?.[1];
+      if (speaker && speaker.split(/\s+/).length <= 2) assert.ok(speakers[lang].has(speaker), `${lang}/${file}: unknown speaker ${speaker}`);
+    }
   }
 }
 const scoring = JSON.parse(await readFile(join(root, "content/scoring/items.json"), "utf8"));

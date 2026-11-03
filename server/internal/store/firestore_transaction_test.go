@@ -102,6 +102,11 @@ func TestFirestoreTransactionRetryAndAtomicWrites(t *testing.T) {
 		}
 		d.Snapshot.Revision++
 		d.Events["completed"] = true
+		companion := "lumi"
+		d.Snapshot.FestivalCompanion = &companion
+		d.Snapshot.Confession = &play.Confession{NPCID: "moka", Reason: "both", Outcome: "waiting"}
+		d.Snapshot.Result = &play.EndingResult{Type: "OHVG", Modifier: "today", NPCTypes: map[string]string{"lumi": "OHVG"}}
+		d.FirstResult = d.Snapshot.Result
 		d.Receipts["command"] = play.StoredReceipt{Receipt: play.Receipt{Key: "command", AppliedRevision: d.Snapshot.Revision}}
 		return nil
 	}
@@ -113,7 +118,7 @@ func TestFirestoreTransactionRetryAndAtomicWrites(t *testing.T) {
 		t.Fatalf("retry: calls=%d commits=%d writes=%v documents=%d revision=%d", calls, fake.commits, fake.writes, len(fake.docs), result.Snapshot.Revision)
 	}
 	var saved play.Doc
-	if err := json.Unmarshal(fake.docs[ref.Path].Fields["data"].GetBytesValue(), &saved); err != nil || saved.Snapshot.Revision != 1 || !saved.Events["completed"] || saved.Receipts["command"].Receipt.AppliedRevision != 1 {
+	if err := json.Unmarshal(fake.docs[ref.Path].Fields["data"].GetBytesValue(), &saved); err != nil || saved.Snapshot.Revision != 1 || !saved.Events["completed"] || saved.Receipts["command"].Receipt.AppliedRevision != 1 || saved.FirstResult == nil || saved.Snapshot.Result == nil || saved.Snapshot.Confession == nil || saved.Snapshot.FestivalCompanion == nil || *saved.Snapshot.FestivalCompanion != "lumi" {
 		t.Fatalf("saved state: %+v %v", saved, err)
 	}
 	for _, suffix := range []string{"/commands/command", "/events/completed"} {

@@ -53,3 +53,12 @@ test("restores only a valid resident puzzle command", () => {
     { ...piece.command, extra: true }
   ]) expect(() => savePending("play", { ...piece, command })).toThrow();
 });
+
+test("saves the ending commands and rejects invalid npc or reason", () => {
+  for (const command of [{ kind: "festival_companion" as const, npcId: "or" as const }, { kind: "confess" as const, npcId: "echo" as const, reason: "both" as const }]) {
+    savePending("play", { ...pending, command });
+    expect(loadPending()?.pending.command).toEqual(command);
+    clearPending("play", pending.key);
+  }
+  for (const command of [{ kind: "festival_companion", npcId: "demi" }, { kind: "confess", npcId: "moka", reason: "score" }, { kind: "confess", npcId: "moka" }]) expect(() => savePending("play", { ...pending, command } as never)).toThrow();
+});

@@ -5,14 +5,18 @@ import type { OrState } from "./or-errand";
 
 export type Pick = "a" | "b";
 export type Choice = { id: string; pick: Pick };
+export type EndingNPC = "lumi" | "moka" | "echo" | "or";
+export type ConfessionReason = "similar" | "drawn" | "both" | "unsure";
 export type Command =
   | { kind: "open_episode"; npcId: string }
   | { kind: "choice"; itemId: string; pick: Pick }
   | { kind: "pickup" | "set_down" | "deliver" | "act" | "talk" | "complete"; targetId: string }
   | { kind: "place"; breadId: BreadId; slotId: SlotId }
   | { kind: "place_piece"; pieceId: string; slotId: string }
+  | { kind: "festival_companion"; npcId: EndingNPC }
+  | { kind: "confess"; npcId: EndingNPC; reason: ConfessionReason }
   | { kind: "auto_arrange" | "finish_segment" };
-export type PlaySnapshot = { playId: string; contentVersion: string; revision: number; segment: string; completedEpisodes: string[]; answers: Choice[]; moka: MokaState; lumi: LumiState; echo: EchoState; or: OrState; episodeEnd?: { npcId: string; hearts: number } };
+export type PlaySnapshot = { playId: string; contentVersion: string; revision: number; segment: string; completedEpisodes: string[]; answers: Choice[]; moka: MokaState; lumi: LumiState; echo: EchoState; or: OrState; episodeEnd?: { npcId: string; hearts: number }; festivalCompanion?: EndingNPC | null; confession?: { npcId: EndingNPC; reason: ConfessionReason; outcome: "accepted" | "waiting" } | null; result?: { type: string; modifier: string; npcTypes: Record<EndingNPC, string> } | null };
 export type PendingCommand = { key: string; expectedRevision: number; command: Command };
 export type LocalSync = { status: "ready" } | { status: "saving" | "retry"; pending: PendingCommand };
 
