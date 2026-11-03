@@ -191,7 +191,7 @@ try {
   socket.addEventListener("message", event => {
     const message = JSON.parse(event.data);
     if (message.id && pending.has(message.id)) { pending.get(message.id)(message); pending.delete(message.id); }
-    if (message.method === "Runtime.exceptionThrown") errors.push((message.params.exceptionDetails.exception?.description ?? message.params.exceptionDetails.text).slice(0, 300));
+    if (message.method === "Runtime.exceptionThrown") { const d = message.params.exceptionDetails; errors.push(`${d.exception?.description ?? d.exception?.value ?? d.text} @ ${d.url ?? ""}:${d.lineNumber ?? ""}:${d.columnNumber ?? ""}`.slice(0, 400)); }
     if (message.method === "Runtime.consoleAPICalled") {
       const value = message.params.args.map(arg => arg.value ?? arg.description ?? "").join(" ");
       const classification = consoleClassifier(message.params.type, value);
