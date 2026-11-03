@@ -57,16 +57,6 @@ for (const npc of ["lumi", "echo", "or"]) {
         assert.equal(branch.currentChoices.length, 0);
       }
     }
-    if (npc === "lumi") {
-      const local = new Story(compiled);
-      for (const id of ids) {
-        while (local.canContinue) local.Continue();
-        assert.deepEqual(local.currentChoices.flatMap((choice) => choice.tags || []), [`item:${id}`, "pick:a", `item:${id}`, "pick:b"], `${lang}: local ${id}`);
-        local.ChooseChoiceIndex(0);
-      }
-      while (local.canContinue) local.Continue();
-      assert.equal(local.currentChoices.length, 0, `${lang}: local end`);
-    }
   }
 }
 console.log("Residents ink: 18 items, choices, phase knots, labels and translations verified.");

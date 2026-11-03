@@ -89,6 +89,13 @@ test("only the first current-play lookup can return the expected 404", () => {
   assert.equal(created("GET", url, 404), "abnormal");
 });
 
+test("only the exact missing cinematic can return 404", () => {
+  const classify = responseClassifier();
+  assert.equal(classify("GET", "http://127.0.0.1:5173/cinematics/prelude-v1.mp4", 404), "expected");
+  assert.equal(classify("GET", "http://127.0.0.1:5173/cinematics/other.mp4", 404), "abnormal");
+  assert.equal(classify("GET", "http://127.0.0.1:5173/cinematics/prelude-v1.mp4?other=1", 404), "abnormal");
+});
+
 test("only the known Three.js software renderer warning is nonfatal", () => {
   const warning = "THREE.WebGLRenderer: KHR_parallel_shader_compile extension not supported.";
   assert.equal(consoleClassifier("warning", warning), "warning");
