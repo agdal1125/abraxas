@@ -1,0 +1,27 @@
+.cinematic {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-content: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #17191b;
+  color: white;
+}
+
+.cinematic video {
+  display: block;
+  width: 100%;
+  max-height: 75vh;
+  object-fit: contain;
+}
+
+.cinematic video[hidden], .cinematic button[hidden] { display: none; }
+.cinematic p { width: 100%; text-align: center; }
+.cinematic p:empty { display: none; }
+.cinematic button { min-height: 44px; padding: 0.5rem 1rem; cursor: pointer; }
+.cinematic button:focus-visible { outline: 3px solid white; outline-offset: 3px; }
