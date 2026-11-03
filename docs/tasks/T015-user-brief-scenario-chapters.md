@@ -20,6 +20,16 @@
 > [Chapter 0. 나는 누구고 여긴 어딘가]
 > 마을로 이동한 주인공에게 마을 사람 한명이 어디서 왔는지 물어본다...
 
+## 사람 답변 (2026-11-03, 원문)
+
+> 1. Do you have any suggestion? I want it to give message to people. The role of this dog is to guide you through out the journey of finding who you are.
+>
+> 2. 도리마을
+>
+> 3. 승인
+
+1번은 Claude가 후보(데미·나나·온이·이름 없음)를 제시했고 사람이 **데미**를 골랐다. 『데미안』에서 따온 이름으로, 답을 주는 존재가 아니라 주인공이 스스로 알을 깨고 나오도록 곁을 지키는 안내자라는 뜻이다. 이름의 뜻은 엔딩 직전 목걸이 글자가 보일 때 드러난다.
+
 ## 감독 메모
 
 - Notion을 검색했지만 초안이 말하는 별도 시나리오 페이지는 찾지 못했다. 위 초안과 저장소 기획 문서가 근거다.
