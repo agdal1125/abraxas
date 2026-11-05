@@ -248,7 +248,7 @@ try {
       const keyboard = await evaluate("(() => { const board = document.querySelector('.resident-board, .moka-board'), first = board?.querySelector('button:not(:disabled)'); return board?.contains(document.activeElement) && document.activeElement !== first && document.activeElement?.matches('button:not(:disabled)'); })()");
       viewportEvidence.keyboard[npc] = !!keyboard;
       if (!keyboard) errors.push(`Board keyboard Tab failed: ${npc}`);
-      for (const [width, height] of [[844, 390], [740, 360], [960, 540], [1280, 720]]) for (const font of [15, 18]) {
+      for (const [width, height] of [[844, 390], [740, 360], [960, 540], [1280, 720]]) for (const font of [17, 20]) {
         await send("Emulation.setDeviceMetricsOverride", { width, height, deviceScaleFactor: 1, mobile: true });
         await evaluate(`document.documentElement.style.setProperty('--body-size', '${font}px')`);
         await frames();

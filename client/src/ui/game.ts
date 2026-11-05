@@ -28,6 +28,17 @@ const ids = ["lumi", "moka", "echo", "or"];
 const quests = ["s1j2", "v1j2", "t1p2", "s2j2"];
 const storageKey = "abraxas-prototype";
 
+async function loadDialogueFonts(content: string): Promise<void> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    await Promise.race([
+      document.fonts.load("400 17px 'Pretendard Variable'", content),
+      new Promise<void>(resolve => { timer = setTimeout(resolve, 400); }),
+    ]);
+  } catch { /* Dialogue remains available if fonts cannot load. */ }
+  finally { clearTimeout(timer); }
+}
+
 export class Game {
   private state: Save;
   private snapshot: PlaySnapshot | null = null;
@@ -60,7 +71,7 @@ export class Game {
   constructor(app: HTMLElement, private village: Village) {
     this.controls = new Controls(app, village as Village & VillageInput);
     try { this.largeText = localStorage.getItem("abraxas-large-text") === "true"; } catch { /* Continue in memory if storage is unavailable. */ }
-    document.documentElement.style.setProperty("--body-size", this.largeText ? "18px" : "15px");
+    document.documentElement.style.setProperty("--body-size", this.largeText ? "20px" : "17px");
     this.overlay.className = "overlay"; app.append(this.overlay);
     this.notice.className = "world-notice"; this.notice.setAttribute("role", "status"); app.append(this.notice);
     this.goal.className = "hud-goal"; this.goal.hidden = true; this.direction.className = "hud-direction"; this.direction.hidden = true; this.direction.setAttribute("aria-hidden", "true");
@@ -77,7 +88,7 @@ export class Game {
   private newId(): string { return globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random()}`; }
   private save(): void { if (this.local) try { localStorage.setItem(storageKey, JSON.stringify(this.state)); this.localSave = this.state; } catch { /* Continue in memory if storage is unavailable. */ } }
   private get ui() { return translations(this.state.lang).ui; }
-  private setTextSize(value: boolean): void { this.largeText = value; document.documentElement.style.setProperty("--body-size", value ? "18px" : "15px"); try { localStorage.setItem("abraxas-large-text", String(value)); } catch { /* Continue in memory if storage is unavailable. */ } }
+  private setTextSize(value: boolean): void { this.largeText = value; document.documentElement.style.setProperty("--body-size", value ? "20px" : "17px"); try { localStorage.setItem("abraxas-large-text", String(value)); } catch { /* Continue in memory if storage is unavailable. */ } }
   private clearViews(): void { this.village.setMokaView(null); this.worldApi.setLumiView(null); this.worldApi.setEchoView(null); this.worldApi.setOrView(null); }
   private restart(): void { this.local = false; this.snapshot = null; this.clearViews(); this.state = { lang: this.state.lang, playId: this.newId(), log: [], completed: [], segment: "title" }; this.title(); }
   private settings(page: "settings" | "confirm" | "credits" = "settings"): void {
@@ -136,7 +147,7 @@ export class Game {
     const button = (label: string, action: () => void, itemId?: string) => { const element = document.createElement("button"); element.textContent = label; if (itemId) element.dataset.itemId = itemId; else element.dataset.action = label === this.ui.next ? "next" : "select"; element.addEventListener("click", () => run(action)); return element; };
     if (kind === "title") {
       const [name, subtitle] = text.split("\n\n"); const heading = document.createElement("h1"); heading.textContent = name ?? ""; const p = document.createElement("p"); p.textContent = subtitle ?? ""; panel.append(heading, p);
-      const controls = document.createElement("div"); controls.className = "title-controls"; for (const [label, action] of [...buttons].reverse()) controls.append(button(label, action)); const size = document.createElement("button"); size.textContent = this.largeText ? "가+" : "가"; size.setAttribute("aria-label", this.state.lang === "ko" ? "글자 크기 변경" : "Change text size"); size.setAttribute("aria-pressed", String(this.largeText)); size.addEventListener("click", () => { this.largeText = !this.largeText; document.documentElement.style.setProperty("--body-size", this.largeText ? "18px" : "15px"); try { localStorage.setItem("abraxas-large-text", String(this.largeText)); } catch { /* Continue in memory if storage is unavailable. */ } size.textContent = this.largeText ? "가+" : "가"; size.setAttribute("aria-pressed", String(this.largeText)); }); controls.append(size); this.overlay.append(panel, controls); return;
+      const controls = document.createElement("div"); controls.className = "title-controls"; for (const [label, action] of [...buttons].reverse()) controls.append(button(label, action)); const size = document.createElement("button"); size.textContent = this.largeText ? "가+" : "가"; size.setAttribute("aria-label", this.state.lang === "ko" ? "글자 크기 변경" : "Change text size"); size.setAttribute("aria-pressed", String(this.largeText)); size.addEventListener("click", () => { this.largeText = !this.largeText; document.documentElement.style.setProperty("--body-size", this.largeText ? "20px" : "17px"); try { localStorage.setItem("abraxas-large-text", String(this.largeText)); } catch { /* Continue in memory if storage is unavailable. */ } size.textContent = this.largeText ? "가+" : "가"; size.setAttribute("aria-pressed", String(this.largeText)); }); controls.append(size); this.overlay.append(panel, controls); return;
     }
     if (kind === "result") {
       const [title, modifier, ...rest] = text.split("\n\n"); const intro = document.createElement("div"); intro.className = "result-intro"; const details = document.createElement("div"); details.className = "result-details"; const heading = document.createElement("h2"); heading.textContent = title ?? ""; const badge = document.createElement("span"); badge.className = "modifier"; badge.textContent = modifier ?? ""; const list = document.createElement("ul"); for (const line of rest.slice(0, 4)) { const item = document.createElement("li"); item.textContent = line; list.append(item); } const disclaimer = document.createElement("p"); disclaimer.className = "disclaimer"; disclaimer.textContent = rest[4] ?? ""; const actions = document.createElement("div"); actions.className = "result-actions"; if (typeof navigator.share === "function") actions.append(button(this.ui.hud.share, () => { void navigator.share({ text: [title, modifier, ...rest.slice(0, 4)].join("\n") }).catch(() => {}); this.result(); })); for (const [label, action] of buttons) actions.append(button(label, action)); intro.append(heading, badge); details.append(list, disclaimer, actions); panel.append(intro, details); this.overlay.append(panel); return;
@@ -240,7 +251,8 @@ export class Game {
       const response = await fetch(`./ink/${this.state.lang}/${file}.json`);
       if (!response.ok) throw new Error("ink_unavailable");
       const { Story } = await import("inkjs");
-      const story = new Story(await response.text()); story.ChoosePathString(knot);
+      const content = await response.text(); await loadDialogueFonts(content);
+      const story = new Story(content); story.ChoosePathString(knot);
       if (token !== this.token) return;
       if (choice) { this.story = story; this.lastLine = ""; await new Promise<void>(resolve => { this.openingDone = () => { this.reloadDialogue = null; resolve(); }; this.reloadDialogue = () => { void this.narrative(file, knot, true).then(resolve); }; this.advance(); }); return; }
       await new Promise<void>(resolve => {
@@ -358,7 +370,7 @@ export class Game {
     this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.state.segment = segment; this.save(); if (!continuing) { this.story = null; this.lastLine = ""; } const token = ++this.token;
     const answered = this.answered(segment); this.episodeLimit = answered < 3 ? 3 : answered < 5 ? 5 : 6;
     if (!continuing && !this.resumed && segment === "prologue") {
-      try { const response = await fetch(`./ink/${this.state.lang}/${segment}.json`); if (!response.ok) throw new Error("ink_unavailable"); const { Story } = await import("inkjs"); const content = await response.text(); if (token !== this.token) return; this.story = new Story(content); } catch { if (token === this.token) this.panel(translations(this.state.lang).moka.status.contentUnavailable, [[translations(this.state.lang).moka.status.tryAgain, () => void this.open(segment)]]); return; }
+      try { const response = await fetch(`./ink/${this.state.lang}/${segment}.json`); if (!response.ok) throw new Error("ink_unavailable"); const { Story } = await import("inkjs"); const content = await response.text(); await loadDialogueFonts(content); if (token !== this.token) return; this.story = new Story(content); } catch { if (token === this.token) this.panel(translations(this.state.lang).moka.status.contentUnavailable, [[translations(this.state.lang).moka.status.tryAgain, () => void this.open(segment)]]); return; }
     }
     if (token !== this.token) return; this.resumed = false; this.advance();
   }
@@ -372,7 +384,8 @@ export class Game {
       const response = await fetch(`./ink/${this.state.lang}/ep_moka.json`);
       if (!response.ok) throw new Error("ink_unavailable");
       const { Story } = await import("inkjs");
-      const story = new Story(await response.text()); story.ChoosePathString(knot);
+      const content = await response.text(); await loadDialogueFonts(content);
+      const story = new Story(content); story.ChoosePathString(knot);
       if (token !== this.token) return;
       this.reloadDialogue = () => { void this.openMoka(); };
       this.story = story; this.lastLine = ""; this.advance();
@@ -384,7 +397,8 @@ export class Game {
       const response = await fetch(`./ink/${this.state.lang}/ep_moka.json`);
       if (!response.ok) throw new Error("ink_unavailable");
       const { Story } = await import("inkjs");
-      const story = new Story(await response.text()); story.ChoosePathString(knot);
+      const content = await response.text(); await loadDialogueFonts(content);
+      const story = new Story(content); story.ChoosePathString(knot);
       if (token !== this.token) return;
       this.reloadDialogue = () => { void this.mokaNarrative(knot, after); };
       const next = () => { while (story.canContinue) { const line = (story.Continue() ?? "").trim(); if (line) { this.panel(line, [[this.ui.next, next]]); return; } } this.reloadDialogue = null; after(); };
@@ -400,7 +414,8 @@ export class Game {
       const response = await fetch(`./ink/${this.state.lang}/ep_${npc}.json`);
       if (!response.ok) throw new Error("ink_unavailable");
       const { Story } = await import("inkjs");
-      const story = new Story(await response.text()); story.ChoosePathString(knot);
+      const content = await response.text(); await loadDialogueFonts(content);
+      const story = new Story(content); story.ChoosePathString(knot);
       if (token !== this.token) return;
       this.reloadDialogue = () => { void this.residentNarrative(npc, knot, after, choice); };
       if (choice) { this.story = story; this.lastLine = ""; this.advance(); return; }
