@@ -27,12 +27,14 @@ it("follows recorded corners and resets after a teleport", () => {
 
 it("whitens only the player geometry and keeps shared materials intact", () => {
   const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("color", new THREE.Float32BufferAttribute([.2, .3, .4], 3));
+  geometry.setAttribute("color", new THREE.Float32BufferAttribute([.2, .3, .4, .6, .7, .8], 3));
   const material = new THREE.MeshStandardMaterial({ vertexColors: true });
   const player = new THREE.Mesh(geometry, material), npc = new THREE.Mesh(geometry, material);
   whitenPlayer(player);
   expect(player.geometry).not.toBe(npc.geometry);
-  expect(player.geometry.getAttribute("color").getX(0)).toBe(1);
+  const colors = player.geometry.getAttribute("color");
+  expect(colors.getX(0)).toBeLessThan(colors.getX(1));
+  expect(colors.getX(1)).toBeLessThan(1);
   expect(npc.geometry.getAttribute("color").getX(0)).toBeCloseTo(.2);
   expect(player.material).toBe(npc.material);
 });

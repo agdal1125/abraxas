@@ -8,7 +8,10 @@ export function whitenPlayer(object: THREE.Object3D): void {
     if (!(child instanceof THREE.Mesh) || !child.geometry.getAttribute("color")) return;
     child.geometry = child.geometry.clone();
     const colors = child.geometry.getAttribute("color");
-    for (let i = 0; i < colors.count; i++) colors.setXYZ(i, 1, 1, 1);
+    for (let i = 0; i < colors.count; i++) {
+      const shade = .72 + .27 * (colors.getX(i) * .2126 + colors.getY(i) * .7152 + colors.getZ(i) * .0722);
+      colors.setXYZ(i, shade, shade * .985, shade * .99);
+    }
     colors.needsUpdate = true;
   });
 }

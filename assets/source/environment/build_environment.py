@@ -778,17 +778,21 @@ def build_bakery(pb: PartBuilder):
         for sy in (-0.57, 0.57):
             pb.add_box((0.10, 0.10, 0.86), (sx, sy, 0.52), PALETTE["wood"], bevel=0.01)
     pb.add_box((1.52, 1.36, 0.14), (0.02, 0.0, 0.98), PALETTE["wood"], bevel=0.02)
-    pb.add_cylinder(0.32, 0.32, 0.12, (-0.05, -0.58, 1.06), PALETTE["gold"], vertices=12, rot_euler=(math.pi * 0.5, 0.0, 0.0), bevel=0.012, scale_xy=(1.4, 0.65))
     # Brick oven & tall rounded chimney
-    pb.add_cylinder(0.26, 0.20, 0.65, (-0.58, 0.05, 0.40), PALETTE["brick"], vertices=10, bevel=0.015)
     pb.add_cylinder(0.16, 0.20, 0.45, (0.35, 0.25, 1.25), PALETTE["brick"], vertices=10, bevel=0.015)
     pb.add_cylinder(0.19, 0.19, 0.08, (0.35, 0.25, 1.46), PALETTE["brick_dark"], vertices=10, bevel=0.01)
-    for i in range(5):
-        ax = -0.38 + i * 0.16
-        col = PALETTE["coral"] if i % 2 == 0 else PALETTE["gold"]
-        pb.add_box((0.16, 0.28, 0.08), (ax, -0.66, 0.74), col, rot_euler=(0.35, 0.0, 0.0), bevel=0.01)
+    for x in (-0.31, -0.12):
+        pb.add_sphere(0.07, (x, -0.665, 0.42), PALETTE["gold"], subdivisions=1, scale=(1.0, 0.35, 0.65))
+    pb.add_box((0.04, 0.54, 0.38), (0.73, 0.12, 0.48), PALETTE["wood_dark"], bevel=0.006)
+    pb.add_box((0.045, 0.44, 0.28), (0.755, 0.12, 0.48), PALETTE["gold_light"], bevel=0.004)
+    pb.add_box((0.05, 0.035, 0.30), (0.78, 0.12, 0.48), PALETTE["wood"], bevel=0.003)
     pb.add_box((0.56, 0.08, 0.36), (-0.18, -0.59, 0.44), PALETTE["wood_dark"], bevel=0.01)
     pb.add_box((0.46, 0.06, 0.26), (-0.18, -0.615, 0.44), PALETTE["gold_light"], bevel=0.008)
+    for i in range(6):
+        pb.add_box((0.095, 0.30, 0.035), (-0.4175 + i * 0.095, -0.74, 0.73), PALETTE["coral"] if i % 2 == 0 else PALETTE["cream"], rot_euler=(0.18, 0, 0), bevel=0.002)
+    for x in (-0.46, 0.10):
+        pb.add_box((0.035, 0.31, 0.035), (x, -0.74, 0.70), PALETTE["wood_dark"], rot_euler=(0.18, 0, 0), bevel=0.003)
+    pb.add_box((0.60, 0.04, 0.05), (-0.18, -0.89, 0.70), PALETTE["wood_dark"], bevel=0.003)
     pb.add_box((0.32, 0.08, 0.54), (0.36, -0.59, 0.38), PALETTE["wood"], bevel=0.01)
     pb.add_box((0.20, 0.05, 0.05), (0.72, -0.45, 0.72), PALETTE["ink"], bevel=0.006)
     pb.add_cylinder(0.11, 0.11, 0.05, (0.74, -0.45, 0.56), PALETTE["gold"], vertices=10, rot_euler=(math.pi * 0.5, 0.0, 0.0), bevel=0.008)
@@ -1371,7 +1375,9 @@ def render_4up_preview(obj, key: str, dims, studio):
             ruler_obj.hide_render = False
             bar_obj.hide_render = False
 
-        tmp_path = os.path.join(BAKES_DIR, f"_{key}_{vname}.png")
+        tmp_dir = BAKES_DIR
+        os.makedirs(tmp_dir, exist_ok=True)
+        tmp_path = os.path.join(tmp_dir, f"_{key}_{vname}.png")
         scene.render.filepath = tmp_path
         bpy.ops.render.render(write_still=True)
         quad_paths.append(tmp_path)
@@ -2016,7 +2022,8 @@ def main():
 
     studio = setup_preview_studio()
 
-    keys_to_build = PHASE1_KEYS if PHASE1_ONLY else list(ASSET_SPECS.keys())
+    targets = os.environ.get("ABRAXAS_ENV_TARGETS")
+    keys_to_build = targets.split(",") if targets else (PHASE1_KEYS if PHASE1_ONLY else list(ASSET_SPECS.keys()))
     built_objects = {}
     metadata_assets = {}
     total_bytes = 0
@@ -2077,7 +2084,7 @@ def main():
             "dracoCompressed": True,
             "concept": f"assets/source/concepts/environment/{spec['concept_sheet']}",
             "preview": f"assets/source/previews/environment/{key}.png",
-            "revisionAuthor": "Codex gpt-6.1-terra (agy 한도로 대체)",
+            "revisionAuthor": "Codex (agy quota fallback)",
             "colorVerification": color_verify,
         }
         print(f"[OK] {key:16s} | tri={tri_count:4d}/{spec['max_tri']:4d} | bytes={byte_size:6d}/{spec['max_kib']*1024:6d} | bounds={bounds['width']}x{bounds['depth']}x{bounds['height']}")
@@ -2130,11 +2137,6 @@ def main():
     bpy.ops.wm.save_as_mainfile(filepath=blend_path)
     if os.path.exists(blend1_path):
         os.remove(blend1_path)
-    for d in (SOURCE_ENV_DIR,):
-        if os.path.exists(d):
-            for fname in os.listdir(d):
-                if fname.endswith(".blend1"):
-                    os.remove(os.path.join(d, fname))
     print(f"[INFO] Completed {len(metadata_assets)} kit assets (total {total_tris} tris, {round(total_bytes/1024.0, 2)} KiB). Saved {meta_path} and {blend_path}")
 
 

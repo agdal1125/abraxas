@@ -1035,17 +1035,50 @@
     ]
   },
   "zones": {
-    "or-assistant": { "x": 13, "z": 7 },
-    "or-fisher": { "x": -4, "z": 8 },
-    "or-merchant": { "x": 7, "z": 8 },
-    "or-review-fisher": { "x": 12, "z": 9 },
-    "or-review-merchant": { "x": 13, "z": 9 },
-    "or-report": { "x": 4, "z": 1 },
-    "echo-organizer": { "x": -12, "z": 1 },
-    "echo-borrower": { "x": -8, "z": -1 },
-    "lumi-stagekeeper": { "x": 2, "z": -2 },
-    "lumi-neighbor-1": { "x": -4, "z": 1 },
-    "lumi-neighbor-2": { "x": 3, "z": 3 },
+    "or-assistant": {
+      "x": 13,
+      "z": 7
+    },
+    "or-fisher": {
+      "x": -4,
+      "z": 8
+    },
+    "or-merchant": {
+      "x": 7,
+      "z": 8
+    },
+    "or-review-fisher": {
+      "x": 12,
+      "z": 9
+    },
+    "or-review-merchant": {
+      "x": 13,
+      "z": 9
+    },
+    "or-report": {
+      "x": 4,
+      "z": 1
+    },
+    "echo-organizer": {
+      "x": -12,
+      "z": 1
+    },
+    "echo-borrower": {
+      "x": -8,
+      "z": -1
+    },
+    "lumi-stagekeeper": {
+      "x": 2,
+      "z": -2
+    },
+    "lumi-neighbor-1": {
+      "x": -4,
+      "z": 1
+    },
+    "lumi-neighbor-2": {
+      "x": 3,
+      "z": 3
+    },
     "entrance": {
       "x": 6,
       "z": 10.392304845413264
@@ -1070,10 +1103,22 @@
       "x": -3,
       "z": 8.660254037844386
     },
-    "moka-route-shortcut": { "x": 10, "z": -1 },
-    "moka-route-gentle": { "x": 8, "z": 1 },
-    "moka-route-join": { "x": 9.2, "z": 3.1 },
-    "moka-guide": { "x": 10.8, "z": -2.1 },
+    "moka-route-shortcut": {
+      "x": 10,
+      "z": -1
+    },
+    "moka-route-gentle": {
+      "x": 8,
+      "z": 1
+    },
+    "moka-route-join": {
+      "x": 9.2,
+      "z": 3.1
+    },
+    "moka-guide": {
+      "x": 10.8,
+      "z": -2.1
+    },
     "gate": {
       "x": -8,
       "z": -13.856406460551018
@@ -1647,8 +1692,44 @@
           "z": -1.7320508075688772
         },
         {
-          "x": 6,
+          "x": 5.65,
+          "z": -2.86
+        },
+        {
+          "x": 5.85,
+          "z": -3.15
+        },
+        {
+          "x": 6.12,
+          "z": -3.36
+        },
+        {
+          "x": 6.5,
           "z": -3.4641016151377544
+        },
+        {
+          "x": 8,
+          "z": -3.4641016151377544
+        },
+        {
+          "x": 9.5,
+          "z": -3.4641016151377544
+        },
+        {
+          "x": 9.88,
+          "z": -3.36
+        },
+        {
+          "x": 10.15,
+          "z": -3.15
+        },
+        {
+          "x": 10.35,
+          "z": -2.86
+        },
+        {
+          "x": 11,
+          "z": -1.7320508075688772
         }
       ]
     },
@@ -1682,45 +1763,6 @@
       "width": 0.9,
       "points": [
         {
-          "x": 6,
-          "z": -3.4641016151377544
-        },
-        {
-          "x": 8,
-          "z": -3.4641016151377544
-        }
-      ]
-    },
-    {
-      "width": 0.9,
-      "points": [
-        {
-          "x": 8,
-          "z": -3.4641016151377544
-        },
-        {
-          "x": 10,
-          "z": -3.4641016151377544
-        }
-      ]
-    },
-    {
-      "width": 0.9,
-      "points": [
-        {
-          "x": 10,
-          "z": -3.4641016151377544
-        },
-        {
-          "x": 11,
-          "z": -1.7320508075688772
-        }
-      ]
-    },
-    {
-      "width": 0.9,
-      "points": [
-        {
           "x": 11,
           "z": -1.7320508075688772
         },
@@ -1740,6 +1782,56 @@
         {
           "x": 14,
           "z": 0
+        }
+      ]
+    },
+    {
+      "width": 0.9,
+      "points": [
+        {
+          "x": 6.5,
+          "z": -3.4641016151377544
+        },
+        {
+          "x": 6.6,
+          "z": -4.15
+        },
+        {
+          "x": 6.75,
+          "z": -4.85
+        },
+        {
+          "x": 6.65,
+          "z": -5.5
+        },
+        {
+          "x": 6.5,
+          "z": -6.0
+        }
+      ]
+    },
+    {
+      "width": 0.9,
+      "points": [
+        {
+          "x": 9.5,
+          "z": -3.4641016151377544
+        },
+        {
+          "x": 10.15,
+          "z": -3.55
+        },
+        {
+          "x": 10.7,
+          "z": -3.75
+        },
+        {
+          "x": 11.15,
+          "z": -4.1
+        },
+        {
+          "x": 11.5,
+          "z": -4.6
         }
       ]
     }
@@ -1868,7 +1960,7 @@
       "asset": "bakery",
       "x": 6,
       "z": -6.928203230275509,
-      "rot": 3.142,
+      "rot": 0.35,
       "scale": 1
     },
     {
@@ -1876,40 +1968,40 @@
       "asset": "bakery",
       "x": 11,
       "z": -5.196152422706632,
-      "rot": 2.094,
+      "rot": 0.5,
       "scale": 1
     },
     {
       "id": "prop-11",
       "asset": "bread-crate",
-      "x": 8,
-      "z": -6.928203230275509,
-      "rot": 0,
-      "scale": 1
+      "x": 7.3,
+      "z": -7.2,
+      "rot": 0.2,
+      "scale": 0.92
     },
     {
       "id": "prop-12",
       "asset": "bread-crate",
-      "x": 5,
-      "z": -5.196152422706632,
-      "rot": 1.047,
-      "scale": 1
+      "x": 7.58,
+      "z": -7.0,
+      "rot": 0.8,
+      "scale": 1.05
     },
     {
       "id": "prop-13",
       "asset": "bread-crate",
-      "x": 5.1,
-      "z": -5.65,
-      "rot": 2.094,
-      "scale": 1
+      "x": 7.48,
+      "z": -7.38,
+      "rot": 1.5,
+      "scale": 0.86
     },
     {
       "id": "prop-14",
       "asset": "bread-crate",
-      "x": 12,
-      "z": -3.4641016151377544,
-      "rot": 0,
-      "scale": 1
+      "x": 11.5,
+      "z": -6.45,
+      "rot": 0.3,
+      "scale": 0.95
     },
     {
       "id": "prop-15",
@@ -2904,27 +2996,11 @@
       "scale": 1
     },
     {
-      "id": "prop-159",
-      "asset": "bread-crate",
-      "x": 2.52,
-      "z": -3.8841016151377543,
-      "rot": 0.6,
-      "scale": 1
-    },
-    {
       "id": "prop-163",
       "asset": "bush",
       "x": -2.52,
       "z": 1.3120508075688773,
       "rot": 0.5,
-      "scale": 1
-    },
-    {
-      "id": "prop-164",
-      "asset": "bread-crate",
-      "x": 3.58,
-      "z": 0.38,
-      "rot": 1.1,
       "scale": 1
     },
     {
@@ -3472,14 +3548,6 @@
       "scale": 1
     },
     {
-      "id": "prop-278",
-      "asset": "bread-crate",
-      "x": 9.38,
-      "z": -1.382050807568877,
-      "rot": 0.8,
-      "scale": 1
-    },
-    {
       "id": "prop-279",
       "asset": "flower-cluster-yellow",
       "x": 6.68,
@@ -3530,10 +3598,10 @@
     {
       "id": "prop-287",
       "asset": "bread-crate",
-      "x": 11.58,
-      "z": -3.0841016151377545,
-      "rot": 0.9,
-      "scale": 1
+      "x": 12.38,
+      "z": -4.48,
+      "rot": 1.0,
+      "scale": 1.05
     },
     {
       "id": "prop-288",
@@ -5232,14 +5300,6 @@
       "scale": 1
     },
     {
-      "id": "prop-636",
-      "asset": "log",
-      "x": 9.6,
-      "z": -0.35,
-      "rot": 1.9,
-      "scale": 1
-    },
-    {
       "id": "prop-638",
       "asset": "pebbles",
       "x": 10.62,
@@ -5506,9 +5566,9 @@
     {
       "id": "bench-bakery-front",
       "asset": "bench",
-      "x": 6.9,
-      "z": -5.55,
-      "rot": 0,
+      "x": 5.48,
+      "z": -5.85,
+      "rot": 0.35,
       "scale": 1
     },
     {
@@ -5565,16 +5625,66 @@
       "rot": 0,
       "scale": 1
     },
-    { "id": "moka-basket-source", "asset": "prop-moka-basket", "x": 8.7, "z": -4.1 },
-    { "id": "moka-display", "asset": "prop-moka-display", "x": 9.8, "z": -4.45 },
-    { "id": "moka-workshop-dropoff", "asset": "prop-moka-dropoff", "x": 14, "z": 6.1 },
-    { "id": "moka-rest", "asset": "prop-moka-dropoff", "x": 10, "z": 3 },
-    { "id": "moka-ledger", "asset": "prop-moka-ledger", "x": 9.2, "z": -3 },
-    { "id": "moka-reservation-bread", "asset": "prop-moka-bread-round", "x": 9.5, "z": -2.5 },
-    { "id": "moka-tired-neighbor", "asset": "quest-npc", "x": 8.6, "z": -2 },
-    { "id": "moka-tasting-plate", "asset": "prop-moka-plate", "x": 9.5, "z": -3.1 },
-    { "id": "moka-dough-double", "asset": "prop-moka-mold", "x": 10.1, "z": -3 },
-    { "id": "moka-dough-reserved", "asset": "prop-moka-mold", "x": 10.3, "z": -2.6 },
+    {
+      "id": "moka-basket-source",
+      "asset": "prop-moka-basket",
+      "x": 8.7,
+      "z": -4.1
+    },
+    {
+      "id": "moka-display",
+      "asset": "prop-moka-display",
+      "x": 9.8,
+      "z": -4.45
+    },
+    {
+      "id": "moka-workshop-dropoff",
+      "asset": "prop-moka-dropoff",
+      "x": 14,
+      "z": 6.1
+    },
+    {
+      "id": "moka-rest",
+      "asset": "prop-moka-dropoff",
+      "x": 10,
+      "z": 3
+    },
+    {
+      "id": "moka-ledger",
+      "asset": "prop-moka-ledger",
+      "x": 9.2,
+      "z": -3
+    },
+    {
+      "id": "moka-reservation-bread",
+      "asset": "prop-moka-bread-round",
+      "x": 9.5,
+      "z": -2.5
+    },
+    {
+      "id": "moka-tired-neighbor",
+      "asset": "quest-npc",
+      "x": 8.6,
+      "z": -2
+    },
+    {
+      "id": "moka-tasting-plate",
+      "asset": "prop-moka-plate",
+      "x": 9.5,
+      "z": -3.1
+    },
+    {
+      "id": "moka-dough-double",
+      "asset": "prop-moka-mold",
+      "x": 10.1,
+      "z": -3
+    },
+    {
+      "id": "moka-dough-reserved",
+      "asset": "prop-moka-mold",
+      "x": 10.3,
+      "z": -2.6
+    },
     {
       "id": "signboard-gate",
       "asset": "signboard",
@@ -5584,62 +5694,342 @@
       "rot": 0,
       "scale": 1
     },
-    {"id":"lumi-table-alone","asset":"bench","x":-1,"z":-2},
-    {"id":"lumi-table-together","asset":"bench","x":-2,"z":-1},
-    {"id":"lumi-card-new","asset":"prop-lumi-notice","x":-0.8,"z":-1},
-    {"id":"lumi-card-traditional","asset":"prop-lumi-notice","x":-0.05,"z":-1.8},
-    {"id":"lumi-horn","asset":"prop-lumi-horn","x":1,"z":1},
-    {"id":"lumi-notices","asset":"prop-lumi-notice","x":1.8,"z":0.75},
-    {"id":"lumi-board","asset":"signboard","x":-2,"z":2},
-    {"id":"lumi-mailbox","asset":"prop-moka-dropoff","x":3,"z":2},
-    {"id":"lumi-notice-return","asset":"prop-moka-dropoff","x":1,"z":2},
-    {"id":"lumi-ribbon-source","asset":"prop-lumi-material","x":-3,"z":0},
-    {"id":"lumi-field-source","asset":"prop-lumi-material","x":-4.75,"z":2.25},
-    {"id":"lumi-stage-workbench","asset":"prop-moka-dropoff","x":2,"z":-1},
-    {"id":"lumi-decoration-board","asset":"prop-lumi-decoration-board","x":3,"z":-2},
-    {"id":"lumi-welcome-postcard","asset":"prop-lumi-notice","x":-0.5,"z":2},
-    {"id":"lumi-welcome-plaza","asset":"bench","x":-1,"z":3},
-    {"id":"lumi-score-new","asset":"prop-lumi-score","x":-4,"z":-1},
-    {"id":"lumi-score-old","asset":"prop-lumi-score","x":-5,"z":-1},
-    {"id":"lumi-musician-stand","asset":"prop-moka-dropoff","x":4,"z":-2},
-    {"id":"lumi-rest","asset":"prop-moka-dropoff","x":2,"z":3},
-    {"id":"echo-kind-note","asset":"prop-echo-book","x":-10,"z":0},
-    {"id":"echo-rules-note","asset":"prop-echo-book","x":-9,"z":0},
-    {"id":"echo-picture-book","asset":"prop-echo-book","x":-11,"z":0},
-    {"id":"echo-history-shelf","asset":"book-stack","x":-12,"z":-3},
-    {"id":"echo-attic-door","asset":"signboard","x":-12.5,"z":-4},
-    {"id":"echo-history-record","asset":"prop-echo-book","x":-12,"z":-2},
-    {"id":"echo-attic-record","asset":"prop-echo-book","x":-13.5,"z":-2.9},
-    {"id":"echo-reading-desk","asset":"prop-moka-dropoff","x":-10,"z":-2},
-    {"id":"echo-notebook","asset":"prop-echo-book","x":-10.25,"z":-3},
-    {"id":"echo-cooking-shelf","asset":"book-stack","x":-9,"z":-4},
-    {"id":"echo-story-table","asset":"prop-moka-dropoff","x":-8,"z":-3},
-    {"id":"echo-bookshelf","asset":"prop-echo-books-board","x":-13,"z":0},
-    {"id":"echo-story","asset":"bench","x":-8,"z":0},
-    {"id":"echo-bookmark-words","asset":"prop-echo-book","x":-11,"z":1},
-    {"id":"echo-bookmark-clues","asset":"prop-echo-book","x":-10,"z":1},
-    {"id":"echo-legend","asset":"prop-echo-book","x":-9,"z":1},
-    {"id":"echo-glass-case","asset":"prop-moka-dropoff","x":-13,"z":1},
-    {"id":"echo-open-display","asset":"prop-moka-dropoff","x":-14,"z":1},
-    {"id":"echo-rest","asset":"prop-moka-dropoff","x":-8,"z":-2},
-    {"id":"or-fire-strong","asset":"tool-rack","x":13.25,"z":5},
-    {"id":"or-fire-gentle","asset":"tool-rack","x":14,"z":4.5},
-    {"id":"or-bucket","asset":"prop-or-bucket-empty","x":12,"z":4.75},
-    {"id":"or-map","asset":"prop-or-lantern-diagram","x":11,"z":7},
-    {"id":"or-sand","asset":"prop-or-sand","x":-4,"z":9},
-    {"id":"or-grinding-bench","asset":"prop-moka-dropoff","x":13.75,"z":7.5},
-    {"id":"or-clock-board","asset":"prop-or-gear-board","x":12.5,"z":7.75},
-    {"id":"or-weight-light","asset":"prop-or-gear-circle","x":11,"z":8},
-    {"id":"or-weight-heavy","asset":"prop-or-gear-square","x":10,"z":8},
-    {"id":"or-review-together","asset":"prop-or-lantern-diagram","x":10.75,"z":9},
-    {"id":"or-review-alone","asset":"prop-or-lantern-diagram","x":9.75,"z":9},
-    {"id":"or-lantern-link","asset":"prop-or-lantern-diagram","x":11.5,"z":10},
-    {"id":"or-hook-branches","asset":"tool-rack","x":14,"z":9},
-    {"id":"or-hook-reinforce","asset":"tool-rack","x":14,"z":10},
-    {"id":"or-tools","asset":"tool-rack","x":15,"z":9.5},
-    {"id":"or-bell","asset":"prop-or-bell","x":12,"z":11},
-    {"id":"or-plaza-stand","asset":"prop-moka-dropoff","x":4,"z":2},
-    {"id":"or-rest","asset":"prop-moka-dropoff","x":10,"z":6}
+    {
+      "id": "lumi-table-alone",
+      "asset": "bench",
+      "x": -1,
+      "z": -2
+    },
+    {
+      "id": "lumi-table-together",
+      "asset": "bench",
+      "x": -2,
+      "z": -1
+    },
+    {
+      "id": "lumi-card-new",
+      "asset": "prop-lumi-notice",
+      "x": -0.8,
+      "z": -1
+    },
+    {
+      "id": "lumi-card-traditional",
+      "asset": "prop-lumi-notice",
+      "x": -0.05,
+      "z": -1.8
+    },
+    {
+      "id": "lumi-horn",
+      "asset": "prop-lumi-horn",
+      "x": 1,
+      "z": 1
+    },
+    {
+      "id": "lumi-notices",
+      "asset": "prop-lumi-notice",
+      "x": 1.8,
+      "z": 0.75
+    },
+    {
+      "id": "lumi-board",
+      "asset": "signboard",
+      "x": -2,
+      "z": 2
+    },
+    {
+      "id": "lumi-mailbox",
+      "asset": "prop-moka-dropoff",
+      "x": 3,
+      "z": 2
+    },
+    {
+      "id": "lumi-notice-return",
+      "asset": "prop-moka-dropoff",
+      "x": 1,
+      "z": 2
+    },
+    {
+      "id": "lumi-ribbon-source",
+      "asset": "prop-lumi-material",
+      "x": -3,
+      "z": 0
+    },
+    {
+      "id": "lumi-field-source",
+      "asset": "prop-lumi-material",
+      "x": -4.75,
+      "z": 2.25
+    },
+    {
+      "id": "lumi-stage-workbench",
+      "asset": "prop-moka-dropoff",
+      "x": 2,
+      "z": -1
+    },
+    {
+      "id": "lumi-decoration-board",
+      "asset": "prop-lumi-decoration-board",
+      "x": 3,
+      "z": -2
+    },
+    {
+      "id": "lumi-welcome-postcard",
+      "asset": "prop-lumi-notice",
+      "x": -0.5,
+      "z": 2
+    },
+    {
+      "id": "lumi-welcome-plaza",
+      "asset": "bench",
+      "x": -1,
+      "z": 3
+    },
+    {
+      "id": "lumi-score-new",
+      "asset": "prop-lumi-score",
+      "x": -4,
+      "z": -1
+    },
+    {
+      "id": "lumi-score-old",
+      "asset": "prop-lumi-score",
+      "x": -5,
+      "z": -1
+    },
+    {
+      "id": "lumi-musician-stand",
+      "asset": "prop-moka-dropoff",
+      "x": 4,
+      "z": -2
+    },
+    {
+      "id": "lumi-rest",
+      "asset": "prop-moka-dropoff",
+      "x": 2,
+      "z": 3
+    },
+    {
+      "id": "echo-kind-note",
+      "asset": "prop-echo-book",
+      "x": -10,
+      "z": 0
+    },
+    {
+      "id": "echo-rules-note",
+      "asset": "prop-echo-book",
+      "x": -9,
+      "z": 0
+    },
+    {
+      "id": "echo-picture-book",
+      "asset": "prop-echo-book",
+      "x": -11,
+      "z": 0
+    },
+    {
+      "id": "echo-history-shelf",
+      "asset": "book-stack",
+      "x": -12,
+      "z": -3
+    },
+    {
+      "id": "echo-attic-door",
+      "asset": "signboard",
+      "x": -12.5,
+      "z": -4
+    },
+    {
+      "id": "echo-history-record",
+      "asset": "prop-echo-book",
+      "x": -12,
+      "z": -2
+    },
+    {
+      "id": "echo-attic-record",
+      "asset": "prop-echo-book",
+      "x": -13.5,
+      "z": -2.9
+    },
+    {
+      "id": "echo-reading-desk",
+      "asset": "prop-moka-dropoff",
+      "x": -10,
+      "z": -2
+    },
+    {
+      "id": "echo-notebook",
+      "asset": "prop-echo-book",
+      "x": -10.25,
+      "z": -3
+    },
+    {
+      "id": "echo-cooking-shelf",
+      "asset": "book-stack",
+      "x": -9,
+      "z": -4
+    },
+    {
+      "id": "echo-story-table",
+      "asset": "prop-moka-dropoff",
+      "x": -8,
+      "z": -3
+    },
+    {
+      "id": "echo-bookshelf",
+      "asset": "prop-echo-books-board",
+      "x": -13,
+      "z": 0
+    },
+    {
+      "id": "echo-story",
+      "asset": "bench",
+      "x": -8,
+      "z": 0
+    },
+    {
+      "id": "echo-bookmark-words",
+      "asset": "prop-echo-book",
+      "x": -11,
+      "z": 1
+    },
+    {
+      "id": "echo-bookmark-clues",
+      "asset": "prop-echo-book",
+      "x": -10,
+      "z": 1
+    },
+    {
+      "id": "echo-legend",
+      "asset": "prop-echo-book",
+      "x": -9,
+      "z": 1
+    },
+    {
+      "id": "echo-glass-case",
+      "asset": "prop-moka-dropoff",
+      "x": -13,
+      "z": 1
+    },
+    {
+      "id": "echo-open-display",
+      "asset": "prop-moka-dropoff",
+      "x": -14,
+      "z": 1
+    },
+    {
+      "id": "echo-rest",
+      "asset": "prop-moka-dropoff",
+      "x": -8,
+      "z": -2
+    },
+    {
+      "id": "or-fire-strong",
+      "asset": "tool-rack",
+      "x": 13.25,
+      "z": 5
+    },
+    {
+      "id": "or-fire-gentle",
+      "asset": "tool-rack",
+      "x": 14,
+      "z": 4.5
+    },
+    {
+      "id": "or-bucket",
+      "asset": "prop-or-bucket-empty",
+      "x": 12,
+      "z": 4.75
+    },
+    {
+      "id": "or-map",
+      "asset": "prop-or-lantern-diagram",
+      "x": 11,
+      "z": 7
+    },
+    {
+      "id": "or-sand",
+      "asset": "prop-or-sand",
+      "x": -4,
+      "z": 9
+    },
+    {
+      "id": "or-grinding-bench",
+      "asset": "prop-moka-dropoff",
+      "x": 13.75,
+      "z": 7.5
+    },
+    {
+      "id": "or-clock-board",
+      "asset": "prop-or-gear-board",
+      "x": 12.5,
+      "z": 7.75
+    },
+    {
+      "id": "or-weight-light",
+      "asset": "prop-or-gear-circle",
+      "x": 11,
+      "z": 8
+    },
+    {
+      "id": "or-weight-heavy",
+      "asset": "prop-or-gear-square",
+      "x": 10,
+      "z": 8
+    },
+    {
+      "id": "or-review-together",
+      "asset": "prop-or-lantern-diagram",
+      "x": 10.75,
+      "z": 9
+    },
+    {
+      "id": "or-review-alone",
+      "asset": "prop-or-lantern-diagram",
+      "x": 9.75,
+      "z": 9
+    },
+    {
+      "id": "or-lantern-link",
+      "asset": "prop-or-lantern-diagram",
+      "x": 11.5,
+      "z": 10
+    },
+    {
+      "id": "or-hook-branches",
+      "asset": "tool-rack",
+      "x": 14,
+      "z": 9
+    },
+    {
+      "id": "or-hook-reinforce",
+      "asset": "tool-rack",
+      "x": 14,
+      "z": 10
+    },
+    {
+      "id": "or-tools",
+      "asset": "tool-rack",
+      "x": 15,
+      "z": 9.5
+    },
+    {
+      "id": "or-bell",
+      "asset": "prop-or-bell",
+      "x": 12,
+      "z": 11
+    },
+    {
+      "id": "or-plaza-stand",
+      "asset": "prop-moka-dropoff",
+      "x": 4,
+      "z": 2
+    },
+    {
+      "id": "or-rest",
+      "asset": "prop-moka-dropoff",
+      "x": 10,
+      "z": 6
+    }
   ],
   "coast": "organic-v3"
 }
