@@ -56,6 +56,13 @@ PHASE1_KEYS = [
 # Palette & Color Utilities (sRGB -> Linear sRGB, Dream Palette v2)
 # -----------------------------------------------------------------------------
 PALETTE = {
+    "nature_leaf_dark": "#315B38",
+    "nature_leaf": "#45784A",
+    "nature_leaf_light": "#619056",
+    "nature_wood": "#80513A",
+    "nature_stone": "#858982",
+    "nature_stone_light": "#A1A59D",
+    "nature_stone_dark": "#696F6B",
     "cream": "#FFF8EC",
     "cream_warm": "#F7EFE2",
     "cream_shadow": "#E6D8C0",
@@ -584,6 +591,17 @@ class PartBuilder:
         bmesh.ops.translate(bm, vec=Vector(center), verts=bm.verts)
         self._finalize_part_mesh(bm, color_hex, bevel_width=bevel, bevel_segments=1 if bevel > 0 else 0, smooth=smooth, shade_gradient=0.16)
 
+    def add_foliage(self, radius, center, color_hex, scale=(1.0, 1.0, 1.0), seed=1):
+        bm = bmesh.new()
+        bmesh.ops.create_icosphere(bm, subdivisions=2, radius=radius)
+        for i, v in enumerate(bm.verts):
+            n = 1.0 + 0.12 * math.sin(i * 4.7 + seed * 8.3)
+            v.co.x *= scale[0] * n
+            v.co.y *= scale[1] * n
+            v.co.z *= scale[2] * n
+        bmesh.ops.translate(bm, vec=Vector(center), verts=bm.verts)
+        self._finalize_part_mesh(bm, color_hex, bevel_width=0, bevel_segments=0, smooth=False)
+
     def add_rock_poly(self, radius, center, color_hex, scale=(1.0, 1.0, 0.8), seed=1, bevel=0.015):
         bm = bmesh.new()
         bmesh.ops.create_icosphere(bm, subdivisions=1, radius=radius)
@@ -874,45 +892,45 @@ def build_lake_pavilion(pb: PartBuilder):
 
 
 def build_tree_round(pb: PartBuilder):
-    pb.add_cylinder(0.15, 0.11, 0.68, (0.0, 0.0, 0.34), PALETTE["wood"], vertices=10, bevel=0.01)
-    pb.add_cylinder(0.065, 0.035, 0.46, (-0.16, -0.03, 0.70), PALETTE["wood_dark"], vertices=8, rot_euler=(0, -0.65, 0), bevel=0.0)
-    pb.add_cylinder(0.06, 0.03, 0.42, (0.16, 0.08, 0.76), PALETTE["wood"], vertices=8, rot_euler=(0, 0.70, 0), bevel=0.0)
-    pb.add_sphere(0.31, (-0.23, -0.07, 1.02), PALETTE["grass_dark"], subdivisions=2, scale=(1.15, 1.0, 0.90))
-    pb.add_sphere(0.32, (0.17, 0.10, 1.13), PALETTE["grass"], subdivisions=2, scale=(1.0, 1.05, 0.95))
-    pb.add_sphere(0.25, (-0.02, -0.18, 1.34), PALETTE["grass_light"], subdivisions=2)
-    pb.add_sphere(0.22, (0.33, -0.08, 0.91), PALETTE["grass_light"], subdivisions=2)
+    pb.add_cylinder(0.15, 0.11, 0.68, (0.0, 0.0, 0.34), PALETTE["nature_wood"], vertices=7, bevel=0.0, smooth=False)
+    pb.add_cylinder(0.065, 0.035, 0.46, (-0.16, -0.03, 0.70), PALETTE["nature_wood"], vertices=8, rot_euler=(0, -0.65, 0), bevel=0.0, smooth=False)
+    pb.add_cylinder(0.06, 0.03, 0.42, (0.16, 0.08, 0.76), PALETTE["nature_wood"], vertices=8, rot_euler=(0, 0.70, 0), bevel=0.0, smooth=False)
+    pb.add_foliage(0.31, (-0.23, -0.07, 1.02), PALETTE["nature_leaf_dark"], scale=(1.15, 1.0, 0.90))
+    pb.add_foliage(0.32, (0.17, 0.10, 1.13), PALETTE["nature_leaf"], scale=(1.0, 1.05, 0.95))
+    pb.add_foliage(0.25, (-0.02, -0.18, 1.34), PALETTE["nature_leaf_light"])
+    pb.add_foliage(0.22, (0.33, -0.08, 0.91), PALETTE["nature_leaf_light"])
 
 
 def build_tree_layered(pb: PartBuilder):
-    pb.add_cylinder(0.18, 0.12, 0.52, (0.0, 0.0, 0.26), PALETTE["wood_dark"], vertices=10, bevel=0.01)
-    pb.add_cylinder(0.55, 0.18, 0.56, (0.0, 0.0, 0.68), PALETTE["grass_dark"], vertices=10, bevel=0.02, segments=2)
-    pb.add_cylinder(0.44, 0.14, 0.52, (0.0, 0.0, 1.08), PALETTE["grass"], vertices=10, bevel=0.02, segments=2)
-    pb.add_cylinder(0.32, 0.03, 0.48, (0.0, 0.0, 1.48), PALETTE["grass_light"], vertices=10, bevel=0.02, segments=2)
+    pb.add_cylinder(0.18, 0.12, 0.52, (0.0, 0.0, 0.26), PALETTE["nature_wood"], vertices=7, bevel=0.0, smooth=False)
+    pb.add_cylinder(0.55, 0.18, 0.56, (0.0, 0.0, 0.68), PALETTE["nature_leaf_dark"], vertices=7, bevel=0.0, segments=0, smooth=False)
+    pb.add_cylinder(0.44, 0.14, 0.52, (0.0, 0.0, 1.08), PALETTE["nature_leaf"], vertices=7, bevel=0.0, segments=0, smooth=False)
+    pb.add_cylinder(0.32, 0.03, 0.48, (0.0, 0.0, 1.48), PALETTE["nature_leaf_light"], vertices=7, bevel=0.0, segments=0, smooth=False)
 
 
 def build_tree_slender(pb: PartBuilder):
-    pb.add_cylinder(0.14, 0.10, 0.50, (0.0, 0.0, 0.25), PALETTE["wood"], vertices=10, bevel=0.01)
-    pb.add_sphere(0.35, (0.0, 0.0, 1.02), PALETTE["grass"], subdivisions=2, scale=(0.95, 0.95, 1.65))
-    pb.add_sphere(0.26, (0.0, 0.0, 1.32), PALETTE["grass_light"], subdivisions=2, scale=(0.85, 0.85, 1.15))
+    pb.add_cylinder(0.14, 0.10, 0.50, (0.0, 0.0, 0.25), PALETTE["nature_wood"], vertices=7, bevel=0.0, smooth=False)
+    pb.add_foliage(0.35, (0.0, 0.0, 1.02), PALETTE["nature_leaf"], scale=(0.95, 0.95, 1.65))
+    pb.add_foliage(0.26, (0.0, 0.0, 1.32), PALETTE["nature_leaf_light"], scale=(0.85, 0.85, 1.15))
 
 
 def build_tree_young(pb: PartBuilder):
-    pb.add_cylinder(0.10, 0.06, 0.64, (0.0, 0.0, 0.32), PALETTE["wood_light"], vertices=8, bevel=0.008)
-    pb.add_sphere(0.24, (0.0, 0.0, 0.92), PALETTE["grass_light"], subdivisions=2)
-    pb.add_sphere(0.18, (-0.16, 0.04, 0.72), PALETTE["grass"], subdivisions=2)
-    pb.add_sphere(0.17, (0.16, -0.04, 0.78), PALETTE["grass"], subdivisions=2)
+    pb.add_cylinder(0.10, 0.06, 0.64, (0.0, 0.0, 0.32), PALETTE["nature_wood"], vertices=7, bevel=0.0, smooth=False)
+    pb.add_foliage(0.24, (0.0, 0.0, 0.92), PALETTE["nature_leaf_light"])
+    pb.add_foliage(0.18, (-0.16, 0.04, 0.72), PALETTE["nature_leaf"])
+    pb.add_foliage(0.17, (0.16, -0.04, 0.78), PALETTE["nature_leaf"])
 
 
 def build_bush(pb: PartBuilder):
-    pb.add_cylinder(0.035, 0.02, 0.19, (0.0, 0.0, 0.095), PALETTE["wood_dark"], vertices=6, bevel=0.0)
-    pb.add_sphere(0.19, (-0.13, 0.02, 0.19), PALETTE["grass_dark"], subdivisions=2, scale=(1.0, 0.95, 0.9))
-    pb.add_sphere(0.18, (0.10, 0.05, 0.24), PALETTE["grass"], subdivisions=2)
-    pb.add_sphere(0.13, (0.22, -0.06, 0.14), PALETTE["grass_light"], subdivisions=2)
+    pb.add_cylinder(0.035, 0.02, 0.19, (0.0, 0.0, 0.095), PALETTE["nature_wood"], vertices=6, bevel=0.0, smooth=False)
+    pb.add_foliage(0.19, (-0.13, 0.02, 0.19), PALETTE["nature_leaf_dark"], scale=(1.0, 0.95, 0.9))
+    pb.add_foliage(0.18, (0.10, 0.05, 0.24), PALETTE["nature_leaf"])
+    pb.add_foliage(0.13, (0.22, -0.06, 0.14), PALETTE["nature_leaf_light"])
 
 
 def build_flower_bed(pb: PartBuilder):
-    pb.add_box((0.68, 0.48, 0.09), (0.0, 0.0, 0.045), PALETTE["wood"], bevel=0.015)
-    pb.add_sphere(0.28, (0.0, 0.0, 0.10), PALETTE["grass_dark"], subdivisions=2, scale=(1.1, 0.75, 0.38))
+    pb.add_box((0.68, 0.48, 0.09), (0.0, 0.0, 0.045), PALETTE["nature_wood"], bevel=0.015)
+    pb.add_foliage(0.28, (0.0, 0.0, 0.10), PALETTE["nature_leaf_dark"], scale=(1.1, 0.75, 0.38))
     flower_specs = [
         ((-0.18, -0.08, 0.20), PALETTE["coral"]),
         ((0.0, -0.10, 0.21), PALETTE["gold"]),
@@ -921,18 +939,18 @@ def build_flower_bed(pb: PartBuilder):
         ((0.12, 0.08, 0.20), PALETTE["blossom_white"]),
     ]
     for pos, col in flower_specs:
-        pb.add_sphere(0.055, pos, col, subdivisions=1, scale=(1.2, 1.2, 0.65))
-        pb.add_sphere(0.025, (pos[0], pos[1], pos[2] + 0.02), PALETTE["gold_light"], subdivisions=1)
+        pb.add_sphere(0.055, pos, col, subdivisions=1, scale=(1.2, 1.2, 0.65), smooth=False)
+        pb.add_sphere(0.025, (pos[0], pos[1], pos[2] + 0.02), PALETTE["gold_light"], subdivisions=1, smooth=False)
 
 
 def build_grass_tuft(pb: PartBuilder):
-    # Strictly <= 160 triangles: 3 beveled main blades + 2 crisp accent blades = 156 tris
+    # Five angular blades stay within the 160-triangle budget.
     blades = [
-        ((0.0, 0.0, 0.09), (0.045, 0.035, 0.18), (0.0, 0.0, 0.0), PALETTE["grass"], 0.005),
-        ((-0.05, -0.02, 0.08), (0.04, 0.03, 0.15), (0.12, -0.28, 0.2), PALETTE["grass_light"], 0.005),
-        ((0.05, 0.02, 0.08), (0.04, 0.03, 0.15), (-0.12, 0.28, -0.2), PALETTE["grass_dark"], 0.005),
-        ((0.0, -0.04, 0.07), (0.038, 0.03, 0.13), (0.25, 0.05, 0.0), PALETTE["grass"], 0.0),
-        ((0.0, 0.04, 0.07), (0.038, 0.03, 0.13), (-0.25, -0.05, 0.0), PALETTE["grass_light"], 0.0),
+        ((0.0, 0.0, 0.09), (0.045, 0.035, 0.18), (0.0, 0.0, 0.0), PALETTE["nature_leaf"], 0.0),
+        ((-0.05, -0.02, 0.08), (0.04, 0.03, 0.15), (0.12, -0.28, 0.2), PALETTE["nature_leaf_light"], 0.0),
+        ((0.05, 0.02, 0.08), (0.04, 0.03, 0.15), (-0.12, 0.28, -0.2), PALETTE["nature_leaf_dark"], 0.0),
+        ((0.0, -0.04, 0.07), (0.038, 0.03, 0.13), (0.25, 0.05, 0.0), PALETTE["nature_leaf"], 0.0),
+        ((0.0, 0.04, 0.07), (0.038, 0.03, 0.13), (-0.25, -0.05, 0.0), PALETTE["nature_leaf_light"], 0.0),
     ]
     for center, size, rot, col, bev in blades:
         pb.add_box(size, center, col, rot_euler=rot, bevel=bev, segments=1 if bev > 0 else 0, taper_top=(0.25, 0.35))
@@ -951,15 +969,15 @@ def build_mushroom(pb: PartBuilder):
 
 
 def build_pebbles(pb: PartBuilder):
-    # Strictly <= 160 triangles: 4 smooth low-poly river stones using 8-sided beveled cylinders = 128 tris
+    # Four irregular stones stay within the 160-triangle budget.
     stones = [
-        ((-0.04, -0.02, 0.024), 0.058, 0.042, PALETTE["stone"], (1.0, 0.85)),
-        ((0.06, 0.03, 0.020), 0.044, 0.036, PALETTE["stone_light"], (0.95, 0.82)),
-        ((-0.03, 0.06, 0.018), 0.034, 0.030, PALETTE["stone_dark"], (0.90, 0.80)),
-        ((0.05, -0.05, 0.016), 0.032, 0.028, PALETTE["stone"], (1.0, 0.88)),
+        ((-0.04, -0.02, 0.024), 0.058, 0.042, PALETTE["nature_stone"], (1.0, 0.85)),
+        ((0.06, 0.03, 0.020), 0.044, 0.036, PALETTE["nature_stone_light"], (0.95, 0.82)),
+        ((-0.03, 0.06, 0.018), 0.034, 0.030, PALETTE["nature_stone_dark"], (0.90, 0.80)),
+        ((0.05, -0.05, 0.016), 0.032, 0.028, PALETTE["nature_stone"], (1.0, 0.88)),
     ]
     for pos, r, h, col, sxy in stones:
-        pb.add_cylinder(r, r * 0.65, h, pos, col, vertices=8, bevel=0.0, segments=0, scale_xy=sxy)
+        pb.add_rock_poly(r, pos, col, scale=(sxy[0], sxy[1], h / r), seed=int(r * 1000), bevel=0.0)
 
 
 def build_fence(pb: PartBuilder):
@@ -970,12 +988,12 @@ def build_fence(pb: PartBuilder):
 
 
 def build_rock_small(pb: PartBuilder):
-    pb.add_rock_poly(0.20, (0.0, 0.0, 0.13), PALETTE["stone"], scale=(1.0, 0.90, 0.75), seed=3, bevel=0.015)
+    pb.add_rock_poly(0.20, (0.0, 0.0, 0.13), PALETTE["nature_stone"], scale=(1.0, 0.90, 0.75), seed=3, bevel=0.0)
 
 
 def build_rock_large(pb: PartBuilder):
-    pb.add_rock_poly(0.36, (-0.04, 0.0, 0.24), PALETTE["stone"], scale=(1.05, 0.92, 0.76), seed=7, bevel=0.02)
-    pb.add_rock_poly(0.22, (0.16, -0.08, 0.14), PALETTE["stone_dark"], scale=(0.95, 0.85, 0.68), seed=11, bevel=0.015)
+    pb.add_rock_poly(0.36, (-0.04, 0.0, 0.24), PALETTE["nature_stone"], scale=(1.05, 0.92, 0.76), seed=7, bevel=0.0)
+    pb.add_rock_poly(0.22, (0.16, -0.08, 0.14), PALETTE["nature_stone_dark"], scale=(0.95, 0.85, 0.68), seed=11, bevel=0.0)
 
 
 def build_streetlight(pb: PartBuilder):
@@ -2049,7 +2067,7 @@ def main():
         obj = pb.build_combined_object(key, spec["dims"], lock_x_bounds=lock_x, z_ground_offset=z_offset)
         built_objects[key] = obj
 
-        if key not in ("bakery", "tree-round", "bush"):
+        if not targets and key not in ("bakery", "tree-round", "bush"):
             continue
 
         for other_k, other_obj in built_objects.items():

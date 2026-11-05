@@ -4,12 +4,12 @@
   "paletteVersion": "dream-v2",
   "colorSpaceNote": "몽환 팔레트 v2(2026-11-01): sRGB 팔레트 v2 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
   "phase1Only": false,
-  "buildTerrain": true,
+  "buildTerrain": false,
   "summary": {
     "assetCount": 40,
-    "totalTriangles": 38184,
-    "totalBytes": 388096,
-    "totalKiB": 379.0
+    "totalTriangles": 37162,
+    "totalBytes": 383796,
+    "totalKiB": 374.8
   },
   "assets": {
     "entrance-house": {
@@ -1111,20 +1111,20 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0,
-          "z": 0,
+          "x": 0.0,
+          "z": 0.0,
           "radius": 0.16
         }
       ],
-      "triangles": 492,
-      "bytes": 8588,
+      "triangles": 400,
+      "bytes": 10000,
       "maxTriangles": 1200,
       "maxBytes": 61440,
       "bounds": {
         "width": 1.02,
         "depth": 1.02,
         "height": 1.5,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 1.5
       },
       "materials": 1,
@@ -1133,82 +1133,67 @@
       "dracoCompressed": true,
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/tree-round.png",
-      "revisionAuthor": "Codex gpt-6.1-terra (agy 한도로 대체)",
+      "revisionAuthor": "Codex (agy quota fallback)",
       "colorVerification": {
-        "grass_dark": {
-          "paletteHex": "#64AD8E",
-          "measuredHex": "#64AD8E",
+        "nature_leaf_dark": {
+          "paletteHex": "#315B38",
+          "measuredHex": "#315B38",
           "measuredSrgb255": [
-            100,
-            173,
-            142
+            49.0,
+            91.0,
+            56.0
           ],
           "measuredLinear": [
-            0.1274,
-            0.4179,
-            0.2705
+            0.0307,
+            0.1046,
+            0.0395
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "grass": {
-          "paletteHex": "#7EC4A6",
-          "measuredHex": "#7EC4A6",
+        "nature_leaf": {
+          "paletteHex": "#45784A",
+          "measuredHex": "#45784A",
           "measuredSrgb255": [
-            126,
-            196,
-            166
+            69.0,
+            120.0,
+            74.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.552,
-            0.3813
-          ],
-          "maxDiff255": 0
-        },
-        "wood_dark": {
-          "paletteHex": "#9C7860",
-          "measuredHex": "#9C7860",
-          "measuredSrgb255": [
-            156,
-            120,
-            96
-          ],
-          "measuredLinear": [
-            0.3325,
+            0.0595,
             0.1878,
-            0.117
+            0.0685
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "grass_light": {
-          "paletteHex": "#9CD4B5",
-          "measuredHex": "#9CD4B5",
+        "nature_leaf_light": {
+          "paletteHex": "#619056",
+          "measuredHex": "#619056",
           "measuredSrgb255": [
-            156,
-            212,
-            181
+            97.0,
+            144.0,
+            86.0
           ],
           "measuredLinear": [
-            0.3325,
-            0.6584,
-            0.4621
+            0.1195,
+            0.2789,
+            0.0931
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "wood": {
-          "paletteHex": "#C69D80",
-          "measuredHex": "#C69D80",
+        "nature_wood": {
+          "paletteHex": "#80513A",
+          "measuredHex": "#80513A",
           "measuredSrgb255": [
-            198,
-            157,
-            128
+            128.0,
+            81.0,
+            58.0
           ],
           "measuredLinear": [
-            0.5647,
-            0.3372,
-            0.2159
+            0.2159,
+            0.0823,
+            0.0423
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         }
       }
     },
@@ -1218,20 +1203,20 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0,
-          "z": 0,
+          "x": 0.0,
+          "z": 0.0,
           "radius": 0.2
         }
       ],
-      "triangles": 464,
-      "bytes": 4248,
+      "triangles": 96,
+      "bytes": 2572,
       "maxTriangles": 1200,
       "maxBytes": 61440,
       "bounds": {
         "width": 1.1,
         "depth": 1.1,
         "height": 1.8,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 1.8
       },
       "materials": 1,
@@ -1240,66 +1225,67 @@
       "dracoCompressed": true,
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/tree-layered.png",
+      "revisionAuthor": "Codex (agy quota fallback)",
       "colorVerification": {
-        "grass_dark": {
-          "paletteHex": "#64AD8E",
-          "measuredHex": "#64AD8E",
+        "nature_leaf_dark": {
+          "paletteHex": "#315B38",
+          "measuredHex": "#315B38",
           "measuredSrgb255": [
-            100,
-            173,
-            142
+            49.0,
+            91.0,
+            56.0
           ],
           "measuredLinear": [
-            0.1274,
-            0.4179,
-            0.2705
+            0.0307,
+            0.1046,
+            0.0395
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "grass": {
-          "paletteHex": "#7EC4A6",
-          "measuredHex": "#7EC4A6",
+        "nature_leaf": {
+          "paletteHex": "#45784A",
+          "measuredHex": "#45784A",
           "measuredSrgb255": [
-            126,
-            196,
-            166
+            69.0,
+            120.0,
+            74.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.552,
-            0.3813
-          ],
-          "maxDiff255": 0
-        },
-        "wood_dark": {
-          "paletteHex": "#9C7860",
-          "measuredHex": "#9C7860",
-          "measuredSrgb255": [
-            156,
-            120,
-            96
-          ],
-          "measuredLinear": [
-            0.3325,
+            0.0595,
             0.1878,
-            0.117
+            0.0685
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "grass_light": {
-          "paletteHex": "#9CD4B5",
-          "measuredHex": "#9CD4B5",
+        "nature_leaf_light": {
+          "paletteHex": "#619056",
+          "measuredHex": "#619056",
           "measuredSrgb255": [
-            156,
-            212,
-            181
+            97.0,
+            144.0,
+            86.0
           ],
           "measuredLinear": [
-            0.3325,
-            0.6584,
-            0.4621
+            0.1195,
+            0.2789,
+            0.0931
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
+        },
+        "nature_wood": {
+          "paletteHex": "#80513A",
+          "measuredHex": "#80513A",
+          "measuredSrgb255": [
+            128.0,
+            81.0,
+            58.0
+          ],
+          "measuredLinear": [
+            0.2159,
+            0.0823,
+            0.0423
+          ],
+          "maxDiff255": 0.0
         }
       }
     },
@@ -1309,20 +1295,20 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0,
-          "z": 0,
+          "x": 0.0,
+          "z": 0.0,
           "radius": 0.16
         }
       ],
-      "triangles": 276,
-      "bytes": 5256,
+      "triangles": 184,
+      "bytes": 5400,
       "maxTriangles": 1200,
       "maxBytes": 61440,
       "bounds": {
         "width": 0.7,
         "depth": 0.7,
         "height": 1.6,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 1.6
       },
       "materials": 1,
@@ -1331,51 +1317,52 @@
       "dracoCompressed": true,
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/tree-slender.png",
+      "revisionAuthor": "Codex (agy quota fallback)",
       "colorVerification": {
-        "grass": {
-          "paletteHex": "#7EC4A6",
-          "measuredHex": "#7EC4A6",
+        "nature_leaf": {
+          "paletteHex": "#45784A",
+          "measuredHex": "#45784A",
           "measuredSrgb255": [
-            126,
-            196,
-            166
+            69.0,
+            120.0,
+            74.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.552,
-            0.3813
+            0.0595,
+            0.1878,
+            0.0685
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "grass_light": {
-          "paletteHex": "#9CD4B5",
-          "measuredHex": "#9CD4B5",
+        "nature_leaf_light": {
+          "paletteHex": "#619056",
+          "measuredHex": "#619056",
           "measuredSrgb255": [
-            156,
-            212,
-            181
+            97.0,
+            144.0,
+            86.0
           ],
           "measuredLinear": [
-            0.3325,
-            0.6584,
-            0.4621
+            0.1195,
+            0.2789,
+            0.0931
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "wood": {
-          "paletteHex": "#C69D80",
-          "measuredHex": "#C69D80",
+        "nature_wood": {
+          "paletteHex": "#80513A",
+          "measuredHex": "#80513A",
           "measuredSrgb255": [
-            198,
-            157,
-            128
+            128.0,
+            81.0,
+            58.0
           ],
           "measuredLinear": [
-            0.5647,
-            0.3372,
-            0.2159
+            0.2159,
+            0.0823,
+            0.0423
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         }
       }
     },
@@ -1385,20 +1372,20 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0,
-          "z": 0,
+          "x": 0.0,
+          "z": 0.0,
           "radius": 0.12
         }
       ],
-      "triangles": 332,
-      "bytes": 6084,
+      "triangles": 264,
+      "bytes": 7172,
       "maxTriangles": 1200,
       "maxBytes": 61440,
       "bounds": {
         "width": 0.66,
         "depth": 0.66,
         "height": 1.2,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 1.2
       },
       "materials": 1,
@@ -1407,51 +1394,52 @@
       "dracoCompressed": true,
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/tree-young.png",
+      "revisionAuthor": "Codex (agy quota fallback)",
       "colorVerification": {
-        "grass": {
-          "paletteHex": "#7EC4A6",
-          "measuredHex": "#7EC4A6",
+        "nature_leaf": {
+          "paletteHex": "#45784A",
+          "measuredHex": "#45784A",
           "measuredSrgb255": [
-            126,
-            196,
-            166
+            69.0,
+            120.0,
+            74.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.552,
-            0.3813
+            0.0595,
+            0.1878,
+            0.0685
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "grass_light": {
-          "paletteHex": "#9CD4B5",
-          "measuredHex": "#9CD4B5",
+        "nature_leaf_light": {
+          "paletteHex": "#619056",
+          "measuredHex": "#619056",
           "measuredSrgb255": [
-            156,
-            212,
-            181
+            97.0,
+            144.0,
+            86.0
           ],
           "measuredLinear": [
-            0.3325,
-            0.6584,
-            0.4621
+            0.1195,
+            0.2789,
+            0.0931
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "wood_light": {
-          "paletteHex": "#DFB99E",
-          "measuredHex": "#DFB99E",
+        "nature_wood": {
+          "paletteHex": "#80513A",
+          "measuredHex": "#80513A",
           "measuredSrgb255": [
-            223,
-            185,
-            158
+            128.0,
+            81.0,
+            58.0
           ],
           "measuredLinear": [
-            0.7379,
-            0.4851,
-            0.3419
+            0.2159,
+            0.0823,
+            0.0423
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         }
       }
     },
@@ -1461,20 +1449,20 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0,
-          "z": 0,
+          "x": 0.0,
+          "z": 0.0,
           "radius": 0.22
         }
       ],
       "triangles": 260,
-      "bytes": 5552,
+      "bytes": 7216,
       "maxTriangles": 500,
       "maxBytes": 30720,
       "bounds": {
         "width": 0.6,
         "depth": 0.5,
         "height": 0.4,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 0.4
       },
       "materials": 1,
@@ -1483,67 +1471,67 @@
       "dracoCompressed": true,
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/bush.png",
-      "revisionAuthor": "Codex gpt-6.1-terra (agy 한도로 대체)",
+      "revisionAuthor": "Codex (agy quota fallback)",
       "colorVerification": {
-        "grass_dark": {
-          "paletteHex": "#64AD8E",
-          "measuredHex": "#64AD8E",
+        "nature_leaf_dark": {
+          "paletteHex": "#315B38",
+          "measuredHex": "#315B38",
           "measuredSrgb255": [
-            100,
-            173,
-            142
+            49.0,
+            91.0,
+            56.0
           ],
           "measuredLinear": [
-            0.1274,
-            0.4179,
-            0.2705
+            0.0307,
+            0.1046,
+            0.0395
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "grass": {
-          "paletteHex": "#7EC4A6",
-          "measuredHex": "#7EC4A6",
+        "nature_leaf": {
+          "paletteHex": "#45784A",
+          "measuredHex": "#45784A",
           "measuredSrgb255": [
-            126,
-            196,
-            166
+            69.0,
+            120.0,
+            74.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.552,
-            0.3813
-          ],
-          "maxDiff255": 0
-        },
-        "wood_dark": {
-          "paletteHex": "#9C7860",
-          "measuredHex": "#9C7860",
-          "measuredSrgb255": [
-            156,
-            120,
-            96
-          ],
-          "measuredLinear": [
-            0.3325,
+            0.0595,
             0.1878,
-            0.117
+            0.0685
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "grass_light": {
-          "paletteHex": "#9CD4B5",
-          "measuredHex": "#9CD4B5",
+        "nature_leaf_light": {
+          "paletteHex": "#619056",
+          "measuredHex": "#619056",
           "measuredSrgb255": [
-            156,
-            212,
-            181
+            97.0,
+            144.0,
+            86.0
           ],
           "measuredLinear": [
-            0.3325,
-            0.6584,
-            0.4621
+            0.1195,
+            0.2789,
+            0.0931
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
+        },
+        "nature_wood": {
+          "paletteHex": "#80513A",
+          "measuredHex": "#80513A",
+          "measuredSrgb255": [
+            128.0,
+            81.0,
+            58.0
+          ],
+          "measuredLinear": [
+            0.2159,
+            0.0823,
+            0.0423
+          ],
+          "maxDiff255": 0.0
         }
       }
     },
@@ -1552,14 +1540,14 @@
       "scale": 1,
       "collision": [],
       "triangles": 324,
-      "bytes": 6388,
+      "bytes": 8120,
       "maxTriangles": 600,
       "maxBytes": 35840,
       "bounds": {
         "width": 0.7,
         "depth": 0.5,
         "height": 0.25,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 0.25
       },
       "materials": 1,
@@ -1568,126 +1556,127 @@
       "dracoCompressed": true,
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/flower-bed.png",
+      "revisionAuthor": "Codex (agy quota fallback)",
       "colorVerification": {
-        "grass_dark": {
-          "paletteHex": "#64AD8E",
-          "measuredHex": "#64AD8E",
+        "nature_leaf_dark": {
+          "paletteHex": "#315B38",
+          "measuredHex": "#315B38",
           "measuredSrgb255": [
-            100,
-            173,
-            142
+            49.0,
+            91.0,
+            56.0
           ],
           "measuredLinear": [
-            0.1274,
-            0.4179,
-            0.2705
+            0.0307,
+            0.1046,
+            0.0395
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
+        },
+        "nature_wood": {
+          "paletteHex": "#80513A",
+          "measuredHex": "#80513A",
+          "measuredSrgb255": [
+            128.0,
+            81.0,
+            58.0
+          ],
+          "measuredLinear": [
+            0.2159,
+            0.0823,
+            0.0423
+          ],
+          "maxDiff255": 0.0
         },
         "violet": {
           "paletteHex": "#BEA5EB",
           "measuredHex": "#BEA5EB",
           "measuredSrgb255": [
-            190,
-            165,
-            235
+            190.0,
+            165.0,
+            235.0
           ],
           "measuredLinear": [
             0.5149,
             0.3763,
             0.8308
           ],
-          "maxDiff255": 0
-        },
-        "wood": {
-          "paletteHex": "#C69D80",
-          "measuredHex": "#C69D80",
-          "measuredSrgb255": [
-            198,
-            157,
-            128
-          ],
-          "measuredLinear": [
-            0.5647,
-            0.3372,
-            0.2159
-          ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "blossom_pink": {
           "paletteHex": "#E6A8C7",
           "measuredHex": "#E6A8C7",
           "measuredSrgb255": [
-            230,
-            168,
-            199
+            230.0,
+            168.0,
+            199.0
           ],
           "measuredLinear": [
             0.7913,
             0.3916,
             0.5711
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "coral": {
           "paletteHex": "#EBA698",
           "measuredHex": "#EBA698",
           "measuredSrgb255": [
-            235,
-            166,
-            152
+            235.0,
+            166.0,
+            152.0
           ],
           "measuredLinear": [
             0.8308,
             0.3813,
             0.314
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "blossom_white": {
           "paletteHex": "#FAF5FF",
           "measuredHex": "#FAF5FF",
           "measuredSrgb255": [
-            250,
-            245,
-            255
+            250.0,
+            245.0,
+            255.0
           ],
           "measuredLinear": [
             0.956,
             0.9131,
-            1
+            1.0
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "gold": {
           "paletteHex": "#FFE08A",
           "measuredHex": "#FFE08A",
           "measuredSrgb255": [
-            255,
-            224,
-            138
+            255.0,
+            224.0,
+            138.0
           ],
           "measuredLinear": [
-            1,
+            1.0,
             0.7454,
             0.2542
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "gold_light": {
           "paletteHex": "#FFF0B8",
           "measuredHex": "#FFF0B8",
           "measuredSrgb255": [
-            255,
-            240,
-            184
+            255.0,
+            240.0,
+            184.0
           ],
           "measuredLinear": [
-            1,
+            1.0,
             0.8714,
             0.4793
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         }
       }
     },
@@ -1695,15 +1684,15 @@
       "path": "assets/abraxas/environment/grass-tuft.glb",
       "scale": 1,
       "collision": [],
-      "triangles": 156,
-      "bytes": 4476,
+      "triangles": 60,
+      "bytes": 2364,
       "maxTriangles": 160,
       "maxBytes": 15360,
       "bounds": {
         "width": 0.22,
         "depth": 0.2,
         "height": 0.18,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 0.18
       },
       "materials": 1,
@@ -1712,51 +1701,52 @@
       "dracoCompressed": true,
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/grass-tuft.png",
+      "revisionAuthor": "Codex (agy quota fallback)",
       "colorVerification": {
-        "grass_dark": {
-          "paletteHex": "#64AD8E",
-          "measuredHex": "#64AD8E",
+        "nature_leaf_dark": {
+          "paletteHex": "#315B38",
+          "measuredHex": "#315B38",
           "measuredSrgb255": [
-            100,
-            173,
-            142
+            49.0,
+            91.0,
+            56.0
           ],
           "measuredLinear": [
-            0.1274,
-            0.4179,
-            0.2705
+            0.0307,
+            0.1046,
+            0.0395
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "grass": {
-          "paletteHex": "#7EC4A6",
-          "measuredHex": "#7EC4A6",
+        "nature_leaf": {
+          "paletteHex": "#45784A",
+          "measuredHex": "#45784A",
           "measuredSrgb255": [
-            126,
-            196,
-            166
+            69.0,
+            120.0,
+            74.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.552,
-            0.3813
+            0.0595,
+            0.1878,
+            0.0685
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "grass_light": {
-          "paletteHex": "#9CD4B5",
-          "measuredHex": "#9CD4B5",
+        "nature_leaf_light": {
+          "paletteHex": "#619056",
+          "measuredHex": "#619056",
           "measuredSrgb255": [
-            156,
-            212,
-            181
+            97.0,
+            144.0,
+            86.0
           ],
           "measuredLinear": [
-            0.3325,
-            0.6584,
-            0.4621
+            0.1195,
+            0.2789,
+            0.0931
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         }
       }
     },
@@ -1848,15 +1838,15 @@
       "path": "assets/abraxas/environment/pebbles.glb",
       "scale": 1,
       "collision": [],
-      "triangles": 112,
-      "bytes": 2240,
+      "triangles": 80,
+      "bytes": 3104,
       "maxTriangles": 160,
       "maxBytes": 15360,
       "bounds": {
         "width": 0.26,
         "depth": 0.24,
         "height": 0.06,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 0.06
       },
       "materials": 1,
@@ -1865,51 +1855,52 @@
       "dracoCompressed": true,
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/pebbles.png",
+      "revisionAuthor": "Codex (agy quota fallback)",
       "colorVerification": {
-        "stone_dark": {
-          "paletteHex": "#A99CC4",
-          "measuredHex": "#A99CC4",
+        "nature_stone_dark": {
+          "paletteHex": "#696F6B",
+          "measuredHex": "#696F6B",
           "measuredSrgb255": [
-            169,
-            156,
-            196
+            105.0,
+            111.0,
+            107.0
           ],
           "measuredLinear": [
-            0.3968,
-            0.3325,
-            0.552
+            0.1413,
+            0.159,
+            0.147
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "stone": {
-          "paletteHex": "#C8BFE0",
-          "measuredHex": "#C8BFE0",
+        "nature_stone": {
+          "paletteHex": "#858982",
+          "measuredHex": "#858982",
           "measuredSrgb255": [
-            200,
-            191,
-            224
+            133.0,
+            137.0,
+            130.0
           ],
           "measuredLinear": [
-            0.5776,
-            0.521,
-            0.7454
+            0.2346,
+            0.2502,
+            0.2232
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "stone_light": {
-          "paletteHex": "#DDD5F0",
-          "measuredHex": "#DDD5F0",
+        "nature_stone_light": {
+          "paletteHex": "#A1A59D",
+          "measuredHex": "#A1A59D",
           "measuredSrgb255": [
-            221,
-            213,
-            240
+            161.0,
+            165.0,
+            157.0
           ],
           "measuredLinear": [
-            0.7231,
-            0.6654,
-            0.8714
+            0.3564,
+            0.3763,
+            0.3372
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         }
       }
     },
@@ -1981,20 +1972,20 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0,
-          "z": 0,
+          "x": 0.0,
+          "z": 0.0,
           "radius": 0.18
         }
       ],
-      "triangles": 94,
-      "bytes": 3612,
+      "triangles": 20,
+      "bytes": 1812,
       "maxTriangles": 300,
       "maxBytes": 20480,
       "bounds": {
         "width": 0.4,
         "depth": 0.36,
         "height": 0.28,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 0.28
       },
       "materials": 1,
@@ -2003,21 +1994,22 @@
       "dracoCompressed": true,
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/rock-small.png",
+      "revisionAuthor": "Codex (agy quota fallback)",
       "colorVerification": {
-        "stone": {
-          "paletteHex": "#C8BFE0",
-          "measuredHex": "#C8BFE0",
+        "nature_stone": {
+          "paletteHex": "#858982",
+          "measuredHex": "#858982",
           "measuredSrgb255": [
-            200,
-            191,
-            224
+            133.0,
+            137.0,
+            130.0
           ],
           "measuredLinear": [
-            0.5776,
-            0.521,
-            0.7454
+            0.2346,
+            0.2502,
+            0.2232
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         }
       }
     },
@@ -2027,20 +2019,20 @@
       "collision": [
         {
           "type": "circle",
-          "x": 0,
-          "z": 0,
+          "x": 0.0,
+          "z": 0.0,
           "radius": 0.36
         }
       ],
-      "triangles": 176,
-      "bytes": 5468,
+      "triangles": 40,
+      "bytes": 2272,
       "maxTriangles": 600,
       "maxBytes": 35840,
       "bounds": {
         "width": 0.8,
         "depth": 0.72,
         "height": 0.52,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 0.52
       },
       "materials": 1,
@@ -2049,36 +2041,37 @@
       "dracoCompressed": true,
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/rock-large.png",
+      "revisionAuthor": "Codex (agy quota fallback)",
       "colorVerification": {
-        "stone_dark": {
-          "paletteHex": "#A99CC4",
-          "measuredHex": "#A99CC4",
+        "nature_stone_dark": {
+          "paletteHex": "#696F6B",
+          "measuredHex": "#696F6B",
           "measuredSrgb255": [
-            169,
-            156,
-            196
+            105.0,
+            111.0,
+            107.0
           ],
           "measuredLinear": [
-            0.3968,
-            0.3325,
-            0.552
+            0.1413,
+            0.159,
+            0.147
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "stone": {
-          "paletteHex": "#C8BFE0",
-          "measuredHex": "#C8BFE0",
+        "nature_stone": {
+          "paletteHex": "#858982",
+          "measuredHex": "#858982",
           "measuredSrgb255": [
-            200,
-            191,
-            224
+            133.0,
+            137.0,
+            130.0
           ],
           "measuredLinear": [
-            0.5776,
-            0.521,
-            0.7454
+            0.2346,
+            0.2502,
+            0.2232
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         }
       }
     },
@@ -3427,14 +3420,14 @@
       "scale": 1,
       "collision": [],
       "triangles": 280,
-      "bytes": 7516,
+      "bytes": 7308,
       "maxTriangles": 300,
       "maxBytes": 20000,
       "bounds": {
         "width": 0.28,
         "depth": 0.28,
         "height": 0.16,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 0.16
       },
       "materials": 1,
@@ -3444,80 +3437,80 @@
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/flowers.png",
       "colorVerification": {
-        "#64AD8E": {
-          "paletteHex": "#64AD8E",
-          "measuredHex": "#64AD8E",
+        "#315B38": {
+          "paletteHex": "#315B38",
+          "measuredHex": "#315B38",
           "measuredSrgb255": [
-            100,
-            173,
-            142
+            49.0,
+            91.0,
+            56.0
           ],
           "measuredLinear": [
-            0.1274,
-            0.4179,
-            0.2705
+            0.0307,
+            0.1046,
+            0.0395
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "#7EC4A6": {
-          "paletteHex": "#7EC4A6",
-          "measuredHex": "#7EC4A6",
+        "#45784A": {
+          "paletteHex": "#45784A",
+          "measuredHex": "#45784A",
           "measuredSrgb255": [
-            126,
-            196,
-            166
+            69.0,
+            120.0,
+            74.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.552,
-            0.3813
+            0.0595,
+            0.1878,
+            0.0685
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "#9CD4B5": {
-          "paletteHex": "#9CD4B5",
-          "measuredHex": "#9CD4B5",
+        "#619056": {
+          "paletteHex": "#619056",
+          "measuredHex": "#619056",
           "measuredSrgb255": [
-            156,
-            212,
-            181
+            97.0,
+            144.0,
+            86.0
           ],
           "measuredLinear": [
-            0.3325,
-            0.6584,
-            0.4621
+            0.1195,
+            0.2789,
+            0.0931
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "#E8949A": {
           "paletteHex": "#E8949A",
           "measuredHex": "#E8949A",
           "measuredSrgb255": [
-            232,
-            148,
-            154
+            232.0,
+            148.0,
+            154.0
           ],
           "measuredLinear": [
             0.807,
             0.2961,
             0.3231
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "#FFE08A": {
           "paletteHex": "#FFE08A",
           "measuredHex": "#FFE08A",
           "measuredSrgb255": [
-            255,
-            224,
-            138
+            255.0,
+            224.0,
+            138.0
           ],
           "measuredLinear": [
-            1,
+            1.0,
             0.7454,
             0.2542
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         }
       }
     },
@@ -3526,14 +3519,14 @@
       "scale": 1,
       "collision": [],
       "triangles": 280,
-      "bytes": 7488,
+      "bytes": 7324,
       "maxTriangles": 300,
       "maxBytes": 20000,
       "bounds": {
         "width": 0.28,
         "depth": 0.28,
         "height": 0.15,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 0.15
       },
       "materials": 1,
@@ -3543,80 +3536,80 @@
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/flowers.png",
       "colorVerification": {
-        "#64AD8E": {
-          "paletteHex": "#64AD8E",
-          "measuredHex": "#64AD8E",
+        "#315B38": {
+          "paletteHex": "#315B38",
+          "measuredHex": "#315B38",
           "measuredSrgb255": [
-            100,
-            173,
-            142
+            49.0,
+            91.0,
+            56.0
           ],
           "measuredLinear": [
-            0.1274,
-            0.4179,
-            0.2705
+            0.0307,
+            0.1046,
+            0.0395
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "#7EC4A6": {
-          "paletteHex": "#7EC4A6",
-          "measuredHex": "#7EC4A6",
+        "#45784A": {
+          "paletteHex": "#45784A",
+          "measuredHex": "#45784A",
           "measuredSrgb255": [
-            126,
-            196,
-            166
+            69.0,
+            120.0,
+            74.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.552,
-            0.3813
+            0.0595,
+            0.1878,
+            0.0685
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "#9CD4B5": {
-          "paletteHex": "#9CD4B5",
-          "measuredHex": "#9CD4B5",
+        "#619056": {
+          "paletteHex": "#619056",
+          "measuredHex": "#619056",
           "measuredSrgb255": [
-            156,
-            212,
-            181
+            97.0,
+            144.0,
+            86.0
           ],
           "measuredLinear": [
-            0.3325,
-            0.6584,
-            0.4621
+            0.1195,
+            0.2789,
+            0.0931
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "#E5A86B": {
           "paletteHex": "#E5A86B",
           "measuredHex": "#E5A86B",
           "measuredSrgb255": [
-            229,
-            168,
-            107
+            229.0,
+            168.0,
+            107.0
           ],
           "measuredLinear": [
             0.7835,
             0.3916,
             0.147
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "#FFE08A": {
           "paletteHex": "#FFE08A",
           "measuredHex": "#FFE08A",
           "measuredSrgb255": [
-            255,
-            224,
-            138
+            255.0,
+            224.0,
+            138.0
           ],
           "measuredLinear": [
-            1,
+            1.0,
             0.7454,
             0.2542
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         }
       }
     },
@@ -3625,14 +3618,14 @@
       "scale": 1,
       "collision": [],
       "triangles": 280,
-      "bytes": 7480,
+      "bytes": 7360,
       "maxTriangles": 300,
       "maxBytes": 20000,
       "bounds": {
         "width": 0.28,
         "depth": 0.28,
         "height": 0.14,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 0.14
       },
       "materials": 1,
@@ -3642,80 +3635,80 @@
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/flowers.png",
       "colorVerification": {
-        "#64AD8E": {
-          "paletteHex": "#64AD8E",
-          "measuredHex": "#64AD8E",
+        "#315B38": {
+          "paletteHex": "#315B38",
+          "measuredHex": "#315B38",
           "measuredSrgb255": [
-            100,
-            173,
-            142
+            49.0,
+            91.0,
+            56.0
           ],
           "measuredLinear": [
-            0.1274,
-            0.4179,
-            0.2705
+            0.0307,
+            0.1046,
+            0.0395
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "#7EC4A6": {
-          "paletteHex": "#7EC4A6",
-          "measuredHex": "#7EC4A6",
+        "#45784A": {
+          "paletteHex": "#45784A",
+          "measuredHex": "#45784A",
           "measuredSrgb255": [
-            126,
-            196,
-            166
+            69.0,
+            120.0,
+            74.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.552,
-            0.3813
+            0.0595,
+            0.1878,
+            0.0685
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "#9CD4B5": {
-          "paletteHex": "#9CD4B5",
-          "measuredHex": "#9CD4B5",
+        "#619056": {
+          "paletteHex": "#619056",
+          "measuredHex": "#619056",
           "measuredSrgb255": [
-            156,
-            212,
-            181
+            97.0,
+            144.0,
+            86.0
           ],
           "measuredLinear": [
-            0.3325,
-            0.6584,
-            0.4621
+            0.1195,
+            0.2789,
+            0.0931
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "#FFE08A": {
           "paletteHex": "#FFE08A",
           "measuredHex": "#FFE08A",
           "measuredSrgb255": [
-            255,
-            224,
-            138
+            255.0,
+            224.0,
+            138.0
           ],
           "measuredLinear": [
-            1,
+            1.0,
             0.7454,
             0.2542
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "#FFF8EC": {
           "paletteHex": "#FFF8EC",
           "measuredHex": "#FFF8EC",
           "measuredSrgb255": [
-            255,
-            248,
-            236
+            255.0,
+            248.0,
+            236.0
           ],
           "measuredLinear": [
-            1,
+            1.0,
             0.9387,
             0.8388
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         }
       }
     },
@@ -3724,14 +3717,14 @@
       "scale": 1,
       "collision": [],
       "triangles": 280,
-      "bytes": 7408,
+      "bytes": 7252,
       "maxTriangles": 300,
       "maxBytes": 20000,
       "bounds": {
         "width": 0.28,
         "depth": 0.28,
         "height": 0.16,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 0.16
       },
       "materials": 1,
@@ -3741,80 +3734,80 @@
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/flowers.png",
       "colorVerification": {
-        "#64AD8E": {
-          "paletteHex": "#64AD8E",
-          "measuredHex": "#64AD8E",
+        "#315B38": {
+          "paletteHex": "#315B38",
+          "measuredHex": "#315B38",
           "measuredSrgb255": [
-            100,
-            173,
-            142
+            49.0,
+            91.0,
+            56.0
           ],
           "measuredLinear": [
-            0.1274,
-            0.4179,
-            0.2705
+            0.0307,
+            0.1046,
+            0.0395
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "#7EC4A6": {
-          "paletteHex": "#7EC4A6",
-          "measuredHex": "#7EC4A6",
+        "#45784A": {
+          "paletteHex": "#45784A",
+          "measuredHex": "#45784A",
           "measuredSrgb255": [
-            126,
-            196,
-            166
+            69.0,
+            120.0,
+            74.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.552,
-            0.3813
+            0.0595,
+            0.1878,
+            0.0685
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "#9CD4B5": {
-          "paletteHex": "#9CD4B5",
-          "measuredHex": "#9CD4B5",
+        "#619056": {
+          "paletteHex": "#619056",
+          "measuredHex": "#619056",
           "measuredSrgb255": [
-            156,
-            212,
-            181
+            97.0,
+            144.0,
+            86.0
           ],
           "measuredLinear": [
-            0.3325,
-            0.6584,
-            0.4621
+            0.1195,
+            0.2789,
+            0.0931
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "#E6A8C7": {
           "paletteHex": "#E6A8C7",
           "measuredHex": "#E6A8C7",
           "measuredSrgb255": [
-            230,
-            168,
-            199
+            230.0,
+            168.0,
+            199.0
           ],
           "measuredLinear": [
             0.7913,
             0.3916,
             0.5711
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "#FFE08A": {
           "paletteHex": "#FFE08A",
           "measuredHex": "#FFE08A",
           "measuredSrgb255": [
-            255,
-            224,
-            138
+            255.0,
+            224.0,
+            138.0
           ],
           "measuredLinear": [
-            1,
+            1.0,
             0.7454,
             0.2542
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         }
       }
     },
@@ -3823,14 +3816,14 @@
       "scale": 1,
       "collision": [],
       "triangles": 280,
-      "bytes": 7428,
+      "bytes": 7256,
       "maxTriangles": 300,
       "maxBytes": 20000,
       "bounds": {
         "width": 0.28,
         "depth": 0.28,
         "height": 0.17,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 0.17
       },
       "materials": 1,
@@ -3840,80 +3833,80 @@
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/flowers.png",
       "colorVerification": {
-        "#64AD8E": {
-          "paletteHex": "#64AD8E",
-          "measuredHex": "#64AD8E",
+        "#315B38": {
+          "paletteHex": "#315B38",
+          "measuredHex": "#315B38",
           "measuredSrgb255": [
-            100,
-            173,
-            142
+            49.0,
+            91.0,
+            56.0
           ],
           "measuredLinear": [
-            0.1274,
-            0.4179,
-            0.2705
+            0.0307,
+            0.1046,
+            0.0395
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "#7EC4A6": {
-          "paletteHex": "#7EC4A6",
-          "measuredHex": "#7EC4A6",
+        "#45784A": {
+          "paletteHex": "#45784A",
+          "measuredHex": "#45784A",
           "measuredSrgb255": [
-            126,
-            196,
-            166
+            69.0,
+            120.0,
+            74.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.552,
-            0.3813
+            0.0595,
+            0.1878,
+            0.0685
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "#9CD4B5": {
-          "paletteHex": "#9CD4B5",
-          "measuredHex": "#9CD4B5",
+        "#619056": {
+          "paletteHex": "#619056",
+          "measuredHex": "#619056",
           "measuredSrgb255": [
-            156,
-            212,
-            181
+            97.0,
+            144.0,
+            86.0
           ],
           "measuredLinear": [
-            0.3325,
-            0.6584,
-            0.4621
+            0.1195,
+            0.2789,
+            0.0931
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "#BEA5EB": {
           "paletteHex": "#BEA5EB",
           "measuredHex": "#BEA5EB",
           "measuredSrgb255": [
-            190,
-            165,
-            235
+            190.0,
+            165.0,
+            235.0
           ],
           "measuredLinear": [
             0.5149,
             0.3763,
             0.8308
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "#FFE08A": {
           "paletteHex": "#FFE08A",
           "measuredHex": "#FFE08A",
           "measuredSrgb255": [
-            255,
-            224,
-            138
+            255.0,
+            224.0,
+            138.0
           ],
           "measuredLinear": [
-            1,
+            1.0,
             0.7454,
             0.2542
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         }
       }
     },
@@ -3921,15 +3914,15 @@
       "path": "assets/abraxas/environment/grass-small.glb",
       "scale": 1,
       "collision": [],
-      "triangles": 112,
-      "bytes": 3904,
+      "triangles": 48,
+      "bytes": 2304,
       "maxTriangles": 120,
       "maxBytes": 15360,
       "bounds": {
         "width": 0.18,
         "depth": 0.18,
         "height": 0.1,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 0.1
       },
       "materials": 1,
@@ -3939,50 +3932,50 @@
       "concept": "assets/source/concepts/environment/nature-foliage.png",
       "preview": "assets/source/previews/environment/flowers.png",
       "colorVerification": {
-        "#64AD8E": {
-          "paletteHex": "#64AD8E",
-          "measuredHex": "#64AD8E",
+        "#315B38": {
+          "paletteHex": "#315B38",
+          "measuredHex": "#315B38",
           "measuredSrgb255": [
-            100,
-            173,
-            142
+            49.0,
+            91.0,
+            56.0
           ],
           "measuredLinear": [
-            0.1274,
-            0.4179,
-            0.2705
+            0.0307,
+            0.1046,
+            0.0395
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "#7EC4A6": {
-          "paletteHex": "#7EC4A6",
-          "measuredHex": "#7EC4A6",
+        "#45784A": {
+          "paletteHex": "#45784A",
+          "measuredHex": "#45784A",
           "measuredSrgb255": [
-            126,
-            196,
-            166
+            69.0,
+            120.0,
+            74.0
           ],
           "measuredLinear": [
-            0.2086,
-            0.552,
-            0.3813
+            0.0595,
+            0.1878,
+            0.0685
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
-        "#9CD4B5": {
-          "paletteHex": "#9CD4B5",
-          "measuredHex": "#9CD4B5",
+        "#619056": {
+          "paletteHex": "#619056",
+          "measuredHex": "#619056",
           "measuredSrgb255": [
-            156,
-            212,
-            181
+            97.0,
+            144.0,
+            86.0
           ],
           "measuredLinear": [
-            0.3325,
-            0.6584,
-            0.4621
+            0.1195,
+            0.2789,
+            0.0931
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         }
       }
     },

@@ -31,7 +31,7 @@ type Character = { object: THREE.Object3D; mixer: THREE.AnimationMixer; actions:
 export class Village {
   private scene = new THREE.Scene();
   private camera = new THREE.OrthographicCamera();
-  private light = new THREE.DirectionalLight("#fff0df", 1.8);
+  private light = new THREE.DirectionalLight("#fff0df", 2.9);
   private renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   private effects?: DreamEffects;
   private loader = new GLTFLoader();
@@ -87,7 +87,7 @@ export class Village {
     const draco = new DRACOLoader();
     draco.setDecoderPath(`${import.meta.env.BASE_URL}assets/abraxas/decoders/`); draco.setWorkerLimit(1); this.loader.setDRACOLoader(draco);
     this.scene.fog = new THREE.Fog("#eae3f7", 19, 40);
-    this.scene.add(new THREE.AmbientLight("#fff4ed", .2), new THREE.HemisphereLight("#fff4ed", "#e8ddf4", 1.8));
+    this.scene.add(new THREE.AmbientLight("#fff4ed", .05), new THREE.HemisphereLight("#fff4ed", "#e8ddf4", .75));
     this.light.castShadow = true; this.light.shadow.camera.near = .1; this.light.shadow.camera.far = 25;
     this.light.shadow.bias = -.0001; this.light.shadow.normalBias = .02;
     this.scene.add(this.light, this.light.target);
