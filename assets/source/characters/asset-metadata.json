@@ -120,15 +120,15 @@
         "walk",
         "talk"
       ],
-      "revisionAuthor": "Codex gpt-6.1-terra (agy 한도로 대체)",
+      "revisionAuthor": "Codex (agy 한도로 대체)",
       "budget": {
         "maxTriangles": 3000,
         "maxKiB": 180
       },
       "measured": {
-        "bytes": 44064,
-        "kib": 43.03,
-        "triangles": 2528,
+        "bytes": 47388,
+        "kib": 46.28,
+        "triangles": 2976,
         "primitives": 1,
         "materials": 1,
         "joints": 8,
@@ -142,19 +142,19 @@
         "draco": true,
         "bounds": {
           "min": [
-            -0.1678,
+            -0.1667,
             0.0,
-            -0.1243
+            -0.1396
           ],
           "max": [
-            0.2529,
+            0.3301,
             0.6,
-            0.1273
+            0.1437
           ],
           "size": [
-            0.4207,
+            0.4967,
             0.6,
-            0.2516
+            0.2833
           ]
         },
         "colorVerification": {
