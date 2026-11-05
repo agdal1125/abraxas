@@ -765,6 +765,8 @@ def build_entrance_house(pb: PartBuilder):
     pb.add_cylinder(0.055, 0.045, 0.12, (0.38, -0.56, 0.53), PALETTE["gold"], vertices=8, bevel=0.008)
     pb.add_box((0.24, 0.06, 0.16), (0.46, -0.55, 0.26), PALETTE["cream_warm"], bevel=0.01)
     pb.add_box((0.05, 0.05, 0.24), (0.46, -0.55, 0.12), PALETTE["wood_dark"], bevel=0.008)
+    for z in (0.22, 0.76):
+        pb.add_box((0.035, 0.88, 0.045), (0.605, 0, z), PALETTE["wood"], bevel=0.0)
 
 
 def build_plaza_hall(pb: PartBuilder):
@@ -776,6 +778,8 @@ def build_plaza_hall(pb: PartBuilder):
     for sx in (-0.77, 0.77):
         for sy in (-0.61, 0.61):
             pb.add_box((0.12, 0.12, 0.80), (sx, sy, 0.50), PALETTE["wood"], bevel=0.012)
+    for z in (0.20, 0.79):
+        pb.add_box((0.04, 1.18, 0.06), (0.81, 0, z), PALETTE["wood_dark"], bevel=0.0)
     # Stepped stone-slate roof + front arched cornice
     pb.add_box((1.80, 1.50, 0.16), (0.0, 0.0, 0.94), PALETTE["stone_dark"], bevel=0.02, taper_top=(0.94, 0.94))
     pb.add_box((1.50, 1.24, 0.16), (0.0, 0.0, 1.08), PALETTE["stone"], bevel=0.02, taper_top=(0.90, 0.90))
@@ -846,6 +850,8 @@ def build_bakery(pb: PartBuilder):
         pb.add_box((0.15, 0.13, 0.055), (x, -0.58, 0.89), PALETTE["wood_dark"], bevel=0.004)
     for x in (-0.40, 0.0, 0.40):
         pb.add_box((0.018, 0.02, 0.10), (x, -0.668, 0.06), PALETTE["stone_dark"], bevel=0.0)
+    for z in (0.20, 0.83):
+        pb.add_box((0.035, 1.02, 0.045), (-0.65, 0, z), PALETTE["wood"], bevel=0.0)
 
 
 def build_library(pb: PartBuilder):
@@ -867,27 +873,37 @@ def build_library(pb: PartBuilder):
     pb.add_box((0.10, 0.56, 0.48), (0.76, 0.0, 0.44), PALETTE["wood_dark"], bevel=0.01)
     for rz, col in ((0.30, PALETTE["coral"]), (0.44, PALETTE["teal"]), (0.58, PALETTE["gold"])):
         pb.add_box((0.08, 0.44, 0.09), (0.78, 0.0, rz), col, bevel=0.006)
+    for z in (0.20, 0.83):
+        pb.add_box((0.035, 1.10, 0.045), (-0.78, 0, z), PALETTE["wood"], bevel=0.0)
 
 
 def build_smithy(pb: PartBuilder):
     pb.add_box((1.76, 1.36, 0.14), (0.0, 0.0, 0.07), PALETTE["stone_dark"], bevel=0.015)
     pb.add_box((1.06, 1.22, 0.78), (-0.30, 0.0, 0.50), PALETTE["stone"], bevel=0.018)
-    pb.add_box((1.12, 1.28, 0.09), (-0.30, 0.0, 0.84), PALETTE["teal_muted"], bevel=0.012)
+    pb.add_box((1.12, 1.28, 0.09), (-0.30, 0.0, 0.84), PALETTE["wood_dark"], bevel=0.0)
     for sx in (-0.82, 0.22, 0.78):
         pb.add_box((0.10, 0.10, 0.76), (sx, -0.58, 0.48), PALETTE["wood_dark"], bevel=0.01)
         pb.add_box((0.10, 0.10, 0.76), (sx, 0.58, 0.48), PALETTE["wood_dark"], bevel=0.01)
-    pb.add_prism_roof(1.26, 1.40, 0.46, (-0.25, 0.0, 0.88), PALETTE["wood"], bevel=0.02, axis='Y')
-    pb.add_box((0.72, 1.36, 0.08), (0.52, 0.0, 0.82), PALETTE["wood_light"], rot_euler=(0.0, 0.26, 0.0), bevel=0.012)
-    pb.add_box((0.38, 0.38, 1.36), (-0.56, 0.20, 0.74), PALETTE["stone_light"], bevel=0.02, taper_top=(0.86, 0.86))
-    pb.add_box((0.44, 0.44, 0.10), (-0.56, 0.20, 1.44), PALETTE["stone_dark"], bevel=0.015)
+    pb.add_prism_roof(1.26, 1.40, 0.46, (-0.25, 0.0, 0.88), "#414740", bevel=0.0, axis='Y')
+    for side in (-1, 1):
+        for row in range(3):
+            x = side * (0.10 + row * 0.20)
+            for col in range(3):
+                pb.add_box((0.24, 0.44, 0.025), (-0.25 + x, -0.46 + col * 0.46, 0.90 + 0.46 * (1 - abs(x) / 0.63)), "#51564D" if (row + col) % 2 else "#484E46", rot_euler=(0, side * math.atan2(0.46, 0.63), 0))
+    pb.add_box((0.72, 1.36, 0.08), (0.52, 0.0, 0.82), PALETTE["wood_dark"], rot_euler=(0.0, 0.26, 0.0), bevel=0.0)
+    for y in (-0.65, 0.65):
+        pb.add_box((0.72, 0.07, 0.09), (0.52, y, 0.80), PALETTE["wood"], rot_euler=(0.0, 0.26, 0.0))
+    pb.add_box((0.38, 0.38, 1.36), (-0.56, 0.20, 0.74), PALETTE["stone"], bevel=0.0, taper_top=(0.86, 0.86))
+    pb.add_box((0.44, 0.44, 0.10), (-0.56, 0.20, 1.44), PALETTE["stone_dark"], bevel=0.0)
     pb.add_box((0.54, 0.12, 0.46), (-0.30, -0.60, 0.34), PALETTE["stone_light"], bevel=0.015)
-    pb.add_box((0.34, 0.10, 0.32), (-0.30, -0.61, 0.28), PALETTE["coral"], bevel=0.01)
-    pb.add_box((0.26, 0.16, 0.18), (0.50, -0.15, 0.22), PALETTE["ink"], bevel=0.012, taper_top=(1.3, 1.1))
+    pb.add_box((0.34, 0.10, 0.32), (-0.30, -0.61, 0.28), "#54473C", bevel=0.0)
+    pb.add_box((0.26, 0.16, 0.18), (0.50, -0.15, 0.22), "#4D504D", bevel=0.0, taper_top=(1.3, 1.1))
 
 
 def build_lake_pavilion(pb: PartBuilder):
     pb.add_box((1.52, 1.32, 0.14), (0.0, 0.0, 0.07), PALETTE["wood_dark"], bevel=0.015)
-    pb.add_box((1.42, 1.22, 0.06), (0.0, 0.0, 0.16), PALETTE["wood_light"], bevel=0.01)
+    for i in range(6):
+        pb.add_box((1.42, 0.18, 0.06), (0.0, -0.52 + i * 0.21, 0.16), PALETTE["wood"] if i % 2 else PALETTE["wood_light"], bevel=0.0)
     for sx in (-0.62, 0.62):
         for sy in (-0.52, 0.52):
             pb.add_cylinder(0.07, 0.065, 0.78, (sx, sy, 0.54), PALETTE["wood"], vertices=10, bevel=0.01)
@@ -896,8 +912,8 @@ def build_lake_pavilion(pb: PartBuilder):
     for sx in (-0.62, 0.62):
         pb.add_box((0.06, 1.04, 0.06), (sx, 0.0, 0.38), PALETTE["wood"], bevel=0.008)
     pb.add_box((1.60, 1.40, 0.10), (0.0, 0.0, 0.94), PALETTE["wood"], bevel=0.018)
-    pb.add_cylinder(0.96, 0.42, 0.26, (0.0, 0.0, 1.10), PALETTE["teal_muted"], vertices=8, rot_euler=(0.0, 0.0, math.pi * 0.125), bevel=0.018, smooth=False, scale_xy=(1.0, 0.88))
-    pb.add_cylinder(0.44, 0.06, 0.20, (0.0, 0.0, 1.30), PALETTE["teal_dark"], vertices=8, rot_euler=(0.0, 0.0, math.pi * 0.125), bevel=0.015, smooth=False, scale_xy=(1.0, 0.88))
+    pb.add_cylinder(0.96, 0.42, 0.26, (0.0, 0.0, 1.10), "#667C70", vertices=8, rot_euler=(0.0, 0.0, math.pi * 0.125), bevel=0.0, smooth=False, scale_xy=(1.0, 0.88))
+    pb.add_cylinder(0.44, 0.06, 0.20, (0.0, 0.0, 1.30), "#536B5F", vertices=8, rot_euler=(0.0, 0.0, math.pi * 0.125), bevel=0.0, smooth=False, scale_xy=(1.0, 0.88))
     pb.add_sphere(0.06, (0.0, 0.0, 1.38), PALETTE["gold"], subdivisions=1)
 
 
@@ -970,7 +986,7 @@ def build_mushroom(pb: PartBuilder):
     # Strictly <= 160 triangles: 3 mushrooms with 6-sided stems + 8-sided low-poly dome caps = 144 tris
     mushrooms = [
         ((0.0, 0.0, 0.06), 0.03, 0.12, 0.078, 0.065, PALETTE["wood_light"]),
-        ((-0.07, -0.04, 0.04), 0.022, 0.08, 0.052, 0.045, PALETTE["coral_soft"]),
+        ((-0.07, -0.04, 0.04), 0.022, 0.08, 0.052, 0.045, "#A8725B"),
         ((0.07, 0.03, 0.045), 0.024, 0.09, 0.058, 0.050, PALETTE["wood"]),
     ]
     for (x, y, z), sr, sh, cr, ch, cap_col in mushrooms:
@@ -992,9 +1008,9 @@ def build_pebbles(pb: PartBuilder):
 
 def build_fence(pb: PartBuilder):
     for px in (-0.42, 0.42):
-        pb.add_box((0.10, 0.10, 0.45), (px, 0.0, 0.225), PALETTE["wood"], bevel=0.012)
-    pb.add_box((1.00, 0.05, 0.07), (0.0, -0.02, 0.32), PALETTE["wood_light"], bevel=0.008)
-    pb.add_box((1.00, 0.05, 0.07), (0.0, -0.02, 0.16), PALETTE["wood_light"], bevel=0.008)
+        pb.add_cylinder(0.055, 0.04, 0.45, (px, 0.0, 0.225), PALETTE["wood_dark"], vertices=6, bevel=0.0, smooth=False)
+    pb.add_box((1.00, 0.05, 0.07), (0.0, -0.02, 0.32), PALETTE["wood"], bevel=0.0)
+    pb.add_box((1.00, 0.05, 0.07), (0.0, -0.02, 0.16), PALETTE["wood_light"], bevel=0.0)
 
 
 def build_rock_small(pb: PartBuilder):
@@ -1007,11 +1023,11 @@ def build_rock_large(pb: PartBuilder):
 
 
 def build_streetlight(pb: PartBuilder):
-    pb.add_cylinder(0.08, 0.065, 0.22, (0.0, 0.0, 0.11), PALETTE["ink"], vertices=8, bevel=0.008)
+    pb.add_cylinder(0.08, 0.065, 0.22, (0.0, 0.0, 0.11), PALETTE["stone_dark"], vertices=8, bevel=0.0, smooth=False)
     pb.add_cylinder(0.045, 0.04, 0.74, (0.0, 0.0, 0.56), PALETTE["wood_dark"], vertices=8, bevel=0.006)
-    pb.add_box((0.24, 0.05, 0.05), (0.09, 0.0, 0.92), PALETTE["ink"], bevel=0.006)
-    pb.add_cylinder(0.07, 0.05, 0.15, (0.18, 0.0, 0.79), PALETTE["gold"], vertices=8, bevel=0.008)
-    pb.add_cylinder(0.085, 0.02, 0.06, (0.18, 0.0, 0.88), PALETTE["ink"], vertices=8, bevel=0.005)
+    pb.add_box((0.24, 0.05, 0.05), (0.09, 0.0, 0.92), PALETTE["wood_dark"], bevel=0.0)
+    pb.add_cylinder(0.07, 0.05, 0.15, (0.18, 0.0, 0.79), "#D6B676", vertices=8, bevel=0.0, smooth=False)
+    pb.add_cylinder(0.085, 0.02, 0.06, (0.18, 0.0, 0.88), "#50534C", vertices=8, bevel=0.0, smooth=False)
 
 
 def build_bench(pb: PartBuilder):
@@ -1026,13 +1042,17 @@ def build_bench(pb: PartBuilder):
 
 def build_well(pb: PartBuilder):
     # Stone curb + visible water surface at top of curb + wooden posts + winch + shingle roof
-    pb.add_cylinder(0.36, 0.36, 0.30, (0.0, 0.0, 0.15), PALETTE["stone"], vertices=12, bevel=0.015)
-    pb.add_cylinder(0.39, 0.39, 0.05, (0.0, 0.0, 0.30), PALETTE["stone_light"], vertices=12, bevel=0.012)
-    pb.add_cylinder(0.28, 0.28, 0.03, (0.0, 0.0, 0.32), PALETTE["sea"], vertices=12, bevel=0.005)
+    pb.add_cylinder(0.36, 0.36, 0.30, (0.0, 0.0, 0.15), PALETTE["stone"], vertices=8, bevel=0.0, smooth=False)
+    pb.add_cylinder(0.39, 0.39, 0.05, (0.0, 0.0, 0.30), PALETTE["stone_dark"], vertices=8, bevel=0.0, smooth=False)
+    pb.add_cylinder(0.28, 0.28, 0.03, (0.0, 0.0, 0.32), "#668F88", vertices=8, bevel=0.0, smooth=False)
     for px in (-0.32, 0.32):
         pb.add_box((0.07, 0.07, 0.44), (px, 0.0, 0.52), PALETTE["wood_dark"], bevel=0.008)
     pb.add_cylinder(0.035, 0.035, 0.60, (0.0, 0.0, 0.50), PALETTE["wood_light"], vertices=8, rot_euler=(0.0, math.pi * 0.5, 0.0), bevel=0.004)
-    pb.add_prism_roof(0.80, 0.72, 0.24, (0.0, 0.0, 0.64), PALETTE["wood"], bevel=0.015, axis='X')
+    pb.add_prism_roof(0.80, 0.72, 0.24, (0.0, 0.0, 0.64), PALETTE["wood_dark"], bevel=0.0, axis='X')
+    for side in (-1, 1):
+        for row in range(2):
+            y = side * (0.09 + row * 0.18)
+            pb.add_box((0.78, 0.21, 0.02), (0, y, 0.65 + 0.24 * (1 - abs(y) / 0.36)), PALETTE["wood"] if row else PALETTE["wood_light"], rot_euler=(-side * math.atan2(0.24, 0.36), 0, 0), bevel=0.0)
 
 
 def build_festival_stage(pb: PartBuilder):
@@ -1042,7 +1062,7 @@ def build_festival_stage(pb: PartBuilder):
     for px in (-0.80, 0.80):
         pb.add_box((0.10, 0.10, 0.82), (px, 0.50, 0.58), PALETTE["wood_dark"], bevel=0.012)
     pb.add_box((1.70, 0.06, 0.06), (0.0, 0.50, 0.94), PALETTE["wood"], bevel=0.008)
-    flag_cols = [PALETTE["coral"], PALETTE["gold"], PALETTE["teal"], PALETTE["violet"], PALETTE["coral"], PALETTE["gold"]]
+    flag_cols = ["#B47A65", "#B6A06A", "#6F8B78", "#81767D", "#B47A65", "#B6A06A"]
     for i, col in enumerate(flag_cols):
         fx = -0.60 + i * 0.24
         pb.add_box((0.15, 0.04, 0.15), (fx, 0.50, 0.82 - (0.04 if i in (2, 3) else 0.0)), col, bevel=0.006, taper_top=(0.25, 1.0))
@@ -1053,6 +1073,8 @@ def build_memory_gate(pb: PartBuilder):
         pb.add_box((0.30, 0.50, 0.14), (px, 0.0, 0.07), PALETTE["stone_dark"], bevel=0.015)
         pb.add_box((0.26, 0.42, 1.06), (px, 0.0, 0.67), PALETTE["stone"], bevel=0.018)
         pb.add_box((0.30, 0.48, 0.12), (px, 0.0, 1.24), PALETTE["stone_light"], bevel=0.015)
+        for z in (0.43, 0.78, 1.08):
+            pb.add_box((0.262, 0.425, 0.018), (px, 0.0, z), PALETTE["stone_dark"], bevel=0.0)
     pb.add_box((1.40, 0.50, 0.24), (0.0, 0.0, 1.42), PALETTE["stone"], bevel=0.02)
     pb.add_box((1.32, 0.44, 0.08), (0.0, 0.0, 1.56), PALETTE["stone_light"], bevel=0.015)
 
@@ -1061,7 +1083,7 @@ def build_bridge(pb: PartBuilder):
     for i in range(9):
         py = -0.88 + i * 0.22
         arch_z = 0.02 * math.cos((py / 1.0) * math.pi * 0.5)
-        pb.add_box((0.92, 0.19, 0.05), (0.0, py, arch_z), PALETTE["wood_light"] if i % 2 == 0 else PALETTE["wood"], bevel=0.008)
+        pb.add_box((0.92, 0.19, 0.05), (0.0, py, arch_z), PALETTE["wood_light"] if i % 2 == 0 else PALETTE["wood"], bevel=0.0)
     for sx in (-0.46, 0.46):
         for py in (-0.92, 0.0, 0.92):
             pb.add_box((0.08, 0.08, 0.32), (sx, py, 0.16), PALETTE["wood_dark"], bevel=0.008)
@@ -1077,22 +1099,22 @@ def build_water_reed(pb: PartBuilder):
         ((-0.06, -0.04, 0.10), 0.20, False),
     ]
     for (rx, ry, rz), h, has_head in reeds:
-        pb.add_cylinder(0.018, 0.012, h, (rx, ry, rz), PALETTE["grass_dark"], vertices=6, bevel=0.003)
+        pb.add_cylinder(0.018, 0.012, h, (rx, ry, rz), PALETTE["nature_leaf"], vertices=6, bevel=0.0, smooth=False)
         if has_head:
-            pb.add_cylinder(0.028, 0.026, 0.09, (rx, ry, h - 0.06), PALETTE["wood_dark"], vertices=8, bevel=0.005)
+            pb.add_cylinder(0.028, 0.026, 0.09, (rx, ry, h - 0.06), PALETTE["wood_dark"], vertices=8, bevel=0.0, smooth=False)
 
 
 def build_water_flower(pb: PartBuilder):
-    pb.add_cylinder(0.13, 0.13, 0.025, (0.0, 0.0, 0.015), PALETTE["grass"], vertices=12, bevel=0.005)
-    pb.add_sphere(0.065, (0.02, -0.01, 0.065), PALETTE["blossom_pink"], subdivisions=1, scale=(1.2, 1.2, 0.75))
-    pb.add_sphere(0.032, (0.02, -0.01, 0.095), PALETTE["gold"], subdivisions=1)
+    pb.add_cylinder(0.13, 0.13, 0.025, (0.0, 0.0, 0.015), PALETTE["nature_leaf"], vertices=8, bevel=0.0, smooth=False)
+    pb.add_sphere(0.065, (0.02, -0.01, 0.065), "#D29B9C", subdivisions=1, scale=(1.2, 1.2, 0.75), smooth=False)
+    pb.add_sphere(0.032, (0.02, -0.01, 0.095), "#CBB37B", subdivisions=1, smooth=False)
 
 
 def build_shore_post(pb: PartBuilder):
     pb.add_box((0.24, 0.24, 0.08), (0.0, 0.0, 0.04), PALETTE["wood_dark"], bevel=0.01)
-    pb.add_cylinder(0.085, 0.078, 0.44, (0.0, 0.0, 0.28), PALETTE["wood"], vertices=10, bevel=0.01)
-    pb.add_cylinder(0.098, 0.098, 0.05, (0.0, 0.0, 0.22), PALETTE["cream_shadow"], vertices=10, bevel=0.008)
-    pb.add_cylinder(0.098, 0.098, 0.05, (0.0, 0.0, 0.29), PALETTE["cream_shadow"], vertices=10, bevel=0.008)
+    pb.add_cylinder(0.085, 0.078, 0.44, (0.0, 0.0, 0.28), PALETTE["wood"], vertices=8, bevel=0.0, smooth=False)
+    pb.add_cylinder(0.098, 0.098, 0.05, (0.0, 0.0, 0.22), "#B09A73", vertices=8, bevel=0.0, smooth=False)
+    pb.add_cylinder(0.098, 0.098, 0.05, (0.0, 0.0, 0.29), "#B09A73", vertices=8, bevel=0.0, smooth=False)
 
 
 def build_bread_crate(pb: PartBuilder):
@@ -1109,26 +1131,27 @@ def build_bread_crate(pb: PartBuilder):
 
 def build_book_stack(pb: PartBuilder):
     books = [
-        ((0.0, 0.0, 0.05), (0.35, 0.27, 0.09), 0.0, PALETTE["gold"]),
-        ((0.0, 0.0, 0.14), (0.33, 0.25, 0.09), 0.12, PALETTE["teal"]),
-        ((0.0, 0.0, 0.23), (0.31, 0.24, 0.09), -0.08, PALETTE["violet"]),
+        ((0.0, 0.0, 0.05), (0.35, 0.27, 0.09), 0.0, "#76533F"),
+        ((0.0, 0.0, 0.14), (0.33, 0.25, 0.09), 0.12, "#52665A"),
+        ((0.0, 0.0, 0.23), (0.31, 0.24, 0.09), -0.08, "#70585A"),
     ]
     for center, sz, rz, col in books:
-        pb.add_box(sz, center, col, rot_euler=(0.0, 0.0, rz), bevel=0.01)
-        pb.add_box((sz[0] * 0.90, sz[1] * 0.90, sz[2] * 0.68), (center[0], center[1] - 0.01, center[2]), PALETTE["cream"], rot_euler=(0.0, 0.0, rz), bevel=0.005)
-    pb.add_box((0.04, 0.28, 0.29), (0.0, 0.0, 0.145), PALETTE["wood_light"], bevel=0.005)
+        pb.add_box((sz[0] * 0.94, sz[1] * 0.94, sz[2] * 0.70), center, "#C9B99A", rot_euler=(0.0, 0.0, rz), bevel=0.0)
+        for dz in (-0.04, 0.04):
+            pb.add_box((sz[0], sz[1], 0.01), (center[0], center[1], center[2] + dz), col, rot_euler=(0.0, 0.0, rz), bevel=0.0)
+        pb.add_box((sz[0] * 0.04, sz[1] * 0.94, sz[2] * 0.70), (center[0] - sz[0] * 0.48 * math.cos(rz), center[1] - sz[0] * 0.48 * math.sin(rz), center[2]), col, rot_euler=(0.0, 0.0, rz), bevel=0.0)
 
 
 def build_tool_rack(pb: PartBuilder):
-    for sx in (-0.23, 0.23):
-        pb.add_box((0.06, 0.06, 0.54), (sx, -0.08, 0.27), PALETTE["wood"], rot_euler=(-0.18, 0.0, 0.0), bevel=0.008)
-        pb.add_box((0.06, 0.06, 0.54), (sx, 0.08, 0.27), PALETTE["wood_dark"], rot_euler=(0.18, 0.0, 0.0), bevel=0.008)
-    pb.add_box((0.54, 0.06, 0.06), (0.0, -0.04, 0.42), PALETTE["wood_light"], bevel=0.008)
-    pb.add_box((0.54, 0.06, 0.06), (0.0, -0.09, 0.16), PALETTE["wood_light"], bevel=0.008)
-    pb.add_cylinder(0.022, 0.022, 0.36, (-0.04, -0.07, 0.30), PALETTE["wood_light"], vertices=8, bevel=0.004)
-    pb.add_box((0.14, 0.09, 0.09), (-0.04, -0.07, 0.46), PALETTE["stone_dark"], bevel=0.01)
-    pb.add_cylinder(0.02, 0.02, 0.38, (0.12, -0.07, 0.28), PALETTE["wood_light"], vertices=8, bevel=0.004)
-    pb.add_box((0.10, 0.03, 0.12), (0.12, -0.08, 0.12), PALETTE["stone"], bevel=0.006, taper_top=(0.7, 1.0))
+    for x in (-0.23, 0.23):
+        pb.add_box((0.07, 0.07, 0.54), (x, 0, 0.27), PALETTE["wood_dark"])
+        pb.add_box((0.08, 0.24, 0.05), (x, 0, 0.025), PALETTE["wood"])
+    for z in (0.12, 0.45):
+        pb.add_box((0.52, 0.06, 0.06), (0, 0, z), PALETTE["wood"])
+    for x in (-0.11, 0.11):
+        pb.add_cylinder(0.018, 0.018, 0.30, (x, -0.055, 0.27), PALETTE["wood_light"], vertices=6, bevel=0.0, smooth=False)
+    pb.add_box((0.14, 0.07, 0.07), (-0.11, -0.055, 0.43), PALETTE["stone_dark"])
+    pb.add_box((0.09, 0.04, 0.10), (0.11, -0.055, 0.11), PALETTE["stone"], taper_top=(0.7, 1.0))
 
 
 def build_barrel(pb: PartBuilder):
@@ -1156,12 +1179,10 @@ def build_signboard(pb: PartBuilder):
     pb.add_box((0.46, 0.065, 0.32), (0.0, -0.02, 0.60), PALETTE["wood"], bevel=0.026, segments=2)
     pb.add_box((0.48, 0.095, 0.045), (0.0, -0.025, 0.77), PALETTE["wood_dark"], bevel=0.012, segments=1)
     # Inset warm cream notice board face
-    pb.add_box((0.38, 0.035, 0.24), (0.0, -0.045, 0.60), PALETTE["cream"], bevel=0.014, segments=1)
+    pb.add_box((0.38, 0.035, 0.24), (0.0, -0.045, 0.60), PALETTE["wood_light"], bevel=0.0)
     # Original pastel zone emblem & direction bars on the board face
-    pb.add_box((0.26, 0.02, 0.04), (-0.03, -0.062, 0.66), PALETTE["coral"], bevel=0.0, segments=0)
-    pb.add_box((0.20, 0.02, 0.032), (-0.06, -0.062, 0.595), PALETTE["teal_muted"], bevel=0.0, segments=0)
-    pb.add_box((0.24, 0.02, 0.032), (-0.04, -0.062, 0.535), PALETTE["wood_light"], bevel=0.0, segments=0)
-    pb.add_cylinder(0.028, 0.028, 0.025, (0.125, -0.060, 0.60), PALETTE["gold"], vertices=8, rot_euler=(math.pi * 0.5, 0.0, 0.0), bevel=0.0, segments=0)
+    for z in (0.56, 0.64):
+        pb.add_box((0.38, 0.02, 0.012), (0, -0.068, z), PALETTE["wood_dark"])
 
 
 BUILDERS = {

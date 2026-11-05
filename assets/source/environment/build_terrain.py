@@ -9,7 +9,7 @@ and generates a single continuous low-poly diorama island mesh (terrain.glb):
 - Inland pond holes lowered to water level y = -0.08m with beveled banks.
 - Paths use constrained polygon edges and per-face colors around path.width.
 - sRGB palette hex values are converted to Linear-sRGB once, and AO is multiplied once in linear space.
-- Verifies exported GLB vertex colors against the terrain palette within ±6/255.
+- Verifies exported GLB vertex colors against the terrain palette within ?6/255.
 - No external ocean plane (rendered by engine).
 """
 
@@ -47,12 +47,12 @@ PALETTE = {
     "stone": "#8D897C",
     "stone_light": "#A7A394",
     "stone_dark": "#706E65",
-    "grass": "#82966B",
-    "grass_dark": "#778B61",
-    "grass_light": "#8D9F75",
+    "grass": "#80A76D",
+    "grass_dark": "#7CA269",
+    "grass_light": "#84AB71",
     "path": "#B98D5D",
-    "path_center": "#C29968",
-    "path_edge": "#B18759",
+    "path_center": "#BB9060",
+    "path_edge": "#B78B5C",
     "sea": "#94D2CB",
     "sea_shallow": "#B0E2DC",
     "sea_deep": "#78BEB6",
@@ -771,12 +771,13 @@ def build_terrain_object():
             continue
         tx, tz = (bx - ax) / length, (bz - az) / length
         nx, nz = -tz, tx
+        # Round each end with short edges; overlapping caps soften junctions.
         poly = []
-        for side in (1, -1):
-            for t in ((0, 0.5, 1) if side == 1 else (1, 0.5, 0)):
-                width = hw * (1.0 + (0.10 * math.sin(ax * 2.1 + bz * 1.7) if t == 0.5 else 0.0))
-                poly.append((ax + (bx - ax) * t + side * nx * width,
-                             az + (bz - az) * t + side * nz * width))
+        for x, z, direction in ((bx, bz, 1), (ax, az, -1)):
+            for i in range(7):
+                angle = -math.pi / 2 + math.pi * i / 6
+                poly.append((x + direction * hw * (tx * math.cos(angle) - nx * math.sin(angle)),
+                             z + direction * hw * (tz * math.cos(angle) - nz * math.sin(angle))))
         road_polys.append(poly)
     road_polys.extend([list(tri[:3]) for tri in junction_triangles])
     road_polys.append([(5.99, -5.95), (6.12, -5.57), (6.61, -5.43),
@@ -1122,7 +1123,7 @@ def verify_glb_colors(glb_path: str, key: str, expected_hex_list: list):
     """
     Re-imports the exported GLB, reads COLOR_0 linear values, converts them back
     to sRGB 0..255, and verifies each expected palette color (grass #5CC96B family,
-    path #F2B35E family) matches within ±6/255. Exits with code 1 on failure.
+    path #F2B35E family) matches within ?6/255. Exits with code 1 on failure.
     """
     prev_objs = set(bpy.data.objects)
     prev_meshes = set(bpy.data.meshes)
@@ -1188,7 +1189,7 @@ def verify_glb_colors(glb_path: str, key: str, expected_hex_list: list):
             f"| linear=({best_lin[0]:.4f},{best_lin[1]:.4f},{best_lin[2]:.4f}) | max_diff={max_diff:.2f}/255"
         )
         if max_diff > 6.0:
-            print(f"[COLOR VERIFY FAIL] {key} ({label}): max_diff {max_diff:.2f}/255 exceeds ±6/255")
+            print(f"[COLOR VERIFY FAIL] {key} ({label}): max_diff {max_diff:.2f}/255 exceeds ?6/255")
             sys.exit(1)
         results[label] = {
             "paletteHex": hex_str,
@@ -1305,7 +1306,7 @@ def main():
         meta_doc = {
             "version": 1,
             "blenderVersion": bpy.app.version_string,
-            "colorSpaceNote": "색공간 수정(2026-11-01): sRGB 팔레트 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
+            "colorSpaceNote": "????????(2026-11-01): sRGB ???????? Linear-sRGB??????? ????? COLOR_0(FLOAT_COLOR)???????? ??? ?????? AO ??? ????? ???",
             "phase1Only": False,
             "buildTerrain": True,
             "summary": {},
@@ -1315,7 +1316,7 @@ def main():
     meta_doc["version"] = 2
     meta_doc["paletteVersion"] = "dream-v2"
     meta_doc["blenderVersion"] = bpy.app.version_string
-    meta_doc["colorSpaceNote"] = "몽환 팔레트 v2(2026-11-01): sRGB 팔레트 v2 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용"
+    meta_doc["colorSpaceNote"] = "??? ?????v2(2026-11-01): sRGB ?????v2 ??? Linear-sRGB??????? ????? COLOR_0(FLOAT_COLOR)???????? ??? ?????? AO ??? ????? ???"
     meta_doc["buildTerrain"] = True
     meta_doc.setdefault("assets", {})["terrain"] = {
         "path": "assets/abraxas/environment/terrain.glb",
