@@ -778,9 +778,19 @@ def build_bakery(pb: PartBuilder):
         for sy in (-0.57, 0.57):
             pb.add_box((0.10, 0.10, 0.86), (sx, sy, 0.52), PALETTE["wood"], bevel=0.01)
     pb.add_box((1.52, 1.36, 0.14), (0.02, 0.0, 0.98), PALETTE["wood"], bevel=0.02)
-    # Brick oven & tall rounded chimney
-    pb.add_cylinder(0.16, 0.20, 0.45, (0.35, 0.25, 1.25), PALETTE["brick"], vertices=10, bevel=0.015)
-    pb.add_cylinder(0.19, 0.19, 0.08, (0.35, 0.25, 1.46), PALETTE["brick_dark"], vertices=10, bevel=0.01)
+    pb.add_prism_roof(1.54, 1.36, 0.40, (0.02, 0.0, 1.04), PALETTE["brick_dark"], ridge_scale=1.0, bevel=0.01, axis='Y')
+    # Large roof tiles share the existing material and use subtle vertex colors.
+    slope = math.atan2(0.40, 0.77)
+    for side in (-1, 1):
+        for row in range(3):
+            x = side * (0.13 + row * 0.245)
+            z = 1.04 + 0.40 * (1.0 - abs(x) / 0.77) + 0.012
+            for col in range(4):
+                color = ("#D89483", "#DF9C8B", "#E4A391")[(row + col * 2) % 3]
+                pb.add_box((0.27, 0.33, 0.025), (0.02 + x, -0.50 + col * 0.335, z), color, rot_euler=(0, side * slope, 0), bevel=0.002)
+    # A narrow brick stack emerges from the sloping roof.
+    pb.add_box((0.17, 0.17, 0.30), (0.43, 0.25, 1.30), PALETTE["brick"], bevel=0.008)
+    pb.add_box((0.21, 0.21, 0.055), (0.43, 0.25, 1.46), PALETTE["brick_dark"], bevel=0.006)
     for x in (-0.31, -0.12):
         pb.add_sphere(0.07, (x, -0.665, 0.42), PALETTE["gold"], subdivisions=1, scale=(1.0, 0.35, 0.65))
     pb.add_box((0.04, 0.54, 0.38), (0.73, 0.12, 0.48), PALETTE["wood_dark"], bevel=0.006)
@@ -2132,12 +2142,13 @@ def main():
 
     blend_path = os.path.join(SOURCE_ENV_DIR, "environment_kit.blend")
     blend1_path = os.path.join(SOURCE_ENV_DIR, "environment_kit.blend1")
-    if os.path.exists(blend_path):
-        os.remove(blend_path)
-    bpy.ops.wm.save_as_mainfile(filepath=blend_path)
-    if os.path.exists(blend1_path):
-        os.remove(blend1_path)
-    print(f"[INFO] Completed {len(metadata_assets)} kit assets (total {total_tris} tris, {round(total_bytes/1024.0, 2)} KiB). Saved {meta_path} and {blend_path}")
+    if not targets:
+        bpy.ops.wm.save_as_mainfile(filepath=blend_path)
+        if os.path.exists(blend1_path):
+            os.remove(blend1_path)
+    else:
+        print("[INFO] Partial build: existing environment kit left unchanged")
+    print(f"[INFO] Completed {len(metadata_assets)} kit assets (total {total_tris} tris, {round(total_bytes/1024.0, 2)} KiB). Saved {meta_path}")
 
 
 if __name__ == "__main__":

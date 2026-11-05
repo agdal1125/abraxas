@@ -4,12 +4,12 @@
   "paletteVersion": "dream-v2",
   "colorSpaceNote": "몽환 팔레트 v2(2026-11-01): sRGB 팔레트 v2 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
   "phase1Only": false,
-  "buildTerrain": false,
+  "buildTerrain": true,
   "summary": {
     "assetCount": 40,
-    "totalTriangles": 36264,
-    "totalBytes": 372268,
-    "totalKiB": 363.54
+    "totalTriangles": 38184,
+    "totalBytes": 388096,
+    "totalKiB": 379.0
   },
   "assets": {
     "entrance-house": {
@@ -388,8 +388,8 @@
           "halfZ": 0.65
         }
       ],
-      "triangles": 1980,
-      "bytes": 26796,
+      "triangles": 2924,
+      "bytes": 39376,
       "maxTriangles": 5000,
       "maxBytes": 184320,
       "bounds": {
@@ -497,6 +497,21 @@
           ],
           "maxDiff255": 0.0
         },
+        "#D89483": {
+          "paletteHex": "#D89483",
+          "measuredHex": "#D89483",
+          "measuredSrgb255": [
+            216.0,
+            148.0,
+            131.0
+          ],
+          "measuredLinear": [
+            0.6867,
+            0.2961,
+            0.227
+          ],
+          "maxDiff255": 0.0
+        },
         "brick": {
           "paletteHex": "#DF9686",
           "measuredHex": "#DF9686",
@@ -512,6 +527,21 @@
           ],
           "maxDiff255": 0.0
         },
+        "#DF9C8B": {
+          "paletteHex": "#DF9C8B",
+          "measuredHex": "#DF9C8B",
+          "measuredSrgb255": [
+            223.0,
+            156.0,
+            139.0
+          ],
+          "measuredLinear": [
+            0.7379,
+            0.3325,
+            0.2582
+          ],
+          "maxDiff255": 0.0
+        },
         "wood_light": {
           "paletteHex": "#DFB99E",
           "measuredHex": "#DFB99E",
@@ -524,6 +554,21 @@
             0.7379,
             0.4851,
             0.3419
+          ],
+          "maxDiff255": 0.0
+        },
+        "#E4A391": {
+          "paletteHex": "#E4A391",
+          "measuredHex": "#E4A391",
+          "measuredSrgb255": [
+            228.0,
+            163.0,
+            145.0
+          ],
+          "measuredLinear": [
+            0.7758,
+            0.3663,
+            0.2831
           ],
           "maxDiff255": 0.0
         },
@@ -3264,8 +3309,8 @@
       "scale": 1,
       "coast": "organic-v3",
       "collision": [],
-      "triangles": 19378,
-      "bytes": 99844,
+      "triangles": 20354,
+      "bytes": 103092,
       "maxTriangles": 30000,
       "maxBytes": 1048576,
       "bounds": {
@@ -3302,18 +3347,18 @@
         },
         "grass_dark": {
           "paletteHex": "#64AD8E",
-          "measuredHex": "#66AD8F",
+          "measuredHex": "#64AD8E",
           "measuredSrgb255": [
-            102.0,
+            100.0,
             173.0,
-            143.0
+            142.0
           ],
           "measuredLinear": [
-            0.1329,
+            0.1274,
             0.4179,
-            0.2747
+            0.2705
           ],
-          "maxDiff255": 2.0
+          "maxDiff255": 0.0
         },
         "grass_light": {
           "paletteHex": "#9CD4B5",

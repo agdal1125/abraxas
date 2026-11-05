@@ -451,7 +451,7 @@ class TerrainColorEvaluator:
         acc = 0.0
         for dx, dz, freq, phase in self.wave_dirs:
             acc += math.sin((x * dx + z * dz) * freq + phase)
-        meadow = acc / 5.0
+        meadow = acc / 3.0
 
         if meadow >= 0.0:
             t_light = smoothstep(0.04, 0.58, meadow)
@@ -476,6 +476,8 @@ class TerrainColorEvaluator:
                 min_norm_d = d
 
         # Feathered edge around d = 1.0 * half_width (width = path.width = 0.9m)
+        if 4.5 < x < 11.5 and -6.2 < z < -1.3:
+            min_norm_d += 0.035 * math.sin(x * 3.1 + z * 2.3)
         path_weight = 1.0 - smoothstep(0.90, 1.10, min_norm_d)
         if path_weight <= 1e-4:
             return 0.0, self.c_path
@@ -511,6 +513,22 @@ class TerrainColorEvaluator:
         grass_col = self.grass_rgb_at(x, z)
         path_w, path_col = self.path_blend_and_rgb_at(x, z)
         base_col = lerp_rgb(grass_col, path_col, path_w)
+
+        # A small worn apron joins the bakery entrance to the road.
+        apron_d = math.hypot((x - 6.58) / 0.66, (z + 5.95) / 0.48)
+        apron = 1.0 - smoothstep(0.72, 1.08, apron_d)
+        base_col = lerp_rgb(base_col, self.c_path, apron * 0.82 * (1.0 - path_w))
+
+        for bx, bz, angle in ((6.0, -6.928203230275509, 0.35), (11.0, -5.196152422706632, 0.5)):
+            dx, dz = x - bx, z - bz
+            lx = math.cos(angle) * dx - math.sin(angle) * dz
+            lz = math.sin(angle) * dx + math.cos(angle) * dz
+            d = math.hypot(max(abs(lx) - 0.8, 0.0), max(abs(lz) - 0.7, 0.0))
+            contact = (1.0 - smoothstep(0.02, 0.35, d)) * 0.22
+            base_col = tuple(c * (1.0 - contact) for c in base_col)
+
+        tree_contact = (1.0 - smoothstep(0.10, 0.48, math.hypot(x - 4.0, z + 6.928203230275509))) * 0.15
+        base_col = tuple(c * (1.0 - tree_contact) for c in base_col)
 
         if d_outer < 1.0 and path_w < 0.8:
             edge_t = (1.0 - smoothstep(0.05, 1.0, d_outer)) * (1.0 - path_w)
@@ -757,7 +775,8 @@ def build_terrain_object():
             continue
         tx, tz = (bx - ax) / seg_len, (bz - az) / seg_len
         nx, nz = -tz, tx
-        steps = max(2, int(math.ceil(seg_len / 0.28)))
+        local = 4.5 < (ax + bx) / 2 < 11.5 and -6.2 < (az + bz) / 2 < -1.3
+        steps = max(2, int(math.ceil(seg_len / (0.14 if local else 0.28))))
         for s_idx in range(steps + 1):
             t = s_idx / float(steps)
             cx = ax + tx * seg_len * t
@@ -765,7 +784,17 @@ def build_terrain_object():
             for lat in (0.0, -0.90 * hw, 0.90 * hw, -1.10 * hw, 1.10 * hw):
                 px = cx + nx * lat
                 pz = cz + nz * lat
-                if valid_top_interior_pt(px, pz, 0.20) and shash.can_insert(px, pz, 0.04):
+                if valid_top_interior_pt(px, pz, 0.20) and shash.can_insert(px, pz, 0.035 if local else 0.04):
+                    cdt_verts.append((px, pz))
+                    shash.insert(px, pz)
+
+    # Resolve the worn apron and foundation edges without refining the whole island.
+    for x0, z0, sx, sz in ((6.58, -5.95, 0.66, 0.48), (6.0, -6.928203230275509, 1.0, 0.9), (11.0, -5.196152422706632, 1.0, 0.9), (4.0, -6.928203230275509, 0.35, 0.35)):
+        for radius in (0.75, 1.0, 1.2):
+            for i in range(32):
+                a = i * math.tau / 32
+                px, pz = x0 + sx * radius * math.cos(a), z0 + sz * radius * math.sin(a)
+                if valid_top_interior_pt(px, pz, 0.20) and shash.can_insert(px, pz, 0.06):
                     cdt_verts.append((px, pz))
                     shash.insert(px, pz)
 
