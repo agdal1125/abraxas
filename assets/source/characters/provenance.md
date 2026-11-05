@@ -1,5 +1,10 @@
 # Abraxas 원본 캐릭터 에셋 출처 및 제작 기록 (Provenance)
 
+## 2026-11-05 루미 시제품 2차 수정
+
+- agy 사용량 한도(429)로 Codex가 이어받아 머리와 목 연결을 보강하고 주머니를 제거했다. 깃대와 황금색 깃발을 바깥으로 배치했으며 전후 비교와 동작 프리뷰를 다시 렌더했다.
+- 전후 비교의 이전 모델은 작업 트리의 기존 결과가 아닌 `HEAD`의 배포 GLB다. 통합 blend와 배포 GLB의 AO 차이는 아래 시제품 기록과 같다.
+
 ## 2026-11-01 대표 에셋 A1 개선
 
 - 개선 제작자: Codex `gpt-6.1-terra` (agy 한도로 대체). 기존 제작 이력은 아래에 유지한다.
@@ -47,6 +52,7 @@
   > Original 3D character design turnaround concept art sheet, showing front view and side view side-by-side on a clean solid light cream background (#FFF8EC). At the bottom of the sheet is a horizontal row of 3 circular flat color palette swatches. The aesthetic is warm low-poly diorama toy figure, soft beveled edges, smooth matte clay and painted wood texture with zero gloss or metallic sheen, soft ambient occlusion. Proportions are gender-neutral 3-head-tall super deformed (SD) figurine: round head making up 1/3 height, rounded torso, short stubby arms and little rounded feet. The character is completely faceless with a smooth blank head containing NO eyes, NO nose, and NO mouth. On top of the round head sits a cracked half-eggshell helmet cap in warm eggshell beige (#E9D7BB) with gentle zig-zag jagged rim points. Side-by-side orthographic turnaround presentation, studio model sheet, clean minimalist design, no logos, no text, no watermarks.
 
 ### 3.2 `char-a` (공략 캐릭터 A — 공형 몸통 + 깃발, `#FF7A59`, 키 0.60m)
+- **2026-11-05 시제품 변경**: agy 사용량 한도(429)로 Codex 대체. 산호색 짧은 머리, 확대된 눈, 목 띠 제거와 긴 깃대를 적용했다. 통합 blend는 여섯 모델을 다시 구성하며, AO를 베이크한 배포 GLB와 다르다. 이번 배포 GLB·AO·개별 프리뷰 갱신 대상은 루미뿐이다. 기존 컨셉 및 아래 프롬프트는 변경 전 기록이다.
 - **원본 아티팩트 경로**: `C:/Users/jake1/.gemini/antigravity-cli/brain/101c2ff1-b0d8-495b-baac-4c63174efa87/character_concept_chara_1793496376028.jpg`
 - **컨셉 PNG 사본 경로**: `assets/source/concepts/characters/char-a.png`
 - **독자적 형태 이유**: 광장과 축제를 이끄는 활기찬 성향을 둥근 공형(구형) 코랄 오렌지(`#FF7A59`) 몸통과 크림색 둥근 목 둘레 링(`#FFF8EC`), 손 본(`hand_prop`)에 결합된 나무 막대(`#9B7355`) 삼각 페넌트 깃발(`#FFF8EC`)로 단순화해 원거리 쿼터뷰와 흑백 실루엣에서도 즉시 식별되게 했다.

@@ -263,9 +263,9 @@ def make_pennant_flag(flag_origin):
     bm = bmesh.new()
     half_y = 0.007
     pts_2d = [
-        (0.0, 0.040),
-        (0.0, -0.040),
-        (0.098, 0.004),
+        (0.0, 0.054),
+        (0.0, -0.054),
+        (0.145, 0.004),
     ]
     front_v = [bm.verts.new((flag_origin[0] + x, flag_origin[1] - half_y, flag_origin[2] + z)) for x, z in pts_2d]
     back_v = [bm.verts.new((flag_origin[0] + x, flag_origin[1] + half_y, flag_origin[2] + z)) for x, z in pts_2d]
@@ -278,11 +278,11 @@ def make_pennant_flag(flag_origin):
     return bm
 
 
-def add_common_face(parts, head_center, head_rx, head_ry, head_rz):
+def add_common_face(parts, head_center, head_rx, head_ry, head_rz, eye_scale=1.0, eye_raise=0.0):
     eye_y = head_center[1] - head_ry * 0.95
-    eye_z = head_center[2] - 0.008
+    eye_z = head_center[2] - 0.008 + eye_raise
     for side in (-1, 1):
-        bm_eye = make_ellipsoid(0.011, 0.007, 0.015, (side * 0.044, eye_y, eye_z), u_seg=8, v_seg=6)
+        bm_eye = make_ellipsoid(0.011 * eye_scale, 0.007, 0.015 * eye_scale, (side * 0.044, eye_y, eye_z), u_seg=8, v_seg=6)
         parts.append(finish_part_mesh(bm_eye, f"eye_{side}", PALETTE["ink"], {"head": 1.0}))
     bm_mouth = make_ellipsoid(0.012, 0.006, 0.005, (0.0, head_center[1] - head_ry * 0.97, head_center[2] - 0.038), u_seg=8, v_seg=6)
     parts.append(finish_part_mesh(bm_mouth, "mouth", PALETTE["ink"], {"head": 1.0}))
@@ -356,22 +356,24 @@ def build_char_a_parts():
     parts.append(finish_part_mesh(bm_torso, "torso", PALETTE["a"], {"body": 1.0}))
     hem = make_torus(0.099, 0.008, (0.0, 0.0, 0.137), major_seg=12, minor_seg=4, scale_xyz=(1.0, 0.93, 1.0))
     parts.append(finish_part_mesh(hem, "hem", PALETTE["cream"], {"body": 1.0}))
-    pocket = make_beveled_box(0.065, 0.012, 0.052, (0.035, -0.119, 0.205), bevel_width=0.004)
-    parts.append(finish_part_mesh(pocket, "pocket", PALETTE["cream"], {"body": 1.0}))
-
-    bm_collar = make_torus(0.078, 0.015, (0.0, 0.0, 0.340), major_seg=16, minor_seg=8, scale_xyz=(1.0, 0.94, 0.85))
-    parts.append(finish_part_mesh(bm_collar, "collar", PALETTE["cream"], {"body": 0.5, "head": 0.5}))
+    neck = make_ellipsoid(0.052, 0.050, 0.035, (0.0, 0.0, 0.343), u_seg=10, v_seg=6)
+    parts.append(finish_part_mesh(neck, "neck", PALETTE["a"], {"body": 1.0}))
 
     head_center = (0.0, 0.0, 0.468)
     bm_head = make_ellipsoid(0.128, 0.122, 0.124, head_center, u_seg=16, v_seg=12)
     parts.append(finish_part_mesh(bm_head, "head_mesh", PALETTE["cream"], {"head": 1.0}))
-    add_common_face(parts, head_center, 0.128, 0.122, 0.124)
+    add_common_face(parts, head_center, 0.128, 0.122, 0.124, 1.25, 0.008)
+    for x, y, z, rx, ry, rz in ((0, 0.012, 0.516, 0.130, 0.126, 0.080), (-0.103, 0.005, 0.494, 0.034, 0.100, 0.064), (0.103, 0.005, 0.494, 0.034, 0.100, 0.064), (-0.075, -0.100, 0.526, 0.039, 0.033, 0.037), (0, -0.112, 0.530, 0.044, 0.030, 0.036), (0.075, -0.100, 0.526, 0.039, 0.033, 0.037)):
+        hair = make_ellipsoid(rx, ry, rz, (x, y, z), u_seg=10, v_seg=6)
+        parts.append(finish_part_mesh(hair, "hair", PALETTE["a"], {"head": 1.0}))
+    hair_back = make_ellipsoid(0.119, 0.062, 0.068, (0.0, 0.076, 0.485), u_seg=8, v_seg=4)
+    parts.append(finish_part_mesh(hair_back, "hair_back", PALETTE["a"], {"head": 1.0}))
 
-    staff_center = (0.145, -0.018, 0.265)
-    bm_staff = make_beveled_cylinder(0.008, 0.008, 0.195, staff_center, segs=10, bevel_width=0.002, bevel_segments=1, tilt_euler=(0.0, 0.12, 0.0))
+    staff_center = (0.166, -0.004, 0.342)
+    bm_staff = make_beveled_cylinder(0.008, 0.008, 0.280, staff_center, segs=10, bevel_width=0.002, bevel_segments=1, tilt_euler=(0.0, 0.19, 0.0))
     parts.append(finish_part_mesh(bm_staff, "flag_staff", PALETTE["wood"], {"hand_prop": 1.0}))
-    bm_flag = make_pennant_flag((0.153, -0.018, 0.312))
-    parts.append(finish_part_mesh(bm_flag, "flag_cloth", PALETTE["cream"], {"hand_prop": 1.0}))
+    bm_flag = make_pennant_flag((0.184, -0.004, 0.442))
+    parts.append(finish_part_mesh(bm_flag, "flag_cloth", PALETTE["b"], {"hand_prop": 1.0}))
     return parts
 
 
@@ -1190,6 +1192,73 @@ def render_action_strips(arm_obj, char_key: str):
     print(f"[PREVIEW] Saved {out_path}")
 
 
+def render_before_after(mesh_obj, arm_obj):
+    scene = bpy.context.scene
+    scene.render.resolution_x = 160
+    scene.render.resolution_y = 120
+    helper_col, cam_obj, cam_data, bg_node = setup_preview_helpers(scene)
+    bpy.data.objects["GuideRuler"].hide_render = True
+    aim_camera_at(cam_obj, (10.0, -10.0, 10.0 * math.tan(math.radians(35)) * math.sqrt(2) + 0.30), (0.0, 0.0, 0.30))
+    cam_data.ortho_scale = 1.80
+    bpy.ops.import_scene.gltf(filepath=f"{SOURCE_DIR}/_before/char-a.glb")
+    old_objects = list(bpy.context.selected_objects)
+    old_mesh = next(obj for obj in old_objects if obj.type == "MESH")
+    old_arm = next(obj for obj in old_objects if obj.type == "ARMATURE")
+    if old_arm.animation_data:
+        old_arm.animation_data.action = None
+        for track in old_arm.animation_data.nla_tracks:
+            track.mute = True
+    sil_mat = bpy.data.materials.new("CompareSilhouette")
+    sil_mat.use_nodes = True
+    nodes = sil_mat.node_tree.nodes
+    nodes.clear()
+    output = nodes.new("ShaderNodeOutputMaterial")
+    emission = nodes.new("ShaderNodeEmission")
+    emission.inputs["Color"].default_value = (0.04, 0.04, 0.05, 1.0)
+    sil_mat.node_tree.links.new(emission.outputs[0], output.inputs["Surface"])
+    pixels = [1.0] * (1280 * 720 * 4)
+    for col, current in enumerate((old_mesh, mesh_obj)):
+        old_mesh.hide_render = col != 0
+        mesh_obj.hide_render = col != 1
+        original_mat = current.data.materials[0]
+        for silhouette in (False, True):
+            if silhouette:
+                current.data.materials[0] = sil_mat
+            temp = f"{SOURCE_DIR}/_tmp_compare.png"
+            scene.render.filepath = temp
+            bpy.ops.render.render(write_still=True)
+            img = bpy.data.images.load(temp, check_existing=False)
+            src = list(img.pixels)
+            bpy.data.images.remove(img)
+            os.remove(temp)
+            if col == 0 and not silhouette:
+                pixels = src[:4] * (1280 * 720)
+            if silhouette:
+                current.data.materials[0] = original_mat
+                for y in range(120):
+                    start = ((y * 1280) + col * 640 + 240) * 4
+                    pixels[start:start + 640] = src[y * 640:(y + 1) * 640]
+            else:
+                for y in range(120):
+                    start = (((y + 600) * 1280) + col * 640 + 240) * 4
+                    pixels[start:start + 640] = src[y * 640:(y + 1) * 640]
+                    for x in range(160):
+                        rgba = src[(y * 160 + x) * 4:(y * 160 + x + 1) * 4]
+                        for dy in range(4):
+                            start = (((120 + y * 4 + dy) * 1280) + col * 640 + x * 4) * 4
+                            pixels[start:start + 16] = rgba * 4
+    mesh_obj.hide_render = False
+    sheet = bpy.data.images.new("before_after", width=1280, height=720, alpha=True)
+    sheet.pixels = pixels
+    sheet.filepath_raw = f"{PREVIEW_DIR}/char-a-before-after.png"
+    sheet.file_format = "PNG"
+    sheet.save()
+    bpy.data.images.remove(sheet)
+    for obj in old_objects:
+        bpy.data.objects.remove(obj, do_unlink=True)
+    cleanup_preview_helpers(helper_col)
+
+
 def stitch_lineup_sheets(all_temp_paths: dict):
     sil_sheet = bpy.data.images.new("silhouette_lineup", width=1024, height=512, alpha=True)
     sil_pixels = [0.04, 0.04, 0.05, 1.0] * (1024 * 512)
@@ -1327,6 +1396,8 @@ def main():
 
         if key == "char-a":
             render_action_strips(arm_obj, key)
+            if os.path.exists(f"{SOURCE_DIR}/_before/char-a.glb"):
+                render_before_after(mesh_obj, arm_obj)
         for path in tpaths.values():
             if os.path.exists(path):
                 os.remove(path)
@@ -1336,7 +1407,7 @@ def main():
             "scale": 1,
             "collision": [{"type": "circle", "x": 0, "z": 0, "radius": col_r}],
             "clips": ["idle", "walk", "talk"],
-            "revisionAuthor": "Codex gpt-6.1-terra (agy 한도로 대체)",
+            "revisionAuthor": "Codex (agy 한도로 대체)",
             "budget": {
                 "maxTriangles": max_tri,
                 "maxKiB": max_kib,
