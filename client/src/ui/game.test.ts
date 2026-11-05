@@ -7,6 +7,21 @@ declare const __CONTENT_VERSION__: string;
 import { Compiler } from "inkjs/full";
 import { data, translations } from "../content";
 
+test.each(["pending", "failed"])("dialogue continues when font loading is %s", async status => {
+  const ink = new Compiler("-> END\n=== scene ===\n바구니 밑도 살펴뒀어.\n-> END").Compile().ToJson() || "";
+  const load = vi.fn(() => status === "pending" ? new Promise(() => {}) : Promise.reject(new Error("font unavailable")));
+  vi.stubGlobal("document", { fonts: { load } });
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(ink)));
+  const panel = vi.fn();
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko" }, token: 0, panel });
+  try {
+    void game.narrative("test", "scene");
+    await vi.waitFor(() => expect(panel).toHaveBeenCalled(), { timeout: 1500 });
+    expect(panel.mock.calls[0]![0]).toContain("살펴뒀어");
+    expect(load).toHaveBeenCalledWith("400 17px 'Pretendard Variable'", ink);
+  } finally { vi.unstubAllGlobals(); }
+});
+
 test("interlude resumes at each unanswered knot with Demi seated", async () => {
   const events: string[] = [];
   const game = Object.assign(Object.create(Game.prototype), { state: { segment: "interlude_1", log: [{ id: "interlude_1_01", pick: "a" }] }, village: { setStoryScene: (x: string) => events.push(x), setDemiMode: (x: string) => events.push(x) }, narrative: async (_file: string, knot: string, choice: boolean) => { events.push(knot); if (choice) game.state.log.push({ id: knot, pick: "a" }); }, finish: () => events.push("finish") });
