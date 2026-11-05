@@ -3428,8 +3428,8 @@
       "scale": 1,
       "coast": "organic-v3",
       "collision": [],
-      "triangles": 12766,
-      "bytes": 86144,
+      "triangles": 12948,
+      "bytes": 87864,
       "maxTriangles": 30000,
       "maxBytes": 1048576,
       "bounds": {
