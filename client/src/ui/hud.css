@@ -5,6 +5,8 @@
 .hud-menu-card{display:grid;gap:8px;width:min(320px,calc(100% - 32px));max-height:calc(100% - 24px);overflow:auto;box-sizing:border-box;padding:16px;border-radius:18px;background:var(--paper);box-shadow:var(--shadow)}
 .hud-menu-card h2{margin:0;font:700 20px var(--font-title, sans-serif)}
 .hud-menu-card button{padding:4px 12px}
+.hud-menu-card p{margin:0;font-size:var(--body-size,15px)}
+.hud-menu-card a{display:flex;align-items:center;min-height:48px;color:var(--ink);font-size:var(--body-size,15px);overflow-wrap:anywhere}
 .hud-direction{position:absolute;z-index:3;pointer-events:none;color:var(--ink);background:var(--marker);border-radius:50%;width:32px;height:32px;display:grid;place-items:center;transform:translate(-50%,-50%);box-shadow:var(--shadow)}
 .overlay.result .panel{width:min(760px,100%);max-width:none;max-height:100%;overflow:visible;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:center;font-family:var(--font-body, sans-serif)}
 .result .result-intro h2{font:800 clamp(22px,4vw,36px)/1.15 var(--font-title, sans-serif);margin:0 0 10px}

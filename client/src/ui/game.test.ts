@@ -126,6 +126,20 @@ test("Demi's displayed name changes only after the reveal", () => {
   } finally { vi.unstubAllGlobals(); }
 });
 
+test("settings opens credits and returns to settings", () => {
+  const nodes: { tag: string; textContent: string; href: string; target: string; rel: string; listeners: Record<string, () => void> }[] = [];
+  const element = (tag = "div") => { const node = { tag, textContent: "", href: "", target: "", rel: "", listeners: {} as Record<string, () => void>, append: vi.fn(), replaceChildren: vi.fn(), setAttribute: vi.fn(), querySelector: () => null, addEventListener: (name: string, action: () => void) => { node.listeners[name] = action; } }; nodes.push(node); return node; };
+  vi.stubGlobal("document", { createElement: element });
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko" }, controls: { setActive: vi.fn() }, village: { setEnabled: vi.fn() }, overlay: element(), settingsMenu: element(), settingsButton: element() });
+  try {
+    game.settings(); nodes.find(node => node.tag === "button" && node.textContent === "만든 자료")!.listeners.click!();
+    expect(nodes.some(node => node.textContent.includes("The Day We Smiled (60s Edit)"))).toBe(true);
+    expect(nodes.find(node => node.textContent === "CC BY 3.0")).toMatchObject({ href: "http://creativecommons.org/licenses/by/3.0/", target: "_blank", rel: "noopener noreferrer" });
+    nodes.find(node => node.tag === "button" && node.textContent === "뒤로")!.listeners.click!();
+    expect(nodes.filter(node => node.tag === "button" && node.textContent === "만든 자료")).toHaveLength(2);
+  } finally { vi.unstubAllGlobals(); }
+});
+
 test("resident interaction uses the confirmed branch and rejects inactive targets", () => {
   const snapshot = structuredClone(fixture.initial) as PlaySnapshot;
   snapshot.segment = "ep_lumi";
