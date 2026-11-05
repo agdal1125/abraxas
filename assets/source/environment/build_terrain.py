@@ -7,9 +7,9 @@ and generates a single continuous low-poly diorama island mesh (terrain.glb):
 - Origin at (0, 0, 0), top surface at y = 0.0, island thickness 0.35m (minY = -0.35m)
   with rounded bevel edge, subdivided organic coastline, and warm earth/stone cliff cross-section.
 - Inland pond holes lowered to water level y = -0.08m with beveled banks.
-- Paths colored via vertex colors (COLOR_0, FLOAT_COLOR) with width = path.width and soft feathered edges.
+- Paths use constrained polygon edges and per-face colors around path.width.
 - sRGB palette hex values are converted to Linear-sRGB once, and AO is multiplied once in linear space.
-- Verifies exported GLB vertex colors (grass #5CC96B family, path #F2B35E family within ±6/255).
+- Verifies exported GLB vertex colors against the terrain palette within ±6/255.
 - No external ocean plane (rendered by engine).
 """
 
@@ -41,18 +41,18 @@ PALETTE = {
     "cream_warm": "#F7EFE2",
     "cream_shadow": "#E6D8C0",
     "ink": "#564863",
-    "wood": "#C69D80",
-    "wood_light": "#DFB99E",
-    "wood_dark": "#9C7860",
-    "stone": "#C8BFE0",
-    "stone_light": "#DDD5F0",
-    "stone_dark": "#A99CC4",
-    "grass": "#7EC4A6",
-    "grass_dark": "#64AD8E",
-    "grass_light": "#9CD4B5",
-    "path": "#EDC9A3",
-    "path_center": "#F3D5B5",
-    "path_edge": "#D9B087",
+    "wood": "#92704F",
+    "wood_light": "#A88862",
+    "wood_dark": "#705741",
+    "stone": "#8D897C",
+    "stone_light": "#A7A394",
+    "stone_dark": "#706E65",
+    "grass": "#82966B",
+    "grass_dark": "#778B61",
+    "grass_light": "#8D9F75",
+    "path": "#B98D5D",
+    "path_center": "#C29968",
+    "path_edge": "#B18759",
     "sea": "#94D2CB",
     "sea_shallow": "#B0E2DC",
     "sea_deep": "#78BEB6",
@@ -724,11 +724,6 @@ def build_terrain_object():
         holes_rings_xz.append(h_rings)
 
     color_eval = TerrainColorEvaluator(outer_sub, holes_sub_list, path_segments, junction_triangles)
-    for ax, az, bx, bz, _hw in path_segments:
-        assert color_eval.path_blend_and_rgb_at((ax + bx) / 2, (az + bz) / 2)[0] > 0.99
-    test_eval = TerrainColorEvaluator([], [], [(0, 0, 2, 0, 0.45)], [])
-    assert test_eval.path_blend_and_rgb_at(1, 0.405)[0] > 0.99
-    assert test_eval.path_blend_and_rgb_at(1, 0.495)[0] < 0.01
 
     # -------------------------------------------------------------------------
     # Constrained Delaunay Triangulation for Top Surface (y = 0.0)
@@ -768,44 +763,33 @@ def build_terrain_object():
                 return False
         return True
 
-    # 3) Seed path-aligned vertices so vertex-colored paths (width 0.9m) have smooth edges
+    # Closed, overlapping road outlines become constrained triangulation edges.
+    road_polys = []
     for ax, az, bx, bz, hw in path_segments:
-        seg_len = math.hypot(bx - ax, bz - az)
-        if seg_len < 1e-5:
+        length = math.hypot(bx - ax, bz - az)
+        if length < 1e-5:
             continue
-        tx, tz = (bx - ax) / seg_len, (bz - az) / seg_len
+        tx, tz = (bx - ax) / length, (bz - az) / length
         nx, nz = -tz, tx
-        local = 4.5 < (ax + bx) / 2 < 11.5 and -6.2 < (az + bz) / 2 < -1.3
-        steps = max(2, int(math.ceil(seg_len / (0.14 if local else 0.28))))
-        for s_idx in range(steps + 1):
-            t = s_idx / float(steps)
-            cx = ax + tx * seg_len * t
-            cz = az + tz * seg_len * t
-            for lat in (0.0, -0.90 * hw, 0.90 * hw, -1.10 * hw, 1.10 * hw):
-                px = cx + nx * lat
-                pz = cz + nz * lat
-                if valid_top_interior_pt(px, pz, 0.20) and shash.can_insert(px, pz, 0.035 if local else 0.04):
-                    cdt_verts.append((px, pz))
-                    shash.insert(px, pz)
-
-    # Resolve the worn apron and foundation edges without refining the whole island.
-    for x0, z0, sx, sz in ((6.58, -5.95, 0.66, 0.48), (6.0, -6.928203230275509, 1.0, 0.9), (11.0, -5.196152422706632, 1.0, 0.9), (4.0, -6.928203230275509, 0.35, 0.35)):
-        for radius in (0.75, 1.0, 1.2):
-            for i in range(32):
-                a = i * math.tau / 32
-                px, pz = x0 + sx * radius * math.cos(a), z0 + sz * radius * math.sin(a)
-                if valid_top_interior_pt(px, pz, 0.20) and shash.can_insert(px, pz, 0.06):
-                    cdt_verts.append((px, pz))
-                    shash.insert(px, pz)
-
-    # Seed vertices inside 3-way junction triangles
-    for tri_a, tri_b, tri_c, _hw in junction_triangles:
-        for w0, w1, w2 in ((1 / 3, 1 / 3, 1 / 3), (0.5, 0.25, 0.25), (0.25, 0.5, 0.25), (0.25, 0.25, 0.5)):
-            px = w0 * tri_a[0] + w1 * tri_b[0] + w2 * tri_c[0]
-            pz = w0 * tri_a[1] + w1 * tri_b[1] + w2 * tri_c[1]
-            if valid_top_interior_pt(px, pz, 0.20) and shash.can_insert(px, pz, 0.20):
-                cdt_verts.append((px, pz))
-                shash.insert(px, pz)
+        poly = []
+        for side in (1, -1):
+            for t in ((0, 0.5, 1) if side == 1 else (1, 0.5, 0)):
+                width = hw * (1.0 + (0.10 * math.sin(ax * 2.1 + bz * 1.7) if t == 0.5 else 0.0))
+                poly.append((ax + (bx - ax) * t + side * nx * width,
+                             az + (bz - az) * t + side * nz * width))
+        road_polys.append(poly)
+    road_polys.extend([list(tri[:3]) for tri in junction_triangles])
+    road_polys.append([(5.99, -5.95), (6.12, -5.57), (6.61, -5.43),
+                       (7.18, -5.64), (7.23, -6.01), (6.93, -6.35), (6.31, -6.37)])
+    assert all(point_in_poly_xz(((a + c) / 2, (b + d) / 2), poly)
+               for (a, b, c, d, _), poly in zip(path_segments, road_polys))
+    assert point_in_poly_xz((6.58, -5.95), road_polys[-1])
+    for poly in road_polys:
+        base = len(cdt_verts)
+        cdt_verts.extend(poly)
+        cdt_edges.extend((base + i, base + (i + 1) % len(poly)) for i in range(len(poly)))
+        for x, z in poly:
+            shash.insert(x, z)
 
     # 4) Seed equilateral triangular grid across remaining grass interior
     xs_all = [p[0] for p in top_outer_ring]
@@ -813,7 +797,7 @@ def build_terrain_object():
     min_x, max_x = min(xs_all), max(xs_all)
     min_z, max_z = min(zs_all), max(zs_all)
 
-    grid_dx = 0.50
+    grid_dx = 0.75
     grid_dz = grid_dx * math.sqrt(3.0) * 0.5
     row = 0
     z_cur = min_z + grid_dz
@@ -872,41 +856,31 @@ def build_terrain_object():
 
     up_normal_b = Vector((0.0, 0.0, 1.0))
 
-    # 1) Add Top Surface triangles (y = 0.0)
-    top_color_cache = {}
-
-    def get_top_color(x: float, z: float):
-        k = (round(x, 4), round(z, 4))
-        c = top_color_cache.get(k)
-        if c is None:
-            c = color_eval.top_surface_rgba(x, z)
-            top_color_cache[k] = c
-        return c
-
+    # 1) Each triangle has a single color; constrained edges separate roads from grass.
     for f_indices in f_cdt:
         if len(f_indices) < 3:
             continue
-        cx = sum(v_cdt[idx].x for idx in f_indices) / float(len(f_indices))
-        cz = sum(v_cdt[idx].y for idx in f_indices) / float(len(f_indices))
-        if not point_in_poly_xz((cx, cz), top_outer_ring):
-            continue
-        if any(point_in_poly_xz((cx, cz), h_ring) for h_ring in top_hole_rings):
-            continue
-
         for k in range(1, len(f_indices) - 1):
-            i0, i1, i2 = f_indices[0], f_indices[k], f_indices[k + 1]
-            x0, z0 = v_cdt[i0].x, v_cdt[i0].y
-            x1, z1 = v_cdt[i1].x, v_cdt[i1].y
-            x2, z2 = v_cdt[i2].x, v_cdt[i2].y
+            points = [v_cdt[i] for i in (f_indices[0], f_indices[k], f_indices[k + 1])]
+            cx = sum(p.x for p in points) / 3
+            cz = sum(p.y for p in points) / 3
+            if not point_in_poly_xz((cx, cz), top_outer_ring):
+                continue
+            if any(point_in_poly_xz((cx, cz), h) for h in top_hole_rings):
+                continue
+            if any(point_in_poly_xz((cx, cz), poly) for poly in road_polys):
+                colors = (color_eval.c_path, color_eval.c_path_center, color_eval.c_path_edge)
+                rgb = colors[int(abs(math.sin(cx * 2.7 + cz * 3.1)) * 100) % 3]
+            else:
+                wave = sum(math.sin((cx * dx + cz * dz) * freq + phase)
+                           for dx, dz, freq, phase in color_eval.wave_dirs)
+                rgb = color_eval.c_grass_light if wave > 1.0 else color_eval.c_grass_dark if wave < -1.0 else color_eval.c_grass
+            color = (*rgb, 1.0)
             add_oriented_triangle(
-                (x0, 0.0, z0),
-                (x1, 0.0, z1),
-                (x2, 0.0, z2),
-                get_top_color(x0, z0),
-                get_top_color(x1, z1),
-                get_top_color(x2, z2),
-                up_normal_b,
-                is_smooth=True,
+                (points[0].x, 0.0, points[0].y),
+                (points[1].x, 0.0, points[1].y),
+                (points[2].x, 0.0, points[2].y),
+                color, color, color, up_normal_b, is_smooth=False,
             )
 
     # 2) Add Outer Bevel & Dirt Cliff Cross-Section Strips (Rings 0..5)
@@ -944,15 +918,15 @@ def build_terrain_object():
 
             add_oriented_triangle(
                 u0, u1, l1,
-                cols_upper[i], cols_upper[inext], cols_lower[inext],
+                cols_lower[i], cols_lower[i], cols_lower[i],
                 expected_n,
-                is_smooth=strip_smooth,
+                is_smooth=False,
             )
             add_oriented_triangle(
                 u0, l1, l0,
-                cols_upper[i], cols_lower[inext], cols_lower[i],
+                cols_lower[i], cols_lower[i], cols_lower[i],
                 expected_n,
-                is_smooth=strip_smooth,
+                is_smooth=False,
             )
 
     # 3) Add Pond Bank Strips (Pond Rings 0..3) and Water Surface (y = -0.08m) for each hole
@@ -988,15 +962,15 @@ def build_terrain_object():
 
                 add_oriented_triangle(
                     u0, u1, l1,
-                    cols_upper[i], cols_upper[inext], cols_lower[inext],
+                    cols_lower[i], cols_lower[i], cols_lower[i],
                     expected_n,
-                    is_smooth=True,
+                    is_smooth=False,
                 )
                 add_oriented_triangle(
                     u0, l1, l0,
-                    cols_upper[i], cols_lower[inext], cols_lower[i],
+                    cols_lower[i], cols_lower[i], cols_lower[i],
                     expected_n,
-                    is_smooth=True,
+                    is_smooth=False,
                 )
 
         # Triangulate the pond water surface at y = -0.08m inside Pond Ring 3

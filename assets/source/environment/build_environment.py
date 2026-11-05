@@ -67,12 +67,12 @@ PALETTE = {
     "cream_warm": "#F7EFE2",
     "cream_shadow": "#E6D8C0",
     "ink": "#564863",
-    "wood": "#C69D80",
-    "wood_light": "#DFB99E",
-    "wood_dark": "#9C7860",
-    "stone": "#C8BFE0",
-    "stone_light": "#DDD5F0",
-    "stone_dark": "#A99CC4",
+    "wood": "#986449",
+    "wood_light": "#B47A58",
+    "wood_dark": "#714632",
+    "stone": "#92958E",
+    "stone_light": "#B0B2A9",
+    "stone_dark": "#737873",
     "grass": "#7EC4A6",
     "grass_dark": "#64AD8E",
     "grass_light": "#9CD4B5",
@@ -744,6 +744,11 @@ def build_entrance_house(pb: PartBuilder):
             pb.add_box((0.11, 0.11, 0.80), (sx, sy, 0.50), PALETTE["wood"], bevel=0.012)
     # Rounded gable roof + overhanging bargeboards & ridge beam
     pb.add_prism_roof(1.40, 1.20, 0.52, (0.0, 0.0, 0.86), PALETTE["wood"], ridge_scale=0.96, bevel=0.025, segments=2, axis='Y')
+    for side in (-1, 1):
+        for row in range(3):
+            x = side * (0.12 + row * 0.22)
+            for col in range(3):
+                pb.add_box((0.25, 0.38, 0.025), (x, -0.40 + col * 0.40, 0.86 + 0.52 * (1 - abs(x) / 0.70) + 0.015), PALETTE["wood_light"] if (row + col) % 2 else PALETTE["wood"], rot_euler=(0, side * math.atan2(0.52, 0.70), 0), bevel=0.0)
     pb.add_box((0.16, 1.22, 0.09), (0.0, 0.0, 1.36), PALETTE["wood_dark"], bevel=0.015)
     # Front arched doorway (-Y is front)
     pb.add_box((0.42, 0.08, 0.54), (0.0, -0.49, 0.38), PALETTE["wood_dark"], bevel=0.015)
@@ -848,7 +853,12 @@ def build_library(pb: PartBuilder):
     pb.add_box((1.52, 1.24, 0.84), (0.0, 0.0, 0.52), PALETTE["cream"], bevel=0.015)
     for sx in (-0.74, -0.34, 0.34, 0.74):
         pb.add_box((0.09, 1.30, 0.84), (sx, 0.0, 0.52), PALETTE["wood"], bevel=0.01)
-    pb.add_prism_roof(1.80, 1.50, 0.84, (0.0, 0.0, 0.92), PALETTE["violet_muted"], ridge_scale=0.96, bevel=0.025, segments=2, axis='Y')
+    pb.add_prism_roof(1.80, 1.50, 0.84, (0.0, 0.0, 0.92), "#71737D", ridge_scale=0.96, bevel=0.025, segments=2, axis='Y')
+    for side in (-1, 1):
+        for row in range(3):
+            x = side * (0.15 + row * 0.29)
+            for col in range(3):
+                pb.add_box((0.34, 0.47, 0.025), (x, -0.50 + col * 0.50, 0.92 + 0.84 * (1 - abs(x) / 0.90) + 0.015), "#777A82" if (row + col) % 2 else "#85858C", rot_euler=(0, side * math.atan2(0.84, 0.90), 0), bevel=0.0)
     pb.add_box((0.14, 1.50, 0.09), (0.0, 0.0, 1.74), PALETTE["wood_dark"], bevel=0.015)
     pb.add_cylinder(0.22, 0.22, 0.08, (0.0, -0.72, 1.24), PALETTE["wood"], vertices=12, rot_euler=(math.pi * 0.5, 0.0, 0.0), bevel=0.01)
     pb.add_cylinder(0.16, 0.16, 0.08, (0.0, -0.735, 1.24), PALETTE["gold_light"], vertices=12, rot_euler=(math.pi * 0.5, 0.0, 0.0), bevel=0.008)
@@ -1008,10 +1018,10 @@ def build_bench(pb: PartBuilder):
     for lx in (-0.33, 0.33):
         pb.add_box((0.07, 0.28, 0.22), (lx, 0.0, 0.11), PALETTE["wood_dark"], bevel=0.008)
         pb.add_box((0.06, 0.06, 0.26), (lx, 0.12, 0.32), PALETTE["wood_dark"], bevel=0.008)
-    pb.add_box((0.80, 0.14, 0.05), (0.0, -0.07, 0.22), PALETTE["wood_light"], bevel=0.008)
-    pb.add_box((0.80, 0.14, 0.05), (0.0, 0.07, 0.22), PALETTE["wood"], bevel=0.008)
-    pb.add_box((0.80, 0.05, 0.09), (0.0, 0.13, 0.32), PALETTE["wood_light"], bevel=0.008)
-    pb.add_box((0.80, 0.05, 0.09), (0.0, 0.13, 0.41), PALETTE["wood"], bevel=0.008)
+    pb.add_box((0.80, 0.12, 0.05), (0.0, -0.08, 0.22), PALETTE["wood_light"], bevel=0.0)
+    pb.add_box((0.80, 0.12, 0.05), (0.0, 0.08, 0.22), PALETTE["wood"], bevel=0.0)
+    pb.add_box((0.80, 0.05, 0.075), (0.0, 0.13, 0.32), PALETTE["wood_light"], bevel=0.0)
+    pb.add_box((0.80, 0.05, 0.075), (0.0, 0.13, 0.41), PALETTE["wood"], bevel=0.0)
 
 
 def build_well(pb: PartBuilder):
@@ -1026,7 +1036,8 @@ def build_well(pb: PartBuilder):
 
 
 def build_festival_stage(pb: PartBuilder):
-    pb.add_box((1.80, 1.20, 0.16), (0.0, 0.0, 0.12), PALETTE["wood"], bevel=0.015)
+    for i in range(6):
+        pb.add_box((1.80, 0.18, 0.16), (0.0, -0.50 + i * 0.20, 0.12), PALETTE["wood"] if i % 2 else PALETTE["wood_light"], bevel=0.0)
     pb.add_box((1.72, 1.12, 0.08), (0.0, 0.0, 0.04), PALETTE["wood_dark"], bevel=0.01)
     for px in (-0.80, 0.80):
         pb.add_box((0.10, 0.10, 0.82), (px, 0.50, 0.58), PALETTE["wood_dark"], bevel=0.012)
@@ -1085,7 +1096,12 @@ def build_shore_post(pb: PartBuilder):
 
 
 def build_bread_crate(pb: PartBuilder):
-    pb.add_box((0.36, 0.28, 0.16), (0.0, 0.0, 0.08), PALETTE["wood"], bevel=0.01)
+    pb.add_box((0.36, 0.28, 0.025), (0.0, 0.0, 0.0125), PALETTE["wood_dark"], bevel=0.0)
+    for z, color in ((0.05, PALETTE["wood"]), (0.125, PALETTE["wood_light"])):
+        for y in (-0.13, 0.13):
+            pb.add_box((0.36, 0.02, 0.055), (0, y, z), color, bevel=0.0)
+        for x in (-0.17, 0.17):
+            pb.add_box((0.02, 0.24, 0.055), (x, 0, z), color, bevel=0.0)
     pb.add_sphere(0.08, (-0.07, 0.0, 0.18), PALETTE["gold"], subdivisions=1, scale=(1.1, 1.5, 0.9), rot_euler=(0.2, -0.2, 0.0))
     pb.add_sphere(0.08, (0.06, -0.02, 0.19), PALETTE["path"], subdivisions=1, scale=(1.0, 1.4, 0.95), rot_euler=(-0.15, 0.25, 0.0))
     pb.add_sphere(0.065, (0.0, 0.05, 0.16), PALETTE["gold_light"], subdivisions=1)
@@ -1116,15 +1132,16 @@ def build_tool_rack(pb: PartBuilder):
 
 
 def build_barrel(pb: PartBuilder):
-    pb.add_cylinder(0.13, 0.15, 0.21, (0.0, 0.0, 0.105), PALETTE["wood"], vertices=12, bevel=0.01)
-    pb.add_cylinder(0.15, 0.13, 0.21, (0.0, 0.0, 0.315), PALETTE["wood"], vertices=12, bevel=0.01)
-    pb.add_cylinder(0.152, 0.152, 0.04, (0.0, 0.0, 0.11), PALETTE["ink"], vertices=12, bevel=0.005)
-    pb.add_cylinder(0.152, 0.152, 0.04, (0.0, 0.0, 0.31), PALETTE["ink"], vertices=12, bevel=0.005)
+    pb.add_cylinder(0.13, 0.15, 0.21, (0.0, 0.0, 0.105), PALETTE["wood"], vertices=8, bevel=0.0, smooth=False)
+    pb.add_cylinder(0.15, 0.13, 0.21, (0.0, 0.0, 0.315), PALETTE["wood"], vertices=8, bevel=0.0, smooth=False)
+    pb.add_cylinder(0.152, 0.152, 0.025, (0.0, 0.0, 0.11), PALETTE["stone_dark"], vertices=8, bevel=0.0, smooth=False)
+    pb.add_cylinder(0.152, 0.152, 0.025, (0.0, 0.0, 0.31), PALETTE["stone_dark"], vertices=8, bevel=0.0, smooth=False)
 
 
 def build_log(pb: PartBuilder):
-    pb.add_cylinder(0.095, 0.09, 0.60, (0.0, 0.0, 0.10), PALETTE["wood"], vertices=10, rot_euler=(0.0, math.pi * 0.5, 0.0), bevel=0.01)
-    pb.add_cylinder(0.075, 0.075, 0.61, (0.0, 0.0, 0.10), PALETTE["cream_warm"], vertices=10, rot_euler=(0.0, math.pi * 0.5, 0.0), bevel=0.005)
+    pb.add_cylinder(0.095, 0.09, 0.60, (0.0, 0.0, 0.10), PALETTE["wood_dark"], vertices=8, rot_euler=(0.0, math.pi * 0.5, 0.0), bevel=0.0, smooth=False)
+    pb.add_cylinder(0.075, 0.075, 0.605, (0.0, 0.0, 0.10), PALETTE["wood_light"], vertices=8, rot_euler=(0.0, math.pi * 0.5, 0.0), bevel=0.0, smooth=False)
+    pb.add_cylinder(0.035, 0.035, 0.61, (0.0, 0.0, 0.10), PALETTE["wood"], vertices=8, rot_euler=(0.0, math.pi * 0.5, 0.0), bevel=0.0, smooth=False)
     pb.add_cylinder(0.02, 0.015, 0.08, (-0.08, 0.0, 0.19), PALETTE["wood_dark"], vertices=6, bevel=0.004)
     pb.add_sphere(0.028, (-0.10, 0.0, 0.22), PALETTE["grass_light"], subdivisions=1, scale=(1.3, 0.7, 0.8))
 
