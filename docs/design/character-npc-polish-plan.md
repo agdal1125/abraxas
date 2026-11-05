@@ -55,4 +55,4 @@ A1/A2는 공유 생성기 때문에 동시에 실행하지 않는다. RS1-A의 �
 
 이 계획 작성자는 게임 화면·실기기·초기 bytes·draw calls를 직접 측정하지 않았다. 감독이 확인한 현재 main의 한국어 실제 스크린샷에서는 루미 이름표가 올바르게 표시된다. 과거 이름 표기를 현재 버그로 보고하지 않는다.
 
-캐릭터 외관 개선 승인 질문은 사용자 응답 대기 중이며, 이 추천안을 승인된 결정으로 공용 기록에 옮기지 않는다. 스킬 적응 원칙은 감독 검토에서 수락되었고, 외관 개선 승인과 독립적으로 배치 준비가 끝났다. 감독 Astra가 검토된 SKILL과 원본 MIT LICENSE를 [저장소 스킬](../../.agents/skills/3dviz-abraxas/SKILL.md)에 함께 배치했다. 공용 memory/devlog 갱신은 감독 Astra에게 인계한다.
+2026-11-05 사람이 외관 개선 진행을 지시했다(`docs/tasks/T017-user-brief.md`). A1·A2는 T017에서 수행했고, CP-W·CP-U·CP-V는 관찰된 문제가 있을 때 진행한다. 스킬 적응 원칙은 감독 검토에서 수락되었고, 외관 개선 승인과 독립적으로 배치 준비가 끝났다. 감독 Astra가 검토된 SKILL과 원본 MIT LICENSE를 [저장소 스킬](../../.agents/skills/3dviz-abraxas/SKILL.md)에 함께 배치했다. 공용 memory/devlog 갱신은 감독 Astra에게 인계한다.
