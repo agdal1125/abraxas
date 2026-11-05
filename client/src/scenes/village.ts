@@ -23,13 +23,15 @@ type MapData = { spawn: Vec2; terrain: Placement; bounds: Bounds; zones: Record<
 type Asset = { path: string; scale: number; collision: Collider[]; clips?: string[] };
 const map = import.meta.glob<{ default: MapData }>("../../../content/world/village.json", { eager: true })["../../../content/world/village.json"]!.default;
 const manifest = import.meta.glob<{ default: { assets: Record<string, Asset> } }>("../../../content/assets/manifest.json", { eager: true })["../../../content/assets/manifest.json"]!.default.assets;
+// 24px keeps the neutral symbol legible on a mobile screen while staying within the policy range.
+const MARKER_SIZE_PX = 24;
 
 type Character = { object: THREE.Object3D; mixer: THREE.AnimationMixer; actions: Map<string, THREE.AnimationAction>; current?: string };
 
 export class Village {
   private scene = new THREE.Scene();
   private camera = new THREE.OrthographicCamera();
-  private light = new THREE.DirectionalLight("#fff0df", 1.8);
+  private light = new THREE.DirectionalLight("#fff0df", 2.9);
   private renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   private effects?: DreamEffects;
   private loader = new GLTFLoader();
@@ -85,7 +87,7 @@ export class Village {
     const draco = new DRACOLoader();
     draco.setDecoderPath(`${import.meta.env.BASE_URL}assets/abraxas/decoders/`); draco.setWorkerLimit(1); this.loader.setDRACOLoader(draco);
     this.scene.fog = new THREE.Fog("#eae3f7", 19, 40);
-    this.scene.add(new THREE.AmbientLight("#fff4ed", .2), new THREE.HemisphereLight("#fff4ed", "#e8ddf4", 1.8));
+    this.scene.add(new THREE.AmbientLight("#fff4ed", .05), new THREE.HemisphereLight("#fff4ed", "#e8ddf4", .75));
     this.light.castShadow = true; this.light.shadow.camera.near = .1; this.light.shadow.camera.far = 25;
     this.light.shadow.bias = -.0001; this.light.shadow.normalBias = .02;
     this.scene.add(this.light, this.light.target);
@@ -151,7 +153,7 @@ export class Village {
     });
     if (!document.hidden) this.frame = requestAnimationFrame(() => this.tick());
   }
-  setEnabled(value: boolean): void { this.enabled = value; if (value) { this.talking = undefined; this.speaker = null; } else { this.auto = undefined; this.input = { x: 0, z: 0 }; this.nearby = null; this.onNearbyChange(null); } }
+  setEnabled(value: boolean): void { this.enabled = value; if (value) { this.talking = undefined; this.speaker = null; } else { this.auto = undefined; this.input = { x: 0, z: 0 }; this.nearby = null; this.onNearbyChange(null); } this.setAvailable([...this.available]); }
   setDemiMode(mode: DemiMode): void {
     if (mode === this.demiMode) return;
     if (mode === "follow") this.demi.reset(this.player.position);
@@ -166,14 +168,14 @@ export class Village {
     this.postman.visible = scene === "entrance";
     this.positionResidents();
   }
-  focusSpeaker(id: string | null): void { this.speaker = id && this.target(id) ? id : null; }
+  focusSpeaker(id: string | null): void { this.speaker = id && this.target(id) ? id : null; this.setAvailable([...this.available]); }
   targetScreenPos(id: string): { x: number; y: number; onScreen: boolean } | null {
     const target = this.target(id); if (!target) return null;
     const point = new THREE.Vector3(target.x, 0, target.z).project(this.camera);
     const rect = this.renderer.domElement.getBoundingClientRect();
     return { x: rect.left + (point.x + 1) * rect.width / 2, y: rect.top + (1 - point.y) * rect.height / 2, onScreen: Math.abs(point.x) <= 1 && Math.abs(point.y) <= 1 && Math.abs(point.z) <= 1 };
   }
-  setAvailable(ids: string[]): void { this.available = new Set(ids); for (const [id, actor] of this.actors) actor.marker.visible = this.available.has(id); }
+  setAvailable(ids: string[]): void { this.available = new Set(ids); for (const [id, actor] of this.actors) actor.marker.visible = this.available.has(id) && (this.enabled || id !== this.speaker); }
   setMokaView(view: MokaView | null): void {
     this.mokaView = view;
     this.auto = undefined;
@@ -411,7 +413,7 @@ export class Village {
     if (!this.visible(id, targetPosition)) return;
     const actor = this.actors.get(id); const prop = this.props.get(id); const position = actor?.object.position ?? prop!; const dx = position.x - this.player.position.x, dz = position.z - this.player.position.z;
     this.input = { x: 0, z: 0 }; if (dx || dz) { this.player.rotation.y = Math.atan2(dx, dz); if (actor?.character) actor.object.rotation.y = Math.atan2(-dx, -dz); }
-    this.talking = id; this.speaker = id; this.onInteract(prop && !this.activeTargets(id) ? `examine:${prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset}` : id);
+    this.talking = id; this.focusSpeaker(id); this.onInteract(prop && !this.activeTargets(id) ? `examine:${prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset}` : id);
   }
   hitTargetAt(clientX: number, clientY: number): string | null {
     if (!this.enabled || !this.ready || this.portrait || this.talking) return null;
@@ -484,7 +486,7 @@ export class Village {
     const canvas = document.createElement("canvas"); canvas.width = canvas.height = 128; const ctx = canvas.getContext("2d")!;
     ctx.fillStyle = "#FFD23F"; ctx.beginPath(); ctx.arc(64, 64, 60, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = "#3B2A22"; ctx.font = "bold 96px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("!", 64, 68);
-    const marker = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true })); marker.scale.set(.25, .25, 1); marker.position.y = .95; return marker;
+    const marker = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true })); marker.visible = false; return marker;
   }
   private ring(color: string, opacity: number): THREE.Mesh<THREE.RingGeometry, THREE.MeshBasicMaterial> {
     const ring = new THREE.Mesh(new THREE.RingGeometry(.25, .3, 32), new THREE.MeshBasicMaterial({ color, transparent: true, opacity, depthWrite: false, side: THREE.DoubleSide }));
@@ -529,6 +531,16 @@ export class Village {
     const desired = this.viewHalfHeight;
     this.cameraHalfHeight = snap ? desired : this.cameraHalfHeight + (desired - this.cameraHalfHeight) * (1 - Math.exp(-5 * dt));
     this.camera.left = -this.cameraHalfHeight * this.viewAspect; this.camera.right = -this.camera.left; this.camera.top = this.cameraHalfHeight; this.camera.bottom = -this.cameraHalfHeight; this.camera.updateProjectionMatrix();
+    const pixel = 2 * this.cameraHalfHeight / this.renderer.domElement.clientHeight;
+    const up = new THREE.Vector3(0, 1, 0).applyQuaternion(this.camera.quaternion);
+    for (const actor of this.actors.values()) {
+      if (!actor.marker.visible) continue;
+      const box = actor.character ? new THREE.Box3().setFromObject(actor.character.object) : new THREE.Box3().setFromCenterAndSize(actor.object.position.clone().add(new THREE.Vector3(0, .3, 0)), new THREE.Vector3(0, .6, 0));
+      const size = box.getSize(new THREE.Vector3());
+      const top = (Math.abs(up.x) * size.x + Math.abs(up.y) * size.y + Math.abs(up.z) * size.z) / 2;
+      actor.marker.scale.set(MARKER_SIZE_PX * pixel, MARKER_SIZE_PX * pixel, 1);
+      actor.marker.position.copy(actor.object.worldToLocal(box.getCenter(new THREE.Vector3()).addScaledVector(up, top + (8 + MARKER_SIZE_PX / 2) * pixel)));
+    }
     this.light.target.position.copy(this.player.position); this.light.position.copy(this.player.position).add(new THREE.Vector3(4, 10, 5));
   }
   private tick(): void {

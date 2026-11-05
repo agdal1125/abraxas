@@ -20,6 +20,9 @@ PREVIEWS_ENV_DIR = os.path.join(ROOT_DIR, "assets", "source", "previews", "envir
 PUBLIC_ENV_DIR = os.path.join(ROOT_DIR, "client", "public", "assets", "abraxas", "environment")
 
 PALETTE = {
+    "nature_leaf_dark": "#315B38",
+    "nature_leaf": "#45784A",
+    "nature_leaf_light": "#619056",
     "cream": "#FFF8EC",
     "cream_warm": "#F7EFE2",
     "ink": "#564863",
@@ -462,12 +465,12 @@ def build_wildflower_cluster(pb: PartBuilder, spec: dict):
             radius_top=0.009,
             depth=stem_len,
             center=(mid_x, mid_y, h * 0.5),
-            color_hex=PALETTE["grass_dark"],
+            color_hex=PALETTE["nature_leaf_dark"],
             vertices=5,
             rot_euler=(pitch_x, pitch_y, 0.0),
             bevel=0.0,
             segments=0,
-            smooth=True,
+            smooth=False,
         )
 
         if pcount > 0:
@@ -491,13 +494,13 @@ def build_wildflower_cluster(pb: PartBuilder, spec: dict):
                 rot_euler=(tiltx, tilty, 0.0),
                 bevel=0.0,
                 segments=0,
-                smooth=True,
+                smooth=False,
             )
 
     # 4 basal leaves directly at ground level (no dirt box)
     leaf_angles = [rot_z + i * (math.pi * 0.5) + 0.35 for i in range(4)]
     for i, lang in enumerate(leaf_angles):
-        l_col = PALETTE["grass"] if i % 2 == 0 else PALETTE["grass_light"]
+        l_col = PALETTE["nature_leaf"] if i % 2 == 0 else PALETTE["nature_leaf_light"]
         lx = math.cos(lang) * 0.018
         ly = math.sin(lang) * 0.018
         pb.add_plump_petal(
@@ -513,13 +516,13 @@ def build_wildflower_cluster(pb: PartBuilder, spec: dict):
 def build_grass_small(pb: PartBuilder):
     """
     Builds a small low-poly grass tuft (0.18m diameter, 0.10m height, <= 120 tris).
-    Uses 2 lightly beveled main blades + 2 crisp accent blades = 112 triangles.
+    Uses four angular blades.
     """
     blades = [
-        ((0.0, 0.0, 0.050), (0.036, 0.028, 0.100), (0.05, 0.0, 0.0), PALETTE["grass"], 0.004),
-        ((-0.038, -0.015, 0.044), (0.032, 0.024, 0.086), (0.14, -0.30, 0.25), PALETTE["grass_light"], 0.004),
-        ((0.038, 0.018, 0.042), (0.032, 0.024, 0.082), (-0.14, 0.30, -0.22), PALETTE["grass_dark"], 0.0),
-        ((0.005, 0.036, 0.038), (0.030, 0.022, 0.074), (-0.28, -0.08, 0.15), PALETTE["grass"], 0.0),
+        ((0.0, 0.0, 0.050), (0.036, 0.028, 0.100), (0.05, 0.0, 0.0), PALETTE["nature_leaf"], 0.0),
+        ((-0.038, -0.015, 0.044), (0.032, 0.024, 0.086), (0.14, -0.30, 0.25), PALETTE["nature_leaf_light"], 0.0),
+        ((0.038, 0.018, 0.042), (0.032, 0.024, 0.082), (-0.14, 0.30, -0.22), PALETTE["nature_leaf_dark"], 0.0),
+        ((0.005, 0.036, 0.038), (0.030, 0.022, 0.074), (-0.28, -0.08, 0.15), PALETTE["nature_leaf"], 0.0),
     ]
     for center, size, rot, col, bev in blades:
         pb.add_box(
@@ -801,7 +804,10 @@ def main():
     built_objects = {}
     new_metadata = {}
 
+    targets = os.environ.get("ABRAXAS_ENV_TARGETS")
     for key, spec in FLOWER_SPECS.items():
+        if targets and key not in targets.split(","):
+            continue
         pb = PartBuilder()
         if key == "grass-small":
             build_grass_small(pb)
