@@ -392,16 +392,44 @@ def build_char_b_parts():
     bm_torso = make_ellipsoid(0.118, 0.108, 0.126, (0.0, 0.0, 0.222), u_seg=16, v_seg=12, taper_top=0.28, bulge_bottom=0.20)
     parts.append(finish_part_mesh(bm_torso, "torso", PALETTE["b"], {"body": 1.0}))
 
-    bm_apron = make_ellipsoid(0.088, 0.032, 0.095, (0.0, -0.095, 0.212), u_seg=14, v_seg=10, taper_top=0.24, bulge_bottom=0.14, tilt_euler=(-0.08, 0.0, 0.0))
-    parts.append(finish_part_mesh(bm_apron, "apron_front", PALETTE["cream"], {"body": 1.0}))
+    def apron_patch(name, z_min, z_max, x_min, x_max):
+        bm = bmesh.new()
+        rows = []
+        for iz in range(7):
+            z = z_min + (z_max - z_min) * iz / 6
+            zn = (z - 0.222) / 0.126
+            scale = 1.0 - 0.28 * zn + 0.20 * (max(0.0, 0.25 - zn) / 1.25) ** 1.3
+            row = []
+            for ix in range(7):
+                x = x_min + (x_max - x_min) * ix / 6
+                y = -0.108 * scale * math.sqrt(max(0.0, 1 - zn * zn - (x / (0.118 * scale)) ** 2)) - 0.0025
+                row.append(bm.verts.new((x, y, z)))
+            rows.append(row)
+        for iz in range(6):
+            for ix in range(6):
+                bm.faces.new((rows[iz][ix], rows[iz + 1][ix], rows[iz + 1][ix + 1], rows[iz][ix + 1]))
+        parts.append(finish_part_mesh(bm, name, PALETTE["cream"], {"body": 1.0}))
+
+    apron_patch("apron_front", 0.145, 0.285, -0.065, 0.065)
     for side in (-1, 1):
-        bm_strap = make_beveled_box(0.018, 0.016, 0.055, (side * 0.038, -0.072, 0.312), bevel_width=0.004, bevel_segments=1, tilt_euler=(0.35, -side * 0.12, 0.0))
-        parts.append(finish_part_mesh(bm_strap, f"apron_strap_{side}", PALETTE["cream"], {"body": 1.0}))
+        apron_patch(f"apron_strap_{side}", 0.280, 0.322, side * 0.044 - 0.008, side * 0.044 + 0.008)
+    parts.append(finish_part_mesh(make_torus(0.125, 0.005, (0, 0, 0.212), major_seg=32, minor_seg=6, scale_xyz=(1, 0.915, 1)), "apron_waist", PALETTE["cream"], {"body": 1.0}))
 
     head_center = (0.0, 0.0, 0.468)
     bm_head = make_ellipsoid(0.128, 0.122, 0.124, head_center, u_seg=16, v_seg=12)
     parts.append(finish_part_mesh(bm_head, "head_mesh", PALETTE["cream"], {"head": 1.0}))
-    add_common_face(parts, head_center, 0.128, 0.122, 0.124)
+    add_common_face(parts, head_center, 0.128, 0.122, 0.124, 1.25, 0.008)
+    for name, size, center, color in (
+        ("neck", (0.05, 0.05, 0.035), (0, 0, 0.343), PALETTE["b"]),
+        ("hair", (0.128, 0.12, 0.065), (0, 0.015, 0.526), PALETTE["wood"]),
+        ("fringe", (0.022, 0.016, 0.014), (0, -0.105, 0.535), PALETTE["wood"]),
+        ("side_hair", (0.020, 0.035, 0.022), (-0.112, 0.018, 0.530), PALETTE["wood"]),
+        ("side_hair", (0.020, 0.035, 0.022), (0.112, 0.018, 0.530), PALETTE["wood"]),
+        ("hair_back", (0.12, 0.052, 0.045), (0, 0.085, 0.520), PALETTE["wood"]),
+        ("hat", (0.135, 0.125, 0.054), (-0.012, 0.006, 0.564), PALETTE["b"]),
+        ("hat_band", (0.126, 0.119, 0.018), (0, 0.004, 0.542), PALETTE["cream"]),
+    ):
+        parts.append(finish_part_mesh(make_ellipsoid(*size, center, u_seg=8, v_seg=4), name, color, {"body" if name == "neck" else "head": 1.0}))
     return parts
 
 
@@ -420,15 +448,20 @@ def build_char_c_parts():
     bm_torso = make_beveled_cylinder(0.096, 0.090, 0.235, (0.0, 0.0, 0.225), segs=16, bevel_width=0.028, bevel_segments=2, scale_xy=(1.0, 0.90))
     parts.append(finish_part_mesh(bm_torso, "torso", PALETTE["c"], {"body": 1.0}))
 
-    bm_scarf = make_torus(0.082, 0.016, (0.0, 0.0, 0.348), major_seg=16, minor_seg=8, scale_xyz=(1.0, 0.92, 0.88))
-    parts.append(finish_part_mesh(bm_scarf, "scarf_ring", PALETTE["cream"], {"body": 0.5, "head": 0.5}))
-    bm_tab = make_beveled_box(0.028, 0.016, 0.052, (0.030, -0.086, 0.318), bevel_width=0.005, bevel_segments=1, tilt_euler=(-0.12, 0.0, 0.05))
-    parts.append(finish_part_mesh(bm_tab, "scarf_tab", PALETTE["cream"], {"body": 1.0}))
-
     head_center = (0.0, 0.0, 0.492)
     bm_head = make_ellipsoid(0.142, 0.136, 0.138, head_center, u_seg=16, v_seg=12)
     parts.append(finish_part_mesh(bm_head, "head_mesh", PALETTE["cream"], {"head": 1.0}))
-    add_common_face(parts, head_center, 0.142, 0.136, 0.138)
+    add_common_face(parts, head_center, 0.142, 0.136, 0.138, 1.25, 0.008)
+    for name, size, center in (
+        ("hair_back", (0.145, 0.075, 0.125), (0, 0.075, 0.493)),
+        ("hair_top", (0.145, 0.130, 0.065), (0, 0.008, 0.568)),
+        ("hair_left", (0.026, 0.090, 0.095), (-0.125, 0.0, 0.477)),
+        ("hair_right", (0.026, 0.090, 0.095), (0.125, 0.0, 0.477)),
+        ("fringe", (0.110, 0.030, 0.026), (0, -0.116, 0.558)),
+    ):
+        parts.append(finish_part_mesh(make_ellipsoid(*size, center, u_seg=12, v_seg=8), name, PALETTE["c"], {"head": 1.0}))
+    parts.append(finish_part_mesh(make_ellipsoid(0.05, 0.05, 0.04, (0, 0, 0.355), u_seg=10, v_seg=6), "neck", PALETTE["c"], {"body": 1.0}))
+    parts.append(finish_part_mesh(make_beveled_box(0.09, 0.055, 0.115, (0.09, -0.035, 0.215), bevel_width=0.006), "book", PALETTE["wood"], {"arm_l": 1.0}))
 
     glass_y = head_center[1] - 0.136
     glass_z = head_center[2] - 0.006
@@ -446,7 +479,7 @@ def build_char_d_parts():
         parts,
         leg_color=PALETTE["cream"],
         arm_color=PALETTE["cream"],
-        hand_color=PALETTE["cream"],
+        hand_color=PALETTE["wood"],
         shoulder_x=0.118,
         shoulder_z=0.300,
         hip_x=0.058,
@@ -465,7 +498,13 @@ def build_char_d_parts():
     head_center = (0.0, 0.0, 0.468)
     bm_head = make_ellipsoid(0.128, 0.122, 0.124, head_center, u_seg=16, v_seg=12)
     parts.append(finish_part_mesh(bm_head, "head_mesh", PALETTE["cream"], {"head": 1.0}))
-    add_common_face(parts, head_center, 0.128, 0.122, 0.124)
+    add_common_face(parts, head_center, 0.128, 0.122, 0.124, 1.25, 0.008)
+    parts.append(finish_part_mesh(make_ellipsoid(0.052, 0.05, 0.035, (0, 0, 0.343), u_seg=10, v_seg=6), "neck", PALETTE["d"], {"body": 1.0}))
+    parts.append(finish_part_mesh(make_ellipsoid(0.124, 0.116, 0.066, (0, 0.008, 0.544), u_seg=12, v_seg=8), "hair", PALETTE["ink"], {"head": 1.0}))
+    parts.append(finish_part_mesh(make_ellipsoid(0.117, 0.060, 0.095, (0, 0.083, 0.475), u_seg=12, v_seg=8), "hair_back", PALETTE["ink"], {"head": 1.0}))
+    parts.append(finish_part_mesh(make_torus(0.122, 0.008, (0, 0.008, 0.535), major_seg=16, minor_seg=4, scale_xyz=(1, 0.94, 1)), "bandana", PALETTE["d"], {"head": 1.0}))
+
+    parts.append(finish_part_mesh(make_ellipsoid(0.020, 0.025, 0.019, (0.103, 0.043, 0.534), u_seg=8, v_seg=6), "bandana_knot", PALETTE["d"], {"head": 1.0}))
 
     bm_handle = make_beveled_cylinder(0.010, 0.010, 0.135, (0.148, -0.020, 0.195), segs=10, bevel_width=0.002, bevel_segments=1, tilt_euler=(math.radians(75), 0.0, math.radians(-20)))
     parts.append(finish_part_mesh(bm_handle, "hammer_handle", PALETTE["wood"], {"hand_prop": 1.0}))
@@ -493,7 +532,8 @@ def build_quest_npc_parts():
     head_center = (0.0, 0.0, 0.425)
     bm_head = make_ellipsoid(0.120, 0.116, 0.114, head_center, u_seg=12, v_seg=8)
     parts.append(finish_part_mesh(bm_head, "head_mesh", PALETTE["cream"], {"head": 1.0}))
-    add_common_face(parts, head_center, 0.120, 0.116, 0.114)
+    add_common_face(parts, head_center, 0.120, 0.116, 0.114, 1.25, 0.008)
+    parts.append(finish_part_mesh(make_ellipsoid(0.05, 0.05, 0.035, (0, 0, 0.317), u_seg=8, v_seg=6), "neck", PALETTE["gray_body"], {"body": 1.0}))
 
     bm_crown = make_ellipsoid(0.092, 0.096, 0.052, (0.0, 0.0, 0.525), u_seg=12, v_seg=6, flatten_bottom=0.45)
     parts.append(finish_part_mesh(bm_crown, "cap_crown", PALETTE["gray_cap"], {"head": 1.0}))
@@ -899,7 +939,7 @@ def verify_glb_colors(glb_path: str, char_key: str):
             f"| linear=({best_lin[0]:.4f},{best_lin[1]:.4f},{best_lin[2]:.4f}) | max_diff={max_diff:.2f}/255"
         )
         if max_diff > 6.0:
-            print(f"[COLOR VERIFY FAIL] {char_key} ({label}): max_diff {max_diff:.2f}/255 exceeds ±6/255")
+            print(f"[COLOR VERIFY FAIL] {char_key} ({label}): max_diff {max_diff:.2f}/255 exceeds ?6/255")
             sys.exit(1)
         results[label] = {
             "paletteHex": hex_str,
@@ -1129,7 +1169,8 @@ def render_character_preview(arm_obj, mesh_obj, char_key: str):
     out_preview = f"{PREVIEW_DIR}/{char_key}.png"
     comp_img.filepath_raw = out_preview
     comp_img.file_format = "PNG"
-    comp_img.save()
+    if char_key not in ("player", "char-a"):
+        comp_img.save()
     bpy.data.images.remove(comp_img)
 
     cleanup_preview_helpers(helper_col)
@@ -1182,7 +1223,7 @@ def render_action_strips(arm_obj, char_key: str):
         pb.rotation_euler = (0.0, 0.0, 0.0)
         pb.scale = (1.0, 1.0, 1.0)
 
-    out_path = f"{PREVIEW_DIR}/action-strips.png"
+    out_path = f"{PREVIEW_DIR}/action-strips-{char_key}.png"
     sheet.pixels = sheet_pixels
     sheet.filepath_raw = out_path
     sheet.file_format = "PNG"
@@ -1192,7 +1233,7 @@ def render_action_strips(arm_obj, char_key: str):
     print(f"[PREVIEW] Saved {out_path}")
 
 
-def render_before_after(mesh_obj, arm_obj):
+def render_before_after(mesh_obj, arm_obj, char_key):
     scene = bpy.context.scene
     scene.render.resolution_x = 160
     scene.render.resolution_y = 120
@@ -1200,7 +1241,7 @@ def render_before_after(mesh_obj, arm_obj):
     bpy.data.objects["GuideRuler"].hide_render = True
     aim_camera_at(cam_obj, (10.0, -10.0, 10.0 * math.tan(math.radians(35)) * math.sqrt(2) + 0.30), (0.0, 0.0, 0.30))
     cam_data.ortho_scale = 1.80
-    bpy.ops.import_scene.gltf(filepath=f"{SOURCE_DIR}/_before/char-a.glb")
+    bpy.ops.import_scene.gltf(filepath=f"{SOURCE_DIR}/_before/{char_key}.glb")
     old_objects = list(bpy.context.selected_objects)
     old_mesh = next(obj for obj in old_objects if obj.type == "MESH")
     old_arm = next(obj for obj in old_objects if obj.type == "ARMATURE")
@@ -1250,7 +1291,7 @@ def render_before_after(mesh_obj, arm_obj):
     mesh_obj.hide_render = False
     sheet = bpy.data.images.new("before_after", width=1280, height=720, alpha=True)
     sheet.pixels = pixels
-    sheet.filepath_raw = f"{PREVIEW_DIR}/char-a-before-after.png"
+    sheet.filepath_raw = f"{SOURCE_DIR}/_before/{char_key}.png"
     sheet.file_format = "PNG"
     sheet.save()
     bpy.data.images.remove(sheet)
@@ -1373,7 +1414,7 @@ def main():
     metadata = {
         "version": 1,
         "generator": f"Blender {blender_ver}",
-        "colorSpaceNote": "색공간 수정(2026-11-01): sRGB 팔레트 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
+        "colorSpaceNote": "sRGB palette is converted to linear COLOR_0; AO is applied once.",
         "assets": {},
     }
     with open(f"{SOURCE_DIR}/asset-metadata.json", "r", encoding="utf-8") as f:
@@ -1381,7 +1422,7 @@ def main():
     all_temp_paths = {}
 
     for key, height, builder_fn, sx, sz, hx, col_r, max_tri, max_kib in specs:
-        if key != "char-a":
+        if key in ("player", "char-a"):
             continue
         reset_scene()
         parts = builder_fn()
@@ -1394,20 +1435,16 @@ def main():
         tpaths = render_character_preview(arm_obj, mesh_obj, key)
         all_temp_paths[key] = tpaths
 
-        if key == "char-a":
-            render_action_strips(arm_obj, key)
-            if os.path.exists(f"{SOURCE_DIR}/_before/char-a.glb"):
-                render_before_after(mesh_obj, arm_obj)
-        for path in tpaths.values():
-            if os.path.exists(path):
-                os.remove(path)
+        render_action_strips(arm_obj, key)
+        if os.path.exists(f"{SOURCE_DIR}/_before/{key}.glb"):
+            render_before_after(mesh_obj, arm_obj, key)
 
         entry = {
             "path": f"assets/abraxas/characters/{key}.glb",
             "scale": 1,
             "collision": [{"type": "circle", "x": 0, "z": 0, "radius": col_r}],
             "clips": ["idle", "walk", "talk"],
-            "revisionAuthor": "Codex (agy 한도로 대체)",
+            "revisionAuthor": "Codex (agy quota limit)",
             "budget": {
                 "maxTriangles": max_tri,
                 "maxKiB": max_kib,
@@ -1417,6 +1454,35 @@ def main():
         if key == "quest-npc":
             entry["sharedBy"] = ["s1j2", "s2j2", "s3j2", "s4j2"]
         metadata["assets"][key] = entry
+
+    # Build lineup from the actual deployed GLBs, including unchanged models.
+    for key, *_ in specs:
+        reset_scene()
+        bpy.ops.import_scene.gltf(filepath=f"{EXPORT_DIR}/{key}.glb")
+        imported = list(bpy.context.selected_objects)
+        mesh = next(obj for obj in imported if obj.type == "MESH")
+        arm = next(obj for obj in imported if obj.type == "ARMATURE")
+        if arm.animation_data:
+            arm.animation_data.action = None
+            for track in arm.animation_data.nla_tracks:
+                track.mute = True
+        all_temp_paths[key] = render_character_preview(arm, mesh, key)
+    stitch_lineup_sheets(all_temp_paths)
+    if all(os.path.exists(f"{SOURCE_DIR}/_before/{key}.png") for key in ("char-b", "char-c", "char-d", "quest-npc")):
+        sheet = bpy.data.images.new("lineup_compare", width=2560, height=1440, alpha=True)
+        pixels = [1.0] * (2560 * 1440 * 4)
+        for i, key in enumerate(("char-b", "char-c", "char-d", "quest-npc")):
+            img = bpy.data.images.load(f"{SOURCE_DIR}/_before/{key}.png", check_existing=False)
+            src = list(img.pixels)
+            for y in range(720):
+                start = (((1 - i // 2) * 720 + y) * 2560 + (i % 2) * 1280) * 4
+                pixels[start:start + 1280 * 4] = src[y * 1280 * 4:(y + 1) * 1280 * 4]
+            bpy.data.images.remove(img)
+        sheet.pixels = pixels
+        sheet.filepath_raw = f"{PREVIEW_DIR}/lineup-before-after.png"
+        sheet.file_format = "PNG"
+        sheet.save()
+        bpy.data.images.remove(sheet)
 
     save_combined_blend_file(specs)
 

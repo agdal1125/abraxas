@@ -1,7 +1,7 @@
 {
   "version": 1,
   "generator": "Blender 5.2.3 LTS",
-  "colorSpaceNote": "색공간 수정(2026-11-01): sRGB 팔레트 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
+  "colorSpaceNote": "sRGB palette is converted to linear COLOR_0; AO is applied once.",
   "assets": {
     "player": {
       "path": "assets/abraxas/characters/player.glb",
@@ -222,14 +222,15 @@
         "walk",
         "talk"
       ],
+      "revisionAuthor": "Codex (agy quota limit)",
       "budget": {
         "maxTriangles": 3000,
         "maxKiB": 180
       },
       "measured": {
-        "bytes": 40860,
-        "kib": 39.9,
-        "triangles": 2244,
+        "bytes": 46648,
+        "kib": 45.55,
+        "triangles": 2888,
         "primitives": 1,
         "materials": 1,
         "joints": 8,
@@ -243,19 +244,19 @@
         "draco": true,
         "bounds": {
           "min": [
-            -0.1515,
+            -0.1451,
             0.0,
-            -0.1243
+            -0.1337
           ],
           "max": [
-            0.1515,
+            0.1451,
             0.6,
-            0.1339
+            0.1213
           ],
           "size": [
-            0.303,
+            0.2902,
             0.6,
-            0.2582
+            0.255
           ]
         },
         "colorVerification": {
@@ -308,14 +309,15 @@
         "walk",
         "talk"
       ],
+      "revisionAuthor": "Codex (agy quota limit)",
       "budget": {
         "maxTriangles": 3500,
         "maxKiB": 180
       },
       "measured": {
-        "bytes": 44308,
-        "kib": 43.27,
-        "triangles": 2468,
+        "bytes": 47284,
+        "kib": 46.18,
+        "triangles": 3152,
         "primitives": 1,
         "materials": 1,
         "joints": 8,
@@ -329,19 +331,19 @@
         "draco": true,
         "bounds": {
           "min": [
-            -0.1604,
+            -0.1596,
             0.0,
-            -0.141
+            -0.1548
           ],
           "max": [
-            0.1604,
+            0.1596,
             0.65,
-            0.1464
+            0.1506
           ],
           "size": [
-            0.3208,
+            0.3193,
             0.65,
-            0.2874
+            0.3054
           ]
         },
         "colorVerification": {
@@ -409,14 +411,15 @@
         "walk",
         "talk"
       ],
+      "revisionAuthor": "Codex (agy quota limit)",
       "budget": {
         "maxTriangles": 3000,
         "maxKiB": 180
       },
       "measured": {
-        "bytes": 40020,
-        "kib": 39.08,
-        "triangles": 2040,
+        "bytes": 44268,
+        "kib": 43.23,
+        "triangles": 2684,
         "primitives": 1,
         "materials": 1,
         "joints": 8,
@@ -430,19 +433,19 @@
         "draco": true,
         "bounds": {
           "min": [
-            -0.1882,
+            -0.1826,
             0.0,
-            -0.1243
+            -0.1414
           ],
           "max": [
-            0.1882,
+            0.1826,
             0.6,
-            0.1267
+            0.1229
           ],
           "size": [
-            0.3764,
+            0.3652,
             0.6,
-            0.2509
+            0.2643
           ]
         },
         "colorVerification": {
@@ -525,14 +528,15 @@
         "walk",
         "talk"
       ],
+      "revisionAuthor": "Codex (agy quota limit)",
       "budget": {
         "maxTriangles": 2000,
         "maxKiB": 120
       },
       "measured": {
-        "bytes": 37576,
-        "kib": 36.7,
-        "triangles": 1628,
+        "bytes": 38060,
+        "kib": 37.17,
+        "triangles": 1708,
         "primitives": 1,
         "materials": 1,
         "joints": 8,
