@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Build the original Moka errand props using the environment kit pipeline."""
 import importlib.util
+import functools
 import json
 import math
 import os
@@ -20,7 +21,7 @@ env = importlib.util.module_from_spec(spec)
 sys.dont_write_bytecode = True
 spec.loader.exec_module(env)
 env.PUBLIC_ENV_DIR = str(PUBLIC)
-P = env.PALETTE
+P = {**env.PALETTE, 'wood': '#986449', 'wood_light': '#B47A58', 'wood_dark': '#714632'}
 
 
 def basket(p):
@@ -39,7 +40,8 @@ def basket(p):
 
 
 def display(p):
-    p.add_box((.76, .40, .055), (0, 0, .26), P['wood_light'])
+    for y, color in ((-.101, P['wood_light']), (.101, P['wood'])):
+        p.add_box((.76, .198, .055), (0, y, .26), color)
     for x in (-.32, .32):
         for y in (-.15, .15):
             p.add_box((.06, .06, .25), (x, y, .125), P['wood'])
@@ -65,7 +67,8 @@ def bread_flower(p):
 
 
 def dropoff(p):
-    p.add_box((.54, .40, .07), (0, 0, .47), P['wood_light'])
+    for y, color in ((-.101, P['wood_light']), (.101, P['wood'])):
+        p.add_box((.54, .198, .07), (0, y, .47), color)
     for x in (-.21, .21):
         for y in (-.14, .14):
             p.add_box((.07, .07, .44), (x, y, .22), P['wood_dark'])
@@ -132,6 +135,9 @@ def main():
     for name, (builder, dims, collision) in ASSETS.items():
         key = 'prop-moka-' + name
         p = env.PartBuilder()
+        p.add_box = functools.partial(p.add_box, bevel=0)
+        p.add_cylinder = functools.partial(p.add_cylinder, bevel=0, smooth=False)
+        p.add_sphere = functools.partial(p.add_sphere, smooth=False)
         builder(p)
         obj = p.build_combined_object(key, dims)
         glb = Path(env.export_asset_glb(obj, key))
@@ -139,7 +145,7 @@ def main():
         primitives = [primitive for mesh in gltf['meshes'] for primitive in mesh['primitives']]
         assert primitives and all('KHR_draco_mesh_compression' in p.get('extensions', {}) and 'COLOR_0' in p['attributes'] for p in primitives)
         triangles = sum(gltf['accessors'][p['indices']]['count'] // 3 for p in primitives)
-        assert triangles > 0
+        assert 0 < triangles <= 700 and glb.stat().st_size <= 40960
         positions = [gltf['accessors'][p['attributes']['POSITION']] for p in primitives]
         minimum = [min(a['min'][i] for a in positions) for i in range(3)]
         maximum = [max(a['max'][i] for a in positions) for i in range(3)]
@@ -154,7 +160,7 @@ def main():
         bpy.ops.render.render(write_still=True)
         path = 'assets/abraxas/environment/' + key + '.glb'
         metadata['assets'][key] = {
-            'path': path, 'triangles': triangles, 'bytes': glb.stat().st_size,
+            'path': path, 'triangles': triangles, 'bytes': glb.stat().st_size, 'maxTriangles': 700, 'maxBytes': 40960,
             'bounds': {'width': round(maximum[0] - minimum[0], 4), 'depth': round(maximum[2] - minimum[2], 4), 'height': round(maximum[1] - minimum[1], 4), 'minY': round(minimum[1], 4), 'maxY': round(maximum[1], 4)},
             'collision': collision, 'colorVerification': verification,
             'manifestDraft': {'path': path, 'scale': 1, 'collision': collision},

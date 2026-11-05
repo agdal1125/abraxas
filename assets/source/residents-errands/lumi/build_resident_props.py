@@ -1,5 +1,6 @@
 """Build RS1-A props with the existing environment geometry and export pipeline."""
 import importlib.util
+import functools
 import json
 import math
 import os
@@ -16,7 +17,7 @@ spec = importlib.util.spec_from_file_location('environment', ROOT / 'assets/sour
 env = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(env)
 env.PUBLIC_ENV_DIR = str(ROOT / 'client/public/assets/abraxas/environment')
-P = env.PALETTE
+P = {**env.PALETTE, 'wood': '#986449', 'wood_light': '#B47A58', 'wood_dark': '#714632'}
 
 
 def box(p, size, center, color, **kw):
@@ -185,7 +186,7 @@ def main():
     scene.render.image_settings.file_format = 'PNG'
     for resident, assets in ASSETS.items():
         source = ROOT / 'assets/source/residents-errands' / resident
-        previews = ROOT / 'assets/_generated/residents-errands' / resident
+        previews = source / 'previews'
         source.mkdir(parents=True, exist_ok=True)
         previews.mkdir(parents=True, exist_ok=True)
         metadata = {'paletteVersion': 'dream-v2', 'blenderVersion': bpy.app.version_string,
@@ -194,6 +195,7 @@ def main():
         for name, (builder, dims) in assets.items():
             key = f'prop-{resident}-{name}'
             p = env.PartBuilder()
+            p.add_sphere = functools.partial(p.add_sphere, smooth=False)
             builder(p)
             obj = p.build_combined_object(key, dims)
             glb = Path(env.export_asset_glb(obj, key))
@@ -221,8 +223,8 @@ def main():
                 'bounds': {'width': round(hi[0]-lo[0], 4), 'depth': round(hi[2]-lo[2], 4), 'height': round(hi[1]-lo[1], 4), 'minY': round(lo[1], 4), 'maxY': round(hi[1], 4)},
                 'collision': [], 'colorVerification': verification,
                 'manifestDraft': {'path': path, 'scale': 1, 'collision': []},
-                'preview': f'assets/_generated/residents-errands/{resident}/{key}-overview.png',
-                'closePreview': f'assets/_generated/residents-errands/{resident}/{key}-close.png'}
+                'preview': f'assets/source/residents-errands/{resident}/previews/{key}-overview.png',
+                'closePreview': f'assets/source/residents-errands/{resident}/previews/{key}-close.png'}
             bpy.data.objects.remove(obj, do_unlink=True)
         metadata['totalBytes'] = sum(v['bytes'] for v in metadata['assets'].values())
         (source / 'asset-metadata.json').write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
