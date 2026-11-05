@@ -80,17 +80,24 @@ export class Game {
   private setTextSize(value: boolean): void { this.largeText = value; document.documentElement.style.setProperty("--body-size", value ? "18px" : "15px"); try { localStorage.setItem("abraxas-large-text", String(value)); } catch { /* Continue in memory if storage is unavailable. */ } }
   private clearViews(): void { this.village.setMokaView(null); this.worldApi.setLumiView(null); this.worldApi.setEchoView(null); this.worldApi.setOrView(null); }
   private restart(): void { this.local = false; this.snapshot = null; this.clearViews(); this.state = { lang: this.state.lang, playId: this.newId(), log: [], completed: [], segment: "title" }; this.title(); }
-  private settings(confirm = false): void {
+  private settings(page: "settings" | "confirm" | "credits" = "settings"): void {
     this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.inert = true; this.settingsMenu.hidden = false;
-    const card = document.createElement("div"); card.className = "hud-menu-card"; card.setAttribute("role", "dialog"); card.setAttribute("aria-modal", "true"); card.setAttribute("aria-label", this.ui.hud.settings);
-    const heading = document.createElement("h2"); heading.textContent = confirm ? this.ui.hud.confirm : this.ui.hud.settings; card.append(heading);
+    const card = document.createElement("div"); card.className = "hud-menu-card"; card.setAttribute("role", "dialog"); card.setAttribute("aria-modal", "true"); card.setAttribute("aria-label", page === "credits" ? this.ui.hud.credits : this.ui.hud.settings);
+    const heading = document.createElement("h2"); heading.textContent = page === "confirm" ? this.ui.hud.confirm : page === "credits" ? this.ui.hud.credits : this.ui.hud.settings; card.append(heading);
     const add = (label: string, action: () => void) => { const button = document.createElement("button"); button.textContent = label; button.addEventListener("click", action); card.append(button); };
     const close = () => { this.settingsMenu.hidden = true; this.overlay.inert = false; if (this.exploring) { this.controls.setActive(true, this.state.lang); this.village.setEnabled(true); } this.settingsButton.focus(); };
-    if (confirm) { add(this.ui.hud.restart, () => { close(); this.restart(); }); add(this.ui.hud.cancel, () => this.settings()); }
+    if (page === "confirm") { add(this.ui.hud.restart, () => { close(); this.restart(); }); add(this.ui.hud.cancel, () => this.settings()); }
+    else if (page === "credits") {
+      const music = document.createElement("p"); music.textContent = this.ui.hud.creditsMusic; card.append(music);
+      const license = document.createElement("a"); license.href = "http://creativecommons.org/licenses/by/3.0/"; license.target = "_blank"; license.rel = "noopener noreferrer"; license.textContent = "CC BY 3.0"; card.append(license);
+      const sounds = document.createElement("p"); sounds.textContent = this.ui.hud.creditsSounds; card.append(sounds);
+      const list = document.createElement("a"); list.href = "cinematics/prelude-v1-credits.txt"; list.target = "_blank"; list.rel = "noopener noreferrer"; list.textContent = this.ui.hud.creditsList; card.append(list);
+      add(this.ui.hud.back, () => this.settings());
+    }
     else {
       add(`${this.ui.hud.language}: ${this.state.lang === "ko" ? "한국어" : "English"}`, () => { this.state.lang = this.state.lang === "ko" ? "en" : "ko"; this.save(); this.updateHud(); this.reloadDialogue?.(); this.settings(); });
       add(`${this.ui.hud.largeText}: ${this.largeText ? this.ui.hud.on : this.ui.hud.off}`, () => { this.setTextSize(!this.largeText); this.settings(); });
-      add(this.ui.hud.restart, () => this.settings(true)); add(this.ui.hud.close, close);
+      add(this.ui.hud.credits, () => this.settings("credits")); add(this.ui.hud.restart, () => this.settings("confirm")); add(this.ui.hud.close, close);
     }
     this.settingsMenu.replaceChildren(card); card.querySelector("button")?.focus();
   }
