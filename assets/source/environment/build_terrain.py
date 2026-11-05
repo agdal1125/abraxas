@@ -782,9 +782,12 @@ def build_terrain_object():
     road_polys.extend([list(tri[:3]) for tri in junction_triangles])
     road_polys.append([(5.99, -5.95), (6.12, -5.57), (6.61, -5.43),
                        (7.18, -5.64), (7.23, -6.01), (6.93, -6.35), (6.31, -6.37)])
+    road_polys.append([(13.1, 6.45), (13.45, 5.65), (14.15, 5.35),
+                       (14.65, 5.7), (14.55, 6.3), (13.8, 6.7)])
     assert all(point_in_poly_xz(((a + c) / 2, (b + d) / 2), poly)
                for (a, b, c, d, _), poly in zip(path_segments, road_polys))
-    assert point_in_poly_xz((6.58, -5.95), road_polys[-1])
+    assert point_in_poly_xz((6.58, -5.95), road_polys[-2])
+    assert point_in_poly_xz((14.15, 5.85), road_polys[-1])
     for poly in road_polys:
         base = len(cdt_verts)
         cdt_verts.extend(poly)

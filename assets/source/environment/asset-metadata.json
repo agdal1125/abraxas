@@ -2,14 +2,14 @@
   "version": 2,
   "blenderVersion": "5.2.3 LTS",
   "paletteVersion": "dream-v2",
-  "colorSpaceNote": "??? ?????v2(2026-11-01): sRGB ?????v2 ??? Linear-sRGB??????? ????? COLOR_0(FLOAT_COLOR)???????? ??? ?????? AO ??? ????? ???",
+  "colorSpaceNote": "몽환 팔레트 v2(2026-11-01): sRGB 팔레트 v2 값을 Linear-sRGB로 한 번만 변환해 COLOR_0(FLOAT_COLOR)에 기록하고 선형 공간에서 AO 곱을 한 번만 적용",
   "phase1Only": false,
-  "buildTerrain": true,
+  "buildTerrain": false,
   "summary": {
     "assetCount": 40,
-    "totalTriangles": 28578,
-    "totalBytes": 354548,
-    "totalKiB": 346.24
+    "totalTriangles": 28658,
+    "totalBytes": 355084,
+    "totalKiB": 346.76
   },
   "assets": {
     "entrance-house": {
@@ -3428,8 +3428,8 @@
       "scale": 1,
       "coast": "organic-v3",
       "collision": [],
-      "triangles": 12686,
-      "bytes": 85452,
+      "triangles": 12766,
+      "bytes": 86144,
       "maxTriangles": 30000,
       "maxBytes": 1048576,
       "bounds": {
@@ -3453,91 +3453,91 @@
           "paletteHex": "#80A76D",
           "measuredHex": "#80A76D",
           "measuredSrgb255": [
-            128,
-            167,
-            109
+            128.0,
+            167.0,
+            109.0
           ],
           "measuredLinear": [
             0.2159,
             0.3864,
             0.1529
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "grass_dark": {
           "paletteHex": "#7CA269",
           "measuredHex": "#7CA269",
           "measuredSrgb255": [
-            124,
-            162,
-            105
+            124.0,
+            162.0,
+            105.0
           ],
           "measuredLinear": [
             0.2016,
             0.3613,
             0.1413
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "grass_light": {
           "paletteHex": "#84AB71",
           "measuredHex": "#84AB71",
           "measuredSrgb255": [
-            132,
-            171,
-            113
+            132.0,
+            171.0,
+            113.0
           ],
           "measuredLinear": [
             0.2307,
             0.4072,
             0.1651
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "path": {
           "paletteHex": "#B98D5D",
           "measuredHex": "#B98D5D",
           "measuredSrgb255": [
-            185,
-            141,
-            93
+            185.0,
+            141.0,
+            93.0
           ],
           "measuredLinear": [
             0.4851,
             0.2664,
             0.1095
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "path_center": {
           "paletteHex": "#BB9060",
           "measuredHex": "#BB9060",
           "measuredSrgb255": [
-            187,
-            144,
-            96
+            187.0,
+            144.0,
+            96.0
           ],
           "measuredLinear": [
             0.4969,
             0.2789,
             0.117
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "path_edge": {
           "paletteHex": "#B78B5C",
           "measuredHex": "#B78B5C",
           "measuredSrgb255": [
-            183,
-            139,
-            92
+            183.0,
+            139.0,
+            92.0
           ],
           "measuredLinear": [
             0.4735,
             0.2582,
             0.107
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         }
       }
     },
@@ -4111,21 +4111,21 @@
       "collision": [
         {
           "type": "box",
-          "x": 0,
-          "z": 0,
+          "x": 0.0,
+          "z": 0.0,
           "halfX": 0.22,
           "halfZ": 0.1
         }
       ],
       "triangles": 456,
-      "bytes": 6972,
+      "bytes": 6816,
       "maxTriangles": 600,
       "maxBytes": 35840,
       "bounds": {
         "width": 0.48,
         "depth": 0.22,
         "height": 0.9,
-        "minY": 0,
+        "minY": 0.0,
         "maxY": 0.9
       },
       "materials": 1,
@@ -4140,61 +4140,61 @@
           "paletteHex": "#714632",
           "measuredHex": "#714632",
           "measuredSrgb255": [
-            113,
-            70,
-            50
+            113.0,
+            70.0,
+            50.0
           ],
           "measuredLinear": [
             0.1651,
             0.0612,
             0.0319
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "stone": {
           "paletteHex": "#92958E",
           "measuredHex": "#92958E",
           "measuredSrgb255": [
-            146,
-            149,
-            142
+            146.0,
+            149.0,
+            142.0
           ],
           "measuredLinear": [
             0.2874,
             0.3005,
             0.2705
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "wood": {
           "paletteHex": "#986449",
           "measuredHex": "#986449",
           "measuredSrgb255": [
-            152,
-            100,
-            73
+            152.0,
+            100.0,
+            73.0
           ],
           "measuredLinear": [
             0.314,
             0.1274,
             0.0666
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         },
         "wood_light": {
           "paletteHex": "#B47A58",
           "measuredHex": "#B47A58",
           "measuredSrgb255": [
-            180,
-            122,
-            88
+            180.0,
+            122.0,
+            88.0
           ],
           "measuredLinear": [
             0.4564,
             0.1946,
             0.0976
           ],
-          "maxDiff255": 0
+          "maxDiff255": 0.0
         }
       }
     }

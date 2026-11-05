@@ -1180,9 +1180,9 @@ def build_signboard(pb: PartBuilder):
     pb.add_box((0.48, 0.095, 0.045), (0.0, -0.025, 0.77), PALETTE["wood_dark"], bevel=0.012, segments=1)
     # Inset warm cream notice board face
     pb.add_box((0.38, 0.035, 0.24), (0.0, -0.045, 0.60), PALETTE["wood_light"], bevel=0.0)
-    # Original pastel zone emblem & direction bars on the board face
+    # Dark horizontal grooves keep the sign readable at game scale.
     for z in (0.56, 0.64):
-        pb.add_box((0.38, 0.02, 0.012), (0, -0.068, z), PALETTE["wood_dark"])
+        pb.add_box((0.34, 0.02, 0.022), (0, -0.068, z), PALETTE["wood_dark"])
 
 
 BUILDERS = {
