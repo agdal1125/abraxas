@@ -38,3 +38,4 @@
 - 에이전트 · Codex 샌드박스에서 worktree의 node_modules를 main으로 junction 연결하면 vite·vitest가 .vite-temp에 쓰지 못해 EPERM → codex exec에 --add-dir <main>/client/node_modules, <main>/node_modules를 추가 (2026-11-03)
 - 에이전트 · Codex에게 큰 UI 통합(장면 10여 개)을 한 번에 맡기면 일부만 하고 끝남 → 같은 파일이어도 시작/중반/엔딩처럼 순차 단계로 나눠 각각 지시 (2026-11-03)
 - 저장 복구 · 새 명령 종류를 서버·전송 타입에만 추가하고 pending.ts 검증을 빠뜨려 저장 전에 invalid_pending으로 막힘(단위 테스트는 통과, E2E에서만 발견) → 명령 종류를 추가하면 pending 검증·테스트도 함께 갱신 (2026-11-03)
+- 영상 제작 · cinecode 초안이 "Chrome closed the page"로 실패해 메모리 부족처럼 보임 → 실제로는 Chrome 156이 capture.mjs의 6MB 오디오 전송 응답에서 디버깅 연결을 끊음(8초 영상은 통과, 12초부터 실패) → 영상 폴더의 tools/capture.mjs에서 CHUNK를 1MB로 낮춤. init_film.py --update-tools를 돌리면 되돌아가므로 다시 고쳐야 한다
