@@ -34,3 +34,6 @@ assets/_generated/**/*.webp
 !.vscode/extensions.json
 *.blend1
 firestore-debug.log
+
+# Rendered opening film frames and reference stills
+assets/source/cinematics/prelude-v2/out/

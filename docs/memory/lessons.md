@@ -49,3 +49,5 @@
 - 아트 · 일부 대상만 빌드한 환경 생성기가 `environment_kit.blend`를 그 일부로 덮어씀 → 일부 빌드에서는 저장을 건너뜀 → 지금은 수정됨. 원본 blend 변경은 PR 전에 확인한다 (2026-11-05)
 - E2E · 기본 브라우저 Edge가 바로 종료(`exited unexpectedly: 0`)해 게임을 시작도 못 함, 원인 미확인 → `ABRAXAS_BROWSER`로 Chrome을 지정하면 동작. 이때 Chrome 업데이터 로그(`update_service_dialer_win`)가 오류로 집계돼 exit 1이 되므로 그 줄을 빼고 판정한다 (2026-11-06)
 - CI · macOS 작업이 단계 0개로 `cancelled`인데 PR에는 fail로 보임 → 러너 쪽 취소로 판단 → 재실행으로 통과. 코드 실패와 구별한다 (2026-11-06)
+- 아트 · Blender 4.1 이후 저수준 API로 만든 메시는 `sharp_face`가 없으면 부드럽게 칠해져 달걀 조각이 금속처럼 보임 → `use_smooth`를 명시해 면을 각지게 (2026-11-06)
+- 도구 · Codex `workspace-write` 샌드박스는 WinGet 폴더의 ffmpeg 실행을 막고 Chrome CDP도 멈춤. 이 PC의 GPU 렌더는 샌드박스 밖에서만 된다 (2026-11-06)
