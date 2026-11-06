@@ -29,7 +29,7 @@ try {
   ws.onclose = event => { for (const { reject } of pending.values()) reject(new Error(`CDP closed: ${event.code} ${event.reason}`)); pending.clear(); };
   ws.onmessage = ({ data }) => {
     const message = JSON.parse(data);
-    if (message.method === 'Network.requestWillBeSent' && /\/cinematics\/prelude-v1(?:-(?:ko|en))?\.mp4(?:\?|$)/.test(message.params.request.url)) cinematicRequests++;
+    if (message.method === 'Network.requestWillBeSent' && /\/cinematics\/prelude-v2(?:-(?:ko|en))?\.mp4(?:\?|$)/.test(message.params.request.url)) cinematicRequests++;
     if (message.method === 'Network.requestWillBeSent' && /\.(glb|wasm|js|json|css)(?:\?|$)/.test(message.params.request.url)) inFlight.add(message.params.requestId);
     if (message.method === 'Network.loadingFinished') bytes += message.params.encodedDataLength;
     if (message.method === 'Network.loadingFinished' || message.method === 'Network.loadingFailed') inFlight.delete(message.params.requestId);
