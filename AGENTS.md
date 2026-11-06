@@ -21,7 +21,7 @@
 
 ## 작업 방식
 
-- 역할: 전반적인 게임 개발 계획·디자인은 Codex CLI(`gpt-6-astra`, reasoning high), 실제 개발(코딩)과 디자인·아트 애셋 생성은 agy(`gemini-4-argon-medium`), 지휘·검수·병합·최종 판단은 Claude. agy 사용량 한도 도달 시 Codex CLI(`gpt-6.1-terra`)로 대체하고 결과 보고에 적는다. 절차는 `.agents/rules/delegation.md` (ADR-0004, T013 역할 변경).
+- 역할: 계획·디자인, 코드, 아트, 검수, 병합을 모두 Claude가 한다. agy와 Codex에는 맡기지 않는다(2026-11-06 사람 지시). 절차는 `.agents/rules/delegation.md`.
 - 작업마다 브랜치·worktree를 나눠 병렬로 진행하고 각각 PR로 올린다.
 - 테스트는 핵심만(계산 규칙, 신뢰 경계, 실제 회귀). 요청 범위 밖 추상화를 만들지 않는다.
 
