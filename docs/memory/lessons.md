@@ -51,3 +51,5 @@
 - CI · macOS 작업이 단계 0개로 `cancelled`인데 PR에는 fail로 보임 → 러너 쪽 취소로 판단 → 재실행으로 통과. 코드 실패와 구별한다 (2026-11-06)
 - 아트 · Blender 4.1 이후 저수준 API로 만든 메시는 `sharp_face`가 없으면 부드럽게 칠해져 달걀 조각이 금속처럼 보임 → `use_smooth`를 명시해 면을 각지게 (2026-11-06)
 - 도구 · Codex `workspace-write` 샌드박스는 WinGet 폴더의 ffmpeg 실행을 막고 Chrome CDP도 멈춤. 이 PC의 GPU 렌더는 샌드박스 밖에서만 된다 (2026-11-06)
+- git · ADMIN 계정인데 HTTPS 푸시가 403 → `gh`는 SSH를 쓰고 HTTPS 푸시는 키체인 자격 증명을 씀 → `gh auth status`만 믿지 말고 `git push --dry-run`으로 확인, `origin`을 SSH로 변경 (2026-11-07)
+- git · 중첩 저장소를 `git add`하면 파일 없이 gitlink만 커밋되고, 안쪽 `.git`이 깨지면 바깥 `git status`도 실패 → 작업 폴더를 커밋하기 전에 안쪽 `.git` 유무 확인 (2026-11-07)

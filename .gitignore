@@ -37,3 +37,6 @@ firestore-debug.log
 
 # Rendered opening film frames and reference stills
 assets/source/cinematics/prelude-v2/out/
+
+# Opening film workspace, kept in its own repository
+abraxas-opening/
