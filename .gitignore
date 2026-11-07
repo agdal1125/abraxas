@@ -36,4 +36,4 @@ assets/_generated/**/*.webp
 firestore-debug.log
 
 # Rendered opening film frames and reference stills
-assets/source/cinematics/prelude-v2/out/
+assets/source/cinematics/prelude-v3/out/

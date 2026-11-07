@@ -1,0 +1,41 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>abraxas wordmark reveal</title>
+<body style="margin:0;background:transparent">
+<canvas id="c" width="1280" height="720"></canvas>
+<script type="module">
+// The v1 film's title: Fredoka, ink on a soft cream glow, letters rising through a mask one after another.
+const FRAMES = 27, SPREAD = 0.55, SIZE = 108, BASELINE = 720 * 0.215;
+const font = new FontFace('Fredoka', 'url(https://cdn.jsdelivr.net/npm/@fontsource/fredoka@5.2.8/files/fredoka-latin-700-normal.woff2)', { weight: '700' });
+const g = document.getElementById('c').getContext('2d');
+const easeOut = (k) => 1 - (1 - k) ** 3;
+
+function draw(frame) {
+  const p = Math.min(1, frame / (FRAMES - 1));
+  g.clearRect(0, 0, 1280, 720);
+  g.save();
+  g.font = `700 ${SIZE}px Fredoka`;
+  g.textBaseline = 'alphabetic';
+  g.fillStyle = '#3b2a22';
+  g.shadowColor = 'rgba(255, 248, 236, 0.75)';
+  g.shadowBlur = 25;
+  const word = 'abraxas', metrics = g.measureText('abraxas');
+  const top = BASELINE - SIZE * 0.86, height = SIZE * 1.15;
+  let x = 640 - metrics.width / 2;
+  [...word].forEach((letter, i) => {
+    const width = g.measureText(letter).width;
+    const k = easeOut(Math.min(1, Math.max(0, (p - (i / (word.length - 1)) * SPREAD) / (1 - SPREAD))));
+    if (k > 0) {
+      g.save();
+      if (k < 1) { g.beginPath(); g.rect(x - 2, top, width + 4, height); g.clip(); }
+      g.fillText(letter, x, BASELINE + (1 - k) * 0.9 * height);
+      g.restore();
+    }
+    x += width;
+  });
+  g.restore();
+}
+window.renderFrame = draw;
+window.captureFrame = (frame) => { draw(frame); return g.canvas.toDataURL('image/png'); };
+window.READY = font.load().then((face) => { document.fonts.add(face); return { frames: FRAMES, fps: 24, width: 1280, height: 720, renderer: 'canvas2d' }; });
+</script>

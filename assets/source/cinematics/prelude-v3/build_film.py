@@ -8,23 +8,23 @@ import json
 import math
 import os
 import sys
-from dataclasses import dataclass
-from typing import Callable
 
 import bmesh
 import bpy
 import numpy as np
 from mathutils import Euler, Matrix, Quaternion, Vector
+from mathutils.bvhtree import BVHTree
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
 ASSETS = os.path.join(ROOT, "client", "public")
 DURATION = 51.42
 FPS = 24
 
-# Key story moments, measured from the existing sound mix.
-LAND = 7.7
-CRACK_HITS = (9.64, 10.25, 10.9, 11.16, 11.6)
-BURST = 11.9
+# Key story moments, the cues of the v1 film and its sound mix.
+LAND = 7.2
+CRACK_HITS = (9.6, 10.9, 11.9)
+BURST = 12.6
+REVEAL = 21.8 + 4 * 13 * 60 / 132.05
 HERO_HEIGHT = 0.58
 
 SEA_LEVEL = -0.2
@@ -359,7 +359,7 @@ def build_grass(eye):
         if t >= LAND:
             buffer[crater, 2] = -1.0
         lens = eye()
-        buffer[np.hypot(x - lens.x, y - lens.y) < (1.15 if 28 <= t < 34.5 else 0.5), 2] = -1.0
+        buffer[np.hypot(x - lens.x, y - lens.y) < 0.55, 2] = -1.0
         near.data.vertices.foreach_set("co", buffer.ravel())
         near.data.update()
     return update
@@ -399,8 +399,7 @@ def build_scenery(kit):
     rng = np.random.default_rng(33)
     trees = ("tree-layered", "tree-round", "tree-slender", "tree-young")
     hand_placed = [(-3.4, 2.2, 1, 1.9), (-5.2, 4.4, 0, 2.4), (-4.2, 5.4, 2, 2.0), (3.9, -1.2, 0, 2.2), (5.2, 2.4, 1, 2.1),
-                   (6.3, 4.8, 0, 2.6), (4.6, 7.5, 2, 1.8), (-6.8, 8.6, 1, 2.3), (-3.2, 10.8, 3, 1.5), (3.4, 11.6, 3, 1.5),
-                   (-3.1, -3.4, 0, 2.2), (-4.8, -5.5, 1, 2.0)]
+                   (6.3, 4.8, 0, 2.6), (4.6, 7.5, 2, 1.8), (-6.8, 8.6, 1, 2.3), (-3.2, 10.8, 3, 1.5), (3.4, 11.6, 3, 1.5)]
     for x, y, kind, scale in hand_placed:
         kit.place(trees[kind], x, y, ground_at(x, y) - 0.02, rng.uniform(0, math.tau), scale)
     placed = 0
@@ -417,6 +416,8 @@ def build_scenery(kit):
         kit.place("bush" if rng.random() < 0.5 else ("rock-large" if rng.random() < 0.35 and y < 9 else "rock-small"), x, y, ground_at(x, y) - 0.02, rng.uniform(0, math.tau), rng.uniform(0.6, 1.3))
     build_flowers(rng)
     for y in np.arange(-7.0, 16.0, 0.98):
+        if -3.2 < y < 1.6:
+            continue
         x = float(path_x(y)) + 1.34
         slope = 0.275 * math.cos(y * 0.25)
         kit.place("fence", x, float(y), ground_at(x, y) - 0.02, math.pi / 2 - math.atan(slope), 1.25)
@@ -438,6 +439,11 @@ def build_clouds():
     spots += [(rng.uniform(-22, 22), rng.uniform(-10, 26), rng.uniform(40, 48), rng.uniform(2.0, 3.6)) for _ in range(9)]
     spots += [(rng.uniform(-90, 90), rng.uniform(60, 130), rng.uniform(95, 135), rng.uniform(5, 10)) for _ in range(24)]
     spots = [spot for spot in spots if spot[2] < 60 and math.hypot(spot[0], spot[1]) > 9 or spot[2] >= 60 and abs(spot[0]) > 16]
+    # Far enough from the lens that none can sweep across it.
+    for height in np.arange(40, 208, 5.0):
+        angle, reach = rng.uniform(0, math.tau), rng.uniform(16, 42)
+        drift = -6 * (54.4 - math.sqrt(54.4 ** 2 - 14 * height)) / 7
+        spots.append((math.cos(angle) * reach, drift + math.sin(angle) * reach, height, rng.uniform(3, 5.5)))
     for cx, cy, cz, size in spots:
         for _ in range(int(rng.integers(6, 11))):
             direction = rng.normal(0, 1, 3) * np.array((1.0, 0.6, 0.22))
@@ -448,7 +454,8 @@ def build_clouds():
             all_verts.append(stretched + np.array((cx, cy, cz)) + direction * size * 0.75)
             all_tris.append(tris + offset)
             offset += len(template)
-    make_mesh("Clouds", np.concatenate(all_verts), tris=np.concatenate(all_tris), material=material)
+    clouds = make_mesh("Clouds", np.concatenate(all_verts), tris=np.concatenate(all_tris), material=material)
+    clouds.visible_shadow = False
 
 
 def build_sea():
@@ -473,68 +480,144 @@ def build_village(kit):
     return collection
 
 
-# ---------------------------------------------------------------- story timing
-def hero_y(t):
-    if t >= 46:
-        return float(track(t, [(46, 12.7), (49, 13.45)]))
-    return float(track(t, [(38.2, 0.0), (46, 3.9)]))
+def pivot(name, parent, location):
+    obj = bpy.data.objects.new(name, None)
+    bpy.context.scene.collection.objects.link(obj)
+    obj.parent = parent
+    obj.location = location
+    obj.rotation_mode = "XYZ"
+    return obj
 
 
-def hero_state(t):
-    y = hero_y(t)
-    walking = 38.4 <= t < 48.8
-    if t < 21.8:
-        heading = float(track(t, [(16.8, 0.0), (17.9, 1.15), (18.7, 1.15), (19.9, -1.2), (20.7, -1.2), (21.6, 0.0)]))
-    elif t >= 38:
-        heading = -math.atan(0.275 * math.cos(y * 0.25))
-    else:
-        heading = 0.0
-    head_yaw = float(track(t, [(16.8, 0.0), (17.9, 0.4), (18.7, 0.4), (19.9, -0.4), (20.7, -0.4), (21.6, 0.0)])) if t < 22 else 0.0
-    head_pitch = float(track(t, [(21.8, 0.0), (22.3, 0.08), (27.2, 0.1), (28.2, 0.42), (30.4, 0.36), (31, -0.1), (34, -0.05), (34.6, 0.0), (47, 0.0), (48.2, 0.08)]))
-    head_roll = float(track(t, [(30.4, 0.0), (31, 0.26), (33.4, 0.22), (34.2, 0.0)])) + (0.05 * math.sin(t * 15) if 30.8 < t < 33.4 else 0.0)
-    joy = float(track(t, [(30.6, 0.0), (31.2, 1.0), (33.5, 1.0), (34.2, 0.0)]))
-    hop = max(0.0, math.sin((t - BURST - 0.1) * 6)) * 0.05 if BURST + 0.1 < t < BURST + 0.62 else 0.0
-    return dict(x=float(path_x(y)), y=y, heading=heading, walking=walking, head_yaw=head_yaw, head_pitch=head_pitch, head_roll=head_roll, joy=joy, hop=hop)
+# ---------------------------------------------------------------- story timing (the v1 film's flow)
+def to_world(f, r):
+    """v1's meadow frame: f runs from the crash site up the path, r is sideways off the path."""
+    return r + float(path_x(f)), f
 
 
-def dog_state(t):
-    if t < 34.5:
-        y = float(track(t, [(21.8, 8.0), (27.3, 0.66), (28.2, 0.66), (30, 0.45), (30.6, 0.28), (33.5, 0.28), (34.2, 0.48)]))
-        heading = math.pi
-    elif t < 38.6:
-        y = float(track(t, [(35.1, 0.48), (36.8, 1.65)]))
-        heading = float(track(t, [(34.5, math.pi), (35.2, 0.0), (37.0, 0.0), (37.6, 2.4), (38.3, 2.4)]))
-    elif t < 46:
-        y = float(track(t, [(38.6, 1.65), (46, 4.9)]))
-        heading = float(track(t, [(38.6, 2.4), (39.2, 0.0)]))
-    else:
-        y = float(track(t, [(46, 13.02), (48.9, 13.72)]))
-        heading = float(track(t, [(48.9, 0.0), (49.6, -0.2)]))
-    moving = 21.8 <= t < 27.3 or 35.1 <= t < 36.8 or 38.7 <= t < 48.9
-    x = float(path_x(y)) + (0.3 if t >= 46 else 0.0)
-    return dict(x=x, y=y, heading=heading, moving=moving, speed=15.0 if t < 27.3 else 10.0,
-                rear=float(track(t, [(30, 0.0), (30.7, 1.0), (33.3, 1.0), (34, 0.0)])),
-                sniff=float(track(t, [(27.4, 0.0), (28, 1.0), (30, 1.0), (30.5, 0.0)])),
-                wag=1.0 if t >= 26 else 0.45,
-                tongue=30.5 < t < 33.4 or t > 49, visible=t >= 21.8)
+def on_ground(f, r, up, t=DURATION):
+    x, y = to_world(f, r)
+    return Vector((x, y, ground_at(x, y, t) + up))
+
+
+def mix(a, b, k):
+    return a + (b - a) * k
+
+
+def clamp(x, a=0.0, b=1.0):
+    return min(b, max(a, x))
+
+
+def ease(a, b, x):
+    return float(smooth(a, b, x))
+
+
+BEAT0, BPM = 21.8, 132.05
+
+
+def bar(n):
+    return BEAT0 + 4 * n * 60 / BPM
+
+
+FIRST_STEP, FLOP, LEAD, SNIFF_START = 38.8, 34.52, 36.34, 25.43
+CAP_LAND, STAND, TURN_BACK, DOG_CREST, DOG_RUN = 17.6, 20.5, 23.2, 21.8, 23.8
+SKY, HIT, SETTLE, CRACK, POV, SIT, RISE = 4.2, 6.6, 8.0, 10.7, 14.4, 16.4, 19.9
+SNIFF_CUT, CIRCLE, WALK = bar(2), bar(5), bar(10)
+# Walking on past the cut to the reveal happens further up the path, on the crest above the village.
+CREST_SHIFT = 8.0
+
+HERO_PATH = [
+    (0, 0, 0, -3, 0.2), (TURN_BACK, 0, 0, -3, 0.2), (24.1, 0, 0, 2, 0.6), (26.6, 0, 0, 1, 0.6), (28.4, 0, 0, 0.1, 1.2), (29.8, 0, 0, -1, 0.4),
+    (31.6, 0, 0, -0.3, -1), (33.4, 0, 0, 1, 0), (38.8, 0, 0, 1.9, 0.1), (47.8, 5.45, 0.02, 8, 0.1), (48.3, 5.5, 0.02, 12, 0.1), (51.5, 5.5, 0.02, 14, 0.2)]
+DOG_PATH = [
+    (0, 6.3, 0.55, 3, 0.5), (DOG_CREST, 6.3, 0.55, 3, 0.5), (22.9, 5.25, 0.5, 3, 0.4), (DOG_RUN, 5.2, 0.5, 0, 0), (SNIFF_START, 0.95, 0.42, 0, 0),
+    (27.2, 0.58, 0.72, 0.5, 1.1), (28.3, 0.13, 1.08, 0.08, 1.45), (29.6, 0.13, 1.08, 0.06, 1.45), (30.6, -0.55, 0.45, 0, 0), (31.6, -0.7, -0.3, 0, 0),
+    (32.8, 0.1, -0.68, 0, 0), (33.5, 0.86, -0.04, 0, 0), (LEAD, 0.86, 0, 0, 0), (37.5, 1.9, 0.08, 3, 0.1), (37.9, 1.9, 0.08, 0, 0),
+    (FIRST_STEP + 0.9, 1.9, 0.08, 0, 0), (41.2, 2.2, 0.3, 6, 0.3), (47.8, 5.95, 0.32, 8, 0.32), (48.5, 5.95, 0.32, 5.5, 0), (49.3, 5.95, 0.32, 5.5, 0), (50, 5.95, 0.32, 12, 0.3), (51.5, 5.95, 0.32, 12, 0.3)]
+
+
+def row_at(rows, t):
+    if t <= rows[0][0]:
+        return rows[0][1:]
+    for a, b in zip(rows, rows[1:]):
+        if t < b[0]:
+            k = ease(a[0], b[0], t)
+            straight = a[0] >= 41 or (a[0] >= FIRST_STEP and rows is HERO_PATH)
+            u = clamp((t - a[0]) / (b[0] - a[0])) if straight else k
+            return mix(a[1], b[1], u), mix(a[2], b[2], u), mix(a[3], b[3], k), mix(a[4], b[4], k)
+    return rows[-1][1:]
+
+
+def actor_place(rows, t):
+    """World position and the heading that faces the aim point, for the rows of one actor."""
+    f, r, aim_f, aim_r = row_at(rows, t)
+    shift = CREST_SHIFT if t >= REVEAL else 0.0
+    x, y = to_world(f + shift, r)
+    ax, ay = to_world(aim_f + shift, aim_r)
+    return x, y, ax - x, ay - y
+
+
+def distance_table(rows, dt=1 / 48, end=52.0):
+    steps = int(end / dt) + 1
+    table = np.zeros(steps)
+    pf, pr = row_at(rows, 0)[:2]
+    for i in range(1, steps):
+        f, r = row_at(rows, i * dt)[:2]
+        table[i] = table[i - 1] + math.hypot(f - pf, r - pr)
+        pf, pr = f, r
+    return lambda t: float(np.interp(t, np.arange(steps) * dt, table))
+
+
+DOG_DISTANCE = distance_table(DOG_PATH)
+
+
+# A plain free fall: constant acceleration, so the egg is at its fastest as it lands.
+FALL_START_SPEED, GRAVITY = 4.0, 7.0
+
+
+def fall_speed(t):
+    return FALL_START_SPEED + GRAVITY * t
+
+
+def egg_fall(t):
+    left = max(0.0, LAND - t)
+    return fall_speed(LAND) * left - GRAVITY * left * left / 2, 6 * left
+
+
+def egg_bottom(t):
+    height, _ = egg_fall(t)
+    since = t - LAND
+    sink = 0.13 * ease(0, 0.25, since) if since >= 0 else 0.0
+    return ground_at(0, 0, LAND) + height - sink
 
 
 # ---------------------------------------------------------------- hero
+def game_axis(ax, ay, az):
+    """A direction in the game model's frame, in Blender armature space."""
+    return Vector((ax, -az, ay))
+
+
 class Hero:
     def __init__(self):
         before = set(bpy.data.objects)
         bpy.ops.import_scene.gltf(filepath=os.path.join(ASSETS, "assets/abraxas/characters/player.glb"))
-        imported = [o for o in bpy.data.objects if o not in before]
+        imported = [o for o in bpy.data.objects if o.type and o not in before]
         self.rig = next(o for o in imported if o.type == "ARMATURE")
         self.meshes = [o for o in imported if o.type == "MESH" and len(o.data.color_attributes)]
         for obj in imported:
             if obj.type == "MESH" and obj not in self.meshes:
                 bpy.data.objects.remove(obj)
         skin = glowing_vertex_material("HeroSkin", 0.08)
-        for obj in self.meshes:
-            self.whiten(obj.data)
-            obj.data.color_attributes[0].name = "Color"
-            obj.data.materials[0] = skin
+        self.caps = []
+        for obj in list(self.meshes):
+            cap = self.split_cap(obj)
+            for part in (obj, cap):
+                self.whiten(part.data)
+                part.data.color_attributes[0].name = "Color"
+                part.data.materials[0] = skin
+            self.caps.append(cap)
+        self.body_meshes = self.meshes
+        self.build_flying_cap()
         self.clips = {}
         for action in bpy.data.actions:
             bag = action.layers[0].strips[0].channelbag(action.slots[0])
@@ -544,6 +627,69 @@ class Hero:
             self.clips[action.name] = channels
         self.rig.animation_data_clear()
         self.rig.rotation_mode = "XYZ"
+        for bone in self.rig.pose.bones:
+            bone.rotation_mode = "QUATERNION"
+
+    @staticmethod
+    def split_cap(obj):
+        """The eggshell cap is the part of the model painted in the colour of its topmost vertex."""
+        mesh = obj.data
+        layer = mesh.color_attributes[0]
+        raw = np.zeros(len(layer.data) * 4, dtype=np.float32)
+        layer.data.foreach_get("color", raw)
+        rgba = raw.reshape(-1, 4)
+        count = len(mesh.vertices)
+        if layer.domain == "CORNER":
+            per_vertex = np.zeros((count, 4), dtype=np.float32)
+            indices = np.zeros(len(mesh.loops), dtype=np.int32)
+            mesh.loops.foreach_get("vertex_index", indices)
+            per_vertex[indices] = rgba
+            rgba = per_vertex
+        heights = np.zeros(count * 3, dtype=np.float32)
+        mesh.vertices.foreach_get("co", heights)
+        # Model space here is Blender's after import: z is up.
+        z = heights.reshape(-1, 3)[:, 2]
+        top = int(np.argmax(z))
+        # The belly shares the cap's colour, so only the head counts.
+        is_cap = (np.abs(rgba[:, :3] - rgba[top, :3]).sum(axis=1) < 0.09) & (z > z.min() + 0.6 * (z.max() - z.min()))
+
+        cap = obj.copy()
+        cap.data = mesh.copy()
+        cap.name = "HeroCap"
+        for collection in obj.users_collection:
+            collection.objects.link(cap)
+        for target, keep_cap in ((mesh, False), (cap.data, True)):
+            data = bmesh.new()
+            data.from_mesh(target)
+            data.verts.ensure_lookup_table()
+            drop = [face for face in data.faces if all(is_cap[v.index] for v in face.verts) != keep_cap]
+            bmesh.ops.delete(data, geom=drop, context="FACES_ONLY")
+            data.to_mesh(target)
+            data.free()
+        return cap
+
+    def build_flying_cap(self):
+        """A rigid copy of the cap in its bind pose: the last piece of shell, falling onto the head."""
+        all_verts, all_tris = [], []
+        offset = 0
+        for cap in self.caps:
+            mesh = cap.data
+            mesh.calc_loop_triangles()
+            count = len(mesh.vertices)
+            co = np.zeros(count * 3, dtype=np.float32)
+            mesh.vertices.foreach_get("co", co)
+            co = co.reshape(-1, 3)
+            matrix = np.array(cap.matrix_local)
+            co = co @ matrix[:3, :3].T + matrix[:3, 3]
+            tris = np.array([tri.vertices[:] for tri in mesh.loop_triangles], dtype=np.int32)
+            all_verts.append(co)
+            all_tris.append(tris + offset)
+            offset += count
+        verts = np.concatenate(all_verts)
+        used = np.unique(np.concatenate(all_tris))
+        self.cap_center = Vector(verts[used].mean(axis=0).tolist())
+        self.flying = make_mesh("HeroCapFlying", verts - np.array(self.cap_center), tris=np.concatenate(all_tris), material=flat_material("CapFlying", "#fbf6ec", 0.8))
+        self.flying.rotation_mode = "XYZ"
 
     @staticmethod
     def whiten(mesh):
@@ -559,165 +705,275 @@ class Hero:
     def sample(self, clip, frame):
         return {path: [curves[i].evaluate(frame) for i in sorted(curves)] for path, curves in self.clips[clip].items()}
 
-    def update(self, t):
-        state = hero_state(t)
-        visible = t >= BURST and not 14.0 <= t < 16.4
-        self.rig.hide_render = not visible
-        for obj in self.meshes:
-            obj.hide_render = not visible
-        self.rig.location = (state["x"], state["y"], ground_at(state["x"], state["y"], t) + state["hop"])
-        self.rig.rotation_euler = (0, 0, state["heading"] + math.pi)
-        frame = (t * FPS) % 19 if state["walking"] else (t * FPS) % 48
-        for path, values in self.sample("walk" if state["walking"] else "idle", frame).items():
+    def base_pose(self, t, walking):
+        idle = self.sample("idle", (t * FPS) % 48)
+        walk = self.sample("walk", (t * FPS) % 19)
+        for path in set(idle) | set(walk):
+            a = idle.get(path)
+            b = walk.get(path, a)
+            a = a if a is not None else b
             bone = self.rig.pose.bones[path.split('"')[1]]
             if path.endswith("rotation_quaternion"):
-                bone.rotation_quaternion = values
+                bone.rotation_quaternion = Quaternion(a).slerp(Quaternion(b), walking)
             elif path.endswith("location"):
-                bone.location = values
-        head = self.rig.pose.bones["head"]
-        head.rotation_quaternion = Quaternion(head.rotation_quaternion) @ Euler((state["head_pitch"], state["head_yaw"], state["head_roll"]), "YXZ").to_quaternion()
-        if state["joy"]:
-            for name, sign in (("arm_l", 1), ("arm_r", -1)):
-                bone = self.rig.pose.bones[name]
-                bone.rotation_quaternion = Quaternion(bone.rotation_quaternion) @ Euler((0, 0, sign * state["joy"] * (1.15 + 0.2 * math.sin(t * 13))), "XYZ").to_quaternion()
+                bone.location = [mix(x, y, walking) for x, y in zip(a, b)]
+
+    def turn(self, name, axis, angle):
+        """Rotates a bone about a direction given in the model's own frame, as the v1 film did."""
+        if not angle:
+            return
+        bone = self.rig.pose.bones[name]
+        rest = bone.bone.matrix_local.to_quaternion()
+        spin = Quaternion(game_axis(*axis), angle)
+        bone.rotation_quaternion = (rest.inverted() @ spin @ rest) @ bone.rotation_quaternion
+
+    def update(self, t):
+        x, y, dx, dy = actor_place(HERO_PATH, t)
+        heading = math.atan2(dx, -dy)
+        visible = t >= BURST and not POV <= t < SIT and not FLOP <= t < LEAD
+        self.rig.hide_render = not visible
+        for obj in self.body_meshes:
+            obj.hide_render = not visible
+        for cap in self.caps:
+            cap.hide_render = not visible or t < CAP_LAND
+
+        sit = 1 - ease(STAND, STAND + 0.85, t)
+        drop = -0.135 * sit + (math.sin(sit * math.pi) * 0.015 if 0 < sit < 1 else 0.0)
+        ground = ground_at(x, y, t)
+        self.rig.location = (x, y, ground + drop)
+        self.rig.rotation_euler = (0, 0, heading)
+
+        flying = 15.5 <= t < CAP_LAND
+        self.flying.hide_render = not flying
+        if flying:
+            k = clamp((t - 15.5) / (CAP_LAND - 15.5))
+            center = Matrix.Rotation(heading, 4, "Z") @ self.cap_center
+            self.flying.location = (x + center.x + (1 - k) * 0.4, y + center.y - (1 - k) * 0.25, ground + drop + center.z + 2.6 * (1 - k * k))
+            self.flying.rotation_euler = ((1 - k) * 8, (1 - k) * 5, heading)
+
+        if not visible:
+            return
+        walking = ease(FIRST_STEP - 0.1, FIRST_STEP + 0.25, t) * (1 - ease(47.8, 48.3, t))
+        self.base_pose(t, walking)
+
+        for leg, side in (("leg_l", 1), ("leg_r", -1)):
+            self.turn(leg, (1, 0, 0), -1.35 * sit)
+            self.turn(leg, (0, 0, 1), side * 0.2 * sit)
+        land = clamp(t - CAP_LAND)
+        bump = math.exp(-land * 7) * math.sin(land * 18) * 0.24 if t >= CAP_LAND else 0.0
+        wake = float(track(t, [(BURST, 0.95), (15.8, 0.95), (16.9, 0.1), (CAP_LAND, 0.08), (CAP_LAND + 0.12, 0.22), (18.1, 0), (19.9, 0), (20.4, 0.5), (STAND + 0.5, 0.18), (STAND + 1.1, 0)]))
+        self.turn("body", (1, 0, 0), 0.22 * wake + 0.05 * sit)
+        look = float(track(t, [(17.9, 0), (18.25, 0.44), (18.95, 0.44), (19.3, -0.44), (19.85, -0.44), (20.15, 0), (DOG_RUN, 0), (24.5, 0.22), (26.5, 0.22), (28.6, -0.24), (31, 0.24), (33.4, 0), (38.9, 0), (39.4, 0)]))
+        pitch = float(track(t, [(BURST, 0.5), (15.8, 0.5), (16.9, 0.05), (19.9, 0.05), (20.3, 0.55), (STAND, 0.5), (STAND + 0.8, 0), (24.6, 0), (26.5, 0.35), (33.4, 0.38), (36.4, 0.5), (37.6, -0.04), (38.7, 0.05), (40, 0)]))
+        yaw = float(track(t, [(19.9, 0), (20.2, 0), (STAND + 1, 0), (21.7, 0.55), (22.3, -0.55), (22.9, 0), (23.2, 0), (TURN_BACK + 0.25, -0.6), (TURN_BACK + 0.8, 0)]))
+        self.turn("head", (0, 0, 1), look + math.sin(t * 2.1) * 0.012)
+        self.turn("head", (1, 0, 0), pitch + bump)
+        self.turn("head", (0, 1, 0), yaw)
+        hands = float(track(t, [(19.9, 0), (20.3, 1), (STAND, 1), (STAND + 0.4, 0), (31.8, 0), (32.4, 0.65), (33.3, 0.65), (33.7, 0)]))
+        shrug = float(track(t, [(18.1, 0), (18.4, 0.34), (19.7, 0.34), (19.95, 0)])) * (1 - hands)
+        for arm, side in (("arm_l", 1), ("arm_r", -1)):
+            self.turn(arm, (1, 0, 0), -1.25 * hands + 0.12 * sit)
+            self.turn(arm, (0, 0, 1), side * (0.25 * hands + shrug))
 
 
 # ---------------------------------------------------------------- dog
-FUR = linear("#ffffff")
-FUR_SHADE = linear("#fff3e4")
+# The model is authored with +x forward, +y up. model_to_blender maps that onto +y forward, +z up.
+def model_to_blender(points):
+    return np.asarray(points, dtype=float)[..., [2, 0, 1]]
 
 
-SPIKE_VERTS = np.array(((0.7, 0.0, 0.0), (0.0, 0.7, 0.0), (-0.7, 0.0, 0.0), (0.0, -0.7, 0.0), (0.0, 0.0, 1.0)))
-SPIKE_TRIS = np.array(((0, 1, 4), (1, 2, 4), (2, 3, 4), (3, 0, 4), (2, 1, 0), (0, 3, 2)))
+def dog_hash(a, b, seed):
+    value = math.sin(a * 127.1 + b * 311.7 + seed * 53.3) * 43758.5453
+    return value - math.floor(value)
 
 
-def add_fur(name, parent, center, radii, count, length, material, seed, flow=(0.0, -0.3, -0.8)):
-    """Coats an ellipsoid in long tapered spikes that hang along the flow direction."""
-    rng = np.random.default_rng(seed)
-    golden = math.pi * (3 - math.sqrt(5))
-    index = np.arange(count)
-    z = 1 - 2 * (index + 0.5) / count
-    ring = np.sqrt(1 - z * z)
-    normals = np.stack((np.cos(golden * index) * ring, np.sin(golden * index) * ring, z), axis=1) + rng.normal(0, 0.1, (count, 3))
-    normals /= np.linalg.norm(normals, axis=1, keepdims=True)
-    roots = np.array(center) + normals * np.array(radii) * 0.86
-    axes = normals * 0.62 + np.array(flow) + rng.normal(0, 0.16, (count, 3))
-    axes /= np.linalg.norm(axes, axis=1, keepdims=True)
-    helper = np.tile((0.31, 0.87, 0.38), (count, 1))
-    side = np.cross(axes, helper)
-    side /= np.linalg.norm(side, axis=1, keepdims=True)
-    other = np.cross(axes, side)
-    span = length * 0.72 * rng.uniform(0.7, 1.2, count)
-    width = span * 0.55
-    verts = np.empty((count * 5, 3))
-    for k, (a, b, c) in enumerate(SPIKE_VERTS):
-        verts[k::5] = roots + side * (a * width)[:, None] + other * (b * width)[:, None] + axes * (c * span)[:, None]
-    tris = (SPIKE_TRIS[None, :, :] + (index * 5)[:, None, None]).reshape(-1, 3)
-    tone = (FUR_SHADE + (FUR - FUR_SHADE) * rng.uniform(0.3, 1.0, count)[:, None])
-    colors = np.repeat(tone, 5, axis=0)
-    colors[4::5] = np.minimum(colors[4::5] * 1.05, 1.0)
-    core, core_tris = ico_template(2)
-    all_verts = np.vstack((verts, core * np.array(radii) * 0.97 + np.array(center)))
-    all_tris = np.vstack((tris, core_tris + count * 5))
-    all_colors = np.vstack((colors, np.tile(FUR_SHADE, (len(core), 1))))
-    obj = make_mesh(name, all_verts, tris=all_tris, colors=all_colors, material=material)
+def loft(rings, n=6, side=(0.0, 0.0, 1.0), jitter=0.05, seed=1):
+    """Skins n-sided rings into big flat facets. Rings twist half a step so quads fold like paper."""
+    centers = [np.array(r[:3], dtype=float) for r in rings]
+    side = np.array(side, dtype=float)
+    grid = []
+    for i, ring in enumerate(rings):
+        tangent = centers[min(i + 1, len(rings) - 1)] - centers[max(i - 1, 0)]
+        tangent /= np.linalg.norm(tangent)
+        u = side - tangent * side.dot(tangent)
+        u /= np.linalg.norm(u)
+        v = np.cross(tangent, u)
+        row = []
+        for k in range(n):
+            angle = (k + (i % 2) * 0.5) / n * math.tau
+            grow = 1 + (dog_hash(i, k, seed) - 0.5) * 2 * jitter
+            row.append(centers[i] + u * math.cos(angle) * ring[3] * grow + v * math.sin(angle) * ring[4] * grow)
+        grid.append(row)
+    triangles = []
+
+    def tri(a, b, c):
+        triangles.append((a, c, b))
+
+    for i in range(len(grid) - 1):
+        for k in range(n):
+            a, b = grid[i][k], grid[i][(k + 1) % n]
+            c, d = grid[i + 1][k], grid[i + 1][(k + 1) % n]
+            if i % 2 == 0:
+                tri(a, c, b)
+                tri(b, c, d)
+            else:
+                tri(a, c, d)
+                tri(a, d, b)
+    for k in range(n):
+        tri(centers[0], grid[0][k], grid[0][(k + 1) % n])
+        tri(centers[-1], grid[-1][(k + 1) % n], grid[-1][k])
+    return np.array(triangles)
+
+
+def triangle_mesh(name, triangles, material, parent):
+    verts = model_to_blender(triangles).reshape(-1, 3)
+    obj = make_mesh(name, verts, tris=np.arange(len(verts)).reshape(-1, 3), material=material)
     obj.parent = parent
     return obj
 
 
-def smooth_ball(name, parent, center, radii, material):
-    template, tris = ico_template(3)
-    obj = make_mesh(name, template * np.array(radii) + np.array(center), tris=tris, material=material)
-    obj.data.polygons.foreach_set("use_smooth", np.ones(len(tris), dtype=bool))
-    obj.data.update()
-    obj.parent = parent
-    return obj
-
-
-def pivot(name, parent, location):
-    obj = bpy.data.objects.new(name, None)
-    bpy.context.scene.collection.objects.link(obj)
-    obj.parent = parent
-    obj.location = location
-    obj.rotation_mode = "XYZ"
-    return obj
+DOG_SCALE = 0.43
 
 
 class Dog:
     def __init__(self):
-        fur = glowing_vertex_material("Fur", 0.16)
-        black = flat_material("DogBlack", "#1d1716", 0.12, specular=0.9)
-        pink = flat_material("DogPink", "#f4a7b9", 0.55)
-        tongue = flat_material("Tongue", "#f27f97", 0.35)
-        gold = flat_material("Tag", "#f2b84b", 0.3)
-        self.root = pivot("Dog", None, (0, 0, 0))
-        self.rear = pivot("DogRear", self.root, (0, -0.13, 0))
-        self.body = pivot("DogBody", self.rear, (0, 0.13, 0))
-        add_fur("DogTorso", self.body, (0, -0.01, 0.175), (0.088, 0.14, 0.082), 900, 0.062, fur, 1, (0.0, -0.45, -0.75))
-        add_fur("DogChest", self.body, (0, 0.115, 0.185), (0.078, 0.066, 0.088), 420, 0.06, fur, 2, (0.0, -0.05, -0.9))
-        self.head = pivot("DogHead", self.body, (0, 0.135, 0.255))
-        add_fur("DogSkull", self.head, (0, 0.045, 0.055), (0.088, 0.082, 0.082), 900, 0.036, fur, 3, (0.0, -0.55, -0.35))
-        add_fur("DogTop", self.head, (0, 0.035, 0.125), (0.056, 0.056, 0.03), 200, 0.036, fur, 4, (0.0, -0.3, 0.45))
-        add_fur("DogMuzzle", self.head, (0, 0.125, 0.024), (0.04, 0.042, 0.032), 300, 0.016, fur, 5, (0.0, -0.15, -0.55))
-        smooth_ball("DogNose", self.head, (0, 0.172, 0.04), (0.019, 0.014, 0.016), black)
-        for sign in (-1, 1):
-            smooth_ball("DogEye", self.head, (sign * 0.043, 0.113, 0.066), (0.0155, 0.011, 0.017), black)
-        self.tongue = smooth_ball("DogTongue", self.head, (0, 0.15, -0.012), (0.018, 0.032, 0.006), tongue)
-        self.ears = []
-        for sign in (-1, 1):
-            ear = pivot("DogEar", self.head, (sign * 0.085, 0.03, 0.095))
-            add_fur("DogEarFur", ear, (sign * 0.022, 0, -0.07), (0.026, 0.038, 0.078), 420, 0.05, fur, 7 + sign, (0.0, 0.0, -1.0))
-            self.ears.append((ear, sign))
-        self.legs = []
-        for index, (sign, front) in enumerate(((-1, 1), (1, 1), (-1, -1), (1, -1))):
-            leg = pivot("DogLeg", self.body, (sign * 0.056, front * 0.095, 0.125))
-            add_fur("DogLegFur", leg, (0, 0, -0.06), (0.027, 0.029, 0.062), 300, 0.032, fur, 10 + index, (0.0, 0.0, -1.0))
-            self.legs.append((leg, sign * front, front > 0))
-        self.tail = pivot("DogTail", self.body, (0, -0.15, 0.215))
-        add_fur("DogTailFur", self.tail, (0, -0.02, 0.055), (0.026, 0.03, 0.06), 320, 0.052, fur, 20, (0.0, -0.75, -0.35))
-        self.build_collar(pink, gold)
+        white = flat_material("DogWhite", "#f6f3ec", 0.82, "#ffffff", 0.06, specular=0.25)
+        black = flat_material("DogBlack", "#141216", 0.5, specular=0.2)
+        pink = flat_material("DogPink", "#f08aa2", 0.7)
+        dark = flat_material("DogMouth", "#5a2a36", 0.9)
+        self.seed = 1
 
-    def build_collar(self, pink, gold):
-        rows, cols = 24, 6
-        u, v = np.meshgrid(np.linspace(0, math.tau, rows, endpoint=False), np.linspace(0, math.tau, cols, endpoint=False), indexing="ij")
-        ring = 0.073 + 0.011 * np.cos(v)
-        verts = np.stack((ring * np.cos(u), ring * np.sin(u), 0.011 * np.sin(v)), axis=-1).reshape(-1, 3)
-        index = np.arange(rows * cols).reshape(rows, cols)
-        quads = np.stack((index, np.roll(index, -1, 0), np.roll(np.roll(index, -1, 0), -1, 1), np.roll(index, -1, 1)), axis=-1).reshape(-1, 4)
-        collar = make_mesh("DogCollar", verts, quads=quads, material=pink)
-        collar.parent = self.body
-        collar.location = (0, 0.125, 0.235)
-        collar.rotation_euler = (math.radians(68), 0, 0)
-        smooth_ball("DogTag", self.body, (0, 0.2, 0.185), (0.016, 0.005, 0.016), gold)
+        def part(name, parent, rings, material=white, **options):
+            triangles = loft(rings, seed=self.seed, **options)
+            self.seed += 1
+            return triangle_mesh(name, triangles, material, parent)
+
+        self.root = pivot("Dog", None, (0, 0, 0))
+        self.rig = pivot("DogRig", self.root, (0, 0, 0))
+        self.rig.scale = (DOG_SCALE, DOG_SCALE, DOG_SCALE)
+        self.body = pivot("DogBody", self.rig, model_to_blender((0, 0.335, 0)).tolist())
+        part("DogTrunk", self.body, [(-0.36, 0.03, 0, 0.06, 0.07), (-0.29, 0.02, 0, 0.18, 0.19), (-0.1, 0.02, 0, 0.205, 0.205),
+                                     (0.09, 0.035, 0, 0.21, 0.225), (0.235, 0.05, 0, 0.165, 0.2), (0.3, 0.06, 0, 0.05, 0.08)], n=6)
+        part("DogNeck", self.body, [(0.12, 0.08, 0, 0.11, 0.11), (0.2, 0.2, 0, 0.145, 0.125), (0.26, 0.29, 0, 0.1, 0.09)], n=6, jitter=0.03)
+
+        def leg(x, z, hind):
+            hip = pivot("DogLeg", self.body, model_to_blender((x, -0.03, z)).tolist())
+            top = 0.135 if hind else 0.1
+            part("DogLegPart", hip, [(0, 0.09, 0, top * 0.7, top * 0.8), (0, 0.0, 0, top, top * 1.15), (0, -0.14, 0, 0.082, 0.085),
+                                     (0, -0.25, 0, 0.074, 0.078), (0, -0.3, 0, 0.03, 0.03)], n=5, side=(1.0, 0.0, 0.0))
+            part("DogPaw", hip, [(-0.06, -0.272, 0, 0.055, 0.03), (0.0, -0.272, 0, 0.09, 0.04), (0.08, -0.282, 0, 0.074, 0.028), (0.12, -0.288, 0, 0.022, 0.012)], n=5, jitter=0.03)
+            return hip
+
+        self.legs = {"fl": leg(0.18, 0.1, False), "fr": leg(0.18, -0.1, False), "bl": leg(-0.24, 0.115, True), "br": leg(-0.24, -0.115, True)}
+
+        self.tail = pivot("DogTail", self.body, model_to_blender((-0.32, 0.12, 0)).tolist())
+        part("DogTailPlume", self.tail, [(0.02, -0.03, 0, 0.04, 0.04), (-0.05, 0.08, 0, 0.075, 0.08), (-0.04, 0.22, 0, 0.1, 0.1), (0.06, 0.28, 0, 0.075, 0.08), (0.14, 0.22, 0, 0.03, 0.03)], n=5)
+
+        self.head = pivot("DogHead", self.body, model_to_blender((0.27, 0.235, 0)).tolist())
+        self.head.rotation_mode = "YXZ"
+        skull_triangles = loft([(-0.2, 0.13, 0, 0.09, 0.09), (-0.14, 0.13, 0, 0.19, 0.185), (0.0, 0.14, 0, 0.245, 0.225), (0.13, 0.12, 0, 0.225, 0.2),
+                                (0.2, 0.065, 0, 0.125, 0.105), (0.28, 0.05, 0, 0.09, 0.07), (0.325, 0.05, 0, 0.04, 0.034)], n=8, jitter=0.035, seed=self.seed)
+        self.seed += 1
+        triangle_mesh("DogSkull", skull_triangles, white, self.head)
+        tree = BVHTree.FromPolygons([tuple(v) for v in skull_triangles.reshape(-1, 3)], [(3 * i, 3 * i + 1, 3 * i + 2) for i in range(len(skull_triangles))], all_triangles=True)
+
+        self.eyes = []
+        for sign in (1, -1):
+            direction = Vector((0.86, 0.17, 0.4 * sign)).normalized()
+            point, normal, _, _ = tree.ray_cast(Vector((0, 0.1, 0)) + direction * 2, -direction)
+            self.eyes.append(self.eye(point, normal, sign * 0.28, black))
+
+        nose_verts = []
+        for radius, height in ((0.04, 0.018), (0.024, -0.018)):
+            for k in range(5):
+                angle = k / 5 * math.tau
+                nose_verts.append((radius * math.sin(angle), height, radius * math.cos(angle) * 0.95))
+        spin = np.array(Matrix.Rotation(-1.25, 3, "Z"))
+        nose_verts = np.array(nose_verts) @ spin.T
+        nose_tris = [(5 + k, 5 + (k + 1) % 5, k) for k in range(5)] + [(k, 5 + (k + 1) % 5, (k + 1) % 5) for k in range(5)] + [(0, k, k + 1) for k in range(1, 4)] + [(5, 5 + k + 1, 5 + k) for k in range(1, 4)]
+        self.nose = make_mesh("DogNose", model_to_blender(nose_verts), tris=np.array(nose_tris), material=black)
+        self.nose.parent = self.head
+        self.nose.location = model_to_blender((0.312, 0.074, 0)).tolist()
+
+        self.jaw = pivot("DogJaw", self.head, model_to_blender((0.2, 0, 0)).tolist())
+        part("DogChin", self.jaw, [(-0.03, 0, 0, 0.09, 0.03), (0.05, -0.005, 0, 0.082, 0.035), (0.11, -0.005, 0, 0.05, 0.02)], n=5, jitter=0.02)
+        part("DogMouth", self.jaw, [(0.02, 0.022, 0, 0.066, 0.016), (0.095, 0.018, 0, 0.042, 0.012)], material=dark, n=5, jitter=0.0)
+        part("DogTongue", self.jaw, [(0.05, 0.03, 0, 0.042, 0.014), (0.1, 0.024, 0, 0.05, 0.016), (0.135, 0.0, 0, 0.034, 0.012)], material=pink, n=5, jitter=0.0)
+
+        self.ears = []
+        for sign in (1, -1):
+            ear = pivot("DogEar", self.head, model_to_blender((-0.01, 0.275, 0.165 * sign)).tolist())
+            part("DogEarFlap", ear, [(0, 0.015, 0.01 * sign, 0.05, 0.03), (0, -0.05, 0.055 * sign, 0.115, 0.055), (0.005, -0.17, 0.075 * sign, 0.12, 0.055), (0.015, -0.27, 0.07 * sign, 0.065, 0.03)],
+                 n=5, side=(1.0, 0.0, 0.0), jitter=0.06)
+            self.ears.append((ear, sign))
+
+    def eye(self, point, normal, turn, material):
+        ring = []
+        for k in range(6):
+            angle = k / 6 * math.tau
+            ring.append(Vector((0.03 * 0.92 * math.cos(angle), 0.03 * 1.12 * math.sin(angle), 0.0)))
+        align = normal.to_track_quat("Z", "Y") @ Quaternion((0, 0, 1), turn)
+        points = [align @ p for p in ring]
+        verts = np.array([p.to_tuple() for p in points])
+        obj = make_mesh("DogEye", model_to_blender(verts), tris=np.array([(0, k + 1, k) for k in range(1, 5)]), material=material)
+        # The polygon must face outward after the axis change, which keeps handedness.
+        obj.parent = self.head
+        obj.location = model_to_blender(np.array((point + normal * 0.004).to_tuple())).tolist()
+        return obj
 
     def update(self, t):
-        state = dog_state(t)
+        visible = t >= DOG_CREST - 0.1
         for obj in [self.root, *self.root.children_recursive]:
-            obj.hide_render = not state["visible"]
-        if not state["visible"]:
+            obj.hide_render = not visible
+        if not visible:
             return
-        self.root.location = (state["x"], state["y"], ground_at(state["x"], state["y"], t))
-        self.root.rotation_euler = (0, 0, state["heading"])
-        wave = t * state["speed"]
-        moving = state["moving"]
-        bounce = abs(math.sin(wave)) * 0.016 if moving else 0.003 * math.sin(t * 3.1)
-        self.body.location = (0, 0.13, bounce)
-        self.rear.rotation_euler = (state["rear"] * math.radians(62) + (0.05 * math.sin(wave * 2) if moving else 0), 0, 0)
-        for leg, phase, front in self.legs:
-            swing = math.sin(wave + (0 if phase > 0 else math.pi)) * 0.62 if moving else 0.0
-            if state["rear"] > 0:
-                swing += state["rear"] * (-1.15 + 0.14 * math.sin(t * 13 + phase) if front else 0.95)
-            leg.rotation_euler = (swing, 0, 0)
-        sniff = state["sniff"]
-        lick = state["rear"]
-        idle = 0.05 * math.sin(wave * 2) if moving else 0.03 * math.sin(t * 1.7)
-        self.head.rotation_euler = (-0.5 * sniff + 0.05 * math.sin(t * 9) * sniff - 1.08 * lick + 0.13 * math.sin(t * 15) * lick + idle, 0, 0)
-        ear_swing = 0.1 * math.sin(wave * 2) if moving else 0.03 * math.sin(t * 2.3)
+        x, y, dx, dy = actor_place(DOG_PATH, t)
+        self.root.location = (x, y, ground_at(x, y, t))
+        self.root.rotation_euler = (0, 0, math.atan2(-dx, dy))
+
+        distance = DOG_DISTANCE(t)
+        speed = (DOG_DISTANCE(t + 0.08) - DOG_DISTANCE(t - 0.08)) / 0.16
+        phase = distance / 0.17 * math.tau
+        amp = clamp(speed * 1.05)
+        flop = ease(FLOP + 0.05, FLOP + 0.55, t) * (1 - ease(LEAD - 0.12, LEAD + 0.2, t))
+        sniffing = float(track(t, [(SNIFF_START - 0.3, 0), (SNIFF_START, 1), (FLOP - 0.8, 1), (FLOP - 0.5, 0)]))
+        pulse = max(0.0, math.sin(t * 15.5)) ** 2
+        shard = float(track(t, [(28.05, 0), (28.35, 1), (29.5, 1), (29.8, 0)]))
+        stop_tilt = float(track(t, [(22.95, 0), (23.25, 1), (23.8, 1), (24, 0)]))
+        look_back = float(track(t, [(37.45, 0), (37.8, 1), (FIRST_STEP + 0.1, 1), (FIRST_STEP + 0.55, 0)]))
+        bark = math.sin((t - 38.05) / 0.4 * math.pi) if 38.05 < t < 38.45 else 0.0
+        reach = float(track(t, [(33.3, 0), (33.55, 1), (FLOP, 1), (FLOP + 0.3, 0)]))
+
+        bob = abs(math.sin(phase)) * 0.016 * amp
+        self.rig.location = (0, 0, bob + bark * 0.075 - 0.083 * flop)
+        self.rig.rotation_euler = (-(math.sin(phase * 2) * 0.012 * amp - reach * 0.05 - 0.015 * flop), 0, 0)
+
+        swing = math.sin(phase) * 0.72 * amp
+        for name, sign, out in (("fl", 1, 1.36), ("br", 1, -1.05), ("fr", -1, 1.28), ("bl", -1, -1.05)):
+            self.legs[name].rotation_euler = (mix(sign * swing, out, flop), 0, 0)
+
+        breath = math.sin(t * 2.7) * 0.01
+        pitch = 0.08 + 0.38 * sniffing + 0.14 * shard + 0.12 * pulse * sniffing - 0.55 * reach + breath - 0.17 * flop + 0.05 * amp * math.sin(phase * 2)
+        tilt = stop_tilt * 0.46 + flop * 0.05 + reach * 0.18 + look_back * math.sin(t * 1.4) * 0.12
+        turn = math.sin(t * 2.9) * 0.3 * sniffing + look_back * 0.08 + flop * 0.02
+        rest = model_to_blender((0.27 + 0.012 * sniffing / DOG_SCALE, 0.235 + (0.022 * reach - 0.012 * sniffing) / DOG_SCALE, 0))
+        self.head.location = rest.tolist()
+        self.head.rotation_euler = (-pitch, tilt, turn)
+        grow = 1 + 0.09 * pulse * sniffing
+        self.nose.scale = (grow, grow, grow)
+
+        pant = (0.06 + 0.05 * math.sin(t * 9)) * clamp(amp + flop)
+        self.jaw.rotation_euler = (-0.62 * bark - pant, 0, 0)
         for ear, sign in self.ears:
-            ear.rotation_euler = (ear_swing, sign * (-0.12 - abs(ear_swing)), 0)
-        self.tail.rotation_euler = (-0.55, math.sin(t * (17 if state["wag"] > 0.6 else 9)) * 0.7 * state["wag"], 0)
-        self.tongue.hide_render = not state["tongue"]
-        self.tongue.location = (0, 0, -0.004 + 0.006 * math.sin(t * 15))
+            lag = math.sin(phase - 0.6) * 0.15 * amp + math.sin(t * 3 + sign) * 0.018 - pitch * 0.34
+            ear.rotation_euler = (-lag, -sign * (0.06 + bark * 0.32 + stop_tilt * 0.08), 0)
+        happy = float(track(t, [(21.5, 0.4), (DOG_RUN, 0.45), (25.5, 1), (30, 0.72), (33, 1), (LEAD, 1), (37.8, 0.75), (38.8, 1)]))
+        self.tail.rotation_euler = (-0.5 * flop, math.sin(t * mix(8, 17, happy)) * 0.42 * happy, 0)
+        inhale = 1 + math.sin(t * (9 if sniffing > 0.5 else 3)) * 0.012
+        self.body.scale = (inhale, 1, inhale)
+        blink = 0.2 if math.sin(t * 0.86 + 1.3) > 0.992 or math.sin(t * 1.33) > 0.996 else 1.0
+        for eye in self.eyes:
+            eye.scale = (1, 1, blink)
 
 
 # ---------------------------------------------------------------- egg
@@ -732,14 +988,9 @@ def egg_shape(directions):
     return points
 
 
-def egg_bottom(t):
-    if t < 6.6:
-        return 76 - 3.6 * t
-    if t < 7.35:
-        return 30.0
-    if t < LAND:
-        return 8.0 * (1 - (t - 7.35) / (LAND - 7.35))
-    return ground_at(0, 0, LAND) - 0.04
+def slow_clock(x):
+    """The shards hang in the light, then fall at full speed."""
+    return x * 0.28 if x < 1.1 else 0.308 + (x - 1.1) * mix(0.28, 1.0, ease(1.1, 2.4, x))
 
 
 class Egg:
@@ -815,7 +1066,7 @@ class Egg:
                                     spin=Vector(rng.normal(0, 1, 3).tolist()).normalized(), spins=rng.uniform(1.5, 3.5) * (1 if rng.random() < 0.5 else -1),
                                     order=float(np.dot(normal, front))))
         ranked = sorted(self.pieces, key=lambda p: -p["order"])
-        stages = (4, 10, 18, 28, 38)
+        stages = (10, 22, 38)
         for rank, piece in enumerate(ranked):
             stage = next((i for i, limit in enumerate(stages) if rank < limit), None)
             piece["crack"] = CRACK_HITS[stage] if stage is not None else None
@@ -832,14 +1083,14 @@ class Egg:
     def build_beam(self):
         rows = 18
         u = np.linspace(0, math.tau, rows, endpoint=False)
-        verts = np.array([(radius * math.cos(a), radius * math.sin(a), z) for radius, z in ((0.5, 0.0), (1.8, 46.0)) for a in u])
+        verts = np.array([(radius * math.cos(a), radius * math.sin(a), z) for radius, z in ((0.3, 0.0), (1.3, 46.0)) for a in u])
         quads = np.array([(i, (i + 1) % rows, rows + (i + 1) % rows, rows + i) for i in range(rows)])
         material = bpy.data.materials.new("Beam")
         material.use_nodes = True
         nodes, links = material.node_tree.nodes, material.node_tree.links
         nodes.clear()
         out = nodes.new("ShaderNodeOutputMaterial")
-        mix = nodes.new("ShaderNodeMixShader")
+        blend_node = nodes.new("ShaderNodeMixShader")
         emit = nodes.new("ShaderNodeEmission")
         emit.inputs["Color"].default_value = (*linear("#fff4cf"), 1)
         emit.inputs["Strength"].default_value = 2.2
@@ -866,20 +1117,30 @@ class Egg:
         strength.operation = "MULTIPLY"
         links.new(soft.outputs[0], strength.inputs[0])
         links.new(ramp.outputs["Color"], strength.inputs[1])
-        links.new(strength.outputs[0], mix.inputs[0])
-        links.new(clear.outputs[0], mix.inputs[1])
-        links.new(emit.outputs[0], mix.inputs[2])
-        links.new(mix.outputs[0], out.inputs["Surface"])
+        links.new(strength.outputs[0], blend_node.inputs[0])
+        links.new(clear.outputs[0], blend_node.inputs[1])
+        links.new(emit.outputs[0], blend_node.inputs[2])
+        links.new(blend_node.outputs[0], out.inputs["Surface"])
         self.beam = make_mesh("Beam", verts, quads=quads, material=material)
+        self.beam.rotation_mode = "QUATERNION"
 
     def update(self, t):
+        since = t - LAND
         bottom = egg_bottom(t)
-        squash = math.sin((t - LAND) / 0.35 * math.pi) * 0.09 if LAND <= t < LAND + 0.35 else 0.0
-        shake = sum(math.exp(-(t - hit) * 7) * math.sin((t - hit) * 42) * 0.018 for hit in CRACK_HITS if hit <= t < BURST)
-        tremble = 0.02 * math.sin(t * 55) * float(smooth(11.2, 11.9, t)) if t < BURST else 0.0
-        self.root.location = (0, 0, bottom + EGG_HEIGHT / 2 * (1 - squash))
-        self.root.rotation_euler = (shake + tremble * 0.7, shake * 0.6 + tremble, 0)
-        self.root.scale = (1 + squash * 0.6, 1 + squash * 0.6, 1 - squash)
+        _, drift = egg_fall(t)
+        squash = math.exp(-since * 5) * math.cos(since * 14) * 0.34 if since >= 0 else 0.0
+
+        def wobble(when, size):
+            return math.exp(-(t - when) * 3.2) * math.sin((t - when) * 15) * size if t >= when else 0.0
+
+        rock = wobble(CRACK_HITS[0], 0.09) + wobble(CRACK_HITS[1], 0.12) + wobble(CRACK_HITS[2], 0.17)
+        lean = 0.24 * ease(0, 0.5, since) + math.exp(-since * 3) * math.sin(since * 9) * 0.08 if since >= 0 else 0.0
+        self.root.location = (0, -drift, bottom + EGG_HEIGHT / 2 * (1 - squash))
+        if since < 0:
+            self.root.rotation_euler = (0.5 + t * 0.26, -0.3 + t * 0.14, t * 0.33)
+        else:
+            self.root.rotation_euler = (lean * 0.5, -lean + rock, 0)
+        self.root.scale = (1 + squash * 0.7, 1 + squash * 0.7, 1 - squash)
         root_matrix = Matrix.Translation(self.root.location) @ self.root.rotation_euler.to_matrix().to_4x4() @ Matrix.Diagonal((*self.root.scale, 1))
         ground = ground_at(0, 0, LAND)
         for piece in self.pieces:
@@ -887,13 +1148,13 @@ class Egg:
             if t < BURST:
                 opening = 0.0
                 if piece["crack"] is not None and t >= piece["crack"]:
-                    opening = 0.007 + 0.016 * float(smooth(piece["crack"], BURST, t))
+                    opening = 0.007 + 0.016 * ease(piece["crack"], BURST, t)
                 obj.location = root_matrix @ Vector((rest + normal * opening).tolist())
                 obj.rotation_quaternion = self.root.rotation_euler.to_quaternion()
                 obj.scale = self.root.scale
                 continue
             obj.scale = (1, 1, 1)
-            age = t - BURST
+            age = slow_clock(t - BURST)
             start = np.array((rest[0], rest[1], rest[2] + ground + EGG_HEIGHT / 2))
             target = piece["target"]
             final_z = ground_at(target[0], target[1], t) + 0.03
@@ -911,13 +1172,16 @@ class Egg:
             obj.rotation_quaternion = rotation
         self.core.hide_render = t >= BURST + 0.04 or t < CRACK_HITS[0]
         pulse = sum(math.exp(-(t - hit) * 4) for hit in CRACK_HITS if hit <= t < BURST)
-        glow = (6 + 30 * pulse + 120 * float(smooth(10.8, BURST, t))) if CRACK_HITS[0] <= t < BURST else 0.0
+        glow = (6 + 30 * pulse + 120 * ease(CRACK_HITS[1], BURST, t)) if CRACK_HITS[0] <= t < BURST else 0.0
         flash = 900 * math.exp(-(t - BURST) * 5.5) if t >= BURST else 0.0
         self.light.data.energy = glow * 0.25 + flash
         self.light.location = (0, 0, ground + 0.5)
         self.light.hide_render = self.light.data.energy < 0.05
-        self.beam.location = (0, 0, bottom + EGG_HEIGHT * 0.5)
-        self.beam.hide_render = t >= 6.6
+        self.beam.hide_render = since >= 0
+        if since < 0:
+            trail = Vector((0, -6, fall_speed(t))).normalized()
+            self.beam.location = Vector(self.root.location) + trail * (EGG_HEIGHT * 0.62)
+            self.beam.rotation_quaternion = Vector((0, 0, 1)).rotation_difference(trail)
 
 
 class Dust:
@@ -965,8 +1229,41 @@ class Dust:
             obj.scale = (size, size, size * 0.85)
 
 
+class Birds:
+    """A small flock that breaks from the trees as the egg comes down."""
+
+    COUNT = 26
+    START, END = 5.05, 6.7
+
+    def __init__(self):
+        rng = np.random.default_rng(4)
+        self.seeds = [dict(angle=rng.uniform(0, math.tau), speed=rng.uniform(3.4, 6.8), height=rng.uniform(0, 2.2), flap=rng.uniform(12, 18),
+                           home=to_world(rng.uniform(-6, -3), rng.uniform(-4, -1))) for _ in range(self.COUNT)]
+        tris = np.arange(self.COUNT * 6).reshape(-1, 3)
+        self.obj = make_mesh("Birds", np.zeros((self.COUNT * 6, 3)), tris=tris, material=flat_material("Bird", "#fff7ee", 1.0, specular=0.1))
+
+    def update(self, t):
+        visible = self.START <= t < self.END
+        self.obj.hide_render = not visible
+        if not visible:
+            return
+        k = t - self.START
+        verts = []
+        for i, bird in enumerate(self.seeds):
+            travel = bird["speed"] * k
+            cx, sx = math.cos(bird["angle"]), math.sin(bird["angle"])
+            center = np.array((bird["home"][0] + cx * travel, bird["home"][1] + sx * travel, ground_at(*bird["home"]) + 1.1 + bird["height"] + travel * 0.55))
+            ahead = np.array((cx, sx, 0.0))
+            wing = np.array((-sx, cx, 0.0))
+            lift = math.sin(t * bird["flap"] + i) * 0.1
+            nose, tail = center + ahead * 0.12, center - ahead * 0.09
+            verts += [nose, tail, center + wing * 0.2 + (0, 0, lift), nose, center - wing * 0.2 + (0, 0, lift), tail]
+        self.obj.data.vertices.foreach_set("co", np.array(verts, dtype=np.float32).ravel())
+        self.obj.data.update()
+
+
 class Fader:
-    """A plane right in front of the lens for the white flash and the eye-opening shot."""
+    """A plane right in front of the lens for the white flashes."""
 
     def __init__(self, camera):
         material = bpy.data.materials.new("Fader")
@@ -989,87 +1286,220 @@ class Fader:
             setattr(self.plane, attr, False)
 
     def update(self, t):
-        if t < 14:
-            amount = float(track(t, [(BURST, 0.0), (BURST + 0.1, 0.92), (BURST + 0.8, 0.0)]))
-        else:
-            amount = float(track(t, [(14, 1.0), (15.8, 0.0)]))
+        amount = 0.0
+        if LAND <= t < LAND + 0.16:
+            amount = 0.42 * (1 - (t - LAND) / 0.16)
+        elif BURST <= t < POV:
+            amount = max(0.8 * (1 - clamp((t - BURST) / 0.22)), clamp((t - (POV - 0.35)) / 0.35))
+        elif POV <= t < POV + 0.35:
+            amount = 1 - (t - POV) / 0.35
         self.mix.inputs[0].default_value = amount
         self.plane.hide_render = amount <= 0.001
 
 
-# ---------------------------------------------------------------- shots
-@dataclass
-class Shot:
-    start: float
-    end: float
-    eye: Callable[[float, float], Vector]
-    look: Callable[[float, float], Vector]
-    lens: float
-    fstop: float = 0.0
-    focus: Callable[[float, float], Vector] | None = None
+class Eyelids:
+    """The hero's own lids over the waking shot: warm skin light, two blinks, then the clear sky."""
+
+    COLUMNS = 40
+    DEPTH = 0.16
+    HALF_HEIGHT = DEPTH * math.tan(math.radians(29))
+    HALF_WIDTH = HALF_HEIGHT * 16 / 9 * 1.1
+
+    def __init__(self, camera):
+        material = bpy.data.materials.new("Lids")
+        material.use_nodes = True
+        nodes, links = material.node_tree.nodes, material.node_tree.links
+        nodes.clear()
+        out = nodes.new("ShaderNodeOutputMaterial")
+        blend_node = nodes.new("ShaderNodeMixShader")
+        emit = nodes.new("ShaderNodeEmission")
+        emit.inputs["Color"].default_value = (*linear("#f6dcc6"), 1)
+        emit.inputs["Strength"].default_value = 2.6
+        clear = nodes.new("ShaderNodeBsdfTransparent")
+        mask = nodes.new("ShaderNodeVertexColor")
+        mask.layer_name = "Color"
+        links.new(mask.outputs["Color"], blend_node.inputs[0])
+        links.new(clear.outputs[0], blend_node.inputs[1])
+        links.new(emit.outputs[0], blend_node.inputs[2])
+        links.new(blend_node.outputs[0], out.inputs["Surface"])
+        columns = self.COLUMNS
+        self.x = np.linspace(-1, 1, columns)
+        rows = 3
+        index = np.arange(columns * rows * 2).reshape(2, rows, columns)
+        quads = []
+        for lid in index:
+            quads.append(np.stack((lid[:-1, :-1], lid[:-1, 1:], lid[1:, 1:], lid[1:, :-1]), axis=-1).reshape(-1, 4))
+        alpha = np.tile(np.array((1.0, 1.0, 0.0))[:, None], (2, 1, columns)).reshape(-1, 1)
+        self.obj = make_mesh("Lids", np.zeros((index.size, 3)), quads=np.concatenate(quads), colors=np.repeat(alpha, 3, axis=1), material=material)
+        self.obj.parent = camera
+        for attr in ("visible_diffuse", "visible_glossy", "visible_transmission", "visible_shadow", "visible_volume_scatter"):
+            setattr(self.obj, attr, False)
+
+    def update(self, t):
+        visible = POV <= t < SIT
+        self.obj.hide_render = not visible
+        if not visible:
+            return
+        u = t - POV
+        opening = float(smooth(0, 1, clamp((u - 0.1) / 0.7)))
+        blink = math.sin((u - 1.02) / 0.24 * math.pi) * 0.55 if 1.02 < u < 1.26 else 0.0
+        lid = max(0.0, opening - blink)
+        lid = (1 - lid) * 0.72
+        s = (self.x + 1) / 2
+        drop = lid * (0.62 * ((1 - s) ** 2 + s ** 2) + 1.25 * 2 * s * (1 - s)) * 2 * self.HALF_HEIGHT
+        band = 0.09 * self.HALF_HEIGHT * 2
+        verts = []
+        for sign in (1, -1):
+            edge = self.HALF_HEIGHT - drop
+            for y in (np.full_like(edge, self.HALF_HEIGHT * 1.1), edge + band, edge - band):
+                verts.append(np.stack((self.x * self.HALF_WIDTH, sign * y, np.full_like(edge, -self.DEPTH)), axis=1))
+        self.obj.data.vertices.foreach_set("co", np.concatenate(verts).astype(np.float32).ravel())
+        self.obj.data.update()
 
 
-def move(a, b):
-    a, b = Vector(a), Vector(b)
-    return lambda u, t: a.lerp(b, float(smooth(0, 1, u)))
+# ---------------------------------------------------------------- shots (the v1 film's cameras)
+def lens_from_fov(vertical_degrees):
+    horizontal = 2 * math.atan(math.tan(math.radians(vertical_degrees) / 2) * 16 / 9)
+    return 18 / math.tan(horizontal / 2)
 
 
-def at(point):
-    point = Vector(point)
-    return lambda u, t: point
+def shake(t, when, size, life=0.75):
+    k = t - when
+    if k < 0 or k > life:
+        return Vector((0, 0, 0))
+    a = (1 - k / life) ** 2 * size
+    return Vector((math.sin(k * 79) * a, math.sin(k * 63 + 1) * a * 0.75, math.sin(k * 71 + 2) * a))
 
 
-def hero_point(offset):
-    offset = Vector(offset)
-
-    def point(u, t):
-        state = hero_state(t)
-        return Vector((state["x"], state["y"], ground_at(state["x"], state["y"], t))) + offset
-    return point
+def view(eye, look, fov, focus=None, fstop=0.0):
+    return dict(eye=eye, look=look, fov=fov, focus=focus, fstop=fstop)
 
 
-def dog_point(offset):
-    offset = Vector(offset)
-
-    def point(u, t):
-        state = dog_state(t)
-        return Vector((state["x"], state["y"], ground_at(state["x"], state["y"], t))) + offset
-    return point
+def dog_row(t):
+    return row_at(DOG_PATH, t)
 
 
-def egg_center(offset=(0, 0, 0)):
-    offset = Vector(offset)
-    return lambda u, t: Vector((0, 0, egg_bottom(t) + EGG_HEIGHT / 2)) + offset
+def hero_row(t):
+    return row_at(HERO_PATH, t)
 
 
-def blend(a, b, start, end):
-    return lambda u, t: a(u, t).lerp(b(u, t), float(smooth(start, end, t)))
+def egg_position(t):
+    _, drift = egg_fall(t)
+    return Vector((0, -drift, egg_bottom(t) + EGG_HEIGHT / 2))
 
 
-def waking_focus(u, t):
-    far = 0.15 + 12 * float(smooth(0.2, 0.8, u)) ** 2
-    return Vector((0, far, 0.46 + far))
+def shot_fall(t):
+    k = ease(0, SKY, t)
+    distance = mix(1.22, 7.4, 1 - (1 - t / SKY) ** 2.6)
+    a, up = mix(0.72, 1.55, k), mix(-0.1, -1.7, k)
+    egg = egg_position(t)
+    return view(egg + Vector((math.cos(a) * distance, math.sin(a) * distance, -distance * mix(0.5, 0.62, k))), egg + Vector((0, 0, mix(-0.02, 0.1, k))), mix(30, 34, k))
 
 
-SHOTS = [
-    Shot(0, 3.4, egg_center((2.4, -3.4, -2.2)), egg_center((0, 0, 0.75)), 40),
-    Shot(3.4, 6.6, lambda u, t: egg_center((2.0, -3.2, 5.5 + 7 * u))(u, t), egg_center(), 36),
-    Shot(6.6, 8.6, move((-1.2, -4.6, 0.5), (-1.05, -4.3, 0.52)), move((0, 0, 0.72), (0, 0, 0.62)), 40),
-    Shot(8.6, 10.7, move((-1.6, -3.0, 0.5), (-1.15, -2.3, 0.54)), move((0, 0, 0.62), (0, 0, 0.64)), 45, 7.0, at((0, -0.3, 0.6))),
-    Shot(10.7, 11.9, move((-0.56, -1.5, 0.62), (-0.46, -1.24, 0.66)), move((-0.05, 0, 0.66), (-0.05, 0, 0.7)), 50, 7.0, at((-0.08, -0.4, 0.65))),
-    Shot(11.9, 14, move((-1.3, -3.1, 0.62), (-1.55, -3.75, 0.78)), move((0, 0, 0.5), (0, 0, 0.42)), 38),
-    Shot(14, 16.4, at((0, 0, 0.46)), move((0.5, 2, 2.3), (-0.3, 2, 2.8)), 28, 0.35, waking_focus),
-    Shot(16.4, 21.8, move((-1.0, -1.85, 0.56), (-0.8, -1.5, 0.48)), at((0, 0.05, 0.3)), 50, 7.0, at((0, 0, 0.3))),
-    Shot(21.8, 24, move((0.32, -1.0, 0.3), (0.3, -0.9, 0.31)), dog_point((0, 0, 0.14)), 70, 8.0, dog_point((0, 0, 0.15))),
-    Shot(24, 28, move((0.58, -1.15, 0.52), (0.5, -1.05, 0.44)), lambda u, t: dog_point((0, 0, 0.2))(u, t).lerp(Vector((0, 0, 0.28)), 0.42), 50, 8.0, dog_point((0, 0, 0.18))),
-    Shot(28, 34.5, move((-1.42, 0.2, 0.36), (-1.25, 0.26, 0.38)), move((0, 0.27, 0.27), (0, 0.27, 0.3)), 45, 8.0, at((0, 0.26, 0.28))),
-    Shot(34.5, 40, move((0.62, -1.32, 0.42), (0.58, -1.1, 0.4)), move((0, 0.5, 0.26), (0, 1.1, 0.3)), 45, 8.0, hero_point((0, 0, 0.3))),
-    Shot(40, 46, hero_point((-1.2, -1.15, 0.42)), hero_point((0.12, 0.42, 0.3)), 40, 8.0, hero_point((0, 0, 0.3))),
-    Shot(46, 51.42,
-         blend(hero_point((0.3, -1.05, 0.28)), hero_point((0.7, -6.0, 2.0)), 46.4, 50.0),
-         blend(hero_point((0, 1.0, 0.55)), at((-1.0, 34, 1.4)), 46.4, 49.6),
-         30),
-]
+def shot_sky(t):
+    eye, egg = on_ground(-27, 1.5, 0.5, t), egg_position(t)
+    look = on_ground(0, 0, 0, t)
+    look.z = max(egg.z * 0.82, eye.z + 1.6)
+    return view(eye, look.lerp(egg, 0.25), 38)
+
+
+def shot_hit(t):
+    # The camera starts further back and follows the egg down, so it is seen all the way in.
+    rest = on_ground(0, 0, 0.62, t)
+    egg = egg_position(t)
+    look = Vector((egg.x * 0.5, rest.y + (egg.y - rest.y) * 0.5, max(rest.z, egg.z - 0.2)))
+    k = ease(HIT, LAND, t)
+    eye = on_ground(mix(-9.0, -3.1, k), -1.05, mix(0.7, 0.2, k), t)
+    return view(eye + shake(t, LAND, 0.1), look, 38)
+
+
+def shot_settle(t):
+    k = ease(SETTLE, CRACK, t)
+    eye = on_ground(mix(-3.5, -2.55, k), mix(0.74, 0.5, k), mix(0.56, 0.48, k), t) + shake(t, CRACK_HITS[0], 0.012, 0.5)
+    return view(eye, on_ground(0, 0, 0.53, t), 30, mix(3.5, 2.6, k), 7.0)
+
+
+def shot_crack(t):
+    k = ease(CRACK, BURST, t)
+    eye = on_ground(mix(-1.38, -1.2, k), mix(0.42, 0.34, k), 0.76, t) + shake(t, CRACK_HITS[2], 0.02, 0.5)
+    return view(eye, on_ground(-0.42, 0.12, 0.76, t), 34, 0.82, 7.0)
+
+
+def shot_burst(t):
+    k = ease(BURST, POV, t)
+    eye = on_ground(mix(-2.7, -3.25, k), mix(0.75, 0.95, k), mix(0.6, 0.72, k), t) + shake(t, BURST, 0.05, 0.5)
+    return view(eye, on_ground(0, 0, mix(0.7, 0.92, k), t), 42)
+
+
+def shot_pov(t):
+    k = ease(POV, SIT, t)
+    u = (t - POV) / (SIT - POV)
+    return view(on_ground(0, 0, 0.4, t), on_ground(mix(-1.1, -1.8, k), mix(0.2, -0.32, k), mix(4.8, 1.6, k), t), 58, 0.15 + 12 * float(smooth(0.2, 0.8, u)) ** 2, 0.18)
+
+
+def shot_sit(t):
+    k = ease(SIT, RISE, t)
+    a, d = mix(-0.42, 0.28, k), mix(1.66, 1.4, k)
+    return view(on_ground(-math.cos(a) * d, math.sin(a) * d, 0.3, t), on_ground(0, 0, 0.31, t), 30, d, 7.0)
+
+
+def shot_rise(t):
+    k = ease(RISE, DOG_CREST, t)
+    return view(on_ground(mix(-2.1, -2.3, k), -0.62, mix(0.42, 0.38, k), t), on_ground(0, 0, mix(0.28, 0.34, k), t), 28, 2.2, 7.0)
+
+
+def shot_crest(t):
+    run = ease(24.2, 26, t)
+    return view(on_ground(-2.5, 0.14, 0.36, t), on_ground(mix(3.2, 1.6, run), 0.28, mix(0.75, 0.28, run), t), mix(17, 25, run), mix(8, 3, run), 8.0)
+
+
+def shot_nose(t):
+    f, r = dog_row(t)[:2]
+    k = ease(26, 30, t)
+    eye, look = on_ground(f + mix(-0.5, -0.32, k), r + mix(0.58, 0.45, k), 0.15, t), on_ground(f + 0.1, r + 0.02, 0.22, t)
+    return view(eye, look, 34, (look - eye).length - 0.05, 7.0)
+
+
+def shot_circle(t):
+    k = ease(30, 34, t)
+    a, d = mix(2.7, 0.2, k), mix(1.65, 1.26, k)
+    return view(on_ground(math.cos(a) * d, math.sin(a) * d, 0.33, t), on_ground(0, 0, 0.3, t), 33, d, 7.0)
+
+
+def shot_photo(t):
+    k = ease(34, 36.2, t)
+    f, r = dog_row(t)[:2]
+    eye, look = on_ground(f - mix(1.02, 0.84, k), r + 0.02, 0.2, t), on_ground(f + 0.03, r, 0.13, t)
+    return view(eye, look, 30, (look - eye).length - 0.02, 7.0)
+
+
+def shot_lead(t):
+    k = ease(36.2, 39.8, t)
+    hf = hero_row(t)[0]
+    df, dr = dog_row(t)[:2]
+    eye, target = on_ground(hf - 1.0, -0.42, 0.34, t), on_ground(df, dr, 0.2, t)
+    return view(eye, on_ground(mix(0.9, df, 0.76), dr * 0.5, mix(0.25, 0.2, k), t), mix(33, 28, k), (target - eye).length, 8.0)
+
+
+def shot_walk(t):
+    hf, hr = hero_row(t)[:2]
+    mid = (hf + dog_row(t)[0]) / 2
+    eye, look = on_ground(mid - 0.25, hr - 2.75, 0.46, t), on_ground(mid + 0.1, hr, 0.24, t)
+    return view(eye, look, 26, (look - eye).length, 8.0)
+
+
+def shot_reveal(t):
+    x, y, _, _ = actor_place(HERO_PATH, t)
+    hero = Vector((x, y, ground_at(x, y, t)))
+    k = ease(REVEAL + 0.4, REVEAL + 4.6, t)
+    eye = (hero + Vector((0.3, -1.05, 0.28))).lerp(hero + Vector((0.7, -6.0, 2.0)), k)
+    look = (hero + Vector((0, 1.0, 0.55))).lerp(Vector((-1.0, 34, 3.4)), ease(REVEAL + 0.4, REVEAL + 4.2, t))
+    return view(eye, look, 26)
+
+
+SHOTS = [(SKY, shot_fall), (HIT, shot_sky), (SETTLE, shot_hit), (CRACK, shot_settle), (BURST, shot_crack), (POV, shot_burst), (SIT, shot_pov),
+         (RISE, shot_sit), (DOG_CREST, shot_rise), (SNIFF_CUT, shot_crest), (CIRCLE, shot_nose), (FLOP, shot_circle), (LEAD, shot_photo),
+         (WALK, shot_lead), (REVEAL, shot_walk), (DURATION + 1, shot_reveal)]
 
 
 def build_camera():
@@ -1082,19 +1512,17 @@ def build_camera():
     camera.data.sensor_width = 36
 
     def update(t):
-        shot = next((s for s in SHOTS if s.start <= t < s.end), SHOTS[-1])
-        u = (t - shot.start) / (shot.end - shot.start)
-        eye = shot.eye(u, t).copy()
-        eye.z = max(eye.z, ground_at(eye.x, eye.y, t) + 0.12)
-        eye += Vector((math.sin(t * 1.3) * 0.004, math.sin(t * 0.9 + 1) * 0.003, math.sin(t * 1.7 + 2) * 0.004))
+        shot = next(function for end, function in SHOTS if t < end)(t)
+        eye = shot["eye"].copy()
+        if t >= SKY:
+            eye.z = max(eye.z, ground_at(eye.x, eye.y, t) + 0.1)
         camera.location = eye
-        camera.rotation_quaternion = (shot.look(u, t) - eye).to_track_quat("-Z", "Y")
-        camera.data.lens = shot.lens
-        camera.data.dof.use_dof = shot.fstop > 0
-        if shot.fstop > 0:
-            camera.data.dof.aperture_fstop = shot.fstop
-            target = shot.focus(u, t) if shot.focus else shot.look(u, t)
-            camera.data.dof.focus_distance = max((target - eye).length, 0.05)
+        camera.rotation_quaternion = (shot["look"] - eye).to_track_quat("-Z", "Y")
+        camera.data.lens = lens_from_fov(shot["fov"])
+        camera.data.dof.use_dof = shot["fstop"] > 0
+        if shot["fstop"] > 0:
+            camera.data.dof.aperture_fstop = shot["fstop"]
+            camera.data.dof.focus_distance = max(shot["focus"], 0.05)
     return camera, update
 
 
@@ -1173,16 +1601,19 @@ def main():
     dog = Dog()
     egg = Egg()
     dust = Dust()
+    birds = Birds()
     camera, update_camera = build_camera()
     update_grass = build_grass(lambda: camera.location)
     fader = Fader(camera)
+    lids = Eyelids(camera)
 
     def update_visibility(t):
-        village.hide_render = t < 46
+        village.hide_render = t < REVEAL
         for child in village.objects:
-            child.hide_render = t < 46
+            child.hide_render = t < REVEAL
 
-    updaters = [update_camera, update_ground, update_grass, update_visibility, hero.update, dog.update, egg.update, dust.update, fader.update]
+    # Actors first: the cameras read where they are.
+    updaters = [update_ground, update_visibility, hero.update, dog.update, egg.update, dust.update, birds.update, update_camera, update_grass, fader.update, lids.update]
     render_frames(args, updaters)
 
 
