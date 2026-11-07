@@ -83,7 +83,7 @@ type Reflection = {
 
 네 사람이 한 명씩 말한다. NPC마다 변화가 가장 큰 축을 하나 고른다. 우선순위는 `turned`, `wavering`, `deepened`, `steady`이고, 같으면 `themeAxes` 순서를 따른다.
 
-대사는 `content/ink/{ko,en}/last_walk.ink`의 `walk_<npc>_<axis>_<shift>` 노트에 둔다. 8개 축 × 4단계 × 2개 언어로 64개 노트다.
+대사는 `content/ink/{ko,en}/last_walk.ink`의 `walk_<npc>_<axis>_<shift>` 노트에 둔다. 8개 축 × 4단계 × 2개 언어로 64개 노트이고, 도입 노트 `walk_intro`가 언어별로 하나씩 더 있다.
 
 대사 규칙은 다음과 같다.
 

@@ -37,11 +37,15 @@ function topValues(input: Input, data: Data): string[] {
   return [...counts].sort(([, a], [, b]) => b.count - a.count || b.last - a.last).slice(0, 3).map(([value]) => value);
 }
 
+export function npcChanges(input: Input, data: Data): Record<string, NpcChange[]> {
+  const { npcs } = progress(input, data);
+  return Object.fromEntries(data.npcs.map(npc => [npc.id, npc.themeAxes.map(axis => ({ axis, shift: shiftOf(npc.start[axis], npcs[npc.id]!.s[axis], data.rules.npcStep) }))]));
+}
+
 export function reflection(input: Input, type: string, data: Data): Reflection {
-  const { npcs, s } = progress(input, data);
-  const npcChanges = Object.fromEntries(data.npcs.map(npc => [npc.id, npc.themeAxes.map(axis => ({ axis, shift: shiftOf(npc.start[axis], npcs[npc.id]!.s[axis], data.rules.npcStep) }))]));
+  const { s } = progress(input, data);
   const moments = mainAxes.map((axis, index) => momentFor(axis, type[index] === "OHVG"[index] ? 1 : -1, Math.abs(s[axis]) < data.rules.tieThreshold, input, data));
-  return { npcChanges, moments, topValues: topValues(input, data) };
+  return { npcChanges: npcChanges(input, data), moments, topValues: topValues(input, data) };
 }
 
 export function walkKnot(npcId: string, changes: NpcChange[]): string {
