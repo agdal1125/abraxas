@@ -1,9 +1,9 @@
 -> walk_intro
 
 === walk_intro ===
-Evening settles over the plaza, and today's faces are all there.
-Demi walks ahead, then looks back.
-You: Let's say hello on the way.
+Today's faces have gathered in the plaza.
+Demi watches quietly beside you.
+You: Let's say hello for a moment.
 -> END
 
 === walk_lumi_A_deepened ===
