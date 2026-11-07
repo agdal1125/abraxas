@@ -14,3 +14,7 @@
 .ending-egg{position:absolute;left:50%;top:50%;width:120px;height:160px;transform:translate(-50%,-50%);filter:drop-shadow(0 0 24px #fff);pointer-events:none}.ending-egg span{position:absolute;top:0;width:50%;height:100%;background:#fffaf0;animation:egg-open .9s ease-out forwards}.ending-egg span:first-child{left:0;border-radius:100% 0 0 100%;transform-origin:bottom left}.ending-egg span:last-child{right:0;border-radius:0 100% 100% 0;transform-origin:bottom right;animation-name:egg-open-right}@keyframes egg-open{to{transform:rotate(-25deg) translateX(-12px);opacity:0}}@keyframes egg-open-right{to{transform:rotate(25deg) translateX(12px);opacity:0}}@media (prefers-reduced-motion:reduce){.ending-egg span{animation:none}}
 .choices button[data-action^="confess-target-"]{width:100%;max-width:100%}
 @media (max-height:360px){.overlay.result .panel{padding:10px 14px;gap:10px}.result .result-intro h2{font-size:22px}.result .result-details ul{font-size:13px}.result .result-details .disclaimer{font-size:11px}}
+.overlay.dialogue.has-choices[data-scene="result-card"]{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:minmax(0,1fr);align-content:stretch;align-items:stretch}
+.overlay.dialogue.has-choices[data-scene="result-card"] .panel{max-height:100%;overflow-y:auto}
+.overlay.dialogue.has-choices[data-scene="result-card"] .panel p{line-height:1.45}
+.overlay.dialogue.has-choices[data-scene="result-card"] .choices{width:auto;max-height:100%;align-content:end}
