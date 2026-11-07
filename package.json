@@ -10,7 +10,8 @@
     "setup": "node scripts/link-agent-config.mjs && node scripts/doctor.mjs",
     "doctor": "node scripts/doctor.mjs",
     "check:scoring": "node scripts/check-scoring.mjs",
-    "e2e:play": "node scripts/e2e-play.mjs"
+    "e2e:play": "node scripts/e2e-play.mjs",
+    "deploy:staging": "node scripts/deploy-staging.mjs"
   },
   "devDependencies": {
     "firebase-tools": "^15.34.2"
