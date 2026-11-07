@@ -2,6 +2,7 @@ import type { Story } from "inkjs";
 import { data, translations } from "../content";
 import { episodeStage, nextSegment } from "../core/flow";
 import { npcMatches, score, type Input } from "../core/scoring";
+import { npcChanges, walkKnot } from "../core/reflection";
 import type { Village } from "../scenes/village";
 import { Controls } from "../input/controls";
 import type { VillageInput } from "../input/movement";
@@ -528,11 +529,20 @@ export class Game {
       this.overlay.querySelectorAll<HTMLElement>(`[data-item-id^='${action}-']`).forEach(button => { button.dataset.action = button.dataset.itemId; delete button.dataset.itemId; });
     });
   }
+  private confirmedInput(): Input {
+    return this.snapshot ? { playId: this.snapshot.playId, log: this.snapshot.answers } : { playId: this.state.playId, log: this.state.log };
+  }
+  private async lastWalk(): Promise<void> {
+    const changes = npcChanges(this.confirmedInput(), data);
+    await this.narrative("last_walk", "walk_intro");
+    for (const id of ids) await this.narrative("last_walk", walkKnot(id, changes[id]!));
+  }
   private async ending(): Promise<void> {
     this.village.setStoryScene("confession"); this.village.setDemiMode("sit");
     if (!this.demiRevealed) await this.narrative("confession", "demi_reveal");
     let confession = this.snapshot?.confession ?? this.state.confession;
     if (!confession) {
+      await this.lastWalk();
       await this.narrative("confession", "confession_intro");
       const npcId = await this.selectEnding(this.ui.confession.targetPrompt, ["lumi", "moka", "echo", "or"] as const, npc => this.ui.npc[npc], "confess-target");
       const reason = await this.selectEnding(this.ui.confession.reasonPrompt, ["similar", "drawn", "both", "unsure"] as const, value => this.ui.confession.reason[value], "confess-reason");
