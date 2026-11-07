@@ -102,7 +102,7 @@ export class Game {
       const music = document.createElement("p"); music.textContent = this.ui.hud.creditsMusic; card.append(music);
       const license = document.createElement("a"); license.href = "http://creativecommons.org/licenses/by/3.0/"; license.target = "_blank"; license.rel = "noopener noreferrer"; license.textContent = "CC BY 3.0"; card.append(license);
       const sounds = document.createElement("p"); sounds.textContent = this.ui.hud.creditsSounds; card.append(sounds);
-      const list = document.createElement("a"); list.href = "cinematics/prelude-v2-credits.txt"; list.target = "_blank"; list.rel = "noopener noreferrer"; list.textContent = this.ui.hud.creditsList; card.append(list);
+      const list = document.createElement("a"); list.href = "cinematics/prelude-v3-credits.txt"; list.target = "_blank"; list.rel = "noopener noreferrer"; list.textContent = this.ui.hud.creditsList; card.append(list);
       add(this.ui.hud.back, () => this.settings());
     }
     else {
