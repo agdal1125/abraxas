@@ -10,7 +10,7 @@ export default defineConfig({
   define: { __CONTENT_VERSION__: JSON.stringify(version) },
   server: {
     fs: { allow: [".."] },
-    proxy: { "/v1": "http://127.0.0.1:8080" },
+    proxy: { "/v1": process.env.ABRAXAS_API_ORIGIN || "http://127.0.0.1:8080" },
     port: 5173,
     strictPort: false,
   },
