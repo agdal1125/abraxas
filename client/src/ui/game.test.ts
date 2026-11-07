@@ -70,11 +70,22 @@ test("a confirmed non-NPC choice shows its thinking reaction", () => {
 
 test("result cards use the server result without displaying its codes or numbers", () => {
   const panel = vi.fn();
-  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko", log: [] }, snapshot: { confession: { npcId: "lumi", reason: "both", outcome: "waiting" }, result: { type: "OHVG", modifier: "today", npcTypes: { lumi: "ILKC", moka: "OHKC", echo: "ILVC", or: "ILKG" } }, festivalCompanion: "moka" }, panel, overlay: { querySelectorAll: () => [] } });
+  const answers = [...data.items, ...data.tiebreakers].map(item => ({ id: item.id, pick: "a" }));
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko", log: [] }, snapshot: { playId: "p", answers, confession: { npcId: "lumi", reason: "both", outcome: "waiting" }, result: { type: "OHVG", modifier: "today", npcTypes: { lumi: "ILKC", moka: "OHKC", echo: "ILVC", or: "ILKG" } }, festivalCompanion: "moka" }, panel, overlay: { querySelectorAll: () => [] } });
   for (let card = 0; card < 3; card++) game.result(card);
   for (const call of panel.mock.calls) expect(call[0]).not.toMatch(/OHVG|ILKC|\d/);
   expect(panel.mock.calls[0]![0]).toContain(translations("ko").ui.result.first);
   expect(panel.mock.calls[1]![0]).toContain(translations("ko").ui.result.reflection.both);
+  expect(panel.mock.calls[0]![0]).toContain(translations("ko").ui.result.values);
+  const momentsButton = panel.mock.calls[0]![1].find((button: unknown[]) => button[2] === "result-moments");
+  const pickText = data.items.find(item => item.axis === "A")!.picks.a!.text;
+  const shown = panel.mock.calls.slice(0, 3).map(call => call[0]).join("\n");
+  momentsButton[1]();
+  const moments = panel.mock.calls[3]![0];
+  expect(moments).toContain("‘");
+  expect(moments).not.toMatch(/OHVG|ILKC|\d/);
+  expect(shown).not.toContain(pickText);
+  expect(shown).not.toContain("‘");
 });
 
 test("resuming before the name was saved asks for it again", async () => {
