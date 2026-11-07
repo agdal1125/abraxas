@@ -38,3 +38,15 @@ it("whitens only the player geometry and keeps shared materials intact", () => {
   expect(npc.geometry.getAttribute("color").getX(0)).toBeCloseTo(.2);
   expect(player.material).toBe(npc.material);
 });
+
+it("has no collar and stays a light mesh for phones", () => {
+  const dog = new Demi({ x: 0, z: 0 });
+  let triangles = 0;
+  dog.object.traverse(child => {
+    if (!(child instanceof THREE.Mesh)) return;
+    expect(child.geometry).not.toBeInstanceOf(THREE.TorusGeometry);
+    const geometry = child.geometry as THREE.BufferGeometry;
+    triangles += (geometry.index?.count ?? geometry.getAttribute("position").count) / 3;
+  });
+  expect(triangles).toBeLessThan(3000);
+});

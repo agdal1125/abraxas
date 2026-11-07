@@ -45,7 +45,8 @@
 - [x] T018 환경 각진 저폴리 전환(#67, 심부름 소품·길 연결 후속 PR): 환경 자산, 지형, 조명, 심부름 소품. 사람 승인 후 병합
 - [x] 오프닝 영상 재제작: client/public/cinematics/prelude-v2.mp4 (51초, 720p, 12.4MiB). Blender Cycles, 원본 assets/source/cinematics/prelude-v2/, 렌더 scripts/render-prelude.mjs. 소리는 v1 그대로
 - [x] 오프닝 영상 v3: client/public/cinematics/prelude-v3.mp4 (51초, 720p, 12.5MiB). 흐름 v1, 그림 v2, 새 저폴리 강아지, 제목 v1 글꼴. 원본 assets/source/cinematics/prelude-v3, v1 원본 저장소 agdal1125/abraxas-opening
-- [ ] 다음: 게임 안 데미를 새 강아지 디자인으로 맞춤, 오프닝 실기기 재생 확인
+- [x] 게임 속 데미를 영상 강아지 설계로 교체, 목줄 제거
+- [ ] 다음: 오프닝과 새 데미를 실기기와 실제 플레이 화면에서 확인
 - [ ] 다음: 인물 표현을 환경에 맞출지, 실기기 성능, 소리·챕터별 빛 변화(정책 P4)
 - [x] 대사 글자 17px, 대사 글꼴 미리 받기(#66), 그래픽·몰입 정책(#65)
 
