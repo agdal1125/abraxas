@@ -16,7 +16,7 @@
     "check:size": "node scripts/check-size.mjs"
   },
   "dependencies": {
-    "firebase": "^13.1.0",
+    "firebase": "^13.2.0",
     "inkjs": "2.4.0",
     "three": "0.187.0"
   },
