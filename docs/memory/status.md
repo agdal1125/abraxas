@@ -49,6 +49,10 @@
 - [ ] 다음: 오프닝과 새 데미를 실기기와 실제 플레이 화면에서 확인
 - [ ] 다음: 인물 표현을 환경에 맞출지, 실기기 성능, 소리·챕터별 빛 변화(정책 P4)
 - [x] 대사 글자 17px, 대사 글꼴 미리 받기(#66), 그래픽·몰입 정책(#65)
+- [x] 스테이징 배포 설정: Hosting `/v1` 연결, CSP·보안 헤더, 배포 스크립트 `npm run deploy:staging`, uid당 분당 300회 제한. 절차 docs/design/staging-deploy.md. 실제 배포는 아직 안 함
+- [x] Firebase 프로젝트 `abraxas-staging` 생성: 웹 앱 등록, Firestore `asia-northeast3`. 결제 미연결이라 Cloud Run 배포 전 단계에서 멈춤
+- [ ] 진행 중: cloudflared 임시 터널로 실기기 확인(비용 0원, 개발용 인증·메모리 저장, 이 PC가 켜져 있어야 함)
+- [ ] 다음: 실기기 확인 뒤 사람이 Blaze 연결, 익명 인증·reCAPTCHA v3·App Check 등록, `.env.staging` 작성 후 스테이징 배포
 
 ## 열린 질문
 

@@ -48,6 +48,7 @@ type PlayConfig struct {
 	Auth                 TokenVerifier
 	AppCheck             AppCheckVerifier
 	AllowMissingAppCheck bool
+	RequestsPerMinute    int
 }
 
 var uuidPattern = regexp.MustCompile(`^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$`)
@@ -60,6 +61,7 @@ func NewPlayRouter(logger *slog.Logger, c PlayConfig) http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /healthz", handleHealthz)
 	h := &playHandler{c}
+	limiter := newUIDRateLimiter(c.RequestsPerMinute)
 	protect := func(next http.HandlerFunc) http.Handler {
 		api := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if c.AppCheck == nil {
@@ -69,6 +71,11 @@ func NewPlayRouter(logger *slog.Logger, c PlayConfig) http.Handler {
 				}
 			} else if err := c.AppCheck.VerifyAppCheck(r.Context(), r.Header.Get("X-Firebase-AppCheck")); err != nil {
 				WriteError(w, 403, "app_check_failed")
+				return
+			}
+			if uid, _ := UIDFromContext(r.Context()); !limiter.allow(uid) {
+				w.Header().Set("Retry-After", "60")
+				WriteError(w, 429, "rate_limited")
 				return
 			}
 			next.ServeHTTP(w, r)

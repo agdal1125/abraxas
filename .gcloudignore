@@ -1,0 +1,8 @@
+# Upload only what server/Dockerfile copies. Without this, Cloud Build would receive
+# the art sources and local worktrees.
+/*
+!/server/
+!/content/
+/content/*
+!/content/scoring/
+!/content/quests/
