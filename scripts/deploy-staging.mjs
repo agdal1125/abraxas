@@ -48,7 +48,7 @@ function webConfig(project) {
   return config;
 }
 
-function buildClient(project, siteKey, version) {
+function buildClient(project, siteKey) {
   const config = webConfig(project);
   const env = {
     VITE_FIREBASE_API_KEY: config.apiKey,
@@ -57,7 +57,6 @@ function buildClient(project, siteKey, version) {
     VITE_FIREBASE_APP_ID: config.appId,
     VITE_FIREBASE_APP_CHECK_SITE_KEY: siteKey
   };
-  console.log(`Client content version: ${version}`);
   run("npm", ["--prefix", "client", "run", "build"], { env });
   run("npm", ["--prefix", "client", "run", "check:size"]);
 }
@@ -106,7 +105,7 @@ const { project, siteKey } = loadSettings();
 const version = contentVersion(root);
 requireCleanTree();
 enableServices(project);
-buildClient(project, siteKey, version);
+buildClient(project, siteKey);
 ensureRepository(project);
 const serviceAccount = ensureServiceAccount(project);
 const image = buildImage(project);
