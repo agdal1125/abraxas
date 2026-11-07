@@ -5,6 +5,15 @@
     "start": "Start",
     "language": "한국어"
   },
+  "intent": {
+    "text": "Where you walk and what you say\ntell others who you are before your name does.\nStay a while, and go where your heart leads.",
+    "prompt": "Tap the screen to continue"
+  },
+  "howTo": {
+    "move": "Drag the screen to walk",
+    "examine": "Tap people and things to look closer",
+    "choose": "Visit the villagers, hear their requests, and choose.\nYou can't take a choice back, but none of them is wrong."
+  },
   "installGuide": {
     "button": "Play full screen",
     "close": "Close",
@@ -122,6 +131,6 @@
   "hud": {
     "goal": { "hub": "Find someone to visit in the village", "character": "Find the person waiting for you", "quest": "Find the villager who needs help", "return": "Go back and meet them again", "interlude": "Take a quiet moment by the lake", "festival": "Head to the plaza", "gate": "Head to the Gate of Memory" },
     "settings": "Settings", "close": "Close", "language": "Language", "largeText": "Large text", "on": "On", "off": "Off", "restart": "Start over", "confirm": "Erase your progress and start over?", "cancel": "Cancel", "share": "Share",
-    "credits": "Credits", "creditsMusic": "Music: The Day We Smiled (60s Edit) — HoneyTune, Internet Archive", "creditsSounds": "Sound effects use CC0 materials.", "creditsList": "Full sound effects list", "back": "Back"
+    "howTo": "How to play", "credits": "Credits", "creditsMusic": "Music: The Day We Smiled (60s Edit) — HoneyTune, Internet Archive", "creditsSounds": "Sound effects use CC0 materials.", "creditsList": "Full sound effects list", "back": "Back"
   }
 }
