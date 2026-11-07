@@ -179,6 +179,10 @@ export class Village {
     const rect = this.renderer.domElement.getBoundingClientRect();
     return { x: rect.left + (point.x + 1) * rect.width / 2, y: rect.top + (1 - point.y) * rect.height / 2, onScreen: Math.abs(point.x) <= 1 && Math.abs(point.y) <= 1 && Math.abs(point.z) <= 1 };
   }
+  mapMarkers(ids: string[]): { player: Vec2; targets: Vec2[] } {
+    const { x, z } = this.player.position;
+    return { player: { x, z }, targets: ids.flatMap(id => { const target = this.target(id); return target ? [{ x: target.x, z: target.z }] : []; }) };
+  }
   setAvailable(ids: string[]): void { this.available = new Set(ids); for (const [id, actor] of this.actors) actor.marker.visible = this.available.has(id) && (this.enabled || id !== this.speaker); }
   setMokaView(view: MokaView | null): void {
     this.mokaView = view;

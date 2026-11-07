@@ -128,6 +128,7 @@
       "turned": "At first: {from}. Now closer to this: {to}."
     }
   },
+  "map": { "open": "Map", "title": "Village map", "here": "You are here", "target": "Places to go", "zones": { "plaza": "Plaza", "bakery": "Bakery", "library": "Library", "smithy": "Smithy", "lake": "Lakeside", "entrance": "Entrance", "gate": "Memory Gate" } },
   "hud": {
     "goal": { "hub": "Find someone to visit in the village", "character": "Find the person waiting for you", "quest": "Find the villager who needs help", "return": "Go back and meet them again", "interlude": "Take a quiet moment by the lake", "festival": "Head to the plaza", "gate": "Head to the Gate of Memory" },
     "settings": "Settings", "close": "Close", "language": "Language", "largeText": "Large text", "on": "On", "off": "Off", "restart": "Start over", "confirm": "Erase your progress and start over?", "cancel": "Cancel", "share": "Share",

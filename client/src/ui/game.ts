@@ -1,4 +1,5 @@
 import { showIntent, showMoveHint } from "./intro-hints";
+import { mapLegend, renderVillageMap } from "./village-map";
 import { currentDisplayEnv, installGuideFor, openInstallGuide } from "./install-guide";
 import type { Story } from "inkjs";
 import { data, translations } from "../content";
@@ -66,6 +67,7 @@ export class Game {
   private noticeTimer = 0;
   private goal = document.createElement("div");
   private direction = document.createElement("div");
+  private mapButton = document.createElement("button");
   private settingsButton = document.createElement("button");
   private settingsMenu = document.createElement("div");
   private exploring = false;
@@ -79,7 +81,8 @@ export class Game {
     this.notice.className = "world-notice"; this.notice.setAttribute("role", "status"); app.append(this.notice);
     this.goal.className = "hud-goal"; this.goal.hidden = true; this.direction.className = "hud-direction"; this.direction.hidden = true; this.direction.setAttribute("aria-hidden", "true");
     this.settingsButton.className = "hud-settings-button"; this.settingsButton.textContent = "⚙︎"; this.settingsButton.addEventListener("click", () => this.settings());
-    this.settingsMenu.className = "hud-menu"; this.settingsMenu.hidden = true; app.append(this.goal, this.direction, this.settingsButton, this.settingsMenu);
+    this.mapButton.className = "hud-map-button"; this.mapButton.hidden = true; this.mapButton.addEventListener("click", () => this.openMap());
+    this.settingsMenu.className = "hud-menu"; this.settingsMenu.hidden = true; app.append(this.goal, this.direction, this.mapButton, this.settingsButton, this.settingsMenu);
     let saved: Save | null = null; try { saved = JSON.parse(localStorage.getItem(storageKey) || "null") as Save | null; } catch { /* Storage may be unavailable. */ }
     this.localSave = saved?.playId && Array.isArray(saved.log) && Array.isArray(saved.completed) ? saved : null;
     this.state = { lang: this.localSave?.lang ?? "ko", playId: this.newId(), log: [], completed: [], segment: "title" };
@@ -99,7 +102,7 @@ export class Game {
     const card = document.createElement("div"); card.className = "hud-menu-card"; card.setAttribute("role", "dialog"); card.setAttribute("aria-modal", "true"); card.setAttribute("aria-label", page === "credits" ? this.ui.hud.credits : page === "howTo" ? this.ui.hud.howTo : this.ui.hud.settings);
     const heading = document.createElement("h2"); heading.textContent = page === "confirm" ? this.ui.hud.confirm : page === "credits" ? this.ui.hud.credits : page === "howTo" ? this.ui.hud.howTo : this.ui.hud.settings; card.append(heading);
     const add = (label: string, action: () => void) => { const button = document.createElement("button"); button.textContent = label; button.addEventListener("click", action); card.append(button); };
-    const close = () => { this.settingsMenu.hidden = true; this.overlay.inert = false; if (this.exploring) { this.controls.setActive(true, this.state.lang); this.village.setEnabled(true); } this.settingsButton.focus(); };
+    const close = () => this.closeMenu(this.settingsButton);
     if (page === "confirm") { add(this.ui.hud.restart, () => { close(); this.restart(); }); add(this.ui.hud.cancel, () => this.settings()); }
     else if (page === "howTo") {
       const steps = document.createElement("ol"), copy = this.ui.howTo;
@@ -120,9 +123,29 @@ export class Game {
     }
     this.settingsMenu.replaceChildren(card); card.querySelector("button")?.focus();
   }
+  private closeMenu(focus: HTMLElement): void {
+    this.settingsMenu.hidden = true; this.settingsMenu.onclick = null; this.overlay.inert = false;
+    if (this.exploring) { this.controls.setActive(true, this.state.lang); this.village.setEnabled(true); }
+    focus.focus();
+  }
+  private openMap(): void {
+    this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.inert = true; this.settingsMenu.hidden = false;
+    const copy = this.ui.map, close = () => this.closeMenu(this.mapButton);
+    const card = document.createElement("div"); card.className = "hud-menu-card map-card"; card.setAttribute("role", "dialog"); card.setAttribute("aria-modal", "true"); card.setAttribute("aria-label", copy.title);
+    const side = document.createElement("div"); side.className = "map-side";
+    const heading = document.createElement("h2"); heading.textContent = copy.title;
+    const goal = document.createElement("p"); goal.textContent = this.goal.firstChild?.textContent ?? "";
+    const done = document.createElement("button"); done.textContent = this.ui.hud.close; done.addEventListener("click", close);
+    side.append(heading, goal, mapLegend(copy.here, copy.target), done);
+    card.append(renderVillageMap(this.village.mapMarkers(this.targets), copy.title, copy.zones), side);
+    this.settingsMenu.replaceChildren(card);
+    this.settingsMenu.onclick = event => { if (event.target === this.settingsMenu) close(); };
+    done.focus();
+  }
   private updateHud(): void {
     this.settingsButton.hidden = this.state.segment === "title" || this.state.segment === "result";
     this.settingsButton.setAttribute("aria-label", this.ui.hud.settings);
+    this.mapButton.hidden = !this.exploring; this.mapButton.textContent = this.ui.map.open;
     this.goal.hidden = !this.exploring;
     if (this.exploring && this.snapshot?.segment === "ep_moka") {
       const view = mokaView(this.snapshot), copy = translations(this.state.lang).moka;
