@@ -1,3 +1,4 @@
+import { showIntent, showMoveHint } from "./intro-hints";
 import { currentDisplayEnv, installGuideFor, openInstallGuide } from "./install-guide";
 import type { Story } from "inkjs";
 import { data, translations } from "../content";
@@ -92,13 +93,18 @@ export class Game {
   private setTextSize(value: boolean): void { this.largeText = value; document.documentElement.style.setProperty("--body-size", value ? "20px" : "17px"); try { localStorage.setItem("abraxas-large-text", String(value)); } catch { /* Continue in memory if storage is unavailable. */ } }
   private clearViews(): void { this.village.setMokaView(null); this.worldApi.setLumiView(null); this.worldApi.setEchoView(null); this.worldApi.setOrView(null); }
   private restart(): void { this.local = false; this.snapshot = null; this.clearViews(); this.state = { lang: this.state.lang, playId: this.newId(), log: [], completed: [], segment: "title" }; this.title(); }
-  private settings(page: "settings" | "confirm" | "credits" = "settings"): void {
+  private settings(page: "settings" | "confirm" | "credits" | "howTo" = "settings"): void {
     this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.inert = true; this.settingsMenu.hidden = false;
-    const card = document.createElement("div"); card.className = "hud-menu-card"; card.setAttribute("role", "dialog"); card.setAttribute("aria-modal", "true"); card.setAttribute("aria-label", page === "credits" ? this.ui.hud.credits : this.ui.hud.settings);
-    const heading = document.createElement("h2"); heading.textContent = page === "confirm" ? this.ui.hud.confirm : page === "credits" ? this.ui.hud.credits : this.ui.hud.settings; card.append(heading);
+    const card = document.createElement("div"); card.className = "hud-menu-card"; card.setAttribute("role", "dialog"); card.setAttribute("aria-modal", "true"); card.setAttribute("aria-label", page === "credits" ? this.ui.hud.credits : page === "howTo" ? this.ui.hud.howTo : this.ui.hud.settings);
+    const heading = document.createElement("h2"); heading.textContent = page === "confirm" ? this.ui.hud.confirm : page === "credits" ? this.ui.hud.credits : page === "howTo" ? this.ui.hud.howTo : this.ui.hud.settings; card.append(heading);
     const add = (label: string, action: () => void) => { const button = document.createElement("button"); button.textContent = label; button.addEventListener("click", action); card.append(button); };
     const close = () => { this.settingsMenu.hidden = true; this.overlay.inert = false; if (this.exploring) { this.controls.setActive(true, this.state.lang); this.village.setEnabled(true); } this.settingsButton.focus(); };
     if (page === "confirm") { add(this.ui.hud.restart, () => { close(); this.restart(); }); add(this.ui.hud.cancel, () => this.settings()); }
+    else if (page === "howTo") {
+      const steps = document.createElement("ol"), copy = this.ui.howTo;
+      for (const text of [copy.move, copy.examine, this.ui.intent.prompt, ...copy.choose.split("\n")]) { const step = document.createElement("li"); step.textContent = text; steps.append(step); }
+      card.append(steps); add(this.ui.hud.back, () => this.settings());
+    }
     else if (page === "credits") {
       const music = document.createElement("p"); music.textContent = this.ui.hud.creditsMusic; card.append(music);
       const license = document.createElement("a"); license.href = "http://creativecommons.org/licenses/by/3.0/"; license.target = "_blank"; license.rel = "noopener noreferrer"; license.textContent = "CC BY 3.0"; card.append(license);
@@ -109,7 +115,7 @@ export class Game {
     else {
       add(`${this.ui.hud.language}: ${this.state.lang === "ko" ? "한국어" : "English"}`, () => { this.state.lang = this.state.lang === "ko" ? "en" : "ko"; this.save(); this.updateHud(); this.reloadDialogue?.(); this.settings(); });
       add(`${this.ui.hud.largeText}: ${this.largeText ? this.ui.hud.on : this.ui.hud.off}`, () => { this.setTextSize(!this.largeText); this.settings(); });
-      add(this.ui.hud.credits, () => this.settings("credits")); add(this.ui.hud.restart, () => this.settings("confirm")); add(this.ui.hud.close, close);
+      add(this.ui.hud.howTo, () => this.settings("howTo")); add(this.ui.hud.credits, () => this.settings("credits")); add(this.ui.hud.restart, () => this.settings("confirm")); add(this.ui.hud.close, close);
     }
     this.settingsMenu.replaceChildren(card); card.querySelector("button")?.focus();
   }
@@ -279,6 +285,8 @@ export class Game {
     this.openingActive = true; this.loadDisplay();
     if (this.resumed && this.display().name === undefined) await this.nameInput();
     await openingSequence({
+      intent: async () => { if (this.display().introSeen) return; this.panel("", []); await showIntent(this.overlay, this.ui.intent); },
+      howToChoose: () => new Promise<void>(resolve => this.panel(this.ui.howTo.choose, [[this.ui.next, resolve]])),
       prelude: async () => { if (!this.display().introSeen) { this.panel("", []); const { playPrelude } = await import("./cinematic"); const playback = playPrelude(this.overlay, this.state.lang, this.ui.cinematic); this.overlay.querySelectorAll(".cinematic button").forEach((button, index) => { (button as HTMLButtonElement).dataset.action = ["play", "mute", "skip"][index]!; }); await playback; this.saveDisplay({ introSeen: true }); } },
       scene: scene => this.village.setStoryScene(scene), mode: mode => this.village.setDemiMode(mode),
       knot: knot => this.narrative("prologue", knot), name: () => this.nameInput(),
@@ -337,7 +345,7 @@ export class Game {
     await this.narrative(segment, segment === "interlude_2" ? `${segment}_outro_${lastPick}` : `${segment}_outro`);
     this.village.setDemiMode("follow"); this.finish();
   }
-  private showWorld(available: string[]): void { this.reloadDialogue = null; this.village.setDemiMode("follow"); this.worldApi.focusSpeaker?.(null); this.exploring = true; this.targets = available; this.updateHud(); this.token++; this.overlay.replaceChildren(); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
+  private showWorld(available: string[]): void { this.reloadDialogue = null; this.village.setDemiMode("follow"); this.worldApi.focusSpeaker?.(null); this.exploring = true; this.targets = available; this.updateHud(); this.token++; this.overlay.replaceChildren(); showMoveHint(this.overlay, [this.ui.howTo.move, this.ui.howTo.examine]); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
   private answered(segment: string): number { return data.items.filter(item => item.segment === segment && this.state.log.some(entry => entry.id === item.id)).length; }
   private interact(id: string): void {
     if (this.snapshot?.segment === "ep_moka") { this.interactMoka(id); return; }

@@ -14,5 +14,12 @@
 .ending-egg{position:absolute;left:50%;top:50%;width:120px;height:160px;transform:translate(-50%,-50%);filter:drop-shadow(0 0 24px #fff);pointer-events:none}.ending-egg span{position:absolute;top:0;width:50%;height:100%;background:#fffaf0;animation:egg-open .9s ease-out forwards}.ending-egg span:first-child{left:0;border-radius:100% 0 0 100%;transform-origin:bottom left}.ending-egg span:last-child{right:0;border-radius:0 100% 100% 0;transform-origin:bottom right;animation-name:egg-open-right}@keyframes egg-open{to{transform:rotate(-25deg) translateX(-12px);opacity:0}}@keyframes egg-open-right{to{transform:rotate(25deg) translateX(12px);opacity:0}}@media (prefers-reduced-motion:reduce){.ending-egg span{animation:none}}
 .choices button[data-action^="confess-target-"]{width:100%;max-width:100%}
 @media (max-height:360px){.overlay.result .panel{padding:10px 14px;gap:10px}.result .result-intro h2{font-size:22px}.result .result-details ul{font-size:13px}.result .result-details .disclaimer{font-size:11px}}
-.install-guide ol{margin:0;padding-left:22px;font-size:var(--body-size,15px);line-height:1.5}
+.hud-menu-card ol{margin:0;padding-left:22px;font-size:var(--body-size,15px);line-height:1.5}
 .install-guide{width:min(460px,calc(100% - 32px))}
+.intent-card{position:absolute;inset:0;z-index:7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;width:100%;height:100%;padding:24px;border:0;border-radius:0;background:#1b1a18;color:#fff8ec;pointer-events:auto;animation:intent-in 900ms ease-out}
+.intent-card:active{transform:none}
+.intent-card p{margin:0;font-size:var(--body-size,17px);line-height:1.9;white-space:pre-line;text-align:center}
+.intent-card small{font-size:var(--caption-size,12px);opacity:.65}
+.move-hint{position:absolute;z-index:3;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);padding:8px 16px;border-radius:var(--radius-window,18px);background:#fff8eceb;color:var(--ink);font-size:14px;line-height:1.6;white-space:pre-line;text-align:center;width:max-content;max-width:calc(100% - 32px);pointer-events:none;box-shadow:var(--shadow)}
+@keyframes intent-in{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.intent-card{animation:none}}
