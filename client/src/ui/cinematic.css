@@ -24,4 +24,4 @@
 .cinematic p { width: 100%; text-align: center; }
 .cinematic p:empty { display: none; }
 .cinematic button { min-height: 44px; padding: 0.5rem 1rem; cursor: pointer; }
-.cinematic button:focus-visible { outline: 3px solid white; outline-offset: 3px; }
+.cinematic button:focus-visible { outline: 3px solid white; outline-offset: -6px; }
