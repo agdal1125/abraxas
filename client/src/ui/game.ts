@@ -4,6 +4,7 @@ import type { Story } from "inkjs";
 import { data, translations } from "../content";
 import { episodeStage, nextSegment } from "../core/flow";
 import { npcMatches, score, type Input } from "../core/scoring";
+import { npcChanges, reflection, walkKnot, type Moment } from "../core/reflection";
 import type { Village } from "../scenes/village";
 import { Controls } from "../input/controls";
 import type { VillageInput } from "../input/movement";
@@ -537,11 +538,20 @@ export class Game {
       this.overlay.querySelectorAll<HTMLElement>(`[data-item-id^='${action}-']`).forEach(button => { button.dataset.action = button.dataset.itemId; delete button.dataset.itemId; });
     });
   }
+  private confirmedInput(): Input {
+    return this.snapshot ? { playId: this.snapshot.playId, log: this.snapshot.answers } : { playId: this.state.playId, log: this.state.log };
+  }
+  private async lastWalk(): Promise<void> {
+    const changes = npcChanges(this.confirmedInput(), data);
+    await this.narrative("last_walk", "walk_intro");
+    for (const id of ids) await this.narrative("last_walk", walkKnot(id, changes[id]!));
+  }
   private async ending(): Promise<void> {
     this.village.setStoryScene("confession"); this.village.setDemiMode("sit");
     if (!this.demiRevealed) await this.narrative("confession", "demi_reveal");
     let confession = this.snapshot?.confession ?? this.state.confession;
     if (!confession) {
+      await this.lastWalk();
       await this.narrative("confession", "confession_intro");
       const npcId = await this.selectEnding(this.ui.confession.targetPrompt, ["lumi", "moka", "echo", "or"] as const, npc => this.ui.npc[npc], "confess-target");
       const reason = await this.selectEnding(this.ui.confession.reasonPrompt, ["similar", "drawn", "both", "unsure"] as const, value => this.ui.confession.reason[value], "confess-reason");
@@ -570,18 +580,32 @@ export class Game {
     const result = this.snapshot?.result ?? (local && { type: local.type, modifier: local.modifier, npcTypes: Object.fromEntries(ids.map(id => [id, (["A", "B", "C", "D"] as const).map((axis, i) => ["OI", "HL", "VK", "GC"][i]![local.npcs[id]!.s[axis] >= 0 ? 0 : 1]).join("")])) as Record<EndingNPC, string> });
     if (!result) return;
     const axes = ["A", "B", "C", "D"] as const;
+    const reflected = reflection(this.confirmedInput(), result.type, data);
     const lines = axes.map((axis, i) => this.ui.result.poles[axis][result.type[i] === "OHVG"[i] ? "plus" : "minus"]);
     const other = axes.map((axis, i) => this.ui.result.poles[axis][result.npcTypes[confession.npcId][i] === "OHVG"[i] ? "plus" : "minus"]);
     const shared = other.filter((_, i) => result.type[i] === result.npcTypes[confession.npcId][i]);
     const different = other.filter((_, i) => result.type[i] !== result.npcTypes[confession.npcId][i]);
     const tasks = this.state.lang === "ko" ? ["루미와 축제 준비", "모카와 빵 나누기", "에코와 책 정리", "오르와 종 고치기"] : ["Preparing the festival with Lumi", "Sharing bread with Moka", "Organizing books with Echo", "Repairing the bell with Or"];
-    const copy = card === 0 ? [this.ui.result.title, ...(this.snapshot ? [this.ui.result.first] : []), this.ui.result.modifier[result.modifier as keyof typeof this.ui.result.modifier], ...lines, this.ui.result.disclaimer] : card === 1 ? [this.ui.npc[confession.npcId], ...(shared.length ? [this.state.lang === "ko" ? "닮은 점" : "In common", ...shared] : []), ...(different.length ? [this.state.lang === "ko" ? "다른 점" : "Differences", ...different] : []), this.ui.result.reflection[confession.reason]] : [this.ui.result.cards.village, ...tasks, this.ui.festival.companion[(this.snapshot?.festivalCompanion ?? this.state.festivalCompanion)!]];
+    const values = `${this.ui.result.values}: ${reflected.topValues.map(value => this.ui.result.valueNames[value as keyof typeof this.ui.result.valueNames]).join(" · ")}`;
+    const start = data.npcs.find(npc => npc.id === confession.npcId)!.start;
+    const changes = reflected.npcChanges[confession.npcId]!.map(({ axis, shift }) => { const poles = this.ui.result.poles[axis], from = start[axis] >= 0 ? poles.plus : poles.minus, to = start[axis] >= 0 ? poles.minus : poles.plus; return this.ui.result.change[shift].replace("{from}", from).replace("{to}", to); });
+    const copy = card === 0 ? [this.ui.result.title, ...(this.snapshot ? [this.ui.result.first] : []), this.ui.result.modifier[result.modifier as keyof typeof this.ui.result.modifier], ...lines, values, this.ui.result.disclaimer] : card === 1 ? [this.ui.npc[confession.npcId], ...changes, ...(shared.length ? [this.state.lang === "ko" ? "닮은 점" : "In common", ...shared] : []), ...(different.length ? [this.state.lang === "ko" ? "다른 점" : "Differences", ...different] : []), this.ui.result.reflection[confession.reason]] : [this.ui.result.cards.village, ...tasks, this.ui.festival.companion[(this.snapshot?.festivalCompanion ?? this.state.festivalCompanion)!]];
     const buttons: [string, () => void, string?][] = [];
     if (card < 2) buttons.push([this.ui.next, () => this.result(card + 1), "result-next"]);
+    if (card === 0) buttons.push([this.ui.result.moments.open, () => this.moments(reflected.moments, lines), "result-moments"]);
     else buttons.push([this.ui.result.continueEnding, () => void this.finalWalk(), "result-continue"]);
     if (typeof navigator.share === "function") buttons.push([this.ui.hud.share, () => { void navigator.share({ text: copy.join("\n") }).catch(() => {}); this.result(card); }, "result-share"]);
     buttons.push([this.ui.result.restart, () => this.restart(), "result-restart"]);
-    this.panel([this.ui.result.cards[(["self", "other", "village"] as const)[card]!], ...copy].join("\n\n"), buttons);
+    this.panel([this.ui.result.cards[(["self", "other", "village"] as const)[card]!], ...copy].join("\n"), buttons);
+    this.markResultPanel();
+  }
+  private moments(moments: Moment[], lines: string[]): void {
+    const copy = moments.map(({ itemId, pick, boundary }, index) => { const text = translations(this.state.lang).items[itemId]?.picks[pick] ?? [...data.items, ...data.tiebreakers].find(item => item.id === itemId)!.picks[pick]!.text; return [lines[index], `‘${text}’`, ...(boundary ? [this.ui.result.moments.boundary] : [])].join("\n"); });
+    this.panel([this.ui.result.moments.title, ...copy].join("\n\n"), [[this.ui.result.moments.back, () => this.result(0), "result-moments-back"]]);
+    this.markResultPanel();
+  }
+  private markResultPanel(): void {
+    if (this.overlay.dataset) this.overlay.dataset.scene = "result-card";
     this.overlay.querySelectorAll<HTMLElement>("[data-item-id^='result-']").forEach(button => { button.dataset.action = button.dataset.itemId; delete button.dataset.itemId; });
   }
   private async finalWalk(): Promise<void> {

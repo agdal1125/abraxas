@@ -23,3 +23,7 @@
 .move-hint{position:absolute;z-index:3;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);padding:8px 16px;border-radius:var(--radius-window,18px);background:#fff8eceb;color:var(--ink);font-size:14px;line-height:1.6;white-space:pre-line;text-align:center;width:max-content;max-width:calc(100% - 32px);pointer-events:none;box-shadow:var(--shadow)}
 @keyframes intent-in{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){.intent-card{animation:none}}
+.overlay.dialogue.has-choices[data-scene="result-card"]{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:minmax(0,1fr);align-content:stretch;align-items:stretch}
+.overlay.dialogue.has-choices[data-scene="result-card"] .panel{max-height:100%;overflow-y:auto}
+.overlay.dialogue.has-choices[data-scene="result-card"] .panel p{line-height:1.45}
+.overlay.dialogue.has-choices[data-scene="result-card"] .choices{width:auto;max-height:100%;align-content:end}
