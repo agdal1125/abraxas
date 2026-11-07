@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import type { DemiGesture } from "../core/world/demi-play";
 import type { Vec2 } from "../core/world/types";
 
 export type DemiMode = "hidden" | "follow" | "lead" | "sit" | "gate" | "ending";
@@ -170,6 +171,16 @@ function buildModel(): DemiRig {
 }
 
 const SIT_ANGLE = .72;
+const HEART_LIFE = 1.1;
+// Faces the fixed village camera, which sits on the +x+z diagonal.
+const CAMERA_YAW = Math.PI / 4;
+
+function buildHeart(): THREE.Mesh<THREE.ShapeGeometry, THREE.MeshBasicMaterial> {
+  const shape = new THREE.Shape(([[0, -.5], [-.5, .02], [-.5, .3], [-.27, .5], [0, .3], [.27, .5], [.5, .3], [.5, .02]] as const).map(([x, y]) => new THREE.Vector2(x, y)));
+  const heart = new THREE.Mesh(new THREE.ShapeGeometry(shape), new THREE.MeshBasicMaterial({ color: "#ff7a9a", transparent: true, side: THREE.DoubleSide, depthTest: false, depthWrite: false }));
+  heart.scale.setScalar(.16); heart.visible = false; heart.renderOrder = 10;
+  return heart;
+}
 
 export class Demi {
   readonly object = new THREE.Group();
@@ -178,14 +189,38 @@ export class Demi {
   private last: Vec2;
   private rig = buildModel();
   private time = 0;
+  private held = false;
+  private gesture: DemiGesture | null = null;
+  private heart = buildHeart();
+  private heartAge = HEART_LIFE;
 
   constructor(position: Vec2) {
-    this.object.add(this.rig.root);
+    this.object.add(this.rig.root, this.heart);
     this.last = { ...position }; this.reset(position); this.object.visible = false;
   }
 
   reset(position: Vec2): void {
     this.object.position.set(position.x, 0, position.z); this.last = { ...position }; this.trail = [];
+  }
+
+  // While held the village moves the dog itself, so the follow trail stays out of the way.
+  hold(gesture: DemiGesture | null): void {
+    this.held = true; this.gesture = gesture;
+    if (gesture === "pet") this.heartAge = 0;
+  }
+
+  release(position: Vec2): void {
+    this.held = false; this.gesture = null; this.trail = []; this.last = { ...position };
+  }
+
+  walkTo(position: Vec2): void {
+    const dx = position.x - this.object.position.x, dz = position.z - this.object.position.z;
+    this.object.position.set(position.x, 0, position.z);
+    if (dx || dz) { this.object.rotation.y = Math.atan2(dx, dz); this.gait(); }
+  }
+
+  face(position: Vec2): void {
+    this.object.rotation.y = Math.atan2(position.x - this.object.position.x, position.z - this.object.position.z);
   }
 
   setMode(mode: DemiMode, position: Vec2): void {
@@ -208,7 +243,10 @@ export class Demi {
   update(position: Vec2, dt: number): void {
     this.time += dt;
     this.idle();
-    if (this.mode !== "follow") return;
+    this.updateHeart(dt);
+    if (this.gesture !== "tilt") this.rig.head.rotation.x *= .8;
+    if (this.gesture) { this.perform(this.gesture, dt); return; }
+    if (this.mode !== "follow" || this.held) return;
     const distance = Math.hypot(position.x - this.last.x, position.z - this.last.z);
     if (distance > 2) { this.reset(position); return; }
     if (distance > .025) { this.trail.push({ ...position }); this.last = { ...position }; }
@@ -223,6 +261,10 @@ export class Demi {
       this.object.rotation.y = Math.atan2(dx, dz); remaining -= step;
       if (step === length) this.trail.shift();
     }
+    this.gait();
+  }
+
+  private gait(): void {
     const stride = this.time * 12;
     this.rig.legs.forEach((leg, index) => { leg.rotation.z = Math.sin(stride + (index === 0 || index === 3 ? 0 : Math.PI)) * .5; });
     this.rig.root.position.y = Math.abs(Math.sin(stride)) * .012;
@@ -235,6 +277,33 @@ export class Demi {
     if (this.mode === "hidden") return;
     this.rig.tail.rotation.x = Math.sin(this.time * 9) * .35;
     this.rig.jaw.rotation.z = -.04 - Math.max(0, Math.sin(this.time * 4)) * .05;
+  }
+
+  private perform(gesture: DemiGesture, dt: number): void {
+    const { head, tail, root, ears } = this.rig, ease = Math.min(1, dt * 10);
+    for (const leg of this.rig.legs) leg.rotation.z *= .8;
+    if (gesture === "pet") {
+      tail.rotation.x = Math.sin(this.time * 22) * .7;
+      head.rotation.z = .2 + Math.sin(this.time * 9) * .06;
+      root.position.y = Math.abs(Math.sin(this.time * 9)) * .05;
+      for (const { pivot } of ears) pivot.rotation.z = .3;
+    } else if (gesture === "sniff") {
+      tail.rotation.x = Math.sin(this.time * 5) * .25;
+      head.rotation.z += (-.6 + Math.sin(this.time * 16) * .04 - head.rotation.z) * ease;
+    } else {
+      head.rotation.x += (.32 - head.rotation.x) * ease;
+      head.rotation.z += (.1 - head.rotation.z) * ease;
+    }
+  }
+
+  private updateHeart(dt: number): void {
+    this.heartAge += dt;
+    const life = this.heartAge / HEART_LIFE;
+    this.heart.visible = life < 1;
+    if (life >= 1) return;
+    this.heart.position.y = .4 + life * .3;
+    this.heart.rotation.y = CAMERA_YAW - this.object.rotation.y;
+    this.heart.material.opacity = 1 - life * life;
   }
 
   private rest(): void {
