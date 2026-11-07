@@ -165,8 +165,12 @@ export class Village {
     }
   }
   setStoryScene(scene: "entrance" | "hub" | "interlude" | "festival" | "gate" | "confession" | "ending"): void {
+    const wasGathered = this.gathered;
+    this.gathered = scene === "confession" || scene === "ending";
     this.postman.visible = scene === "entrance";
     this.positionResidents();
+    const spot = map.zones["ending-player"];
+    if (this.gathered && !wasGathered && spot) { this.player.position.set(spot.x, 0, spot.z); this.cameraTarget.copy(this.player.position); }
   }
   focusSpeaker(id: string | null): void { this.speaker = id && this.target(id) ? id : null; this.setAvailable([...this.available]); }
   targetScreenPos(id: string): { x: number; y: number; onScreen: boolean } | null {
@@ -225,6 +229,7 @@ export class Village {
       if (view && view.phase !== "locked" && !this.residentProps[npc] && !this.residentLoading[npc]) this.setResidentView(npc);
     }
   }
+  private gathered = false;
   private positionResidents(): void {
     const active = (view: { phase: string } | null) => !!view && view.phase !== "locked" && view.phase !== "completed";
     const move = (id: string, zone?: string) => {
@@ -242,7 +247,8 @@ export class Village {
     move("s2j2", active(this.orView) ? "or-assistant" : undefined);
     const elsewhere = active(this.lumiView) || active(this.echoView) || active(this.mokaView);
     const plaza = !elsewhere && this.orView && ["report", "completed"].includes(this.orView.phase) && this.orView.choices[5] === "b";
-    move("D", plaza ? "or-report" : undefined);
+    for (const id of ["A", "B", "C"]) move(id, this.gathered ? `ending-${id}` : undefined);
+    move("D", this.gathered ? "ending-D" : plaza ? "or-report" : undefined);
     for (const [npc, ids] of Object.entries({ lumi: ["lumi-neighbor-1", "lumi-neighbor-2"], echo: ["echo-borrower"], or: ["or-fisher", "or-merchant"] }) as ["lumi" | "echo" | "or", string[]][]) {
       const view = this[`${npc}View`];
       for (const id of ids) {
