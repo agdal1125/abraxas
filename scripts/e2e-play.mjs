@@ -60,7 +60,7 @@ export function responseClassifier() {
   let checked = false;
   return (method, url, status) => {
     const current = method === "GET" && url === "http://127.0.0.1:5173/v1/plays/current";
-    const expected = status === 404 && ((current && !checked) || (method === "GET" && url === "http://127.0.0.1:5173/cinematics/prelude-v2.mp4"));
+    const expected = status === 404 && ((current && !checked) || (method === "GET" && url === "http://127.0.0.1:5173/cinematics/prelude-v3.mp4"));
     if (current || (method === "POST" && url === "http://127.0.0.1:5173/v1/plays")) checked = true;
     return expected ? "expected" : status >= 400 ? "abnormal" : "ok";
   };
