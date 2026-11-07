@@ -108,7 +108,16 @@
       "tomorrow": "Dreaming of tomorrow"
     },
     "disclaimer": "This is a psychology game for fun, not a professional assessment.",
-    "restart": "Play again"
+    "restart": "Play again",
+    "values": "What you held on to",
+    "valueNames": { "자율": "Independence", "자극": "Excitement", "즐거움": "Enjoyment", "성취": "Achievement", "영향력": "Influence", "안전": "Security", "조화": "Harmony", "전통": "Tradition", "박애": "Caring", "보편": "Fairness" },
+    "moments": { "open": "The moments behind this", "title": "The moments you chose", "boundary": "Both sides of you showed here.", "back": "Back" },
+    "change": {
+      "deepened": "More than ever: {from}.",
+      "steady": "Still the same: {from}.",
+      "wavering": "{from}, and now also listening to this: {to}.",
+      "turned": "At first: {from}. Now closer to this: {to}."
+    }
   },
   "hud": {
     "goal": { "hub": "Find someone to visit in the village", "character": "Find the person waiting for you", "quest": "Find the villager who needs help", "return": "Go back and meet them again", "interlude": "Take a quiet moment by the lake", "festival": "Head to the plaza", "gate": "Head to the Gate of Memory" },

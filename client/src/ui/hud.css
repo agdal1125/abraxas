@@ -16,3 +16,7 @@
 @media (max-height:360px){.overlay.result .panel{padding:10px 14px;gap:10px}.result .result-intro h2{font-size:22px}.result .result-details ul{font-size:13px}.result .result-details .disclaimer{font-size:11px}}
 .install-guide ol{margin:0;padding-left:22px;font-size:var(--body-size,15px);line-height:1.5}
 .install-guide{width:min(460px,calc(100% - 32px))}
+.overlay.dialogue.has-choices[data-scene="result-card"]{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:minmax(0,1fr);align-content:stretch;align-items:stretch}
+.overlay.dialogue.has-choices[data-scene="result-card"] .panel{max-height:100%;overflow-y:auto}
+.overlay.dialogue.has-choices[data-scene="result-card"] .panel p{line-height:1.45}
+.overlay.dialogue.has-choices[data-scene="result-card"] .choices{width:auto;max-height:100%;align-content:end}
