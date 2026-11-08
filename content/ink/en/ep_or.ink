@@ -50,15 +50,12 @@ Or: Good work. What will you do next?
 -> END
 
 === or_fire ===
-Adjust the hearth to the chosen heat.
 -> END
 
 === or_bucket_pickup ===
-Pick up the empty bucket.
 -> END
 
 === or_find_sand ===
-Check the map or ask the fisher at the pier.
 -> END
 
 === or_find_sand_a ===
@@ -74,19 +71,15 @@ Merchant: Follow the water for good sand. Safe travels.
 -> END
 
 === or_sand ===
-Fill the bucket with sand from the stream.
 -> END
 
 === or_sand_delivery ===
-Bring the sand to the polishing bench in the forge.
 -> END
 
 === or_gears ===
-Match each gear to its shaft on the clock tower panel.
 -> END
 
 === or_weight ===
-Hang the chosen weight.
 -> END
 
 === or_assistant ===
@@ -94,7 +87,6 @@ Workshop Apprentice: This is the lantern lift diagram. Hanger is here.
 -> END
 
 === or_review ===
-Study the diagram in the way you chose.
 -> END
 
 === or_review_a ===
@@ -106,19 +98,15 @@ Or waits quietly while you study the diagram on your own.
 -> END
 
 === or_lantern_link ===
-Connect the marked link on the lantern diagram.
 -> END
 
 === or_hook ===
-Work on the lantern hanger in the chosen way.
 -> END
 
 === or_return ===
-Return to Or.
 -> END
 
 === or_finish ===
-Put away the tools or pick up the finished bell.
 -> END
 
 === or_finish_a ===
@@ -130,19 +118,15 @@ You lift the finished bell. Time to bring it to the square.
 -> END
 
 === or_bell_delivery ===
-Deliver the bell to the stand in the square.
 -> END
 
 === or_report ===
-Let Or know the task is finished.
 -> END
 
 === or_report_a ===
-Tell Or at the forge that the work is complete.
 -> END
 
 === or_report_b ===
-Tell Or in the square that the work is complete.
 -> END
 
 === or_completed ===

@@ -9,11 +9,9 @@
 -> END
 
 === moka_pick_up ===
-호두빵 바구니가 빵집 앞에 놓여 있다.
 -> END
 
 === moka_deliver ===
-대장간 바깥 받침대에 호두빵 바구니를 전하자.
 -> END
 
 === moka_delivered ===
@@ -31,7 +29,6 @@
 -> END
 
 === moka_reservation_action ===
-정한 대로 장부를 살펴보거나 손님에게 빵을 건네자.
 -> END
 
 === moka_choose_display ===
@@ -43,7 +40,6 @@
 
 === moka_arrange ===
 모카: 천천히 해도 돼.
-빵을 고른 뒤 같은 모양의 자리에 놓자.
 -> END
 
 === moka_share ===
@@ -55,7 +51,6 @@
 -> END
 
 === moka_share_action ===
-정한 대로 이웃에게 빵을 건네거나 접시에 담자.
 -> END
 
 === moka_order ===
@@ -66,11 +61,9 @@
 -> END
 
 === moka_order_action ===
-정한 수량에 맞는 반죽 준비 묶음을 챙기자.
 -> END
 
 === moka_return ===
-반죽 준비를 마쳤다. 빵집의 모카에게 돌아가자.
 -> END
 
 === moka_feedback ===
@@ -82,7 +75,6 @@
 -> END
 
 === moka_report ===
-모카와 심부름 이야기를 마무리하자.
 -> END
 
 === moka_completed ===
