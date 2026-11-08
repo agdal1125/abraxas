@@ -1,6 +1,7 @@
 import type { Story } from "inkjs";
 import { data, translations } from "../content";
 import { episodeStage, nextSegment } from "../core/flow";
+import { fragmentCount, MAX_FRAGMENTS, type FragmentGroups } from "../core/fragments";
 import { npcMatches, score, type Input } from "../core/scoring";
 import { npcChanges, reflection, walkKnot, type Moment } from "../core/reflection";
 import type { Village } from "../scenes/village";
@@ -63,6 +64,9 @@ export class Game {
   private notice = document.createElement("div");
   private noticeTimer = 0;
   private goal = document.createElement("div");
+  private hudTop = document.createElement("div");
+  private fragmentChip = document.createElement("div");
+  private fragmentSeen: { playId: string; count: number } | null = null;
   private direction = document.createElement("div");
   private settingsButton = document.createElement("button");
   private settingsMenu = document.createElement("div");
@@ -77,7 +81,7 @@ export class Game {
     this.notice.className = "world-notice"; this.notice.setAttribute("role", "status"); app.append(this.notice);
     this.goal.className = "hud-goal"; this.goal.hidden = true; this.direction.className = "hud-direction"; this.direction.hidden = true; this.direction.setAttribute("aria-hidden", "true");
     this.settingsButton.className = "hud-settings-button"; this.settingsButton.textContent = "⚙"; this.settingsButton.addEventListener("click", () => this.settings());
-    this.settingsMenu.className = "hud-menu"; this.settingsMenu.hidden = true; app.append(this.goal, this.direction, this.settingsButton, this.settingsMenu);
+    this.settingsMenu.className = "hud-menu"; this.settingsMenu.hidden = true; this.hudTop.className = "hud-top"; this.fragmentChip.className = "hud-fragments"; this.fragmentChip.hidden = true; this.hudTop.append(this.goal, this.fragmentChip); app.append(this.hudTop, this.direction, this.settingsButton, this.settingsMenu);
     let saved: Save | null = null; try { saved = JSON.parse(localStorage.getItem(storageKey) || "null") as Save | null; } catch { /* Storage may be unavailable. */ }
     this.localSave = saved?.playId && Array.isArray(saved.log) && Array.isArray(saved.completed) ? saved : null;
     this.state = { lang: this.localSave?.lang ?? "ko", playId: this.newId(), log: [], completed: [], segment: "title" };
@@ -117,6 +121,9 @@ export class Game {
     this.settingsButton.hidden = this.state.segment === "title" || this.state.segment === "result";
     this.settingsButton.setAttribute("aria-label", this.ui.hud.settings);
     this.goal.hidden = !this.exploring;
+    this.syncFragments(false);
+    this.fragmentChip.hidden = !this.exploring;
+    this.fragmentChip.textContent = this.fragmentText("fragments", this.fragmentTotal());
     if (this.exploring && this.snapshot?.segment === "ep_moka") {
       const view = mokaView(this.snapshot), copy = translations(this.state.lang).moka;
       const key = view.objectiveKey.split(".").at(-1) as keyof typeof copy.objective;
@@ -127,6 +134,35 @@ export class Game {
       this.goal.textContent = copy.objective[view.objectiveKey.split(".").at(-1)!] ?? "";
       const carrying = document.createElement("span"); carrying.className = "moka-carry"; carrying.textContent = `${this.ui.carrying}: ${copy.items[view.carriedObjectId ?? "empty"] ?? ""}`; this.goal.append(carrying);
     } else if (this.exploring) this.goal.textContent = this.ui.hud.goal[objectiveKey(this.state.segment, episodeStage(this.answered(this.state.segment)))];
+  }
+  private fragmentGroups(): FragmentGroups { return { prologue: data.items.filter(item => item.segment === "prologue").map(item => item.id), festival: data.items.filter(item => item.segment === "festival").map(item => item.id), tiebreakers: data.tiebreakers.map(item => item.id) }; }
+  private fragmentTotal(): number { return fragmentCount(this.state.log.map(entry => entry.id), this.state.completed, this.fragmentGroups()); }
+  private fragmentText(key: "fragments" | "fragmentFound", n: number): string { return this.ui.hud[key].replace("{n}", String(n)).replace("{max}", String(MAX_FRAGMENTS)); }
+  // The first sync for a play only records a baseline, so resuming never announces old fragments.
+  private syncFragments(announce: boolean): void {
+    const count = this.fragmentTotal(), seen = this.fragmentSeen;
+    if (!announce && seen?.playId === this.state.playId) return;
+    this.fragmentSeen = { playId: this.state.playId, count };
+    if (announce && seen?.playId === this.state.playId && count > seen.count) this.flashNotice(this.fragmentText("fragmentFound", count), 2000);
+  }
+  private flashNotice(text: string, ms: number): void { this.notice.textContent = text; window.clearTimeout(this.noticeTimer); this.noticeTimer = window.setTimeout(() => { this.notice.textContent = ""; }, ms); }
+  private fragmentsReveal(): Promise<void> {
+    this.exploring = false; this.updateHud(); this.token++; this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.replaceChildren();
+    const total = this.fragmentTotal(), root = document.createElement("div");
+    root.className = "fragment-reveal"; root.setAttribute("role", "status");
+    const dots = document.createElement("div"); dots.className = "fragment-dots";
+    for (let index = 0; index < MAX_FRAGMENTS; index++) { const dot = document.createElement("span"); if (index < total) dot.className = "is-found"; dots.append(dot); }
+    const label = document.createElement("p"); label.textContent = this.ui.hud.fragmentsGate;
+    const count = document.createElement("strong"); count.textContent = this.fragmentText("fragments", total);
+    const hint = document.createElement("small"); hint.textContent = this.ui.hud.fragmentsContinue;
+    root.append(label, dots, count, hint);
+    this.overlay.parentElement?.append(root);
+    return new Promise<void>(resolve => {
+      let timer = 0;
+      const done = () => { window.clearTimeout(timer); root.remove(); resolve(); };
+      timer = window.setTimeout(done, 3200);
+      root.addEventListener("click", done);
+    });
   }
   private updateDirection = (): void => {
     this.direction.hidden = true;
@@ -322,6 +358,7 @@ export class Game {
     const segment = this.state.segment;
     this.village.setStoryScene(segment.startsWith("interlude_") ? "interlude" : segment === "festival" ? "festival" : "gate");
     this.village.setDemiMode(segment === "gate" ? "gate" : "sit");
+    if (segment === "gate") await this.fragmentsReveal();
     await this.narrative(segment, `${segment}_intro`);
     const items = segment === "gate" ? data.tiebreakers : data.items.filter(item => item.segment === segment);
     for (const item of items) {
@@ -337,7 +374,7 @@ export class Game {
     await this.narrative(segment, segment === "interlude_2" ? `${segment}_outro_${lastPick}` : `${segment}_outro`);
     this.village.setDemiMode("follow"); this.finish();
   }
-  private showWorld(available: string[]): void { this.reloadDialogue = null; this.village.setDemiMode("follow"); this.worldApi.focusSpeaker?.(null); this.exploring = true; this.targets = available; this.updateHud(); this.token++; this.overlay.replaceChildren(); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
+  private showWorld(available: string[]): void { this.reloadDialogue = null; this.village.setDemiMode("follow"); this.worldApi.focusSpeaker?.(null); this.exploring = true; this.targets = available; this.updateHud(); this.syncFragments(true); this.token++; this.overlay.replaceChildren(); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
   private answered(segment: string): number { return data.items.filter(item => item.segment === segment && this.state.log.some(entry => entry.id === item.id)).length; }
   private interact(id: string): void {
     if (this.snapshot?.segment === "ep_moka") { this.interactMoka(id); return; }

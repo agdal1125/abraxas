@@ -31,7 +31,7 @@ test("interlude resumes at each unanswered knot with Demi seated", async () => {
 
 test("gate asks all unanswered questions in order while Demi waits", async () => {
   const events: string[] = [];
-  const game = Object.assign(Object.create(Game.prototype), { state: { segment: "gate", log: [] }, village: { setStoryScene: (x: string) => events.push(x), setDemiMode: (x: string) => events.push(x) }, narrative: async (_file: string, knot: string, choice: boolean) => { events.push(knot); if (choice) game.state.log.push({ id: knot, pick: "a" }); }, finish: () => events.push("finish") });
+  const game = Object.assign(Object.create(Game.prototype), { state: { segment: "gate", log: [] }, fragmentsReveal: async () => {}, village: { setStoryScene: (x: string) => events.push(x), setDemiMode: (x: string) => events.push(x) }, narrative: async (_file: string, knot: string, choice: boolean) => { events.push(knot); if (choice) game.state.log.push({ id: knot, pick: "a" }); }, finish: () => events.push("finish") });
   await game.lateScene();
   expect(events).toEqual(["gate", "gate", "gate_intro", "gate_a", "gate_b", "gate_c", "gate_d", "gate_outro", "follow", "finish"]);
 });
