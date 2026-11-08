@@ -60,6 +60,9 @@ export class Game {
   private reloadDialogue: (() => void) | null = null;
   private episodeLimit = 6;
   private largeText = false;
+  private autoAdvance = false;
+  private autoTimer = 0;
+  private autoPending: { token: number; fire: () => void; ms: number } | null = null;
   private controls: Controls;
   private notice = document.createElement("div");
   private noticeTimer = 0;
@@ -76,6 +79,7 @@ export class Game {
   constructor(app: HTMLElement, private village: Village) {
     this.controls = new Controls(app, village as Village & VillageInput);
     try { this.largeText = localStorage.getItem("abraxas-large-text") === "true"; } catch { /* Continue in memory if storage is unavailable. */ }
+    try { this.autoAdvance = localStorage.getItem("abraxas-auto-advance") === "true"; } catch { /* Continue in memory if storage is unavailable. */ }
     document.documentElement.style.setProperty("--body-size", this.largeText ? "20px" : "17px");
     this.overlay.className = "overlay"; app.append(this.overlay);
     this.notice.className = "world-notice"; this.notice.setAttribute("role", "status"); app.append(this.notice);
@@ -94,14 +98,23 @@ export class Game {
   private save(): void { if (this.local) try { localStorage.setItem(storageKey, JSON.stringify(this.state)); this.localSave = this.state; } catch { /* Continue in memory if storage is unavailable. */ } }
   private get ui() { return translations(this.state.lang).ui; }
   private setTextSize(value: boolean): void { this.largeText = value; document.documentElement.style.setProperty("--body-size", value ? "20px" : "17px"); try { localStorage.setItem("abraxas-large-text", String(value)); } catch { /* Continue in memory if storage is unavailable. */ } }
+  private setAutoAdvance(value: boolean): void { this.autoAdvance = value; try { localStorage.setItem("abraxas-auto-advance", String(value)); } catch { /* Continue in memory if storage is unavailable. */ } }
+  private autoDelay(text: string): number { return Math.min(5000, Math.max(1200, Math.round(text.length / 6 * 1000))); }
+  private clearAuto(): void { clearTimeout(this.autoTimer); this.autoTimer = 0; this.autoPending = null; }
+  // Counts from zero each time it runs, so closing the settings menu restarts the wait.
+  private resumeAuto(): void {
+    clearTimeout(this.autoTimer); this.autoTimer = 0; const pending = this.autoPending;
+    if (!pending || !this.autoAdvance || !this.settingsMenu.hidden) return;
+    this.autoTimer = window.setTimeout(() => { this.autoTimer = 0; if (pending.token === this.token && this.autoPending === pending && this.autoAdvance && this.settingsMenu.hidden) { this.autoPending = null; pending.fire(); } }, pending.ms);
+  }
   private clearViews(): void { this.village.setMokaView(null); this.worldApi.setLumiView(null); this.worldApi.setEchoView(null); this.worldApi.setOrView(null); }
   private restart(): void { this.local = false; this.snapshot = null; this.clearViews(); this.state = { lang: this.state.lang, playId: this.newId(), log: [], completed: [], segment: "title" }; this.title(); }
   private settings(page: "settings" | "confirm" | "credits" = "settings"): void {
-    this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.inert = true; this.settingsMenu.hidden = false;
+    this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.inert = true; this.settingsMenu.hidden = false; clearTimeout(this.autoTimer); this.autoTimer = 0;
     const card = document.createElement("div"); card.className = "hud-menu-card"; card.setAttribute("role", "dialog"); card.setAttribute("aria-modal", "true"); card.setAttribute("aria-label", page === "credits" ? this.ui.hud.credits : this.ui.hud.settings);
     const heading = document.createElement("h2"); heading.textContent = page === "confirm" ? this.ui.hud.confirm : page === "credits" ? this.ui.hud.credits : this.ui.hud.settings; card.append(heading);
     const add = (label: string, action: () => void) => { const button = document.createElement("button"); button.textContent = label; button.addEventListener("click", action); card.append(button); };
-    const close = () => { this.settingsMenu.hidden = true; this.overlay.inert = false; if (this.exploring) { this.controls.setActive(true, this.state.lang); this.village.setEnabled(true); } this.settingsButton.focus(); };
+    const close = () => { this.settingsMenu.hidden = true; this.overlay.inert = false; this.resumeAuto(); if (this.exploring) { this.controls.setActive(true, this.state.lang); this.village.setEnabled(true); } this.settingsButton.focus(); };
     if (page === "confirm") { add(this.ui.hud.restart, () => { close(); this.restart(); }); add(this.ui.hud.cancel, () => this.settings()); }
     else if (page === "credits") {
       const music = document.createElement("p"); music.textContent = this.ui.hud.creditsMusic; card.append(music);
@@ -113,6 +126,7 @@ export class Game {
     else {
       add(`${this.ui.hud.language}: ${this.state.lang === "ko" ? "한국어" : "English"}`, () => { this.state.lang = this.state.lang === "ko" ? "en" : "ko"; this.save(); this.updateHud(); this.reloadDialogue?.(); this.settings(); });
       add(`${this.ui.hud.largeText}: ${this.largeText ? this.ui.hud.on : this.ui.hud.off}`, () => { this.setTextSize(!this.largeText); this.settings(); });
+      add(`${this.ui.hud.autoAdvance}: ${this.autoAdvance ? this.ui.hud.on : this.ui.hud.off}`, () => { this.setAutoAdvance(!this.autoAdvance); this.settings(); });
       add(this.ui.hud.credits, () => this.settings("credits")); add(this.ui.hud.restart, () => this.settings("confirm")); add(this.ui.hud.close, close);
     }
     this.settingsMenu.replaceChildren(card); card.querySelector("button")?.focus();
@@ -178,7 +192,7 @@ export class Game {
     requestAnimationFrame(this.updateDirection);
   };
   private panel(text: string, buttons: [string, () => void, string?][], kind: "dialogue" | "title" | "result" = "dialogue", speaker?: string): void {
-    this.exploring = false; this.updateHud(); this.token++; const token = this.token; this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.replaceChildren(); if (this.overlay.dataset) delete this.overlay.dataset.scene; this.overlay.className = `overlay ${kind}`;
+    this.exploring = false; this.updateHud(); this.token++; const token = this.token; this.clearAuto(); this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.replaceChildren(); if (this.overlay.dataset) delete this.overlay.dataset.scene; this.overlay.className = `overlay ${kind}`;
     const panel = document.createElement("div"); panel.className = "panel";
     const run = (action: () => void) => { if (token === this.token) { this.token++; action(); } };
     const button = (label: string, action: () => void, itemId?: string) => { const element = document.createElement("button"); element.textContent = label; if (itemId) element.dataset.itemId = itemId; else element.dataset.action = label === this.ui.next ? "next" : "select"; element.addEventListener("click", () => run(action)); return element; };
@@ -198,8 +212,8 @@ export class Game {
     if (residentIndex >= 0 || questIndex >= 0) this.worldApi.focusSpeaker?.(residentIndex >= 0 ? "ABCD"[residentIndex]! : quests[questIndex]!);
     if (speakerName && (match || residentIndex >= 0 || questIndex >= 0)) { const name = document.createElement("span"); name.className = "speaker"; name.textContent = residentNames[residentIndex] ?? questNames[questIndex] ?? speakerName; name.style.backgroundColor = ["var(--char-a)", "var(--char-b)", "var(--char-c)", "var(--char-d)"][residentIndex] ?? "var(--char-npc)"; if (residentIndex < 0) name.style.color = "var(--paper)"; panel.append(name); }
     panel.append(p);
-    if (buttons.length === 1 && buttons[0]![0] === this.ui.next) { panel.classList.add("continue"); panel.dataset.action = "next"; panel.tabIndex = 0; panel.setAttribute("role", "button"); panel.setAttribute("aria-label", this.ui.next); panel.addEventListener("click", () => run(buttons[0]![1])); panel.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); if (!event.repeat) run(buttons[0]![1]); } }); const indicator = document.createElement("span"); indicator.className = "indicator"; indicator.textContent = "▼"; indicator.setAttribute("aria-hidden", "true"); panel.append(indicator); }
-    this.overlay.append(panel);
+    if (buttons.length === 1 && buttons[0]![0] === this.ui.next) { panel.classList.add("continue"); panel.dataset.action = "next"; panel.tabIndex = 0; panel.setAttribute("role", "button"); panel.setAttribute("aria-label", this.ui.next); panel.addEventListener("click", () => run(buttons[0]![1])); panel.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); if (!event.repeat) run(buttons[0]![1]); } }); const indicator = document.createElement("span"); indicator.className = "indicator"; indicator.textContent = "▼"; indicator.setAttribute("aria-hidden", "true"); panel.append(indicator); const advance = buttons[0]![1]; this.autoPending = { token, fire: () => run(advance), ms: this.autoDelay(p.textContent ?? text) }; }
+    this.overlay.append(panel); this.resumeAuto();
     if (!(buttons.length === 1 && buttons[0]![0] === this.ui.next)) { this.overlay.classList.add("has-choices"); const choices = document.createElement("div"); choices.className = "choices"; for (const [label, action, itemId] of buttons) choices.append(button(label, action, itemId)); this.overlay.append(choices); }
   }
   private applySnapshot(snapshot: PlaySnapshot): boolean {

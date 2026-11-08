@@ -242,3 +242,17 @@ test("resident dialogue parser failure offers a retry and resumes the selected k
     expect(game.story).not.toBeNull();
   } finally { vi.doUnmock("inkjs"); vi.unstubAllGlobals(); }
 });
+
+test("auto-advance fires only for the panel that armed it", () => {
+  vi.useFakeTimers(); vi.stubGlobal("window", { setTimeout: (fn: () => void, ms: number) => setTimeout(fn, ms) });
+  try {
+    const game = Object.assign(Object.create(Game.prototype), { token: 1, autoAdvance: true, autoTimer: 0, autoPending: null, settingsMenu: { hidden: true } });
+    expect(game.autoDelay("짧다")).toBe(1200); expect(game.autoDelay("가".repeat(60))).toBe(5000); expect(game.autoDelay("가".repeat(12))).toBe(2000);
+    const stale = vi.fn(); game.autoPending = { token: 1, fire: stale, ms: 1200 }; game.resumeAuto(); game.token = 2; vi.advanceTimersByTime(5000);
+    expect(stale).not.toHaveBeenCalled();
+    const live = vi.fn(); game.autoPending = { token: 2, fire: live, ms: 1200 }; game.resumeAuto(); game.settingsMenu.hidden = false; vi.advanceTimersByTime(5000);
+    expect(live).not.toHaveBeenCalled();
+    game.settingsMenu.hidden = true; game.resumeAuto(); vi.advanceTimersByTime(1199); expect(live).not.toHaveBeenCalled(); vi.advanceTimersByTime(1);
+    expect(live).toHaveBeenCalledOnce();
+  } finally { vi.useRealTimers(); vi.unstubAllGlobals(); }
+});
