@@ -1,12 +1,10 @@
 -> ending_shell
 
 === ending_shell ===
-The egg from the beginning reappears.
-Today's colors have seeped into the once-white shell.
+The egg from the beginning reappears, tinged with today's colors.
 You: I thought I was empty, but today filled me in.
 You: I'm the one who breaks the shell.
-The shell cracks gently, and a soft light spills out.
-You: I met the self who lived today.
+The shell cracks, and a soft light spills out.
 -> END
 
 === ending_cards ===

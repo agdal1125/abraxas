@@ -10,33 +10,33 @@
 === gate_a ===
 하루 끝에 마음을 채우는 풍경이 떠오른다.
 주인공: 어떤 풍경이 내게 남았을까?
-* [다정한 목소리가 오가며 함께 웃고 떠들던 활기찬 광장 # item:gate_a # pick:a]
+* [함께 웃던 광장 # item:gate_a # pick:a]
 -> END
-* [고요한 밤공기 속에서 오롯이 나 자신과 마주하던 호숫가 # item:gate_a # pick:b]
+* [혼자 마주한 호숫가 # item:gate_a # pick:b]
 -> END
 
 === gate_b ===
 어려운 결정을 내리던 순간이 스친다.
 주인공: 그때 무엇을 마음에 두었을까?
-* [함께 있는 사람들의 다치지 않는 마음과 따뜻한 온기 # item:gate_b # pick:a]
+* [다치지 않는 마음 # item:gate_b # pick:a]
 -> END
-* [누구에게나 흔들리지 않는 분명한 이치와 공정한 기준 # item:gate_b # pick:b]
+* [흔들리지 않는 기준 # item:gate_b # pick:b]
 -> END
 
 === gate_c ===
 다시 걸어갈 길이 눈앞에 어른거린다.
 주인공: 어떤 길이 나를 기다릴까?
-* [아직 가보지 못한 골목 너머의 낯설고 새로운 풍경 # item:gate_c # pick:a]
+* [낯설고 새로운 골목 # item:gate_c # pick:a]
 -> END
-* [오랜 시간 손때 묻은 자리에서 반겨 주는 익숙한 풍경 # item:gate_c # pick:b]
+* [손때 묻은 익숙한 자리 # item:gate_c # pick:b]
 -> END
 
 === gate_d ===
 문고리를 잡은 손에 힘이 들어간다.
 주인공: 무엇이 내 발걸음을 움직일까?
-* [문 너머에서 얻을 더 크고 빛나는 가능성을 향한 발걸음 # item:gate_d # pick:a]
+* [더 큰 가능성 쪽으로 # item:gate_d # pick:a]
 -> END
-* [소중한 것을 잃지 않도록 발밑을 단단히 지키는 발걸음 # item:gate_d # pick:b]
+* [소중한 것을 지키는 쪽으로 # item:gate_d # pick:b]
 -> END
 
 === gate_outro ===

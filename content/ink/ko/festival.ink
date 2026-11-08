@@ -4,23 +4,22 @@
 장식과 빵, 기록과 종이 광장에 모였다.
 네 주민이 남은 공동 예산 앞에 섰다.
 루미: 다들 와 줬네! 장식이 춤추는 것 같아!
-에코: 기록에 남길 만한 밤이네.
 오르: 남은 예산은 어떻게 쓸까?
 -> END
 
 === festival_01 ===
-* [오늘 밤 하늘을 수놓을 불꽃놀이와 특별 간식에 다 쓰자 # item:festival_01 # pick:a]
+* [오늘 밤 불꽃놀이에 # item:festival_01 # pick:a]
 -> END
-* [다가올 겨울에 다리와 지붕을 고칠 비상 기금으로 두자 # item:festival_01 # pick:b]
+* [겨울 수리 기금으로 # item:festival_01 # pick:b]
 -> END
 
 === festival_02 ===
 두 마을 악단의 연주 순서가 겹쳐 무대 앞에 섰다.
 모카: 악사들에게 물을 가져다줄게.
 오르: 의자 더 놓자. 순서는 어떻게 할까?
-* [신청서 접수 시각이 앞선 기록대로 공정히 순서를 정한다 # item:festival_02 # pick:a]
+* [접수한 순서대로 # item:festival_02 # pick:a]
 -> END
-* [어느 쪽도 서운치 않게 두 악단의 합동 무대를 연다 # item:festival_02 # pick:b]
+* [두 악단 합동 무대 # item:festival_02 # pick:b]
 -> END
 
 === festival_03 ===
@@ -28,18 +27,18 @@
 루미: 강아지야, 같이 춤출래!
 에코: 꼬리가 박자를 맞추는군.
 오르: 밟지 않게 조심. 등불은 어떻게 꾸밀까?
-* [색색의 유리를 새로 끼워 처음 보는 무지갯빛을 밝힌다 # item:festival_03 # pick:a]
+* [색유리로 새 무지갯빛 # item:festival_03 # pick:a]
 -> END
-* [오랜 풍습대로 따뜻한 호박색 초를 넣어 옛 빛을 밝힌다 # item:festival_03 # pick:b]
+* [호박색 초로 옛 빛 # item:festival_03 # pick:b]
 -> END
 
 === festival_04 ===
 광장 등불을 잇는 점등판 앞에 섰다.
 오르: 심지 여기 있어.
 에코: 연결된 자리를 확인하자. 어디부터 켤까?
-* [불씨가 모자라 꺼지지 않게 가까운 둘레 등불부터 켠다 # item:festival_04 # pick:a]
+* [가까운 등불부터 # item:festival_04 # pick:a]
 -> END
-* [꼭대기 아치까지 빛이 닿도록 가장 높은 등불에 도전한다 # item:festival_04 # pick:b]
+* [가장 높은 등불부터 # item:festival_04 # pick:b]
 -> END
 
 === festival_lights ===
@@ -52,9 +51,9 @@
 모카: 네 하얀 모습에도 빛이 닿네.
 에코: 빛은 자꾸 달라지는군.
 주인공: 이 밤에 무엇이 떠오를까?
-* [이 밤이 지나고 맞이할 내일의 마을과 앞날을 그려 본다 # item:festival_05 # pick:a]
+* [내일의 마을 그려 보기 # item:festival_05 # pick:a]
 -> END
-* [지금 눈앞에 반짝이는 불빛과 음악 소리 속에 빠져든다 # item:festival_05 # pick:b]
+* [지금 불빛에 빠져들기 # item:festival_05 # pick:b]
 -> END
 
 === festival_companion_intro ===
