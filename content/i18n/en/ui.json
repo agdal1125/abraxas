@@ -7,6 +7,7 @@
   },
   "intent": {
     "text": "Where you walk and what you say\ntell others who you are before your name does.\nStay a while, and go where your heart leads.",
+    "note": "Choices can't be undone, but none of them are wrong.",
     "prompt": "Tap the screen to continue"
   },
   "howTo": {
@@ -131,7 +132,7 @@
   },
   "map": { "open": "Map", "title": "Village map", "here": "You are here", "target": "Places to go", "zones": { "plaza": "Plaza", "bakery": "Bakery", "library": "Library", "smithy": "Smithy", "lake": "Lakeside", "entrance": "Entrance", "gate": "Memory Gate" } },
   "hud": {
-    "goal": { "hub": "Find someone to help with the festival", "character": "Find the person waiting for you", "quest": "Find the villager who needs help", "return": "Go back and meet them again", "interlude": "Take a quiet moment by the lake", "festival": "Head to the plaza", "gate": "Head to the Gate of Memory" },
+    "goal": { "walk": "Follow the path into the village", "hub": "Find someone to help with the festival", "character": "Find the person waiting for you", "quest": "Find the villager who needs help", "return": "Go back and meet them again", "interlude": "Take a quiet moment by the lake", "festival": "Head to the plaza", "gate": "Head to the Gate of Memory" },
     "settings": "Settings", "close": "Close", "language": "Language", "largeText": "Large text", "on": "On", "off": "Off", "restart": "Start over", "confirm": "Erase your progress and start over?", "cancel": "Cancel", "share": "Share",
     "howTo": "How to play", "credits": "Credits", "creditsMusic": "Music: The Day We Smiled (60s Edit) — HoneyTune, Internet Archive", "creditsSounds": "Sound effects use CC0 materials.", "creditsList": "Full sound effects list", "back": "Back"
   }

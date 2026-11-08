@@ -7,6 +7,7 @@
   },
   "intent": {
     "text": "어디로 걷고 어떤 말을 건네는지가\n이름보다 먼저 그 사람을 말해 주곤 한다.\n잠시 이 마을에서 마음 가는 대로 머물다 가기를.",
+    "note": "고른 것은 되돌릴 수 없지만, 정답도 없어요.",
     "prompt": "화면을 눌러 이야기를 이어 가세요"
   },
   "howTo": {
@@ -131,7 +132,7 @@
   },
   "map": { "open": "지도", "title": "마을 지도", "here": "지금 있는 곳", "target": "가 볼 곳", "zones": { "plaza": "광장", "bakery": "빵집", "library": "도서관", "smithy": "대장간", "lake": "호숫가", "entrance": "마을 입구", "gate": "기억의 문" } },
   "hud": {
-    "goal": { "hub": "축제 준비를 도울 사람을 찾아보자", "character": "기다리는 사람을 찾아가 보자", "quest": "도움을 줄 주민을 찾아가 보자", "return": "다시 만나러 가 보자", "interlude": "호숫가에서 잠시 쉬어 가자", "festival": "광장으로 가 보자", "gate": "기억의 문으로 가 보자" },
+    "goal": { "walk": "길을 따라 마을 안쪽으로 걸어가 보자", "hub": "축제 준비를 도울 사람을 찾아보자", "character": "기다리는 사람을 찾아가 보자", "quest": "도움을 줄 주민을 찾아가 보자", "return": "다시 만나러 가 보자", "interlude": "호숫가에서 잠시 쉬어 가자", "festival": "광장으로 가 보자", "gate": "기억의 문으로 가 보자" },
     "settings": "설정", "close": "닫기", "language": "언어", "largeText": "글자 크게", "on": "켜기", "off": "끄기", "restart": "처음부터 다시", "confirm": "지금까지의 진행을 지우고 처음부터 다시 시작할까요?", "cancel": "취소", "share": "공유하기",
     "howTo": "조작 방법", "credits": "만든 자료", "creditsMusic": "음악: The Day We Smiled (60s Edit) — HoneyTune, Internet Archive", "creditsSounds": "효과음은 CC0 자료를 사용했습니다.", "creditsList": "효과음 전체 목록", "back": "뒤로"
   }

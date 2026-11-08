@@ -10,6 +10,9 @@ import type { Village } from "../scenes/village";
 import { Controls } from "../input/controls";
 import type { VillageInput } from "../input/movement";
 import { objectiveKey } from "./hud";
+
+// Prologue questions after the first wait at these spots on the road from the entrance to the plaza.
+const PROLOGUE_STOPS = [null, "prologue-fork", "prologue-sign"] as const;
 import { mokaView, type BreadId, type SlotId } from "../core/moka-errand";
 import { lumiView } from "../core/lumi-errand";
 import { echoView } from "../core/echo-errand";
@@ -51,6 +54,7 @@ export class Game {
   private overlay = document.createElement("div");
   private token = 0;
   private story: Story | null = null;
+  private walkStop: { id: string; reached: () => void } | null = null;
   private lastLine = "";
   private resumed = false;
   private openingActive = false;
@@ -183,6 +187,7 @@ export class Game {
     if (kind === "result") {
       const [title, modifier, ...rest] = text.split("\n\n"); const intro = document.createElement("div"); intro.className = "result-intro"; const details = document.createElement("div"); details.className = "result-details"; const heading = document.createElement("h2"); heading.textContent = title ?? ""; const badge = document.createElement("span"); badge.className = "modifier"; badge.textContent = modifier ?? ""; const list = document.createElement("ul"); for (const line of rest.slice(0, 4)) { const item = document.createElement("li"); item.textContent = line; list.append(item); } const disclaimer = document.createElement("p"); disclaimer.className = "disclaimer"; disclaimer.textContent = rest[4] ?? ""; const actions = document.createElement("div"); actions.className = "result-actions"; if (typeof navigator.share === "function") actions.append(button(this.ui.hud.share, () => { void navigator.share({ text: [title, modifier, ...rest.slice(0, 4)].join("\n") }).catch(() => {}); this.result(); })); for (const [label, action] of buttons) actions.append(button(label, action)); intro.append(heading, badge); details.append(list, disclaimer, actions); panel.append(intro, details); this.overlay.append(panel); return;
     }
+    if (!text && buttons.length === 0) return; // panel("", []) only clears the screen and pauses input.
     const match = text.match(/^([^:\n]+):\s*([\s\S]*)$/); const p = document.createElement("p"); p.textContent = match ? match[2]! : text;
     const rawSpeaker = match?.[1]?.trim() ?? speaker;
     const speakerName = rawSpeaker === "주인공" || rawSpeaker === "You" ? this.playerName || this.ui.names.player : rawSpeaker === "데미" || rawSpeaker === "Demi" ? this.demiRevealed ? this.ui.names.demi : this.ui.names.dogUnknown : rawSpeaker;
@@ -311,12 +316,15 @@ export class Game {
     if (this.resumed && this.display().name === undefined) await this.nameInput();
     await openingSequence({
       intent: async () => { if (this.display().introSeen) return; this.panel("", []); await showIntent(this.overlay, this.ui.intent); },
-      howToChoose: () => new Promise<void>(resolve => this.panel(this.ui.howTo.choose, [[this.ui.next, resolve]])),
       prelude: async () => { if (!this.display().introSeen) { this.panel("", []); const { playPrelude } = await import("./cinematic"); const playback = playPrelude(this.overlay, this.state.lang, this.ui.cinematic); this.overlay.querySelectorAll(".cinematic button").forEach((button, index) => { (button as HTMLButtonElement).dataset.action = ["play", "mute", "skip"][index]!; }); await playback; this.saveDisplay({ introSeen: true }); } },
       scene: scene => this.village.setStoryScene(scene), mode: mode => this.village.setDemiMode(mode),
       knot: knot => this.narrative("prologue", knot), name: () => this.nameInput(),
       questions: async () => {
-        for (const item of data.items.filter(item => item.segment === "prologue")) {
+        for (const [index, item] of data.items.filter(item => item.segment === "prologue").entries()) {
+          if (this.state.log.some(answer => answer.id === item.id)) continue;
+          const stop = PROLOGUE_STOPS[index];
+          if (stop) await this.walkTo(stop);
+          this.village.setDemiMode("sit");
           while (!this.state.log.some(answer => answer.id === item.id)) {
             await this.narrative("prologue", item.id, true);
             if (!this.state.log.some(answer => answer.id === item.id)) await new Promise<void>(resolve => { const status = translations(this.state.lang).moka.status; this.panel(status.contentUnavailable, [[status.tryAgain, resolve]]); });
@@ -326,6 +334,8 @@ export class Game {
     }, !this.resumed && this.state.log.length === 0);
     this.openingActive = false; this.resumed = false; this.finish();
   }
+  // Resolves once the player reaches the marked spot, so a scene waits for the player to walk there.
+  private walkTo(id: string): Promise<void> { return new Promise(resolve => { this.walkStop = { id, reached: resolve }; this.showWorld([id]); }); }
   private async hub(): Promise<void> {
     const seen = this.display().hubSeen;
     await this.narrative("hub", seen ? "hub_return" : "hub_intro");
@@ -375,6 +385,7 @@ export class Game {
   private interact(id: string): void {
     if (this.snapshot?.segment === "ep_moka") { this.interactMoka(id); return; }
     if (this.snapshot && this.resident()) { this.interactResident(this.resident()!, id); return; }
+    if (this.walkStop?.id === id) { const { reached } = this.walkStop; this.walkStop = null; reached(); return; }
     if (id.startsWith("examine:")) {
       const lines = translations(this.state.lang).examine[id.slice(8)];
       if (lines?.length) {

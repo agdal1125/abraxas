@@ -18,6 +18,7 @@
 .install-guide{width:min(460px,calc(100% - 32px))}
 .intent-card{position:absolute;inset:0;z-index:7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;width:100%;height:100%;padding:24px;clip-path:none;box-shadow:none;background:#1b1a18;color:#fff8ec;font-weight:400;pointer-events:auto;animation:intent-in 900ms ease-out}
 .intent-card:active{transform:none;box-shadow:none}
+.intent-card .intent-note{font-size:var(--label-size,14px);line-height:1.6;opacity:.75}
 .intent-card p{margin:0;font-size:var(--body-size,17px);line-height:1.9;white-space:pre-line;text-align:center}
 .intent-card small{font-size:var(--caption-size,12px);opacity:.65}
 .move-hint{position:absolute;z-index:3;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);padding:8px 16px;background:var(--paper);color:var(--ink);font-size:14px;line-height:1.6;white-space:pre-line;text-align:center;width:max-content;max-width:calc(100% - 32px);pointer-events:none}
