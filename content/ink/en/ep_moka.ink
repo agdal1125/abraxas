@@ -4,7 +4,6 @@
 The bakery is full of a warm, toasty smell.
 Moka: Welcome. I could use a hand right now.
 Moka: Freshly baked walnut bread! Could you take it to the workshop?
-Moka: It's a snack for the folks at Or's workshop on the hill.
 Moka: Which path will you take?
 * [Run up the steep shortcut to deliver it warm # item:moka_01 # pick:a]
 -> END
