@@ -147,6 +147,7 @@ export class Game {
   }
   private flashNotice(text: string, ms: number): void { this.notice.textContent = text; window.clearTimeout(this.noticeTimer); this.noticeTimer = window.setTimeout(() => { this.notice.textContent = ""; }, ms); }
   private fragmentsReveal(): Promise<void> {
+    this.exploring = false; this.updateHud(); this.token++; this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.replaceChildren();
     const total = this.fragmentTotal(), root = document.createElement("div");
     root.className = "fragment-reveal"; root.setAttribute("role", "status");
     const dots = document.createElement("div"); dots.className = "fragment-dots";
