@@ -10,6 +10,7 @@ type OpeningActions = {
   mode: (mode: "lead" | "follow" | "sit") => void;
   knot: (knot: string) => Promise<void>;
   name: () => Promise<void>;
+  question: (id: string) => Promise<void>;
   questions: () => Promise<void>;
 };
 
@@ -21,6 +22,10 @@ export async function openingSequence(actions: OpeningActions, fresh: boolean): 
     await actions.knot("demi_follow");
     actions.mode("follow");
     await actions.knot("postman_intro");
+    actions.mode("sit");
+    await actions.question("prologue_01");
+    actions.mode("follow");
+    await actions.knot("postman_name");
     await actions.name();
     await actions.knot("postman_named");
   } else actions.scene("entrance");
