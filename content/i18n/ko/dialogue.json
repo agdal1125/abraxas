@@ -18,7 +18,7 @@
     "lumi_01": {
       "speaker": "lumi",
       "empathy": "응! 그 자리도 좋겠다!",
-      "thinking": "오, 거기선 어떤 이야기가 생길까!"
+      "thinking": "오, 거기선 뭐가 만들어질까!"
     },
     "lumi_02": {
       "speaker": "lumi",
@@ -32,7 +32,7 @@
     },
     "lumi_04": {
       "speaker": "lumi",
-      "empathy": "좋아! 멋진 재료가 되겠다!",
+      "empathy": "좋아! 그걸로 꾸며 보자!",
       "thinking": "와, 어떤 장식이 나올까!"
     },
     "lumi_05": {
@@ -43,7 +43,7 @@
     "lumi_06": {
       "speaker": "lumi",
       "empathy": "좋아! 같이 귀 기울이자!",
-      "thinking": "와, 첫 음이 벌써 궁금해!"
+      "thinking": "와, 다들 어떤 얼굴로 들을까!"
     },
     "interlude_1_01": {
       "speaker": "player",
@@ -53,7 +53,7 @@
     "interlude_1_02": {
       "speaker": "player",
       "empathy": "그 모습이 눈에 들어왔어.",
-      "thinking": "아, 그때의 모습이 새롭게 보이네."
+      "thinking": "아, 나도 모르게 멈춰서 보게 되네."
     },
     "moka_01": {
       "speaker": "moka",
@@ -62,8 +62,8 @@
     },
     "moka_02": {
       "speaker": "moka",
-      "empathy": "그래, 함께 살펴보자.",
-      "thinking": "아, 그런 마음으로도 볼 수 있구나."
+      "empathy": "그래, 그렇게 해 보자.",
+      "thinking": "아, 그렇게 풀 수도 있구나."
     },
     "moka_03": {
       "speaker": "moka",
@@ -93,7 +93,7 @@
     "interlude_2_02": {
       "speaker": "player",
       "empathy": "이렇게 해도 괜찮아.",
-      "thinking": "상자에 이런 이야기도 숨어 있었네."
+      "thinking": "이 상자, 생각보다 재미있네."
     },
     "echo_01": {
       "speaker": "echo",
@@ -117,7 +117,7 @@
     },
     "echo_05": {
       "speaker": "echo",
-      "empathy": "응, 그 대목이 마음에 남겠어.",
+      "empathy": "응, 그 대목 좋지.",
       "thinking": "그 장면을 다시 읽어 보고 싶네."
     },
     "echo_06": {
@@ -183,7 +183,7 @@
     "festival_04": {
       "speaker": "or",
       "empathy": "좋아. 해 보자.",
-      "thinking": "빛이 어디까지 닿을까."
+      "thinking": "어디부터 밝아질지 보자."
     },
     "festival_05": {
       "speaker": "player",
@@ -203,7 +203,7 @@
     "gate_c": {
       "speaker": "player",
       "empathy": "그 길도 내게 남았네.",
-      "thinking": "그 길에서 만날 풍경이 궁금해."
+      "thinking": "그 길이 나를 기다리고 있겠지."
     },
     "gate_d": {
       "speaker": "player",
