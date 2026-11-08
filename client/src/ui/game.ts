@@ -19,6 +19,7 @@ import { echoView } from "../core/echo-errand";
 import { orView } from "../core/or-errand";
 import { residentBoard, residentCommand, type Resident } from "./residents-errands";
 import { MINIGAME_ROUNDS, focusMinigame, minigameBoard } from "./minigames";
+import { setSound, soundOn } from "./sfx";
 import { nextPlacements, roundPlan } from "../core/minigames";
 import { contentVersionMatches, type Command, type PlaySnapshot, type EndingNPC, type ConfessionReason } from "../core/play";
 import { createPlay, loadCurrentPlay, recoverPending, sendCommand, PlayApiError, ResponseValidationError, type CommandResult } from "../net/plays";
@@ -125,6 +126,7 @@ export class Game {
     else {
       add(`${this.ui.hud.language}: ${this.state.lang === "ko" ? "한국어" : "English"}`, () => { this.state.lang = this.state.lang === "ko" ? "en" : "ko"; this.save(); this.updateHud(); this.reloadDialogue?.(); this.settings(); });
       add(`${this.ui.hud.largeText}: ${this.largeText ? this.ui.hud.on : this.ui.hud.off}`, () => { this.setTextSize(!this.largeText); this.settings(); });
+      add(`${this.ui.hud.sound}: ${soundOn() ? this.ui.hud.on : this.ui.hud.off}`, () => { setSound(!soundOn()); this.settings(); });
       add(this.ui.hud.howTo, () => this.settings("howTo")); add(this.ui.hud.credits, () => this.settings("credits")); add(this.ui.hud.restart, () => this.settings("confirm")); add(this.ui.hud.close, close);
     }
     this.settingsMenu.replaceChildren(card); card.querySelector("button")?.focus();
