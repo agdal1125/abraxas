@@ -35,7 +35,7 @@ describe("Lumi errand", () => {
   it("requires the carried object to be recovered from the rest", () => {
     let snapshot = structuredClone(fixture.initial) as PlaySnapshot;
     const commands = fixture.success[0]!.commands;
-    const pickup = commands.findIndex(c => c.kind === "pickup" && "targetId" in c && c.targetId === "lumi-horn");
+    const pickup = commands.findIndex(c => c.kind === "choice" && "itemId" in c && c.itemId === "lumi_03"); // the notice is handed over with this choice
     for (const command of commands.slice(0, pickup + 1)) snapshot = transitionLumi(snapshot, command as Command, fixture.completedAt);
     snapshot = transitionLumi(snapshot, { kind: "set_down", targetId: "lumi-rest" });
     expect(lumiView(snapshot).activeTargetIds).toEqual(["lumi-rest"]);
@@ -68,7 +68,7 @@ describe("Lumi errand", () => {
     expect(() => transitionLumi(snapshot, { kind: "place_piece", pieceId: otherPiece, slotId: first.slotId })).toThrow("invalid_lumi_transition");
   });
   it("activates only the selected branch at each action", () => {
-    const branches: Partial<Record<keyof typeof content.phases, string>> = {"table":"lumi_01","card":"lumi_02","notice_pickup":"lumi_03","notice_first":"lumi_03","notice_second":"lumi_03","material_pickup":"lumi_04","welcome":"lumi_05","score_pickup":"lumi_06"};
+    const branches: Partial<Record<keyof typeof content.phases, string>> = {"table":"lumi_01","card":"lumi_02","notice_first":"lumi_03","notice_second":"lumi_03","welcome":"lumi_05"};
     let snapshot = structuredClone(fixture.initial) as PlaySnapshot;
     let checked = 0;
     for (const command of fixture.success[0]!.commands) {

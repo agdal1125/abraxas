@@ -26,11 +26,11 @@ describe("Moka errand", () => {
     expect(contentVersionMatches(snapshot, "")).toBe(false);
   });
 
-  it("rejects out-of-order actions and carries the basket only after pickup", () => {
+  it("rejects out-of-order actions and hands over the basket with the route choice", () => {
     let snapshot = transitionMoka(start(), { kind: "open_episode", npcId: "moka" });
     expect(() => transitionMoka(snapshot, { kind: "deliver", targetId: "moka-workshop-dropoff" })).toThrow();
     snapshot = transitionMoka(snapshot, { kind: "choice", itemId: "moka_01", pick: "a" });
-    snapshot = transitionMoka(snapshot, { kind: "pickup", targetId: "moka-basket-source" });
+    expect(snapshot.moka).toMatchObject({ phase: "deliver", basket: "player" });
     snapshot = transitionMoka(snapshot, { kind: "set_down", targetId: "moka-rest" });
     expect(() => transitionMoka(snapshot, { kind: "deliver", targetId: "moka-workshop-dropoff" })).toThrow();
     snapshot = transitionMoka(snapshot, { kind: "pickup", targetId: "moka-rest" });

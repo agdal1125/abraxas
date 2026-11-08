@@ -523,9 +523,7 @@ export class Game {
     if (phase === "arrange") { void this.mokaNarrative("moka_arrange", () => this.board()); return; }
     if (phase === "report") { void this.mokaNarrative("moka_report", () => void this.command({ kind: "complete", targetId: "B" }, result => { const hearts = result.snapshot.episodeEnd?.hearts ?? 0; void this.mokaNarrative("moka_completed", () => this.panel(`${"♥".repeat(hearts)}${"♡".repeat(5 - hearts)}`, [[this.ui.next, () => this.world()]])); }), this.ui.finishErrand); return; }
     let command: Command;
-    if (phase === "pick_up") command = { kind: "pickup", targetId: id };
-    else if (phase === "deliver") command = { kind: id === "moka-rest" ? (this.snapshot.moka.basket === "player" ? "set_down" : "pickup") : "deliver", targetId: id };
-    else if (phase === "return") command = { kind: "talk", targetId: id };
+    if (phase === "deliver") command = { kind: id === "moka-rest" ? (this.snapshot.moka.basket === "player" ? "set_down" : "pickup") : "deliver", targetId: id };
     else command = { kind: "act", targetId: id };
     void this.command(command, () => { if (command.kind === "deliver") void this.mokaNarrative("moka_delivered", () => this.world()); else this.world(); });
   }

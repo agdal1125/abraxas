@@ -246,6 +246,14 @@ func residentRest(state *ResidentState, c Command, npc, object string) bool {
 	}
 	return false
 }
+
+// Hands the player the object a choice sends them to deliver, so the errand skips a separate pickup step.
+func carryOnChoice(state *ResidentState, object string) {
+	if object != "" {
+		state.Objects[object] = "player"
+	}
+}
+
 func residentChoice(s *Snapshot, state *ResidentState, c Command, id, next string) bool {
 	if c.Kind != "choice" || c.ItemID != id || (c.Pick != "a" && c.Pick != "b") || answer(s, id) != "" {
 		return false
@@ -474,16 +482,16 @@ func (e *Engine) moka(s *Snapshot, c Command, at string) error {
 	choices := map[string]struct {
 		index int
 		next  string
-	}{"choose_route": {0, "pick_up"}, "reservation": {1, "reservation_action"}, "choose_display": {2, "arrange"}, "share": {3, "share_action"}, "order": {4, "order_action"}, "feedback": {5, "report"}}
+	}{"choose_route": {0, "deliver"}, "reservation": {1, "reservation_action"}, "choose_display": {2, "arrange"}, "share": {3, "share_action"}, "order": {4, "order_action"}, "feedback": {5, "report"}}
 	if rule, ok := choices[phase]; ok && c.Kind == "choice" && c.ItemID == e.quest.Items[rule.index] && (c.Pick == "a" || c.Pick == "b") && answer(s, c.ItemID) == "" {
 		s.Answers = append(s.Answers, scoring.Answer{ID: c.ItemID, Pick: c.Pick})
 		m.Phase = rule.next
+		if phase == "choose_route" {
+			m.Basket = "player" // Moka hands over the basket with the request; there is no separate pickup step.
+		}
 		return nil
 	}
 	switch {
-	case phase == "pick_up" && c.Kind == "pickup" && c.TargetID == "moka-basket-source" && m.Basket == "source":
-		m.Basket = "player"
-		m.Phase = "deliver"
 	case phase == "deliver" && c.Kind == "set_down" && c.TargetID == "moka-rest" && m.Basket == "player":
 		m.Basket = "moka-rest"
 	case phase == "deliver" && c.Kind == "pickup" && c.TargetID == "moka-rest" && m.Basket == "moka-rest":
@@ -497,7 +505,7 @@ func (e *Engine) moka(s *Snapshot, c Command, at string) error {
 			index, next = 3, "order"
 		}
 		if phase == "order_action" {
-			index, next = 4, "return"
+			index, next = 4, "feedback"
 		}
 		pick := answer(s, e.quest.Items[index])
 		if pick == "" || e.quest.Phases[phase].TargetsByPick[pick] != c.TargetID {
@@ -550,8 +558,6 @@ func (e *Engine) moka(s *Snapshot, c Command, at string) error {
 			}
 		}
 		m.Phase = "share"
-	case phase == "return" && c.Kind == "talk" && c.TargetID == "B":
-		m.Phase = "feedback"
 	case phase == "report" && c.Kind == "complete" && c.TargetID == "B" && at != "" && m.Basket == "delivered" && !contains(s.CompletedEpisodes, "moka") && len(m.Placements) == len(e.quest.Slots):
 		used := map[string]bool{}
 		for slot, bread := range m.Placements {

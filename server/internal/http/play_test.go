@@ -128,7 +128,7 @@ func TestMokaTransportAndConcurrency(t *testing.T) {
 
 	concurrent := store.NewMemory()
 	doc := play.NewDoc(fixture.Initial)
-	for _, cmd := range fixture.Success[0].Commands[:3] {
+	for _, cmd := range fixture.Success[0].Commands[:2] { // open and choose a route: the basket is already in hand
 		if _, err := engine.Apply(&doc, cmd, fixture.CompletedAt); err != nil {
 			t.Fatal(err)
 		}
