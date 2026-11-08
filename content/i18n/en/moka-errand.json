@@ -2,7 +2,6 @@
   "objective": {
     "locked": "Talk to Moka",
     "choose_route": "Talk to Moka",
-    "pick_up": "Pick up the walnut bread basket",
     "deliver": "Deliver the bread to the workshop",
     "pick_up_rest": "Pick up the basket again",
     "reservation": "Meet the customer outside the bakery",
@@ -13,7 +12,6 @@
     "share_action": "Put the tasting bread where you chose",
     "order": "Prepare dough for the festival",
     "order_action": "Prepare the amount of dough you chose",
-    "return": "Return to Moka",
     "feedback": "Talk with Moka about the cookies",
     "report": "Finish talking about the errand",
     "completed": "You finished Moka's errand"

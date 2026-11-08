@@ -28,7 +28,7 @@ describe("Echo errand", () => {
   it("requires the carried object to be recovered from the rest", () => {
     let snapshot = structuredClone(fixture.initial) as PlaySnapshot;
     const commands = fixture.success[0]!.commands;
-    const pickup = commands.findIndex(c => c.kind === "pickup" && "targetId" in c && c.targetId === "echo-picture-book");
+    const pickup = commands.findIndex(c => c.kind === "act" && "targetId" in c && c.targetId === "echo-kind-note"); // enclosing the note hands over the book
     for (const command of commands.slice(0, pickup + 1)) snapshot = transitionEcho(snapshot, command as Command, fixture.completedAt);
     snapshot = transitionEcho(snapshot, { kind: "set_down", targetId: "echo-rest" });
     expect(echoView(snapshot).activeTargetIds).toEqual(["echo-rest"]);
@@ -61,7 +61,7 @@ describe("Echo errand", () => {
     expect(() => transitionEcho(snapshot, { kind: "place_piece", pieceId: otherPiece, slotId: first.slotId })).toThrow("invalid_echo_transition");
   });
   it("activates only the selected branch at each action", () => {
-    const branches: Partial<Record<keyof typeof content.phases, string>> = {"enclose":"echo_01","search":"echo_02","record_pickup":"echo_02","notebook_delivery":"echo_03","bookmark":"echo_05","legend_delivery":"echo_06"};
+    const branches: Partial<Record<keyof typeof content.phases, string>> = {"enclose":"echo_01","search":"echo_02","notebook_delivery":"echo_03","bookmark":"echo_05","legend_delivery":"echo_06"};
     let snapshot = structuredClone(fixture.initial) as PlaySnapshot;
     let checked = 0;
     for (const command of fixture.success[0]!.commands) {

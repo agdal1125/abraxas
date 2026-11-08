@@ -55,11 +55,7 @@ The map marks where fine sand can be found by the stream.
 -> END
 
 === or_find_sand_b ===
-Angler: You'll find fine sand downstream. The merchant knows the way.
--> END
-
-=== or_merchant ===
-Merchant: Follow the water for good sand. Safe travels.
+Angler: You'll find fine sand downstream. Follow the water.
 -> END
 
 === or_assistant ===

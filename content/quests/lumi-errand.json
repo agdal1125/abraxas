@@ -4,18 +4,16 @@
   "pieces": { "circle-1": "circle", "circle-2": "circle", "triangle-1": "triangle", "triangle-2": "triangle", "square-1": "square", "square-2": "square" },
   "slots": { "circle-1": "circle", "circle-2": "circle", "triangle-1": "triangle", "triangle-2": "triangle", "square-1": "square", "square-2": "square" },
   "objects": { "notice": ["source", "player", "lumi-rest", "delivered"], "material": ["source", "player", "lumi-rest", "delivered"], "score": ["source", "player", "lumi-rest", "delivered"] },
-  "objectiveKeys": {"locked":"lumi.objective.locked","choose_01":"lumi.objective.choose_01","table":"lumi.objective.table","choose_02":"lumi.objective.choose_02","card":"lumi.objective.card","choose_03":"lumi.objective.choose_03","notice_pickup":"lumi.objective.notice_pickup","notice_first":"lumi.objective.notice_first","notice_second":"lumi.objective.notice_second","notice_return":"lumi.objective.notice_return","stagekeeper":"lumi.objective.stagekeeper","choose_04":"lumi.objective.choose_04","material_pickup":"lumi.objective.material_pickup","material_delivery":"lumi.objective.material_delivery","arrange":"lumi.objective.arrange","choose_05":"lumi.objective.choose_05","welcome":"lumi.objective.welcome","return":"lumi.objective.return","choose_06":"lumi.objective.choose_06","score_pickup":"lumi.objective.score_pickup","score_delivery":"lumi.objective.score_delivery","report":"lumi.objective.report","completed":"lumi.objective.completed"},
-  "resumePoints": {"locked":[],"choose_01":["A"],"table":["lumi-table-alone","lumi-table-together"],"choose_02":["A"],"card":["lumi-card-new","lumi-card-traditional"],"choose_03":["A"],"notice_pickup":["lumi-horn","lumi-notices"],"notice_first":["lumi-neighbor-1","lumi-board"],"notice_second":["lumi-neighbor-2","lumi-mailbox"],"notice_return":["lumi-notice-return"],"stagekeeper":["s1j2"],"choose_04":["A"],"material_pickup":["lumi-ribbon-source","lumi-field-source"],"material_delivery":["lumi-stage-workbench"],"arrange":["lumi-decoration-board"],"choose_05":["A"],"welcome":["lumi-welcome-postcard","lumi-welcome-plaza"],"return":["A"],"choose_06":["A"],"score_pickup":["lumi-score-new","lumi-score-old"],"score_delivery":["lumi-musician-stand"],"report":["A"],"completed":["A"]},
+  "objectiveKeys": {"locked":"lumi.objective.locked","choose_01":"lumi.objective.choose_01","table":"lumi.objective.table","choose_02":"lumi.objective.choose_02","card":"lumi.objective.card","choose_03":"lumi.objective.choose_03","notice_first":"lumi.objective.notice_first","notice_second":"lumi.objective.notice_second","stagekeeper":"lumi.objective.stagekeeper","choose_04":"lumi.objective.choose_04","material_delivery":"lumi.objective.material_delivery","arrange":"lumi.objective.arrange","choose_05":"lumi.objective.choose_05","welcome":"lumi.objective.welcome","choose_06":"lumi.objective.choose_06","score_delivery":"lumi.objective.score_delivery","report":"lumi.objective.report","completed":"lumi.objective.completed"},
+  "resumePoints": {"locked":[],"choose_01":["A"],"table":["lumi-table-alone","lumi-table-together"],"choose_02":["A"],"card":["lumi-card-new","lumi-card-traditional"],"choose_03":["A"],"notice_first":["lumi-neighbor-1","lumi-board"],"notice_second":["lumi-neighbor-2","lumi-mailbox"],"stagekeeper":["s1j2"],"choose_04":["A"],"material_delivery":["lumi-stage-workbench"],"arrange":["lumi-decoration-board"],"choose_05":["A"],"welcome":["lumi-welcome-postcard","lumi-welcome-plaza"],"choose_06":["A"],"score_delivery":["lumi-musician-stand"],"report":["A"],"completed":["A"]},
   "restObjectiveKey": "lumi.objective.pick_up_rest",
   "phases": {
     "locked": [], "choose_01": ["A"], "table": ["lumi-table-alone", "lumi-table-together"],
     "choose_02": ["A"], "card": ["lumi-card-new", "lumi-card-traditional"],
-    "choose_03": ["A"], "notice_pickup": ["lumi-horn", "lumi-notices"],
-    "notice_first": ["lumi-neighbor-1", "lumi-board"], "notice_second": ["lumi-neighbor-2", "lumi-mailbox"],
-    "notice_return": ["lumi-notice-return"], "stagekeeper": ["s1j2"], "choose_04": ["A"],
-    "material_pickup": ["lumi-ribbon-source", "lumi-field-source"], "material_delivery": ["lumi-stage-workbench"],
+    "choose_03": ["A"], "notice_first": ["lumi-neighbor-1", "lumi-board"], "notice_second": ["lumi-neighbor-2", "lumi-mailbox"],
+    "stagekeeper": ["s1j2"], "choose_04": ["A"],
+    "material_delivery": ["lumi-stage-workbench"],
     "arrange": ["lumi-decoration-board"], "choose_05": ["A"], "welcome": ["lumi-welcome-postcard", "lumi-welcome-plaza"],
-    "return": ["A"], "choose_06": ["A"], "score_pickup": ["lumi-score-new", "lumi-score-old"],
-    "score_delivery": ["lumi-musician-stand"], "report": ["A"], "completed": []
+    "choose_06": ["A"], "score_delivery": ["lumi-musician-stand"], "report": ["A"], "completed": []
   }
 }
