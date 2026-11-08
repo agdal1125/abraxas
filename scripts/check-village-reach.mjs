@@ -57,7 +57,7 @@ function check(active, completed, variant = '') {
   const canMove = (a, b) => safe(b) && edges.every(e => segmentDistance(a, b, e) >= radius - eps)
     && circles.every(c => distanceToSegment(c, { a, b }) >= radius + c.radius - eps)
     && boxes.every(box => box.edges.every(e => segmentDistance(a, b, e) >= radius - eps));
-  const targetIds = new Set(['A', 'B', 'C', 'D', ...map.actors.map(a => a.id), ...['lake', 'plaza', 'gate']]);
+  const targetIds = new Set(['A', 'B', 'C', 'D', ...map.actors.map(a => a.id), ...['lake', 'plaza', 'gate', 'prologue-fork', 'prologue-sign']]);
   if (active === 'moka') {
     for (const phase of Object.values(quests.moka.phases)) for (const id of phase.targets ?? Object.values(phase.targetsByPick)) targetIds.add(id);
     for (const route of Object.values(quests.moka.routes)) for (const id of route.waypoints) targetIds.add(id);

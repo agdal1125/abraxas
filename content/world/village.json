@@ -1103,6 +1103,14 @@
       "x": -3,
       "z": 8.660254037844386
     },
+    "prologue-fork": {
+      "x": 3.6,
+      "z": 6.2
+    },
+    "prologue-sign": {
+      "x": -0.6,
+      "z": 2.4
+    },
     "moka-route-shortcut": {
       "x": 10,
       "z": -1

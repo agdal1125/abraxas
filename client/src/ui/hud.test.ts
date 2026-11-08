@@ -4,6 +4,7 @@ import { Game } from "./game";
 import { vi } from "vitest";
 
 it("selects the objective for each exploration stage", () => {
+  expect(objectiveKey("prologue", "character")).toBe("walk");
   expect(objectiveKey("hub", "character")).toBe("hub");
   expect(objectiveKey("ep_lumi", "character")).toBe("character");
   expect(objectiveKey("ep_lumi", "quest")).toBe("quest");

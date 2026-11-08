@@ -1,20 +1,16 @@
 -> demi_follow
 
 === demi_follow ===
-You: ...Where am I?
-You: I can't remember my name, or how I got here.
+You: ...Where am I? I can't remember anything.
 A little dog wags its tail and trots ahead.
 You: You want me to follow? Alright, let's go.
 -> END
 
 === postman_intro ===
 At the edge of the village, you meet a mail carrier with a satchel.
-Mail Carrier: Oh, a face I haven't seen. Where did you come from?
-You: I... can't remember.
-Mail Carrier: Like a fresh envelope with no address on it.
-Mail Carrier: Visitors like you turn up in Dori Village now and then.
-Mail Carrier: Tonight, when the festival lights go up,
-Mail Carrier: the Gate of Memory at the village edge opens.
+Mail Carrier: New to Dori Village? Like an envelope with no address.
+You: I... can't remember anything.
+Mail Carrier: When the festival lights go up tonight, the Gate of Memory opens.
 Mail Carrier: Lost visitors have found their memories there.
 -> END
 

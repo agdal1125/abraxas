@@ -126,7 +126,7 @@ export class Village {
       const entry = { object, marker, character: undefined as Character | undefined }; this.actors.set(actor.id, entry);
       loading.push(this.character(actor.asset, object).then(character => { entry.character = character; }));
     }
-    for (const id of ["lake", "plaza", "gate"]) {
+    for (const id of ["lake", "plaza", "gate", "prologue-fork", "prologue-sign"]) {
       const position = map.zones[id]; if (!position) continue;
       const object = new THREE.Group(); object.position.set(position.x, 0, position.z); object.userData.id = id;
       const marker = this.label(); object.add(marker); this.scene.add(object); this.actors.set(id, { object, marker });

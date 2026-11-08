@@ -1,12 +1,12 @@
 const MOVE_HINT_SEEN = "abraxas-move-hint-seen";
 
-export function showIntent(parent: HTMLElement, copy: { text: string; prompt: string }): Promise<void> {
+export function showIntent(parent: HTMLElement, copy: { text: string; note: string; prompt: string }): Promise<void> {
   return new Promise(resolve => {
-    const card = document.createElement("button"), text = document.createElement("p"), prompt = document.createElement("small");
+    const card = document.createElement("button"), text = document.createElement("p"), note = document.createElement("p"), prompt = document.createElement("small");
     card.type = "button"; card.className = "intent-card"; card.dataset.action = "next";
-    text.textContent = copy.text; prompt.textContent = copy.prompt;
+    text.textContent = copy.text; note.className = "intent-note"; note.textContent = copy.note; prompt.textContent = copy.prompt;
     card.addEventListener("click", () => { card.remove(); resolve(); }, { once: true });
-    card.append(text, prompt); parent.append(card); card.focus();
+    card.append(text, note, prompt); parent.append(card); card.focus();
   });
 }
 
