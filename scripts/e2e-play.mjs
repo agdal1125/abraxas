@@ -289,14 +289,19 @@ try {
     recovery[npc][checkpoint] = true;
     pendingWalk = null;
   }
-  let stuck = 0, touchPrimed = false;
+  let stuck = 0, touchPrimed = false; const retriedTaps = new Set();
   while (steps++ < 6000) {
     const info = await evaluate(`(() => { const { game, village: v } = window.__abraxas, snapshot = game.snapshot, npc = snapshot?.segment?.slice(3); const view = npc === 'moka' ? v.mokaView : ['lumi', 'echo', 'or'].includes(npc) ? game.residentView(npc) : null; return { snapshot, view, exploring: game.exploring, walking: !!v.auto, arrivals: window.__e2eArrivals.splice(0), pending: !!localStorage.getItem('abraxas:pending-command') }; })()`);
     const snapshot = info.snapshot, segment = snapshot?.segment ?? "unknown", npc = segment.startsWith("ep_") ? segment.slice(3) : null, key = segment + (info.view ? `:${info.view.phase}` : "");
     lastSnapshot = snapshot;
     if (pendingWalk && info.walking) pendingWalk.walked = true;
     if (pendingWalk && info.arrivals.includes(pendingWalk.id)) { if (pendingWalk.pointer && pendingWalk.npc) { pointerEvidence[pendingWalk.npc]++; if (pendingWalk.input === "touch") touchEvidence[pendingWalk.npc]++; } interactionEvidence[pendingWalk.pointer ? "pointer" : "direct"]++; if (pendingWalk.pointer) interactionEvidence[pendingWalk.input]++; if (pendingWalk.walked) interactionEvidence.walked++; pendingWalk = null; }
-    if (pendingWalk && !info.walking && !info.arrivals.includes(pendingWalk.id)) { errors.push(`Interaction did not arrive: ${pendingWalk.id}`); break; }
+    if (pendingWalk && !info.walking && !info.arrivals.includes(pendingWalk.id)) {
+      // A tap sent the instant the world returns can land before the village is ready for it; a person would tap again.
+      const diagnostic = JSON.stringify(await evaluate(`(() => { const v = window.__abraxas.village, p = v.player.position; return { enabled: v.enabled, ready: v.ready, talking: v.talking ?? null, available: [...v.available], player: [+p.x.toFixed(2), +p.z.toFixed(2)], target: v.target(${JSON.stringify(pendingWalk.id)}) ?? null }; })()`));
+      if (!retriedTaps.has(pendingWalk.id)) { retriedTaps.add(pendingWalk.id); warnings.push(`Tap retried: ${pendingWalk.id} ${diagnostic}`); pendingWalk = null; continue; }
+      errors.push(`Interaction did not arrive: ${pendingWalk.id}`, diagnostic); break;
+    }
     if (segments.at(-1) !== key) { segments.push(key); await shot(`${String(segments.length).padStart(2, "0")}-${key.replace(/[^a-z0-9_]/gi, "-")}`); }
     if (scenario === "resume" && snapshot && !info.pending) {
       let checkpoint;
