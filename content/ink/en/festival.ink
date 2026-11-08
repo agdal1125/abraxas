@@ -3,12 +3,7 @@
 === festival_intro ===
 Garlands, fresh bread, records, and the bell are all here.
 The four villagers gather before the remaining budget.
-Lumi: Everyone is here!
-Moka: The bread is ready too.
-Echo: The records are right here.
-Or: The bell is hung.
-Lumi: The garlands look like they're dancing!
-Moka: The smell of bread reaches every corner of the plaza.
+Lumi: Everyone came! The garlands look like they're dancing!
 Echo: A night truly worth writing down.
 Or: How should we spend what's left?
 -> END
@@ -21,8 +16,6 @@ Or: How should we spend what's left?
 
 === festival_02 ===
 Two village bands arrive at the stage at the same time.
-Lumi: More musicians are here!
-Echo: The sign-up records are here.
 Moka: I'll bring some fresh water for the players.
 Or: Bring more chairs. How should we set the order?
 * [Use the order in which requests arrived # item:festival_02 # pick:a]
@@ -32,7 +25,6 @@ Or: Bring more chairs. How should we set the order?
 
 === festival_03 ===
 It is time to illuminate the grand lantern in the plaza.
-Moka: A little guest is chasing crumbs over there.
 Lumi: Hey there, pup, want to dance with us!
 Echo: That tail is keeping rhythm.
 Or: Watch your step. How should we trim the lantern?
@@ -43,9 +35,7 @@ Or: Watch your step. How should we trim the lantern?
 
 === festival_04 ===
 You stand before the board to connect the plaza lights.
-Lumi: Let's light the grand lantern too!
 Or: Wick is here.
-Moka: Careful, it gets quite warm.
 Echo: Check the connections. Where should we begin?
 * [Light the nearby lanterns safely # item:festival_04 # pick:a]
 -> END
@@ -59,10 +49,8 @@ A warm glow traces the arch, spilling across the square.
 
 === festival_05 ===
 The plaza fills with radiant lantern light.
-Lumi: Look how bright the square is!
 Moka: The light touches your white silhouette too.
 Echo: The light keeps shifting.
-Or: Clear view. All the way over there.
 You: What thoughts come to me on this night?
 * [Imagine the village’s days to come # item:festival_05 # pick:a]
 -> END
@@ -96,5 +84,6 @@ You stroll around the plaza with Or.
 
 === festival_outro ===
 You: I wish this day could last a little longer.
+A low creak of a door sounds from the village edge.
 The little dog gazes toward the Gate of Memory.
 -> END

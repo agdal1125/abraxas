@@ -7,7 +7,6 @@ The carved letters read: "Demi."
 You: Demi, so that's your name.
 You: I walked this road myself.
 You: Demi, you were by my side the whole time.
-You: I'm the one who breaks the shell. Let's go together.
 Demi wags its tail, nudging its nose into your palm.
 -> END
 
@@ -16,10 +15,8 @@ It is time to share your heart with someone from today.
 -> END
 
 === confession_send ===
-You: I really loved spending today with you.
-You: I'd like to stay close by your side.
-You: I want to hear more of your stories.
-You: Take your time. There's no rush.
+You: Today was good because you were there.
+You: I'd like to be by your side tomorrow too.
 -> END
 
 === confession_lumi_accepted ===
