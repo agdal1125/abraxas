@@ -534,9 +534,9 @@ export class Game {
     const copy = translations(this.state.lang).moka, placements = this.snapshot.moka.placements;
     const { round, size } = roundPlan(Object.keys(quest.slots).length, Object.values(placements).filter(Boolean).length, MINIGAME_ROUNDS);
     const pairs = nextPlacements(quest.bread, quest.slots, placements, size);
-    const label = pairs[0] ? copy.items[quest.slots[pairs[0][1] as SlotId] as "walnut" | "roll" | "flower"] : undefined;
+    const variant = pairs[0] ? quest.slots[pairs[0][1] as SlotId] as "walnut" | "roll" | "flower" : undefined, label = variant ? copy.items[variant] : undefined;
     const after = () => this.snapshot?.moka.phase === "arrange" ? this.board() : this.world();
-    const board = minigameBoard({ kind: "oven", index: round, rounds: MINIGAME_ROUNDS, label }, copy.game, { auto: copy.puzzle.auto, close: copy.puzzle.close, onAuto: () => void this.command({ kind: "auto_arrange" }, () => this.world()), onClose: () => this.world() }, () => this.sendChain(pairs.map(([breadId, slotId]) => ({ kind: "place", breadId: breadId as BreadId, slotId: slotId as SlotId })), after), "moka-board");
+    const board = minigameBoard({ kind: "oven", index: round, rounds: MINIGAME_ROUNDS, label, variant }, copy.game, { auto: copy.puzzle.auto, close: copy.puzzle.close, onAuto: () => void this.command({ kind: "auto_arrange" }, () => this.world()), onClose: () => this.world() }, () => this.sendChain(pairs.map(([breadId, slotId]) => ({ kind: "place", breadId: breadId as BreadId, slotId: slotId as SlotId })), after), "moka-board");
     this.overlay.append(board); focusMinigame(board);
   }
   // Sends commands one after another, then runs `after` once the last is saved.
