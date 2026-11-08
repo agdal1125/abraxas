@@ -59,4 +59,7 @@
 - 조사 · 로컬 main으로 현황을 분석했더니 원격보다 뒤처져(#74와 #90) 이미 구현된 기능을 없다고 씀 → 현황 분석 전에 `git fetch` 후 `origin/main`을 본다 (2026-11-08)
 - 에이전트 · 세션 중에 만든 `.claude/agents/*.md`를 `subagent_type`으로 부르면 'not found' → 세션 시작 때 읽은 목록만 쓰임 → 새 세션에서 쓰거나, 그 세션에서는 일반 subagent에게 역할 파일을 읽게 한다 (2026-11-08)
 - 도구 · worktree 세션의 `preview_start`가 worktree가 아니라 원래 저장소의 `.claude/launch.json`을 찾음 → worktree에서 개발 서버를 다른 포트로 띄우고 `preview_start`에 `url`을 넘긴다 (2026-11-08)
-- 아트 · Blender 생성기에서 제비꼬리 깃발의 홈이 사라짐 → 오목 다각형을 `bm.faces.new` 한 면으로 만들고 삼각화하면 홈이 메워짐 → 볼록한 조각 둘로 나눠 만든다. 머리 위로 장식을 올리면 `join_and_fit_height`가 몸 전체를 줄이므로 최고점을 확인한다
+- 저장소 · agent worktree에 체크아웃된 브랜치의 PR을 `gh pr merge --delete-branch`로 병합하면 원격 병합 뒤 로컬 브랜치 삭제에서 멈춤 → 그 브랜치는 `--delete-branch` 없이 병합하고 `git push origin --delete <브랜치>`로 원격만 지운다 (2026-11-08)
+- E2E · 실행 중인 E2E의 worktree를 rebase해 결과가 섞임 → E2E가 끝난 뒤 rebase하고, rebase 뒤에는 `npm --prefix client run ink`로 다시 컴파일한 다음 새로 돌린다 (2026-11-08)
+- E2E · `ABRAXAS_BROWSER=chrome`처럼 이름만 주면 'Browser not found' → 실행 파일 절대 경로를 준다(`C:/Program Files/Google/Chrome/Application/chrome.exe`) (2026-11-08)
+- 아트 · Blender 생성기에서 제비꼬리 깃발의 홈이 사라짐 → 오목 다각형을 `bm.faces.new` 한 면으로 만들고 삼각화하면 홈이 메워짐 → 볼록한 조각 둘로 나눠 만든다. 머리 위로 장식을 올리면 `join_and_fit_height`가 몸 전체를 줄이므로 최고점을 확인한다 (2026-11-08)

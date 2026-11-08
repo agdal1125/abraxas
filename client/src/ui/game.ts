@@ -1,6 +1,7 @@
 import type { Story } from "inkjs";
 import { data, translations } from "../content";
 import { episodeStage, nextSegment } from "../core/flow";
+import { fragmentCount, MAX_FRAGMENTS, type FragmentGroups } from "../core/fragments";
 import { npcMatches, score, type Input } from "../core/scoring";
 import { npcChanges, reflection, walkKnot, type Moment } from "../core/reflection";
 import type { Village } from "../scenes/village";
@@ -59,10 +60,16 @@ export class Game {
   private reloadDialogue: (() => void) | null = null;
   private episodeLimit = 6;
   private largeText = false;
+  private autoAdvance = false;
+  private autoTimer = 0;
+  private autoPending: { token: number; fire: () => void; ms: number } | null = null;
   private controls: Controls;
   private notice = document.createElement("div");
   private noticeTimer = 0;
   private goal = document.createElement("div");
+  private hudTop = document.createElement("div");
+  private fragmentChip = document.createElement("div");
+  private fragmentSeen: { playId: string; count: number } | null = null;
   private direction = document.createElement("div");
   private settingsButton = document.createElement("button");
   private settingsMenu = document.createElement("div");
@@ -72,12 +79,13 @@ export class Game {
   constructor(app: HTMLElement, private village: Village) {
     this.controls = new Controls(app, village as Village & VillageInput);
     try { this.largeText = localStorage.getItem("abraxas-large-text") === "true"; } catch { /* Continue in memory if storage is unavailable. */ }
+    try { this.autoAdvance = localStorage.getItem("abraxas-auto-advance") === "true"; } catch { /* Continue in memory if storage is unavailable. */ }
     document.documentElement.style.setProperty("--body-size", this.largeText ? "20px" : "17px");
     this.overlay.className = "overlay"; app.append(this.overlay);
     this.notice.className = "world-notice"; this.notice.setAttribute("role", "status"); app.append(this.notice);
     this.goal.className = "hud-goal"; this.goal.hidden = true; this.direction.className = "hud-direction"; this.direction.hidden = true; this.direction.setAttribute("aria-hidden", "true");
     this.settingsButton.className = "hud-settings-button"; this.settingsButton.textContent = "⚙"; this.settingsButton.addEventListener("click", () => this.settings());
-    this.settingsMenu.className = "hud-menu"; this.settingsMenu.hidden = true; app.append(this.goal, this.direction, this.settingsButton, this.settingsMenu);
+    this.settingsMenu.className = "hud-menu"; this.settingsMenu.hidden = true; this.hudTop.className = "hud-top"; this.fragmentChip.className = "hud-fragments"; this.fragmentChip.hidden = true; this.hudTop.append(this.goal, this.fragmentChip); app.append(this.hudTop, this.direction, this.settingsButton, this.settingsMenu);
     let saved: Save | null = null; try { saved = JSON.parse(localStorage.getItem(storageKey) || "null") as Save | null; } catch { /* Storage may be unavailable. */ }
     this.localSave = saved?.playId && Array.isArray(saved.log) && Array.isArray(saved.completed) ? saved : null;
     this.state = { lang: this.localSave?.lang ?? "ko", playId: this.newId(), log: [], completed: [], segment: "title" };
@@ -90,14 +98,23 @@ export class Game {
   private save(): void { if (this.local) try { localStorage.setItem(storageKey, JSON.stringify(this.state)); this.localSave = this.state; } catch { /* Continue in memory if storage is unavailable. */ } }
   private get ui() { return translations(this.state.lang).ui; }
   private setTextSize(value: boolean): void { this.largeText = value; document.documentElement.style.setProperty("--body-size", value ? "20px" : "17px"); try { localStorage.setItem("abraxas-large-text", String(value)); } catch { /* Continue in memory if storage is unavailable. */ } }
+  private setAutoAdvance(value: boolean): void { this.autoAdvance = value; try { localStorage.setItem("abraxas-auto-advance", String(value)); } catch { /* Continue in memory if storage is unavailable. */ } }
+  private autoDelay(text: string): number { return Math.min(5000, Math.max(1200, Math.round(text.length / 6 * 1000))); }
+  private clearAuto(): void { clearTimeout(this.autoTimer); this.autoTimer = 0; this.autoPending = null; }
+  // Counts from zero each time it runs, so closing the settings menu restarts the wait.
+  private resumeAuto(): void {
+    clearTimeout(this.autoTimer); this.autoTimer = 0; const pending = this.autoPending;
+    if (!pending || !this.autoAdvance || !this.settingsMenu.hidden) return;
+    this.autoTimer = window.setTimeout(() => { this.autoTimer = 0; if (pending.token === this.token && this.autoPending === pending && this.autoAdvance && this.settingsMenu.hidden) { this.autoPending = null; pending.fire(); } }, pending.ms);
+  }
   private clearViews(): void { this.village.setMokaView(null); this.worldApi.setLumiView(null); this.worldApi.setEchoView(null); this.worldApi.setOrView(null); }
   private restart(): void { this.local = false; this.snapshot = null; this.clearViews(); this.state = { lang: this.state.lang, playId: this.newId(), log: [], completed: [], segment: "title" }; this.title(); }
   private settings(page: "settings" | "confirm" | "credits" = "settings"): void {
-    this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.inert = true; this.settingsMenu.hidden = false;
+    this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.inert = true; this.settingsMenu.hidden = false; clearTimeout(this.autoTimer); this.autoTimer = 0;
     const card = document.createElement("div"); card.className = "hud-menu-card"; card.setAttribute("role", "dialog"); card.setAttribute("aria-modal", "true"); card.setAttribute("aria-label", page === "credits" ? this.ui.hud.credits : this.ui.hud.settings);
     const heading = document.createElement("h2"); heading.textContent = page === "confirm" ? this.ui.hud.confirm : page === "credits" ? this.ui.hud.credits : this.ui.hud.settings; card.append(heading);
     const add = (label: string, action: () => void) => { const button = document.createElement("button"); button.textContent = label; button.addEventListener("click", action); card.append(button); };
-    const close = () => { this.settingsMenu.hidden = true; this.overlay.inert = false; if (this.exploring) { this.controls.setActive(true, this.state.lang); this.village.setEnabled(true); } this.settingsButton.focus(); };
+    const close = () => { this.settingsMenu.hidden = true; this.overlay.inert = false; this.resumeAuto(); if (this.exploring) { this.controls.setActive(true, this.state.lang); this.village.setEnabled(true); } this.settingsButton.focus(); };
     if (page === "confirm") { add(this.ui.hud.restart, () => { close(); this.restart(); }); add(this.ui.hud.cancel, () => this.settings()); }
     else if (page === "credits") {
       const music = document.createElement("p"); music.textContent = this.ui.hud.creditsMusic; card.append(music);
@@ -109,6 +126,7 @@ export class Game {
     else {
       add(`${this.ui.hud.language}: ${this.state.lang === "ko" ? "한국어" : "English"}`, () => { this.state.lang = this.state.lang === "ko" ? "en" : "ko"; this.save(); this.updateHud(); this.reloadDialogue?.(); this.settings(); });
       add(`${this.ui.hud.largeText}: ${this.largeText ? this.ui.hud.on : this.ui.hud.off}`, () => { this.setTextSize(!this.largeText); this.settings(); });
+      add(`${this.ui.hud.autoAdvance}: ${this.autoAdvance ? this.ui.hud.on : this.ui.hud.off}`, () => { this.setAutoAdvance(!this.autoAdvance); this.settings(); });
       add(this.ui.hud.credits, () => this.settings("credits")); add(this.ui.hud.restart, () => this.settings("confirm")); add(this.ui.hud.close, close);
     }
     this.settingsMenu.replaceChildren(card); card.querySelector("button")?.focus();
@@ -117,6 +135,9 @@ export class Game {
     this.settingsButton.hidden = this.state.segment === "title" || this.state.segment === "result";
     this.settingsButton.setAttribute("aria-label", this.ui.hud.settings);
     this.goal.hidden = !this.exploring;
+    this.syncFragments(false);
+    this.fragmentChip.hidden = !this.exploring;
+    this.fragmentChip.textContent = this.fragmentText("fragments", this.fragmentTotal());
     if (this.exploring && this.snapshot?.segment === "ep_moka") {
       const view = mokaView(this.snapshot), copy = translations(this.state.lang).moka;
       const key = view.objectiveKey.split(".").at(-1) as keyof typeof copy.objective;
@@ -127,6 +148,35 @@ export class Game {
       this.goal.textContent = copy.objective[view.objectiveKey.split(".").at(-1)!] ?? "";
       const carrying = document.createElement("span"); carrying.className = "moka-carry"; carrying.textContent = `${this.ui.carrying}: ${copy.items[view.carriedObjectId ?? "empty"] ?? ""}`; this.goal.append(carrying);
     } else if (this.exploring) this.goal.textContent = this.ui.hud.goal[objectiveKey(this.state.segment, episodeStage(this.answered(this.state.segment)))];
+  }
+  private fragmentGroups(): FragmentGroups { return { prologue: data.items.filter(item => item.segment === "prologue").map(item => item.id), festival: data.items.filter(item => item.segment === "festival").map(item => item.id), tiebreakers: data.tiebreakers.map(item => item.id) }; }
+  private fragmentTotal(): number { return fragmentCount(this.state.log.map(entry => entry.id), this.state.completed, this.fragmentGroups()); }
+  private fragmentText(key: "fragments" | "fragmentFound", n: number): string { return this.ui.hud[key].replace("{n}", String(n)).replace("{max}", String(MAX_FRAGMENTS)); }
+  // The first sync for a play only records a baseline, so resuming never announces old fragments.
+  private syncFragments(announce: boolean): void {
+    const count = this.fragmentTotal(), seen = this.fragmentSeen;
+    if (!announce && seen?.playId === this.state.playId) return;
+    this.fragmentSeen = { playId: this.state.playId, count };
+    if (announce && seen?.playId === this.state.playId && count > seen.count) this.flashNotice(this.fragmentText("fragmentFound", count), 2000);
+  }
+  private flashNotice(text: string, ms: number): void { this.notice.textContent = text; window.clearTimeout(this.noticeTimer); this.noticeTimer = window.setTimeout(() => { this.notice.textContent = ""; }, ms); }
+  private fragmentsReveal(): Promise<void> {
+    this.exploring = false; this.updateHud(); this.token++; this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.replaceChildren();
+    const total = this.fragmentTotal(), root = document.createElement("div");
+    root.className = "fragment-reveal"; root.setAttribute("role", "status");
+    const dots = document.createElement("div"); dots.className = "fragment-dots";
+    for (let index = 0; index < MAX_FRAGMENTS; index++) { const dot = document.createElement("span"); if (index < total) dot.className = "is-found"; dots.append(dot); }
+    const label = document.createElement("p"); label.textContent = this.ui.hud.fragmentsGate;
+    const count = document.createElement("strong"); count.textContent = this.fragmentText("fragments", total);
+    const hint = document.createElement("small"); hint.textContent = this.ui.hud.fragmentsContinue;
+    root.append(label, dots, count, hint);
+    this.overlay.parentElement?.append(root);
+    return new Promise<void>(resolve => {
+      let timer = 0;
+      const done = () => { window.clearTimeout(timer); root.remove(); resolve(); };
+      timer = window.setTimeout(done, 3200);
+      root.addEventListener("click", done);
+    });
   }
   private updateDirection = (): void => {
     this.direction.hidden = true;
@@ -142,7 +192,7 @@ export class Game {
     requestAnimationFrame(this.updateDirection);
   };
   private panel(text: string, buttons: [string, () => void, string?][], kind: "dialogue" | "title" | "result" = "dialogue", speaker?: string): void {
-    this.exploring = false; this.updateHud(); this.token++; const token = this.token; this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.replaceChildren(); if (this.overlay.dataset) delete this.overlay.dataset.scene; this.overlay.className = `overlay ${kind}`;
+    this.exploring = false; this.updateHud(); this.token++; const token = this.token; this.clearAuto(); this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.replaceChildren(); if (this.overlay.dataset) delete this.overlay.dataset.scene; this.overlay.className = `overlay ${kind}`;
     const panel = document.createElement("div"); panel.className = "panel";
     const run = (action: () => void) => { if (token === this.token) { this.token++; action(); } };
     const button = (label: string, action: () => void, itemId?: string) => { const element = document.createElement("button"); element.textContent = label; if (itemId) element.dataset.itemId = itemId; else element.dataset.action = label === this.ui.next ? "next" : "select"; element.addEventListener("click", () => run(action)); return element; };
@@ -162,8 +212,8 @@ export class Game {
     if (residentIndex >= 0 || questIndex >= 0) this.worldApi.focusSpeaker?.(residentIndex >= 0 ? "ABCD"[residentIndex]! : quests[questIndex]!);
     if (speakerName && (match || residentIndex >= 0 || questIndex >= 0)) { const name = document.createElement("span"); name.className = "speaker"; name.textContent = residentNames[residentIndex] ?? questNames[questIndex] ?? speakerName; name.style.backgroundColor = ["var(--char-a)", "var(--char-b)", "var(--char-c)", "var(--char-d)"][residentIndex] ?? "var(--char-npc)"; if (residentIndex < 0) name.style.color = "var(--paper)"; panel.append(name); }
     panel.append(p);
-    if (buttons.length === 1 && buttons[0]![0] === this.ui.next) { panel.classList.add("continue"); panel.dataset.action = "next"; panel.tabIndex = 0; panel.setAttribute("role", "button"); panel.setAttribute("aria-label", this.ui.next); panel.addEventListener("click", () => run(buttons[0]![1])); panel.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); if (!event.repeat) run(buttons[0]![1]); } }); const indicator = document.createElement("span"); indicator.className = "indicator"; indicator.textContent = "▼"; indicator.setAttribute("aria-hidden", "true"); panel.append(indicator); }
-    this.overlay.append(panel);
+    if (buttons.length === 1 && buttons[0]![0] === this.ui.next) { panel.classList.add("continue"); panel.dataset.action = "next"; panel.tabIndex = 0; panel.setAttribute("role", "button"); panel.setAttribute("aria-label", this.ui.next); panel.addEventListener("click", () => run(buttons[0]![1])); panel.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); if (!event.repeat) run(buttons[0]![1]); } }); const indicator = document.createElement("span"); indicator.className = "indicator"; indicator.textContent = "▼"; indicator.setAttribute("aria-hidden", "true"); panel.append(indicator); const advance = buttons[0]![1]; this.autoPending = { token, fire: () => run(advance), ms: this.autoDelay(p.textContent ?? text) }; }
+    this.overlay.append(panel); this.resumeAuto();
     if (!(buttons.length === 1 && buttons[0]![0] === this.ui.next)) { this.overlay.classList.add("has-choices"); const choices = document.createElement("div"); choices.className = "choices"; for (const [label, action, itemId] of buttons) choices.append(button(label, action, itemId)); this.overlay.append(choices); }
   }
   private applySnapshot(snapshot: PlaySnapshot): boolean {
@@ -278,18 +328,18 @@ export class Game {
   private async opening(): Promise<void> {
     this.openingActive = true; this.loadDisplay();
     if (this.resumed && this.display().name === undefined) await this.nameInput();
+    const ask = async (id: string) => {
+      while (!this.state.log.some(answer => answer.id === id)) {
+        await this.narrative("prologue", id, true);
+        if (!this.state.log.some(answer => answer.id === id)) await new Promise<void>(resolve => { const status = translations(this.state.lang).moka.status; this.panel(status.contentUnavailable, [[status.tryAgain, resolve]]); });
+      }
+    };
     await openingSequence({
       prelude: async () => { if (!this.display().introSeen) { this.panel("", []); const { playPrelude } = await import("./cinematic"); const playback = playPrelude(this.overlay, this.state.lang, this.ui.cinematic); this.overlay.querySelectorAll(".cinematic button").forEach((button, index) => { (button as HTMLButtonElement).dataset.action = ["play", "mute", "skip"][index]!; }); await playback; this.saveDisplay({ introSeen: true }); } },
       scene: scene => this.village.setStoryScene(scene), mode: mode => this.village.setDemiMode(mode),
       knot: knot => this.narrative("prologue", knot), name: () => this.nameInput(),
-      questions: async () => {
-        for (const item of data.items.filter(item => item.segment === "prologue")) {
-          while (!this.state.log.some(answer => answer.id === item.id)) {
-            await this.narrative("prologue", item.id, true);
-            if (!this.state.log.some(answer => answer.id === item.id)) await new Promise<void>(resolve => { const status = translations(this.state.lang).moka.status; this.panel(status.contentUnavailable, [[status.tryAgain, resolve]]); });
-          }
-        }
-      },
+      question: id => ask(id),
+      questions: async () => { for (const item of data.items.filter(item => item.segment === "prologue")) await ask(item.id); },
     }, !this.resumed && this.state.log.length === 0);
     this.openingActive = false; this.resumed = false; this.finish();
   }
@@ -322,6 +372,7 @@ export class Game {
     const segment = this.state.segment;
     this.village.setStoryScene(segment.startsWith("interlude_") ? "interlude" : segment === "festival" ? "festival" : "gate");
     this.village.setDemiMode(segment === "gate" ? "gate" : "sit");
+    if (segment === "gate") await this.fragmentsReveal();
     await this.narrative(segment, `${segment}_intro`);
     const items = segment === "gate" ? data.tiebreakers : data.items.filter(item => item.segment === segment);
     for (const item of items) {
@@ -337,7 +388,7 @@ export class Game {
     await this.narrative(segment, segment === "interlude_2" ? `${segment}_outro_${lastPick}` : `${segment}_outro`);
     this.village.setDemiMode("follow"); this.finish();
   }
-  private showWorld(available: string[]): void { this.reloadDialogue = null; this.village.setDemiMode("follow"); this.worldApi.focusSpeaker?.(null); this.exploring = true; this.targets = available; this.updateHud(); this.token++; this.overlay.replaceChildren(); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
+  private showWorld(available: string[]): void { this.reloadDialogue = null; this.village.setDemiMode("follow"); this.worldApi.focusSpeaker?.(null); this.exploring = true; this.targets = available; this.updateHud(); this.syncFragments(true); this.token++; this.overlay.replaceChildren(); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
   private answered(segment: string): number { return data.items.filter(item => item.segment === segment && this.state.log.some(entry => entry.id === item.id)).length; }
   private interact(id: string): void {
     if (this.snapshot?.segment === "ep_moka") { this.interactMoka(id); return; }
