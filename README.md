@@ -9,7 +9,7 @@
 ## 구조
 
 ```
-client/    Phaser 4 + TypeScript + Vite
+client/    Three.js + TypeScript + Vite
 server/    Go API (Cloud Run)
 content/   ink 대사, 성향 가중치 데이터
 docs/      기획, ADR, 공유 메모리, 개발 일지, 아트 가이드
@@ -45,7 +45,6 @@ irm https://antigravity.google/cli/install.ps1 | iex           # Antigravity CLI
 git clone https://github.com/agdal1125/abraxas
 cd abraxas
 npm run setup                    # Claude Code용 스킬 링크 + 도구 버전 점검
-npx skills add phaserjs/phaser   # Phaser 공식 에이전트 스킬
 agy                              # Antigravity 실행 (처음엔 작업 폴더 신뢰 승인)
 ```
 
