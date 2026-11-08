@@ -1,4 +1,5 @@
 import "./minigames.css";
+import { sfx } from "./sfx";
 import { aligned, gauge, inZone, scrambled, seeded, sequence, shelfHint, shuffledOrder, sorted, swap, turn } from "../core/minigames";
 
 // One round of an errand minigame. `clear` fires once when the round is won; the caller saves progress
@@ -24,7 +25,7 @@ export function minigameBoard(round: Round, copy: MinigameCopy, controls: Contro
   const status = document.createElement("p"); status.className = "minigame-status"; status.setAttribute("role", "status"); status.textContent = copy.howto;
   const stage = document.createElement("div"); stage.className = "minigame-stage";
   const footer = document.createElement("div"); footer.className = "minigame-footer";
-  let done = false; const win = () => { if (done) return; done = true; status.textContent = copy.cleared; board.classList.add("is-cleared"); stop(); setTimeout(clear, 650); };
+  let done = false; const win = () => { if (done) return; done = true; sfx.cleared(); status.textContent = copy.cleared; board.classList.add("is-cleared"); stop(); setTimeout(clear, 650); };
   const auto = document.createElement("button"); auto.textContent = controls.auto; auto.onclick = () => { if (!done) { done = true; stop(); controls.onAuto(); } };
   const close = document.createElement("button"); close.textContent = controls.close; close.onclick = () => { if (!done) { done = true; stop(); controls.onClose(); } };
   footer.append(auto, close);
@@ -61,13 +62,13 @@ const ribbons: Game = (stage, status, copy, round, win) => {
     const beat = reducedMotion() ? 900 : 650;
     order.forEach((color, i) => {
       const b = buttons[RIBBONS.indexOf(color)]!;
-      timers.push(setTimeout(() => b.classList.add("lit"), beat * i + 300), setTimeout(() => b.classList.remove("lit"), beat * i + 300 + beat * .6));
+      timers.push(setTimeout(() => { b.classList.add("lit"); sfx.ribbon(RIBBONS.indexOf(color)); }, beat * i + 300), setTimeout(() => b.classList.remove("lit"), beat * i + 300 + beat * .6));
     });
     timers.push(setTimeout(() => { for (const b of buttons) b.disabled = false; status.textContent = copy.yourTurn; mark(); }, beat * order.length + 300));
   };
   buttons.forEach((b, i) => b.addEventListener("click", () => {
-    if (RIBBONS[i] !== order[step]) { status.textContent = copy.retry; garland.classList.add("shake"); timers.push(setTimeout(() => garland.classList.remove("shake"), 400), setTimeout(show, 700)); for (const x of buttons) x.disabled = true; return; }
-    b.classList.add("lit"); timers.push(setTimeout(() => b.classList.remove("lit"), 200));
+    if (RIBBONS[i] !== order[step]) { sfx.wrong(); status.textContent = copy.retry; garland.classList.add("shake"); timers.push(setTimeout(() => garland.classList.remove("shake"), 400), setTimeout(show, 700)); for (const x of buttons) x.disabled = true; return; }
+    b.classList.add("lit"); sfx.ribbon(i); timers.push(setTimeout(() => b.classList.remove("lit"), 200));
     step++; fill(); mark(); if (step === order.length) win();
   }));
   show();
@@ -98,15 +99,17 @@ const oven: Game = (stage, status, copy, round, win) => {
   stage.append(box, controls);
   const bread = box.querySelector<SVGGElement>(".bread")!;
   const period = (reducedMotion() ? 3.2 : 2.2) - round.index * .2, start = performance.now();
-  let frame = 0, value = 0;
+  let frame = 0, value = 0, inside = false;
   const tick = () => {
     value = gauge((performance.now() - start) / 1000, period);
+    // A soft tick as the needle enters the band gives an audio cue for the timing.
+    if (inZone(value, OVEN_ZONE) !== inside) { inside = !inside; if (inside) sfx.ovenTick(); }
     needle.style.left = `${value * 100}%`; bread.style.setProperty("--crust", crust(value));
     if (inZone(value, OVEN_ZONE)) button.dataset.solve = "1"; else delete button.dataset.solve;
     frame = requestAnimationFrame(tick);
   };
   frame = requestAnimationFrame(tick);
-  button.addEventListener("click", () => { if (inZone(value, OVEN_ZONE)) { cancelAnimationFrame(frame); win(); } else status.textContent = value < OVEN_ZONE[0] ? copy.early : copy.late; });
+  button.addEventListener("click", () => { if (inZone(value, OVEN_ZONE)) { cancelAnimationFrame(frame); sfx.ovenDing(); win(); } else { sfx.ovenThud(); status.textContent = value < OVEN_ZONE[0] ? copy.early : copy.late; } });
   return () => cancelAnimationFrame(frame);
 };
 
@@ -125,8 +128,8 @@ const shelf: Game = (stage, status, copy, round, win) => {
       b.setAttribute("aria-pressed", String(picked === spot)); if (book === spot) b.classList.add("in-place");
       if (hint && spot === (picked === null ? hint[0] : picked === hint[0] ? hint[1] : hint[0])) b.dataset.solve = "1";
       b.onclick = () => {
-        if (picked === null) { picked = spot; render(); return; }
-        if (picked !== spot) order = swap(order, picked, spot);
+        if (picked === null) { picked = spot; sfx.bookTok(); render(); return; }
+        if (picked !== spot) { order = swap(order, picked, spot); sfx.bookSwap(); }
         picked = null; render(); if (sorted(order)) win();
       };
       row.append(b);
@@ -145,7 +148,7 @@ const gears: Game = (stage, status, copy, round, win) => {
   const buttons = rotations.map((_, i) => {
     const b = document.createElement("button"); b.className = "gear"; b.setAttribute("aria-label", `${copy.marks[i] ?? i + 1}`);
     b.append(art("gear-arrow", "▼"), art("gear-art", GEAR));
-    b.onclick = () => { rotations = turn(rotations, i); paint(); if (aligned(rotations)) win(); };
+    b.onclick = () => { rotations = turn(rotations, i); if (rotations[i] === 0) sfx.gearSet(); else sfx.gearClick(); paint(); if (aligned(rotations)) win(); };
     row.append(b); return b;
   });
   // Rotation accumulates so a quarter turn from 270° keeps spinning forward instead of snapping back.
