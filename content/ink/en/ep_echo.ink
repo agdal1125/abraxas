@@ -1,6 +1,8 @@
 -> echo_choose_01
 
 === echo_choose_01 ===
+The library's return box is close to overflowing.
+Echo: You came to help? ...Thank you. I was short on hands.
 Echo: You look like an empty bookshelf.
 Echo: What you write there will be up to you.
 Echo: There's a tea stain on this picture book.
@@ -53,6 +55,7 @@ Echo: How should we share this story?
 -> END
 
 === echo_organizer ===
+Book Keeper: You're helping Echo? I look after the shelves.
 Book Keeper: Shall we find where these books belong?
 -> END
 
@@ -70,6 +73,6 @@ Echo: The shelves have found their places.
 -> END
 
 === echo_completed ===
-Echo: Thank you for looking after the books with me.
-Echo: See you again at the festival.
+Echo: The shelves seem to breathe again. Thanks to you.
+Echo: I'll record tonight too. Every bit of it.
 -> END

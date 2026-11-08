@@ -1,7 +1,8 @@
 -> lumi_choose_01
 
 === lumi_choose_01 ===
-Lumi: Hi! We're getting ready for the festival!
+Ribbons and garlands are piled high under the tent.
+Lumi: You came to help? Really? Thank you!
 Lumi: Wow! You look just like a fluffy white cloud!
 Lumi: There's a spot for you too. Where shall we work together?
 * [Tie ribbons quietly at a table # item:lumi_01 # pick:a]
@@ -73,5 +74,6 @@ Lumi: Done already? We're all set to welcome everyone!
 -> END
 
 === lumi_completed ===
-Lumi: Thank you for helping! I'll see you at the festival!
+Lumi: All done! Our tent will sparkle brightest tonight!
+Lumi: Come when the lights go up! I'll save you a front spot!
 -> END

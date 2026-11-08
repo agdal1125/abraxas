@@ -1,16 +1,19 @@
 -> END
 
 === moka_meet ===
+The bakery is full of a warm, toasty smell.
+Moka: Welcome. I could use a hand right now.
 Moka: Freshly baked walnut bread! Could you take it to the workshop?
-Moka: I checked the basket. Which path will you take?
+Moka: It's a snack for the folks at Or's workshop on the hill.
+Moka: Which path will you take?
 * [Run up the steep shortcut to deliver it warm # item:moka_01 # pick:a]
 -> END
 * [Take the gentler path to keep it from getting crushed # item:moka_01 # pick:b]
 -> END
 
 === moka_delivered ===
-Tasting Guide: From the bakery? I was waiting for this!
-Tasting Guide: Thanks! Just in time for a break.
+Tasting Guide: Moka's walnut bread? A snack for the workshop?
+Tasting Guide: I'll share it out with the workers. Thank you!
 -> END
 
 === moka_reservation ===
@@ -61,6 +64,6 @@ Moka: That's everything for today. You gave me room to breathe.
 -> END
 
 === moka_completed ===
-Moka: Thank you for helping.
-Moka: The bakery feels so much warmer now.
+Moka: Thank you so much. The smell will reach the square.
+Moka: I'll save you a fresh one for the festival.
 -> END
