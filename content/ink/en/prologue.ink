@@ -23,9 +23,9 @@ Mail Carrier: By the time the lights go up, this place won't feel strange.
 === prologue_01 ===
 A lively square lies one way, a quiet lakeside the other.
 You: Where should I head first?
-* [Head to the square and take in the scene # item:prologue_01 # pick:a]
+* [To the busy square # item:prologue_01 # pick:a]
 -> END
-* [Walk by the lake and collect your thoughts # item:prologue_01 # pick:b]
+* [To the quiet lake # item:prologue_01 # pick:b]
 -> END
 
 === prologue_02 ===
@@ -33,18 +33,18 @@ Two paths lead deeper into the village.
 An old stone wall path and a colorful pinwheel trail.
 The little dog sits at your feet, waiting.
 You: Which path should I choose this time?
-* [Follow the familiar old stone wall # item:prologue_02 # pick:a]
+* [The old stone-wall path # item:prologue_02 # pick:a]
 -> END
-* [Take the new path past the pinwheels # item:prologue_02 # pick:b]
+* [The new pinwheel path # item:prologue_02 # pick:b]
 -> END
 
 === prologue_03 ===
 You stand before a wooden board at the square entrance.
 Beside the village map hang drawings of today’s events.
 You: What should I take a look at first?
-* [Explore the market while it is open # item:prologue_03 # pick:a]
+* [See the market first # item:prologue_03 # pick:a]
 -> END
-* [Study the map and plan your day # item:prologue_03 # pick:b]
+* [Plan the day with the map # item:prologue_03 # pick:b]
 -> END
 
 === prologue_outro ===

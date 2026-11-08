@@ -8,18 +8,18 @@ You: Found some dust, did you?
 
 === interlude_2_01 ===
 You: I'll rest for a moment too. How shall I spend it?
-* [Enjoy the insects singing around you # item:interlude_2_01 # pick:a]
+* [Enjoy the quiet moment # item:interlude_2_01 # pick:a]
 -> END
-* [Tie your shoes and check your plans for the evening # item:interlude_2_01 # pick:b]
+* [Check the evening plans # item:interlude_2_01 # pick:b]
 -> END
 
 === interlude_2_02 ===
 Beneath the bench, a puzzle box has a bonus slot.
 A brass key might open it, but could get stuck.
 You: What should I do with this slot?
-* [Keep the key safe # item:interlude_2_02 # pick:a]
+* [Leave the slot alone # item:interlude_2_02 # pick:a]
 -> END
-* [Risk the key for hidden treasure # item:interlude_2_02 # pick:b]
+* [Risk the key and turn it # item:interlude_2_02 # pick:b]
 -> END
 
 === interlude_2_outro_a ===

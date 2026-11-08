@@ -10,33 +10,33 @@ You: Wait for me just a moment.
 === gate_a ===
 A scene rises to fill your heart at day's end.
 You: What scene stays with me?
-* [A square alive with friends and laughter # item:gate_a # pick:a]
+* [The square, laughing together # item:gate_a # pick:a]
 -> END
-* [A quiet lakeside moment to yourself # item:gate_a # pick:b]
+* [The lake, alone with myself # item:gate_a # pick:b]
 -> END
 
 === gate_b ===
 A difficult choice flits across your thoughts.
 You: What did I hold onto in that moment?
-* [Care for the feelings of those involved # item:gate_b # pick:a]
+* [Hearts kept from hurt # item:gate_b # pick:a]
 -> END
-* [Clear values and fair rules for everyone # item:gate_b # pick:b]
+* [A standard that holds # item:gate_b # pick:b]
 -> END
 
 === gate_c ===
 The road ahead shimmers before you.
 You: What kind of road awaits me?
-* [A new view beyond an unexplored alley # item:gate_c # pick:a]
+* [A new, unknown lane # item:gate_c # pick:a]
 -> END
-* [A familiar place that welcomes you back # item:gate_c # pick:b]
+* [A familiar, well-worn place # item:gate_c # pick:b]
 -> END
 
 === gate_d ===
 Your hand tightens around the gate handle.
 You: What moves my steps forward?
-* [The possibility of something wonderful beyond it # item:gate_d # pick:a]
+* [Toward a bigger chance # item:gate_d # pick:a]
 -> END
-* [A steady step that protects what matters # item:gate_d # pick:b]
+* [Toward keeping what matters # item:gate_d # pick:b]
 -> END
 
 === gate_outro ===

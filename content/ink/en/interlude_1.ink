@@ -9,18 +9,18 @@ You: Looks like you left your signature too.
 
 === interlude_1_01 ===
 You: What should I fill this page with?
-* [Write down clues and what to do next # item:interlude_1_01 # pick:a]
+* [Note clues and next steps # item:interlude_1_01 # pick:a]
 -> END
-* [Sketch the lane you just saw # item:interlude_1_01 # pick:b]
+* [Sketch the scene right now # item:interlude_1_01 # pick:b]
 -> END
 
 === interlude_1_02 ===
 By the fountain, two villagers argue by their carts.
 It looks like one wheel scratched another.
 You: What happened here?
-* [Notice how upset they look # item:interlude_1_02 # pick:a]
+* [Look at their faces # item:interlude_1_02 # pick:a]
 -> END
-* [Examine the wheel marks and what happened # item:interlude_1_02 # pick:b]
+* [Look at the wheel marks # item:interlude_1_02 # pick:b]
 -> END
 
 === interlude_1_outro ===

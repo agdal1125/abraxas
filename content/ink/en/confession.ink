@@ -2,11 +2,8 @@
 
 === demi_reveal ===
 You return to the plaza after passing through the gate.
-As the little dog sits down, letters on the collar show.
-The carved letters read: "Demi."
-You: Demi, so that's your name.
-You: I walked this road myself.
-You: Demi, you were by my side the whole time.
+Inside the dog's collar, letters read: "Demi."
+You: Demi, that's your name. You stayed by me all along.
 Demi wags its tail, nudging its nose into your palm.
 -> END
 

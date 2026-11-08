@@ -8,17 +8,17 @@ You: Do you like sunsets too?
 
 === interlude_3_01 ===
 You: Which moment comes to mind from today?
-* [Remember the lively voices of villagers # item:interlude_3_01 # pick:a]
+* [Voices shared with villagers # item:interlude_3_01 # pick:a]
 -> END
-* [Remember the quiet breeze on a solitary walk # item:interlude_3_01 # pick:b]
+* [A breeze on a solo walk # item:interlude_3_01 # pick:b]
 -> END
 
 === interlude_3_02 ===
 By the fountain, you find a clear marble sparkling in the sunset.
 You: What should I do with this marble?
-* [Save it in your pocket for later # item:interlude_3_02 # pick:a]
+* [Keep it for later # item:interlude_3_02 # pick:a]
 -> END
-* [Enjoy the colors it catches now # item:interlude_3_02 # pick:b]
+* [Enjoy its colors now # item:interlude_3_02 # pick:b]
 -> END
 
 === interlude_3_outro ===

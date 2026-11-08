@@ -3,52 +3,51 @@
 === or_choose_01 ===
 A blast of heat rolls out of the forge.
 Or: You came. Extra hands are welcome.
-Or: Making the festival bell.
-Or: Time to heat it up.
+Or: Time to heat the festival bell.
 Or: How strong should the fire be?
-* [Use a strong fire for a clearer, farther ring # item:or_01 # pick:a]
+* [Strong fire, clearer ring # item:or_01 # pick:a]
 -> END
-* [Use a gentle fire to reduce the risk of cracks # item:or_01 # pick:b]
+* [Gentle fire, no cracks # item:or_01 # pick:b]
 -> END
 
 === or_choose_02 ===
 Or: Need fine sand. How will you search?
-* [Use the map and search alone # item:or_02 # pick:a]
+* [Search alone with the map # item:or_02 # pick:a]
 -> END
-* [Ask the fishers and merchants on the bridge # item:or_02 # pick:b]
+* [Ask the people at the dock # item:or_02 # pick:b]
 -> END
 
 === or_choose_03 ===
 Or: Gears are set. Time to hang the weight.
 Or: Which weight do you want?
-* [Use a light weight to protect the gears # item:or_03 # pick:a]
+* [A light weight, easy on the gears # item:or_03 # pick:a]
 -> END
-* [Use a heavy weight for a stronger chime # item:or_03 # pick:b]
+* [A heavy weight, a farther chime # item:or_03 # pick:b]
 -> END
 
 === or_choose_04 ===
 Or: Let's see the diagram. Apprentice, unroll it.
 Workshop Apprentice: Here is the diagram.
 Or: How shall we look it over?
-* [Talk through it together # item:or_04 # pick:a]
+* [Talk it through with Or # item:or_04 # pick:a]
 -> END
-* [Study it quietly on your own first # item:or_04 # pick:b]
+* [Study it alone first # item:or_04 # pick:b]
 -> END
 
 === or_choose_05 ===
 Or: The hanger still needs work.
 Or: Where should we begin?
-* [Add a branch to hold more lanterns # item:or_05 # pick:a]
+* [Add branches for more lanterns # item:or_05 # pick:a]
 -> END
-* [Reinforce the base for heavy lanterns # item:or_05 # pick:b]
+* [Reinforce the joints first # item:or_05 # pick:b]
 -> END
 
 === or_choose_06 ===
 Or: The bell goes to the square.
 Or: Good work. What will you do next?
-* [Stay and enjoy the quiet warmth # item:or_06 # pick:a]
+* [Stay and tidy the tools # item:or_06 # pick:a]
 -> END
-* [Bring the bell to the square and talk with everyone # item:or_06 # pick:b]
+* [Carry the bell to the square # item:or_06 # pick:b]
 -> END
 
 === or_find_sand_a ===

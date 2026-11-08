@@ -22,9 +22,9 @@
 === prologue_01 ===
 멀리 활기찬 광장 소리와 고요한 호숫가가 보인다.
 주인공: 어디부터 가 볼까?
-* [사람들 소리가 들리는 광장으로 가서 분위기를 살핀다 # item:prologue_01 # pick:a]
+* [사람들 있는 광장으로 # item:prologue_01 # pick:a]
 -> END
-* [고요한 호숫가 산책로를 걸으며 혼자 생각부터 정리한다 # item:prologue_01 # pick:b]
+* [조용한 호숫가로 # item:prologue_01 # pick:b]
 -> END
 
 === prologue_02 ===
@@ -32,18 +32,18 @@
 정겨운 옛 돌담길과 색색의 바람개비 길이다.
 강아지가 발치에 앉아 기다린다.
 주인공: 이번엔 어느 길로 가 볼까?
-* [오랜 세월 주민들이 걸어온 정겨운 옛 돌담길을 따라간다 # item:prologue_02 # pick:a]
+* [늘 다니던 돌담길로 # item:prologue_02 # pick:a]
 -> END
-* [처음 보는 바람개비가 돌아가는 색다른 오솔길로 들어선다 # item:prologue_02 # pick:b]
+* [처음 보는 바람개비 길로 # item:prologue_02 # pick:b]
 -> END
 
 === prologue_03 ===
 광장 입구 나무 안내판 앞에 섰다.
 마을 지도 옆에 오늘 열릴 행사 그림이 붙어 있다.
 주인공: 여기서는 뭘 먼저 살펴볼까?
-* [지금 바로 즐길 수 있는 눈앞의 장터 풍경부터 구경한다 # item:prologue_03 # pick:a]
+* [눈앞의 장터부터 구경 # item:prologue_03 # pick:a]
 -> END
-* [전체 지도를 익히며 오늘 어떻게 움직일지 그려 본다 # item:prologue_03 # pick:b]
+* [지도 보며 하루 계획 # item:prologue_03 # pick:b]
 -> END
 
 === prologue_outro ===
