@@ -18,6 +18,8 @@ import { lumiView } from "../core/lumi-errand";
 import { echoView } from "../core/echo-errand";
 import { orView } from "../core/or-errand";
 import { residentBoard, residentCommand, type Resident } from "./residents-errands";
+import { MINIGAME_ROUNDS, focusMinigame, minigameBoard } from "./minigames";
+import { nextPlacements, roundPlan } from "../core/minigames";
 import { contentVersionMatches, type Command, type PlaySnapshot, type EndingNPC, type ConfessionReason } from "../core/play";
 import { createPlay, loadCurrentPlay, recoverPending, sendCommand, PlayApiError, ResponseValidationError, type CommandResult } from "../net/plays";
 import { clearPending, loadPending } from "../net/pending";
@@ -511,8 +513,8 @@ export class Game {
     if (!this.snapshot) return;
     this.exploring = false; this.updateHud(); this.token++; this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.replaceChildren(); this.overlay.className = "overlay dialogue";
     const phase = this.snapshot[npc].phase;
-    const board = residentBoard(npc, this.snapshot[npc].placements, translations(this.state.lang).residents[npc], command => void this.command(command, () => this.snapshot?.[npc].phase === phase ? this.residentsBoard(npc) : this.world()), () => this.world(), this.state.lang);
-    this.overlay.append(board); board.querySelector<HTMLButtonElement>("button:not(:disabled)")?.focus();
+    const board = residentBoard(npc, this.snapshot[npc].placements, translations(this.state.lang).residents[npc], commands => this.sendChain(commands, () => this.snapshot?.[npc].phase === phase ? this.residentsBoard(npc) : this.world()), () => this.world());
+    this.overlay.append(board); focusMinigame(board);
   }
   private interactMoka(id: string): void {
     if (!this.snapshot || !mokaView(this.snapshot).activeTargetIds.includes(id)) { this.world(); return; }
@@ -527,27 +529,23 @@ export class Game {
     else command = { kind: "act", targetId: id };
     void this.command(command, () => { if (command.kind === "deliver") void this.mokaNarrative("moka_delivered", () => this.world()); else this.world(); });
   }
+  // Moka's errand minigame: bake each round's bread by stopping the oven needle in the golden band.
   private board(): void {
     if (!this.snapshot || this.snapshot.moka.phase !== "arrange") { this.world(); return; }
     this.exploring = false; this.updateHud(); this.token++; this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.replaceChildren(); this.overlay.className = "overlay dialogue";
     const copy = translations(this.state.lang).moka, placements = this.snapshot.moka.placements;
-    const board = document.createElement("div"); board.className = "panel moka-board"; board.setAttribute("role", "dialog"); board.setAttribute("aria-label", copy.objective.arrange);
-    const message = document.createElement("p"); message.textContent = copy.objective.arrange; board.append(message);
-    let selected: BreadId | null = null;
-    const breads = document.createElement("div"), slots = document.createElement("div"); breads.className = "moka-grid"; slots.className = `moka-grid ${mokaView(this.snapshot).display === "high" ? "moka-high" : "moka-low"}`;
-    const breadButtons = new Map<BreadId, HTMLButtonElement>();
-    for (const id of Object.keys(quest.bread) as BreadId[]) {
-      const button = document.createElement("button"); button.textContent = copy.items[quest.bread[id] as "walnut" | "roll" | "flower"]; button.disabled = Object.values(placements).includes(id); button.setAttribute("aria-pressed", "false");
-      button.onclick = () => { selected = id; for (const [key, element] of breadButtons) element.setAttribute("aria-pressed", String(key === id)); }; breadButtons.set(id, button); breads.append(button);
-    }
-    for (const id of Object.keys(quest.slots) as SlotId[]) {
-      const button = document.createElement("button"); button.textContent = `${copy.items[quest.slots[id] as "walnut" | "roll" | "flower"]} ${placements[id] ? "✓" : "○"}`; button.disabled = !!placements[id];
-      button.onclick = () => { if (!selected) return; if (quest.bread[selected] !== quest.slots[id]) { message.textContent = copy.puzzle.wrong; selected = null; for (const element of breadButtons.values()) element.setAttribute("aria-pressed", "false"); return; } void this.command({ kind: "place", breadId: selected, slotId: id }, () => this.snapshot?.moka.phase === "arrange" ? this.board() : this.world()); }; slots.append(button);
-    }
-    board.append(breads, slots);
-    const hint = document.createElement("button"); hint.textContent = copy.puzzle.hint; hint.onclick = () => { const slot = (Object.keys(quest.slots) as SlotId[]).find(id => !placements[id]); const bread = (Object.keys(quest.bread) as BreadId[]).find(id => slot && quest.bread[id] === quest.slots[slot] && !Object.values(placements).includes(id)); if (slot && bread) { selected = bread; for (const [key, element] of breadButtons) element.setAttribute("aria-pressed", String(key === bread)); message.textContent = `${copy.items[quest.bread[bread] as "walnut" | "roll" | "flower"]} → ${copy.items[quest.slots[slot] as "walnut" | "roll" | "flower"]}`; } };
-    const auto = document.createElement("button"); auto.textContent = copy.puzzle.auto; auto.onclick = () => void this.command({ kind: "auto_arrange" }, () => this.world());
-    const close = document.createElement("button"); close.textContent = copy.puzzle.close; close.onclick = () => this.world(); board.append(hint, auto, close); this.overlay.append(board); breadButtons.values().next().value?.focus();
+    const { round, size } = roundPlan(Object.keys(quest.slots).length, Object.values(placements).filter(Boolean).length, MINIGAME_ROUNDS);
+    const pairs = nextPlacements(quest.bread, quest.slots, placements, size);
+    const label = pairs[0] ? copy.items[quest.slots[pairs[0][1] as SlotId] as "walnut" | "roll" | "flower"] : undefined;
+    const after = () => this.snapshot?.moka.phase === "arrange" ? this.board() : this.world();
+    const board = minigameBoard({ kind: "oven", index: round, rounds: MINIGAME_ROUNDS, label }, copy.game, { auto: copy.puzzle.auto, close: copy.puzzle.close, onAuto: () => void this.command({ kind: "auto_arrange" }, () => this.world()), onClose: () => this.world() }, () => this.sendChain(pairs.map(([breadId, slotId]) => ({ kind: "place", breadId: breadId as BreadId, slotId: slotId as SlotId })), after), "moka-board");
+    this.overlay.append(board); focusMinigame(board);
+  }
+  // Sends commands one after another, then runs `after` once the last is saved.
+  private sendChain(commands: Command[], after: () => void): void {
+    const [first, ...rest] = commands;
+    if (!first) { after(); return; }
+    void this.command(first, () => this.sendChain(rest, after));
   }
   private advance(): void {
     const segment = this.state.segment;

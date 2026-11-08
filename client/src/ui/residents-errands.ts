@@ -6,6 +6,8 @@ import lumi from "../../../content/quests/lumi-errand.json";
 import echo from "../../../content/quests/echo-errand.json";
 import or from "../../../content/quests/or-errand.json";
 import "./residents-errands.css";
+import { nextPlacements, roundPlan } from "../core/minigames";
+import { MINIGAME_ROUNDS, minigameBoard, type MinigameCopy, type MinigameKind } from "./minigames";
 
 export type Resident = "lumi" | "echo" | "or";
 const quests = { lumi, echo, or };
@@ -23,26 +25,15 @@ export function residentCommand(snapshot: PlaySnapshot, npc: Resident, targetId:
   return null;
 }
 
-type Copy = { objective: Record<string, string>; items: Record<string, string>; puzzle: typeof import("../../../content/i18n/ko/lumi-errand.json")["puzzle"] };
-export function residentBoard(npc: Resident, placements: Record<string, string | undefined>, copy: Copy, send: (command: Command) => void, close: () => void, lang: "ko" | "en" = "ko"): HTMLElement {
+type Copy = { puzzle: { auto: string; close: string }; game: MinigameCopy };
+const KINDS: Record<Resident, MinigameKind> = { lumi: "ribbons", echo: "shelf", or: "gears" };
+
+// One round of the resident's minigame. Winning sends the round's share of matching placements;
+// the server still checks every placement, so the minigame only decides when they are sent.
+export function residentBoard(npc: Resident, placements: Record<string, string | undefined>, copy: Copy, send: (commands: Command[]) => void, close: () => void): HTMLElement {
   const quest = quests[npc], pieces: Record<string, string> = quest.pieces, slots: Record<string, string> = quest.slots;
-  const board = document.createElement("div"); board.className = "panel resident-board"; board.setAttribute("role", "dialog"); board.setAttribute("aria-label", copy.objective[npc === "or" ? "gears" : "arrange"] ?? "");
-  const message = document.createElement("p"); message.setAttribute("role", "status"); message.textContent = copy.puzzle.select; board.append(message);
-  const pieceGrid = document.createElement("div"), slotGrid = document.createElement("div"); pieceGrid.className = slotGrid.className = "resident-grid";
-  let selected: string | null = null, busy = false;
-  const buttons = new Map<string, HTMLButtonElement>();
-  const ordinals = lang === "ko" ? ["첫째", "둘째", "셋째", "넷째", "다섯째", "여섯째"] : ["first", "second", "third", "fourth", "fifth", "sixth"];
-  for (const [index, [id, shape]] of Object.entries(pieces).entries()) {
-    const button = document.createElement("button"); button.textContent = `${ordinals[index]} ${copy.items[shape] ?? ""}`; button.disabled = Object.values(placements).includes(id); button.setAttribute("aria-pressed", "false");
-    button.onclick = () => { if (busy) return; selected = id; for (const [key, element] of buttons) element.setAttribute("aria-pressed", String(key === id)); }; buttons.set(id, button); pieceGrid.append(button);
-  }
-  for (const [index, [id, shape]] of Object.entries(slots).entries()) {
-    const button = document.createElement("button"); button.textContent = `${ordinals[index]} ${copy.items[shape] ?? ""} · ${placements[id] ? copy.puzzle.placed : copy.puzzle.empty}`; button.disabled = !!placements[id];
-    button.onclick = () => { if (busy || !selected) return; if (pieces[selected] !== shape) { message.textContent = copy.puzzle.wrong; return; } busy = true; send({ kind: "place_piece", pieceId: selected, slotId: id }); }; slotGrid.append(button);
-  }
-  board.append(pieceGrid, slotGrid);
-  const hint = document.createElement("button"); hint.textContent = copy.puzzle.hint; hint.onclick = () => { if (busy) return; const slot = Object.keys(slots).find(id => !placements[id]); const piece = Object.keys(pieces).find(id => slot && pieces[id] === slots[slot] && !Object.values(placements).includes(id)); if (piece && slot) { selected = piece; for (const [key, element] of buttons) element.setAttribute("aria-pressed", String(key === piece)); message.textContent = `${ordinals[Object.keys(pieces).indexOf(piece)]} ${copy.items[pieces[piece]!] ?? ""} → ${ordinals[Object.keys(slots).indexOf(slot)]} ${copy.items[slots[slot]!] ?? ""}`; } };
-  const auto = document.createElement("button"); auto.textContent = copy.puzzle.auto; auto.onclick = () => { if (!busy) { busy = true; send({ kind: "auto_arrange" }); } };
-  const closeButton = document.createElement("button"); closeButton.textContent = copy.puzzle.close; closeButton.onclick = () => { if (!busy) close(); }; board.append(hint, auto, closeButton);
-  return board;
+  const total = Object.keys(slots).length, placed = Object.values(placements).filter(Boolean).length;
+  const { round, size } = roundPlan(total, placed, MINIGAME_ROUNDS);
+  const place = () => send(nextPlacements(pieces, slots, placements, size).map(([pieceId, slotId]) => ({ kind: "place_piece", pieceId, slotId })));
+  return minigameBoard({ kind: KINDS[npc], index: round, rounds: MINIGAME_ROUNDS }, copy.game, { auto: copy.puzzle.auto, close: copy.puzzle.close, onAuto: () => send([{ kind: "auto_arrange" }]), onClose: close }, place);
 }
