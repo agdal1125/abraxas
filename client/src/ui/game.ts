@@ -278,18 +278,18 @@ export class Game {
   private async opening(): Promise<void> {
     this.openingActive = true; this.loadDisplay();
     if (this.resumed && this.display().name === undefined) await this.nameInput();
+    const ask = async (id: string) => {
+      while (!this.state.log.some(answer => answer.id === id)) {
+        await this.narrative("prologue", id, true);
+        if (!this.state.log.some(answer => answer.id === id)) await new Promise<void>(resolve => { const status = translations(this.state.lang).moka.status; this.panel(status.contentUnavailable, [[status.tryAgain, resolve]]); });
+      }
+    };
     await openingSequence({
       prelude: async () => { if (!this.display().introSeen) { this.panel("", []); const { playPrelude } = await import("./cinematic"); const playback = playPrelude(this.overlay, this.state.lang, this.ui.cinematic); this.overlay.querySelectorAll(".cinematic button").forEach((button, index) => { (button as HTMLButtonElement).dataset.action = ["play", "mute", "skip"][index]!; }); await playback; this.saveDisplay({ introSeen: true }); } },
       scene: scene => this.village.setStoryScene(scene), mode: mode => this.village.setDemiMode(mode),
       knot: knot => this.narrative("prologue", knot), name: () => this.nameInput(),
-      questions: async () => {
-        for (const item of data.items.filter(item => item.segment === "prologue")) {
-          while (!this.state.log.some(answer => answer.id === item.id)) {
-            await this.narrative("prologue", item.id, true);
-            if (!this.state.log.some(answer => answer.id === item.id)) await new Promise<void>(resolve => { const status = translations(this.state.lang).moka.status; this.panel(status.contentUnavailable, [[status.tryAgain, resolve]]); });
-          }
-        }
-      },
+      question: id => ask(id),
+      questions: async () => { for (const item of data.items.filter(item => item.segment === "prologue")) await ask(item.id); },
     }, !this.resumed && this.state.log.length === 0);
     this.openingActive = false; this.resumed = false; this.finish();
   }
