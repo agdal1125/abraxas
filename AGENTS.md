@@ -23,7 +23,7 @@
 ## 작업 방식
 
 - 역할: 계획·디자인, 코드, 아트, 검수, 병합을 모두 Claude가 한다. agy와 Codex에는 맡기지 않는다(2026-11-06 사람 지시). 절차는 `.agents/rules/delegation.md`.
-- 역할별 subagent(`.claude/agents/`): graphic-designer, game-engineer, game-designer, psychologist, critic-reviewer, ux-designer. 메인 세션이 지휘와 병합을 맡는다.
+- 역할별 subagent(`.claude/agents/`): graphic-designer, game-engineer, game-designer, psychologist, critic-reviewer, qa-engineer, ux-designer. 메인 세션이 지휘와 병합을 맡는다.
 - 작업마다 브랜치·worktree를 나눠 병렬로 진행하고 각각 PR로 올린다.
 - 테스트는 핵심만(계산 규칙, 신뢰 경계, 실제 회귀). 요청 범위 밖 추상화를 만들지 않는다.
 
@@ -45,4 +45,5 @@
 | 벤치마크 리서치 | `docs/research/` |
 | 심리 자문 기록 | `docs/psych/` |
 | 작업 지시서 · 검수 보고서 | `docs/tasks/`, `docs/reviews/` |
+| 기능 QA 보고서 | `docs/qa/` |
 | 콘텐츠 구조(흐름·NPC·퀘스트) | `docs/gdd/content-structure.md` |

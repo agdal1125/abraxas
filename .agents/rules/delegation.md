@@ -27,6 +27,7 @@ agy와 Codex에 작업을 맡기지 않는다.
 | game-designer | 흐름, 재미, 시나리오 | `docs/gdd/`, `docs/story/`, `docs/design/`, `content/ink/`, `content/quests/` | `pacing-audit`, `ink-scenario` |
 | psychologist | 측정과 결과 문구 자문 | `docs/psych/` | `psych-review` |
 | critic-reviewer | 실제 플레이 비평 | 없음(읽기 전용) | `critic-playtest` |
+| qa-engineer | 기능 결함 재현, 회귀, 신뢰 경계 시험 | `docs/qa/` | `qa-check` |
 | ux-designer | 화면 문구, UI, 접근성 | `content/i18n/`, `client/src/style.css`, `client/src/ui/*.css`, `docs/art/design-system.md` | `abraxas-ux-copy` |
 
 단일 작성자 파일은 한 번에 한 작업만 쓴다: `client/src/ui/game.ts`, `client/src/scenes/village.ts`, `content/world/village.json`, `content/assets/manifest.json`.
@@ -37,7 +38,7 @@ agy와 Codex에 작업을 맡기지 않는다.
 2. 기획자나 담당자가 설계 초안을 쓴다.
 3. 대사, 선택, 반응, 결과, 소리, 연출을 건드리면 psychologist가 사전 검토한다.
 4. 담당자가 worktree에서 제작하고 자체 검증한다.
-5. critic-reviewer가 빌드된 게임을 실제로 플레이한다.
+5. 기능이 바뀌었으면 qa-engineer가 결함과 회귀를 확인하고, critic-reviewer가 빌드된 게임을 실제로 플레이한다.
 6. 해당 게이트를 통과한다.
 7. 메인이 diff를 보고 필수 검사를 다시 돌린 뒤 PR을 올리고 병합한다(`release-gate` 스킬).
 8. 메인이 `docs/memory/`와 `docs/devlog/`를 갱신한다.
@@ -50,9 +51,10 @@ agy와 Codex에 작업을 맡기지 않는다.
 | G2 아트 | graphic-designer | 740×360·844×390 실제 캡처, 사람이 인상 확인 | 렌더 변경 |
 | G3 성능 | game-engineer | 실제 폰 측정. 임시 목표 평균 30 FPS, 프레임 간격 p95 50ms. `check:size` 통과 | 렌더·에셋 변경 |
 | G4 비평 | critic-reviewer | 앞선 지적 재발 없음, 새 치명 지적 없음 | 마일스톤마다 전체, 작업마다 해당 구간 |
+| G6 기능 | qa-engineer | `qa-check` 자동 검사와 E2E 통과, 미해결 S1·S2 없음, 수정 결함의 회귀 확인 | 흐름·서버·UI·입력 변경, 버그 수정 PR |
 | G5 사람 | 사람 | 정책 수치, 유형 이름, 비밀값, 배포, 규칙, 외부 서비스, 법적 판단 | 해당 시 항상 |
 
-G4는 LLM 평가다. 재미 판정은 마일스톤마다 실제 사람 5명 시험으로 확인한다. 심리 검토도 전문가 자문을 대신하지 않는다.
+G6은 '동작하는가'를, G4는 '할 만한가'를 본다. 같은 결함이 둘 다에 나오면 하나로 묶는다. G4는 LLM 평가다. 재미 판정은 마일스톤마다 실제 사람 5명 시험으로 확인한다. 심리 검토도 전문가 자문을 대신하지 않는다.
 
 ## 작업 기준
 
