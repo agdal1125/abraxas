@@ -1,6 +1,8 @@
 -> or_choose_01
 
 === or_choose_01 ===
+A blast of heat rolls out of the forge.
+Or: You came. Extra hands are welcome.
 Or: Making the festival bell.
 Or: Time to heat it up.
 Or: How strong should the fire be?
@@ -90,6 +92,6 @@ Or: The bell hangs well. It'll carry across the square.
 -> END
 
 === or_completed ===
-Or: Thanks for the helping hand.
-Or: See you at the festival.
+Or: Listen for the bell.
+Or: You'll hear it when the lights go up.
 -> END
