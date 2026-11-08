@@ -11,6 +11,8 @@
   padding: 1rem;
   background: #17191b;
   color: white;
+  /* The game overlay that hosts this is pointer-events: none, so the player would tap straight through. */
+  pointer-events: auto;
 }
 
 .cinematic video {
