@@ -1,33 +1,66 @@
-.minigame { display: flex; flex-direction: column; gap: 10px; width: min(560px, 100%); max-height: 100%; overflow-y: auto; }
+.minigame { display: flex; flex-direction: column; gap: 8px; width: min(560px, 100%); max-height: 100%; overflow-y: auto; }
 .minigame p { margin: 0; text-align: center; }
-.minigame-heading { font-size: var(--label-size, 14px); font-weight: 700; opacity: .8; }
+.minigame-heading { font-size: var(--label-size, 12px); font-weight: 700; color: var(--ink-soft); letter-spacing: .02em; }
 .minigame-status { min-height: 1.5em; }
-.minigame-stage { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 6px 0; }
+.minigame.is-cleared .minigame-status { color: var(--plank-edge); font-weight: 700; }
+.minigame-stage { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 4px 0; }
 .minigame-footer { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+/* Play pieces are drawn shapes, not wooden sign buttons. */
+.minigame-stage button { clip-path: none; background: none; box-shadow: none; padding: 0; min-width: 48px; min-height: 48px; }
+.minigame-stage button:active { transform: translateY(1px); box-shadow: none; }
+.minigame svg { display: block; width: 100%; height: 100%; overflow: visible; }
 
-/* Lumi: four ribbons in a row. */
-.minigame-ribbons .minigame-stage { flex-direction: row; justify-content: center; }
-.ribbon { width: 64px; height: 64px; border-radius: 0; opacity: .72; transition: opacity 120ms, transform 120ms; }
-.ribbon.lit { opacity: 1; transform: translateY(-4px) scale(1.06); }
-.ribbon-pink { background: #f4a7b9; } .ribbon-yellow { background: #f6d77a; } .ribbon-mint { background: #9fd8c3; } .ribbon-lilac { background: #c7b2e8; }
-.ribbon:disabled { opacity: .55; }
+/* Lumi: ribbon bows and a garland that fills one pennant per correct tap. */
+.garland { position: relative; display: flex; gap: 10px; padding-top: 6px; }
+.garland::before { content: ""; position: absolute; left: -10px; right: -10px; top: 4px; height: 10px; border-top: 2px solid var(--plank-edge); border-radius: 0 0 50% 50% / 0 0 100% 100%; }
+.pennant { position: relative; width: 18px; height: 20px; background: var(--line); clip-path: polygon(0 0, 100% 0, 50% 100%); opacity: .55; transition: background-color 150ms, opacity 150ms; }
+.pennant[class*="ribbon-"] { opacity: 1; }
+.garland.shake { animation: shake 300ms; }
+@keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+.ribbon-row { display: flex; gap: 12px; justify-content: center; }
+.ribbon { --tone: #f4a7b9; --shade: #d9768f; width: 68px; height: 68px; transition: transform 140ms, filter 140ms; }
+.ribbon .light { fill: var(--tone); } .ribbon .dark { fill: var(--shade); } .ribbon .knot { fill: var(--shade); }
+.ribbon.lit { transform: translateY(-6px) scale(1.12); filter: drop-shadow(0 0 6px var(--marker)) brightness(1.08); }
+.ribbon:disabled { opacity: .8; cursor: default; }
+.ribbon-pink { --tone: #f4a7b9; --shade: #d9768f; } .ribbon-yellow { --tone: #f6d77a; --shade: #d9aa3f; }
+.ribbon-mint { --tone: #9fd8c3; --shade: #5fae93; } .ribbon-lilac { --tone: #c7b2e8; --shade: #9a7fcb; }
+.pennant.ribbon-pink { background: #f4a7b9; } .pennant.ribbon-yellow { background: #f6d77a; } .pennant.ribbon-mint { background: #9fd8c3; } .pennant.ribbon-lilac { background: #c7b2e8; }
 
-/* Moka: an oven gauge with a golden band. */
-.oven-bar { position: relative; width: min(420px, 100%); height: 26px; background: #5b4636; box-shadow: inset 0 -4px 0 #3f3026; }
-.oven-zone { position: absolute; top: 0; bottom: 0; background: #f2c14e; }
-.oven-needle { position: absolute; top: -6px; bottom: -6px; width: 4px; margin-left: -2px; background: #fff8ec; }
-.oven-action { min-width: 160px; }
+/* Moka: a brick oven; the bread in the mouth browns with the needle. */
+.minigame-oven .minigame-stage { flex-direction: row; justify-content: center; gap: 18px; }
+.oven { display: block; width: min(180px, 40vw); height: auto; aspect-ratio: 160 / 96; flex: none; }
+.oven-controls { display: flex; flex-direction: column; align-items: center; gap: 14px; width: min(280px, 50vw); padding-top: 8px; }
+.oven .brick { fill: #b65d3a; } .oven .brick-line { stroke: #8f4428; stroke-width: 2; fill: none; }
+.oven .mouth { fill: #3a2018; }
+.oven .bread { --crust: rgb(243 227 195); }
+.oven .crust, .oven .crust circle { fill: var(--crust); stroke: rgb(0 0 0 / .18); stroke-width: 1.5; }
+.oven .score { stroke: rgb(255 244 220 / .7); stroke-width: 2; fill: none; stroke-linecap: round; } .oven .score-dot { fill: rgb(255 244 220 / .8); }
+.minigame-oven.is-cleared .oven .mouth { fill: #6b3418; }
+.oven-bar { position: relative; width: 100%; height: 18px; background: linear-gradient(90deg, #f3e3c3, #e2a04a 62%, #c4782e 80%, #603618); box-shadow: inset 0 -3px 0 rgb(0 0 0 / .2); }
+.oven-zone { position: absolute; top: -3px; bottom: -3px; border: 3px solid var(--marker); box-sizing: border-box; }
+.oven-needle { position: absolute; top: -8px; bottom: -8px; width: 4px; margin-left: -2px; background: var(--wood); box-shadow: 0 0 0 2px var(--paper); }
+.minigame-stage .oven-action { clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px); min-width: 160px; padding: 6px 14px; background: var(--plank); color: var(--plank-text); box-shadow: inset 0 -4px 0 var(--plank-edge); }
 
-/* Echo: books to swap into mark order. */
-.shelf-row { display: flex; gap: 6px; align-items: flex-end; padding: 8px 10px 0; border-bottom: 6px solid #6b4f3a; }
-.book { width: 52px; min-width: 48px; height: 92px; padding: 4px; font-size: 20px; }
-.book[aria-pressed="true"] { transform: translateY(-8px); outline: 3px solid var(--marker, #f2c14e); outline-offset: -6px; }
-.book-0 { background: #8fb3d9; } .book-1 { background: #d98f8f; } .book-2 { background: #9fc38a; } .book-3 { background: #d8b679; }
+/* Echo: a bookcase; later marks are taller, so the sorted row steps up. */
+.bookcase { padding: 10px 12px 0; background: #6b4f3a; box-shadow: inset 0 0 0 6px #4e3828; }
+.shelf-row { display: flex; gap: 4px; align-items: flex-end; min-height: 110px; padding: 0 4px; border-bottom: 8px solid #8a6545; }
+.book { --tone: #8fb3d9; --shade: #5d84ad; position: relative; width: 46px; height: var(--height, 88px); background: linear-gradient(90deg, var(--shade) 0 14%, var(--tone) 14% 86%, var(--shade) 86%) !important; transition: transform 140ms; }
+.book-0 { --tone: #8fb3d9; --shade: #5d84ad; } .book-1 { --tone: #d98f8f; --shade: #ad5d5d; } .book-2 { --tone: #9fc38a; --shade: #6e9658; } .book-3 { --tone: #d8b679; --shade: #ab8746; }
+.book-bands { position: absolute; left: 0; right: 0; top: 12px; height: 4px; background: var(--shade); box-shadow: 0 6px 0 var(--shade), 0 calc(var(--height, 88px) - 34px) 0 var(--shade); }
+.book-plate { position: absolute; left: 7px; right: 7px; top: 30%; padding: 2px 0; background: var(--paper); color: var(--ink); font-size: 13px; font-weight: 700; line-height: 1.2; }
+.book[aria-pressed="true"] { transform: translateY(-10px); outline: 3px solid var(--marker); outline-offset: -3px; }
+.minigame-shelf.is-cleared .book { filter: brightness(1.08); }
 
-/* Or: gears with a tooth that must point up. */
-.gear-row { display: flex; gap: 14px; justify-content: center; }
-.gear { position: relative; width: 64px; height: 64px; border-radius: 0; background: #8a8f96; box-shadow: inset 0 -4px 0 #5f646b; }
-.gear::after { content: ""; position: absolute; left: 50%; top: 50%; width: 8px; height: 28px; margin: -28px 0 0 -4px; background: #fff8ec; transform-origin: 50% 100%; transform: rotate(calc(var(--turn) * 90deg)); transition: transform 160ms; }
-.gear.set { background: #c9a64a; box-shadow: inset 0 -4px 0 #8f7530; }
+/* Or: gears whose bright tooth must point up to the arrow. */
+.gear-row { display: flex; gap: 2px; justify-content: center; }
+.gear { position: relative; width: 76px; height: 92px; padding-top: 16px !important; }
+.gear-arrow { position: absolute; top: 0; left: 0; right: 0; font-size: 12px; line-height: 16px; color: var(--plank-edge); text-align: center; }
+.gear-art { display: block; width: 76px; height: 76px; }
+.gear .gear-body { transform: rotate(calc(var(--turn, 0) * 90deg)); transition: transform 220ms cubic-bezier(.34, 1.56, .64, 1); }
+.gear .tooth, .gear .rim { fill: #8a8f96; } .gear .face { fill: #a9aeb5; } .gear .hub { fill: #5f646b; } .gear .tooth.key { fill: var(--marker); }
+.gear.set .tooth, .gear.set .rim { fill: #c9a64a; } .gear.set .face { fill: #e0c26a; } .gear.set .gear-arrow { color: var(--plank); }
+.gear:nth-child(even) .gear-art { transform: scale(.86); }
+.minigame-gears.is-cleared .gear .gear-body { animation: spin 600ms linear; }
+@keyframes spin { to { transform: rotate(calc(var(--turn, 0) * 90deg + 360deg)); } }
 
-@media (prefers-reduced-motion: reduce) { .ribbon, .gear::after { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .ribbon, .pennant, .book, .gear .gear-body { transition: none; } .garland.shake, .minigame-gears.is-cleared .gear .gear-body { animation: none; } }
