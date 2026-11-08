@@ -106,7 +106,7 @@
   },
   "hud": {
     "goal": { "hub": "마을에서 만날 사람을 찾아보자", "character": "기다리는 사람을 찾아가 보자", "quest": "도움을 줄 주민을 찾아가 보자", "return": "다시 만나러 가 보자", "interlude": "호숫가에서 잠시 쉬어 가자", "festival": "광장으로 가 보자", "gate": "기억의 문으로 가 보자" },
-    "settings": "설정", "close": "닫기", "language": "언어", "largeText": "글자 크게", "on": "켜기", "off": "끄기", "restart": "처음부터 다시", "confirm": "지금까지의 진행을 지우고 처음부터 다시 시작할까요?", "cancel": "취소", "share": "공유하기",
+    "settings": "설정", "close": "닫기", "language": "언어", "largeText": "글자 크게", "autoAdvance": "자동 넘김", "on": "켜기", "off": "끄기", "restart": "처음부터 다시", "confirm": "지금까지의 진행을 지우고 처음부터 다시 시작할까요?", "cancel": "취소", "share": "공유하기",
     "credits": "만든 자료", "creditsMusic": "음악: The Day We Smiled (60s Edit) — HoneyTune, Internet Archive", "creditsSounds": "효과음은 CC0 자료를 사용했습니다.", "creditsList": "효과음 전체 목록", "back": "뒤로",
     "fragments": "기억 조각 {n}/{max}", "fragmentFound": "기억 조각을 찾았다 ({n}/{max})", "fragmentsGate": "여기까지 모은 기억 조각", "fragmentsContinue": "탭해서 계속"
   }
