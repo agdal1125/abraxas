@@ -1,17 +1,15 @@
 -> hub_intro
 
 === hub_intro ===
-Garlands hang by the tent; sweet warmth drifts from the bakery.
-Bundles of books sit by the library; tools clink at the forge.
-Lumi: Come help out at the festival tent!
-Moka: Fresh bread will be out soon. Come while it's warm.
-Echo: I'm looking for a book. Need to check the list too.
-Or: Workshop is over that way. You can drop by.
-You: Where should I head first?
+The fountain square. Everyone is busy before the festival.
+Lumi: The tent decorations aren't even half done! Can someone help?
+Moka: Bread's almost out. An extra pair of hands would be nice.
+Echo: Where did the festival records go... I'd better sort the library first.
+Or: The bell isn't done. I'll be at the workshop.
+You: Everyone could use a hand. Who should I help first?
 -> END
 
 === hub_return ===
-You return to the fountain in the square.
-Friendly village sounds fill the open air.
-You: Where should I go next?
+You're back at the fountain square.
+You: Is anyone still waiting for help?
 -> END
