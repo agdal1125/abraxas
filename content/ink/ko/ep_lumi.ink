@@ -48,26 +48,6 @@
 * [귀에 익어 편안한 마을의 옛 행진곡으로 시작하자 # item:lumi_06 # pick:b]
 -> END
 
-=== lumi_table ===
-정한 자리에서 장식을 만들자.
--> END
-
-=== lumi_card ===
-고른 공연 카드를 무대 계획판에 놓자.
--> END
-
-=== lumi_notice_pickup ===
-정한 안내 도구를 집자.
--> END
-
-=== lumi_notice_first ===
-첫 번째 장소에 축제 소식을 전하자.
--> END
-
-=== lumi_notice_second ===
-두 번째 장소에도 축제 소식을 전하자.
--> END
-
 === lumi_notice_first_a ===
 주민: 알려 줘서 고마워. 시작할 때 갈게.
 -> END
@@ -84,44 +64,12 @@
 우편함에 안내문을 넣었다.
 -> END
 
-=== lumi_notice_return ===
-안내 도구를 제자리에 돌려놓자.
--> END
-
 === lumi_stagekeeper ===
 무대지기: 기둥 하나에 걸 꽃줄이 모자라. 재료를 더 구해 줄래?
 -> END
 
-=== lumi_material_pickup ===
-정한 장식 재료를 집자.
--> END
-
-=== lumi_material_delivery ===
-재료를 무대 작업대에 전하자.
--> END
-
-=== lumi_arrange ===
-같은 모양의 고리와 표식을 이어 장식을 걸자.
--> END
-
-=== lumi_welcome ===
-정한 자리에서 손님을 맞이하자.
--> END
-
-=== lumi_return ===
-루미에게 돌아가자.
--> END
-
-=== lumi_score_pickup ===
-고른 행진곡 악보를 집자.
--> END
-
-=== lumi_score_delivery ===
-악보를 악사 받침대에 전하자.
--> END
-
 === lumi_report ===
-루미에게 준비를 마쳤다고 알리자.
+루미: 벌써 다 끝냈어? 손님 맞을 준비가 다 됐네!
 -> END
 
 === lumi_completed ===

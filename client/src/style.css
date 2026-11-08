@@ -102,6 +102,9 @@ input {
 
 .dialogue .panel { position: relative; display: flex; flex-direction: column; flex-shrink: 0; width: 100%; max-width: 420px; max-height: 38%; min-height: 48px; }
 .dialogue .panel p { min-height: 0; overflow-y: auto; }
+/* Lines nobody speaks read as a caption over the scene, not as the hero talking. */
+.dialogue .panel.narration { background: rgb(27 26 24 / .82); box-shadow: none; color: var(--paper); text-align: center; }
+.dialogue .panel.narration .indicator { color: var(--paper); }
 .speaker {
   align-self: flex-start;
   flex: none;
