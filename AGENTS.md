@@ -6,7 +6,8 @@
 
 - 기억을 잃은 주인공이 30분 동안 마을 NPC들과 지내며 선택으로 16유형 중 자신의 성격을 찾는 모바일 웹 심리 테스트형 연애 어드벤처.
 - 기획서: `docs/gdd/README.md` (원본은 Claude 문서 "Abraxas 기획서 v2.0").
-- 기술 스택: `docs/adr/0001-tech-stack.md`. Phaser 4 + TypeScript / Go API on Cloud Run / Firebase Hosting·Anonymous Auth·Firestore.
+- 기술 스택: `docs/adr/0001-tech-stack.md`, 렌더링은 `docs/adr/0005-threejs-rendering.md`. Three.js + TypeScript / Go API on Cloud Run / Firebase Hosting·Anonymous Auth·Firestore.
+- 출시 계획: `docs/roadmap/release-plan.md`.
 
 ## 언제나 지킬 것
 
@@ -22,13 +23,14 @@
 ## 작업 방식
 
 - 역할: 계획·디자인, 코드, 아트, 검수, 병합을 모두 Claude가 한다. agy와 Codex에는 맡기지 않는다(2026-11-06 사람 지시). 절차는 `.agents/rules/delegation.md`.
+- 역할별 subagent(`.claude/agents/`): graphic-designer, game-engineer, game-designer, psychologist, critic-reviewer, qa-engineer, ux-designer. 메인 세션이 지휘와 병합을 맡는다.
 - 작업마다 브랜치·worktree를 나눠 병렬로 진행하고 각각 PR로 올린다.
 - 테스트는 핵심만(계산 규칙, 신뢰 경계, 실제 회귀). 요청 범위 밖 추상화를 만들지 않는다.
 
 - 큰 변경은 구현 전에 계획을 먼저 보여주고 확인받는다.
 - 하나의 PR에는 하나의 목적만 담는다.
 - 끝났다고 말하기 전에: 클라이언트 `npm run typecheck && npm test`, 서버 `go vet ./... && go test ./... && govulncheck ./...`.
-- 모르는 API는 추측하지 않는다. Phaser는 설치된 Phaser 스킬, 그 외는 공식 문서를 확인한다.
+- 모르는 API는 추측하지 않는다. Three.js는 설치된 타입 정의와 공식 문서를 확인한다. 전역에 설치된 Phaser 스킬은 이 프로젝트에 쓰지 않는다.
 
 ## 문서 지도
 
@@ -38,7 +40,10 @@
 | 현재 진행 상황, 다음 할 일 | `docs/memory/status.md` |
 | 겪어본 함정, 우회법 | `docs/memory/lessons.md` |
 | 날짜별 작업 기록 | `docs/devlog/YYYY-MM-DD.md` |
-| 아트 기준 | `docs/art/style-guide.md` |
+| 아트 기준 | `docs/art/design-system.md`, `docs/art/immersion-policy.md`, 옛 기준 `docs/art/style-guide.md` |
+| 출시 순서, 사람 결정 | `docs/roadmap/release-plan.md` |
+| 벤치마크 리서치 | `docs/research/` |
+| 심리 자문 기록 | `docs/psych/` |
 | 작업 지시서 · 검수 보고서 | `docs/tasks/`, `docs/reviews/` |
+| 기능 QA 보고서 · 플레이테스트 양식 · 출시 점검표 | `docs/qa/` |
 | 콘텐츠 구조(흐름·NPC·퀘스트) | `docs/gdd/content-structure.md` |
-| 플레이테스트 양식 · 출시 점검표 | `docs/qa/` |
