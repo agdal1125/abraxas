@@ -360,7 +360,7 @@ def build_player_parts():
     parts.append(finish_part_mesh(bm_head, "head_mesh", PALETTE["cream"], {"head": 1.0}))
 
     bm_shell = make_eggshell_cap((0.0, 0.0, 0.462), rx=0.132, ry=0.128, rz=0.118, thickness=0.012, num_teeth=8)
-    parts.append(finish_part_mesh(bm_shell, "eggshell", PALETTE["eggshell"], {"head": 1.0}))
+    parts.append(finish_part_mesh(bm_shell, "eggshell", PALETTE["eggshell"], {"sec_shell_cap": 1.0}))
     return parts
 
 
@@ -391,7 +391,7 @@ def build_char_a_parts():
     scarf = make_torus(0.070, 0.019, (0.0, 0.0, 0.345), major_seg=12, minor_seg=5, scale_xyz=(1.0, 0.95, 1.0))
     parts.append(finish_part_mesh(scarf, "scarf", PALETTE["sky"], {"body": 1.0}))
     scarf_tail = make_beveled_box(0.040, 0.014, 0.090, (-0.070, -0.060, 0.300), bevel_width=0.005, tilt_euler=(0.25, 0.0, -0.55))
-    parts.append(finish_part_mesh(scarf_tail, "scarf_tail", PALETTE["sky"], {"body": 1.0}))
+    parts.append(finish_part_mesh(scarf_tail, "scarf_tail", PALETTE["sky"], {"sec_cloth_scarf": 1.0}))
 
     head_center = (0.0, 0.0, 0.468)
     bm_head = make_ellipsoid(0.128, 0.122, 0.124, head_center, u_seg=16, v_seg=10)
@@ -404,7 +404,7 @@ def build_char_a_parts():
     parts.append(finish_part_mesh(hair_back, "hair_back", PALETTE["a"], {"head": 1.0}))
     # One springy curl popping up from the crown.
     curl = make_torus(0.022, 0.009, (0.016, 0.004, 0.582), major_seg=10, minor_seg=4, tilt_euler=(math.radians(90), 0.0, math.radians(-25)))
-    parts.append(finish_part_mesh(curl, "hair_curl", PALETTE["a"], {"head": 1.0}))
+    parts.append(finish_part_mesh(curl, "hair_curl", PALETTE["a"], {"sec_hair_curl": 1.0}))
     # Sunny round bobble clip on the right side of the hair (G1: no star or badge marks).
     bobble = make_ellipsoid(0.019, 0.016, 0.019, (-0.127, -0.052, 0.536), u_seg=8, v_seg=5)
     parts.append(finish_part_mesh(bobble, "hair_bobble", PALETTE["sunny"], {"head": 1.0}))
@@ -418,9 +418,9 @@ def build_char_a_parts():
     flag_origin = (0.186, -0.004, 0.428)
     # Two convex halves so the swallowtail notch survives triangulation.
     for half in ([(0.0, 0.050), (0.165, 0.050), (0.118, 0.0), (0.0, 0.0)], [(0.0, 0.0), (0.118, 0.0), (0.165, -0.050), (0.0, -0.050)]):
-        parts.append(finish_part_mesh(make_flat_prism(half, flag_origin, 0.006, bevel=0.0), "flag_cloth", PALETTE["sunny"], {"hand_prop": 1.0}, smooth=False))
+        parts.append(finish_part_mesh(make_flat_prism(half, flag_origin, 0.006, bevel=0.0), "flag_cloth", PALETTE["sunny"], {"sec_cloth_flag": 1.0}, smooth=False))
     stripe = [(0.0, 0.050), (0.042, 0.050), (0.042, -0.050), (0.0, -0.050)]
-    parts.append(finish_part_mesh(make_flat_prism(stripe, flag_origin, 0.0085, bevel=0.0), "flag_stripe", PALETTE["a"], {"hand_prop": 1.0}, smooth=False))
+    parts.append(finish_part_mesh(make_flat_prism(stripe, flag_origin, 0.0085, bevel=0.0), "flag_stripe", PALETTE["a"], {"sec_cloth_flag": 1.0}, smooth=False))
     return parts
 
 
@@ -441,7 +441,7 @@ def build_char_b_parts():
     bm_torso = make_ellipsoid(0.118, 0.108, 0.126, (0.0, 0.0, 0.222), u_seg=16, v_seg=10, taper_top=0.28, bulge_bottom=0.20)
     parts.append(finish_part_mesh(bm_torso, "torso", PALETTE["b"], {"body": 1.0}))
 
-    def apron_patch(name, z_min, z_max, x_min, x_max):
+    def apron_patch(name, z_min, z_max, x_min, x_max, bone="body", stand_off=0.0025):
         bm = bmesh.new()
         rows = []
         for iz in range(7):
@@ -451,15 +451,17 @@ def build_char_b_parts():
             row = []
             for ix in range(7):
                 x = x_min + (x_max - x_min) * ix / 6
-                y = -0.108 * scale * math.sqrt(max(0.0, 1 - zn * zn - (x / (0.118 * scale)) ** 2)) - 0.0025
+                y = -0.108 * scale * math.sqrt(max(0.0, 1 - zn * zn - (x / (0.118 * scale)) ** 2)) - stand_off
                 row.append(bm.verts.new((x, y, z)))
             rows.append(row)
         for iz in range(6):
             for ix in range(6):
                 bm.faces.new((rows[iz][ix], rows[iz + 1][ix], rows[iz + 1][ix + 1], rows[iz][ix + 1]))
-        parts.append(finish_part_mesh(bm, name, PALETTE["cream"], {"body": 1.0}))
+        parts.append(finish_part_mesh(bm, name, PALETTE["cream"], {bone: 1.0}))
 
-    apron_patch("apron_front", 0.145, 0.285, -0.065, 0.065)
+    apron_patch("apron_bib", 0.212, 0.285, -0.065, 0.065)
+    # Below the waist tie the apron hangs free, standing off the body so it has room to swing.
+    apron_patch("apron_skirt", 0.145, 0.214, -0.065, 0.065, bone="sec_cloth_apron", stand_off=0.011)
     for side in (-1, 1):
         apron_patch(f"apron_strap_{side}", 0.280, 0.322, side * 0.044 - 0.008, side * 0.044 + 0.008)
     parts.append(finish_part_mesh(make_torus(0.125, 0.005, (0, 0, 0.212), major_seg=32, minor_seg=6, scale_xyz=(1, 0.915, 1)), "apron_waist", PALETTE["cream"], {"body": 1.0}))
@@ -477,7 +479,7 @@ def build_char_b_parts():
     ):
         parts.append(finish_part_mesh(make_ellipsoid(*size, center, u_seg=10, v_seg=5), name, color, {"body" if name == "neck" else "head": 1.0}))
     puff = make_ellipsoid(0.140, 0.132, 0.052, (0, 0.006, 0.568), u_seg=12, v_seg=6, taper_top=-0.10, flatten_bottom=0.30)
-    parts.append(finish_part_mesh(puff, "hat", PALETTE["b"], {"head": 1.0}))
+    parts.append(finish_part_mesh(puff, "hat", PALETTE["b"], {"sec_soft_hat": 1.0}))
 
     # A round loaf held in the left hand: the baker who shares warm bread with neighbours.
     loaf_c = (0.160, -0.052, 0.214)
@@ -520,7 +522,7 @@ def build_char_c_parts():
         parts.append(finish_part_mesh(make_ellipsoid(*size, center, u_seg=10, v_seg=6), name, PALETTE["indigo"], {"head": 1.0}))
     # Side-swept fringe: quiet and tidy, leaving the glasses readable.
     fringe = make_ellipsoid(0.105, 0.030, 0.028, (0.018, -0.116, 0.562), u_seg=10, v_seg=6, tilt_euler=(0.0, 0.16, 0.0))
-    parts.append(finish_part_mesh(fringe, "fringe", PALETTE["indigo"], {"head": 1.0}))
+    parts.append(finish_part_mesh(fringe, "fringe", PALETTE["indigo"], {"sec_hair_fringe": 1.0}))
     parts.append(finish_part_mesh(make_ellipsoid(0.05, 0.05, 0.04, (0, 0, 0.355), u_seg=8, v_seg=4), "neck", PALETTE["cream"], {"body": 1.0}))
     # High cream collar: a reserved, buttoned-up reader.
     collar = make_beveled_cylinder(0.072, 0.064, 0.036, (0.0, 0.0, 0.350), segs=14, bevel_width=0.008, bevel_segments=1, scale_xy=(1.0, 0.92))
@@ -537,11 +539,11 @@ def build_char_c_parts():
     strap = make_beveled_box(0.020, 0.010, 0.250, (0.006, -0.090, 0.245), bevel_width=0.003, tilt_euler=(0.0, math.radians(38), 0.0))
     parts.append(finish_part_mesh(strap, "satchel_strap", PALETTE["wood"], {"body": 1.0}))
     bag = make_beveled_box(0.074, 0.040, 0.066, (-0.092, -0.050, 0.150), bevel_width=0.010, bevel_segments=1, tilt_euler=(0.0, 0.0, math.radians(-12)))
-    parts.append(finish_part_mesh(bag, "satchel", PALETTE["wood"], {"body": 1.0}))
+    parts.append(finish_part_mesh(bag, "satchel", PALETTE["wood"], {"sec_hang_satchel": 1.0}))
     flap = make_beveled_box(0.076, 0.012, 0.034, (-0.092, -0.074, 0.168), bevel_width=0.004, tilt_euler=(0.0, 0.0, math.radians(-12)))
-    parts.append(finish_part_mesh(flap, "satchel_flap", PALETTE["indigo"], {"body": 1.0}))
+    parts.append(finish_part_mesh(flap, "satchel_flap", PALETTE["indigo"], {"sec_hang_satchel": 1.0}))
     button = make_ellipsoid(0.010, 0.006, 0.010, (-0.094, -0.082, 0.158), u_seg=6, v_seg=4)
-    parts.append(finish_part_mesh(button, "satchel_button", PALETTE["sunny"], {"body": 1.0}))
+    parts.append(finish_part_mesh(button, "satchel_button", PALETTE["sunny"], {"sec_hang_satchel": 1.0}))
 
     glass_y = head_center[1] - 0.136
     glass_z = head_center[2] - 0.006
@@ -583,7 +585,7 @@ def build_char_d_parts():
     buckle = make_beveled_box(0.036, 0.010, 0.032, (0.0, -0.085, 0.165), bevel_width=0.003)
     parts.append(finish_part_mesh(buckle, "belt_buckle", PALETTE["steel"], {"body": 1.0}))
     pouch = make_beveled_box(0.056, 0.034, 0.056, (-0.068, -0.090, 0.142), bevel_width=0.008)
-    parts.append(finish_part_mesh(pouch, "tool_pouch", PALETTE["boot"], {"body": 1.0}))
+    parts.append(finish_part_mesh(pouch, "tool_pouch", PALETTE["boot"], {"sec_hang_pouch": 1.0}))
 
     head_center = (0.0, 0.0, 0.468)
     bm_head = make_ellipsoid(0.128, 0.122, 0.124, head_center, u_seg=16, v_seg=10)
@@ -593,7 +595,11 @@ def build_char_d_parts():
     parts.append(finish_part_mesh(make_ellipsoid(0.124, 0.116, 0.066, (0, 0.008, 0.544), u_seg=12, v_seg=7), "hair", PALETTE["ink"], {"head": 1.0}))
     parts.append(finish_part_mesh(make_ellipsoid(0.131, 0.104, 0.098, (0, 0.030, 0.480), u_seg=10, v_seg=6), "hair_back", PALETTE["ink"], {"head": 1.0}))
     parts.append(finish_part_mesh(make_torus(0.122, 0.008, (0, 0.008, 0.535), major_seg=16, minor_seg=4, scale_xyz=(1, 0.94, 1)), "bandana", PALETTE["d"], {"head": 1.0}))
-    parts.append(finish_part_mesh(make_ellipsoid(0.020, 0.025, 0.019, (0.103, 0.043, 0.534), u_seg=8, v_seg=5), "bandana_knot", PALETTE["d"], {"head": 1.0}))
+    parts.append(finish_part_mesh(make_ellipsoid(0.020, 0.025, 0.019, (0.103, 0.043, 0.534), u_seg=8, v_seg=5), "bandana_knot", PALETTE["d"], {"sec_cloth_knot": 1.0}))
+    # Two loose bandana tails behind the knot: the one soft thing on a figure made of blocks and tools.
+    for dx, dy, tilt in ((0.012, 0.012, -0.5), (0.030, 0.030, -0.9)):
+        tail = make_beveled_box(0.018, 0.008, 0.060, (0.108 + dx, 0.046 + dy, 0.500), bevel_width=0.003, tilt_euler=(0.35, tilt, 0.0))
+        parts.append(finish_part_mesh(tail, "bandana_tail", PALETTE["d"], {"sec_cloth_knot": 1.0}))
 
     # Work goggles pushed up on the bandana: ready to test a fix by hand.
     goggle_y, goggle_z = -0.110, 0.548
@@ -609,10 +615,10 @@ def build_char_d_parts():
     hammer_tilt = (0.0, 0.14, 0.0)
     handle_c = (0.176, -0.012, 0.250)
     bm_handle = make_beveled_cylinder(0.011, 0.011, 0.170, handle_c, segs=8, bevel_width=0.002, bevel_segments=1, tilt_euler=hammer_tilt)
-    parts.append(finish_part_mesh(bm_handle, "hammer_handle", PALETTE["wood"], {"hand_prop": 1.0}))
+    parts.append(finish_part_mesh(bm_handle, "hammer_handle", PALETTE["wood"], {"sec_heavy_hammer": 1.0}))
     head_c = (handle_c[0] + 0.085 * math.sin(0.14), handle_c[1], handle_c[2] + 0.085 * math.cos(0.14) + 0.012)
     bm_hhead = make_beveled_box(0.060, 0.118, 0.058, head_c, bevel_width=0.009, bevel_segments=1, tilt_euler=hammer_tilt)
-    parts.append(finish_part_mesh(bm_hhead, "hammer_head", PALETTE["steel"], {"hand_prop": 1.0}))
+    parts.append(finish_part_mesh(bm_hhead, "hammer_head", PALETTE["steel"], {"sec_heavy_hammer": 1.0}))
     return parts
 
 
@@ -672,6 +678,9 @@ def join_and_fit_height(parts, char_key: str, target_height: float):
     mesh_obj.location = (0.0, 0.0, 0.0)
     mesh_obj.rotation_euler = (0.0, 0.0, 0.0)
     mesh_obj.scale = (1.0, 1.0, 1.0)
+    # Secondary bone pivots are authored in part coordinates and must follow the same fit.
+    mesh_obj["fit_scale"] = scale_f
+    mesh_obj["fit_min_z"] = min_z
     return mesh_obj
 
 
@@ -804,6 +813,21 @@ def create_armature_and_bind(mesh_obj, char_key: str, shoulder_x=0.092, shoulder
     b_prop.parent = eb["arm_l"]
     b_prop.use_deform = True
 
+    scale_f, min_z = mesh_obj["fit_scale"], mesh_obj["fit_min_z"]
+    for name, parent, pivot, tip in SECONDARY_BONES.get(char_key, []):
+        head = Vector((pivot[0] * scale_f, pivot[1] * scale_f, (pivot[2] - min_z) * scale_f))
+        tail = Vector((tip[0] * scale_f, tip[1] * scale_f, (tip[2] - min_z) * scale_f))
+        # glTF joints carry no length, so the runtime reads it (in millimetres) from the name.
+        final_name = f"{name}_{round((tail - head).length * 1000):03d}"
+        b_sec = eb.new(final_name)
+        b_sec.head = head
+        b_sec.tail = tail
+        b_sec.parent = eb[parent]
+        b_sec.use_deform = True
+        group = mesh_obj.vertex_groups.get(name)
+        assert group is not None, f"{char_key}: no part is bound to {name}"
+        group.name = final_name
+
     # Align bone roll so every bone has local Z pointing forward (-Y) and local X pointing sideways (+X)
     for b in eb:
         b.align_roll(Vector((0.0, -1.0, 0.0)))
@@ -814,6 +838,57 @@ def create_armature_and_bind(mesh_obj, char_key: str, shoulder_x=0.092, shoulder
     mod = mesh_obj.modifiers.new(name="Armature", type="ARMATURE")
     mod.object = arm_obj
     return arm_obj
+
+
+# Secondary bones (T026-C): parts that hang or sit loosely get their own bone. The baked clips never key them;
+# client/src/scenes/spring-bones.ts drives them at runtime so cloth, hair, hats and bags lag behind the body,
+# each with its own weight. The middle word of the name is the material the runtime looks up.
+# (name, parent bone, pivot, tip) in part coordinates, before the height fit.
+SECONDARY_BONES = {
+    "player": [
+        ("sec_shell_cap", "head", (0.0, 0.0, 0.470), (0.0, 0.0, 0.580)),
+    ],
+    "char-a": [
+        ("sec_cloth_scarf", "body", (-0.058, -0.048, 0.338), (-0.092, -0.072, 0.255)),
+        ("sec_hair_curl", "head", (0.016, 0.004, 0.560), (0.016, 0.004, 0.606)),
+        ("sec_cloth_flag", "hand_prop", (0.186, -0.004, 0.428), (0.330, -0.004, 0.428)),
+    ],
+    "char-b": [
+        ("sec_soft_hat", "head", (0.0, 0.006, 0.546), (0.0, 0.006, 0.624)),
+        ("sec_cloth_apron", "body", (0.0, -0.112, 0.214), (0.0, -0.126, 0.146)),
+    ],
+    "char-c": [
+        ("sec_hang_satchel", "body", (-0.086, -0.062, 0.218), (-0.094, -0.060, 0.118)),
+        ("sec_hair_fringe", "head", (0.018, -0.104, 0.584), (0.018, -0.128, 0.540)),
+    ],
+    "char-d": [
+        ("sec_hang_pouch", "body", (-0.068, -0.092, 0.172), (-0.068, -0.094, 0.112)),
+        ("sec_cloth_knot", "head", (0.104, 0.044, 0.536), (0.138, 0.070, 0.470)),
+        ("sec_heavy_hammer", "hand_prop", (0.160, -0.012, 0.205), (0.188, -0.012, 0.345)),
+    ],
+}
+
+# The game moves characters at 1.4 units per second (client/src/core/world/move.ts). The walk clip plants each
+# foot for half a cycle and slides it back at exactly that speed, so the foot stays put on the ground.
+WALK_SPEED = 1.4
+WALK_FRAMES = 10
+WALK_STRIDE = WALK_SPEED * (WALK_FRAMES / 24.0) / 2.0
+WALK_SWING = 0.50
+WALK_LIFT = 0.034
+HIP_HEIGHT = 0.12
+
+
+def walk_leg_pose(cycle: float):
+    """Leg pose at a point of the walk cycle (0..1): (pitch, forward shift, downward shift) in bone space."""
+    cycle %= 1.0
+    if cycle < 0.5:
+        forward, lift = WALK_STRIDE * (0.5 - cycle / 0.5), 0.0
+    else:
+        t = (cycle - 0.5) / 0.5
+        forward, lift = WALK_STRIDE * (t * t * (3.0 - 2.0 * t) - 0.5), WALK_LIFT * math.sin(math.pi * t)
+    pitch = WALK_SWING * forward / (WALK_STRIDE / 2.0)
+    # The foot swings on the hip, so rotation alone moves it HIP_HEIGHT * sin(pitch) forward and lifts it.
+    return pitch, forward - HIP_HEIGHT * math.sin(pitch), HIP_HEIGHT * (1.0 - math.cos(pitch)) - lift
 
 
 # Idle temperament (T019): same neutral clip, only amplitude differs per resident.
@@ -842,14 +917,18 @@ def apply_pose_at_phase(arm_obj, clip_name: str, phase: float, idle_amp: float =
         arm_obj.pose.bones["arm_l"].rotation_euler = (0.08 * k * s1, 0.0, 0.04 * k * (1.0 - c1))
         arm_obj.pose.bones["arm_r"].rotation_euler = (-0.08 * k * s1, 0.0, -0.04 * k * (1.0 - c1))
     elif clip_name == "walk":
-        bounce = 0.018 * abs(s1)
+        cycle = phase / math.tau
+        # The body is highest when the planted leg is upright and lowest when the feet change over.
+        bounce = 0.014 * (0.5 - 0.5 * math.cos(2.0 * phase))
         arm_obj.pose.bones["body"].location = (0.0, bounce, 0.0)
-        arm_obj.pose.bones["body"].rotation_euler = (0.07, 0.09 * s1, 0.05 * s1)
-        arm_obj.pose.bones["head"].rotation_euler = (-0.05 * s2, -0.06 * s1, -0.04 * s1)
-        arm_obj.pose.bones["leg_l"].rotation_euler = (0.58 * s1, 0.0, 0.0)
-        arm_obj.pose.bones["leg_r"].rotation_euler = (-0.58 * s1, 0.0, 0.0)
-        arm_obj.pose.bones["arm_l"].rotation_euler = (-0.48 * s1, 0.0, 0.0)
-        arm_obj.pose.bones["arm_r"].rotation_euler = (0.48 * s1, 0.0, 0.0)
+        arm_obj.pose.bones["body"].rotation_euler = (0.10, 0.08 * c1, 0.04 * c1)
+        arm_obj.pose.bones["head"].rotation_euler = (-0.05 - 0.03 * math.cos(2.0 * phase), -0.05 * c1, -0.03 * c1)
+        for bone_name, offset in (("leg_l", 0.0), ("leg_r", 0.5)):
+            pitch, forward, down = walk_leg_pose(cycle + offset)
+            arm_obj.pose.bones[bone_name].rotation_euler = (pitch, 0.0, 0.0)
+            arm_obj.pose.bones[bone_name].location = (0.0, down, forward)
+        arm_obj.pose.bones["arm_l"].rotation_euler = (-0.55 * c1, 0.0, 0.0)
+        arm_obj.pose.bones["arm_r"].rotation_euler = (0.55 * c1, 0.0, 0.0)
     elif clip_name == "talk":
         nod = 0.14 * math.sin(phase * 2.0)
         tilt = 0.08 * s1
@@ -873,9 +952,10 @@ def bake_three_actions(arm_obj, char_key: str):
 
     clips = [
         ("idle", 48),
-        ("walk", 19),
+        ("walk", WALK_FRAMES),
         ("talk", 38),
     ]
+    animated = [pb for pb in arm_obj.pose.bones if not pb.name.startswith("sec_")]
 
     for clip_name, end_frame in clips:
         act = bpy.data.actions.new(name=f"{char_key}_{clip_name}")
@@ -888,10 +968,16 @@ def bake_three_actions(arm_obj, char_key: str):
         for f in range(0, end_frame + 1):
             phase = (f / end_frame) * math.tau
             apply_pose_at_phase(arm_obj, clip_name, phase, IDLE_AMPLITUDE.get(char_key, 1.0))
-            for pb in arm_obj.pose.bones:
+            for pb in animated:
                 pb.keyframe_insert(data_path="location", frame=f)
                 pb.keyframe_insert(data_path="rotation_euler", frame=f)
                 pb.keyframe_insert(data_path="scale", frame=f)
+            if clip_name == "walk" and f <= WALK_FRAMES // 2:
+                # Grounding check: while planted, the left foot must move back at walking speed and stay on the floor.
+                bpy.context.view_layer.update()
+                foot = arm_obj.matrix_world @ arm_obj.pose.bones["leg_l"].matrix @ Vector((0.0, HIP_HEIGHT, 0.0))
+                travelled = WALK_SPEED * f / 24.0
+                assert abs(-foot.y - (WALK_STRIDE / 2.0 - travelled)) < 0.001 and abs(foot.z) < 0.001, f"{char_key}: planted foot slips at frame {f}: {tuple(foot)}"
 
         track = arm_obj.animation_data.nla_tracks.new()
         track.name = clip_name
@@ -1541,8 +1627,6 @@ def main():
     all_temp_paths = {}
 
     for key, height, builder_fn, sx, sz, hx, col_r, max_tri, max_kib in specs:
-        if key == "player":
-            continue
         reset_scene()
         parts = builder_fn()
         mesh_obj = join_and_fit_height(parts, key, height)
@@ -1563,7 +1647,7 @@ def main():
             "scale": 1,
             "collision": [{"type": "circle", "x": 0, "z": 0, "radius": col_r}],
             "clips": ["idle", "walk", "talk"],
-            "revisionAuthor": "Claude (T019)",
+            "revisionAuthor": "Claude (T026-C)",
             "budget": {
                 "maxTriangles": max_tri,
                 "maxKiB": max_kib,
