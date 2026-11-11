@@ -29,6 +29,9 @@ const manifest = import.meta.glob<{ default: { assets: Record<string, Asset> } }
 // 24px keeps the neutral symbol legible on a mobile screen while staying within the policy range.
 const MARKER_SIZE_PX = 24;
 
+// Errand walk-ons stand on zones, not in the map's actor list, so their models are named here.
+const WALK_ON_ASSET: Record<string, string> = { "lumi-neighbor-1": "resident-villager-a", "lumi-neighbor-2": "resident-villager-b", "echo-borrower": "resident-villager-b", "or-fisher": "resident-fisher", "or-merchant": "resident-merchant" };
+
 type Character = { object: THREE.Object3D; mixer: THREE.AnimationMixer; springs: SpringBones; actions: Map<string, THREE.AnimationAction>; current?: string };
 
 export class Village {
@@ -101,9 +104,7 @@ export class Village {
     this.player.position.set(map.spawn.x, 0, map.spawn.z); this.cameraTarget.copy(this.player.position); this.scene.add(this.player, this.demi.object, this.postman);
     this.postman.visible = false;
     this.postman.position.set(map.spawn.x - .8, 0, map.spawn.z - .8);
-    const bag = new THREE.Mesh(new THREE.BoxGeometry(.16, .18, .08), new THREE.MeshStandardMaterial({ color: "#c99470", roughness: 1 }));
-    bag.position.set(.18, .24, 0); this.postman.add(bag);
-    loading.push(this.character("quest-npc", this.postman));
+    loading.push(this.character("resident-postman", this.postman));
     loading.push(this.character("player", this.player).then(character => { this.playerCharacter = character; }));
     const scenery: typeof map.props = [];
     for (const prop of map.props) {
@@ -263,7 +264,7 @@ export class Village {
         const review = npc === "or" && this.orView?.phase === "review" && this.orView.choices[3] === "a";
         const zone = review ? id.replace("or-", "or-review-") : id;
         const point = map.zones[zone]; if (!point) throw new Error(`Missing actor zone: ${zone}`);
-        actor.object.position.set(point.x, 0, point.z); this.addColliders({ ...point, asset: "quest-npc" }, id);
+        actor.object.position.set(point.x, 0, point.z); this.addColliders({ ...point, asset: WALK_ON_ASSET[id]! }, id);
       }
     }
   }
@@ -296,7 +297,7 @@ export class Village {
         ...ids.map(async id => {
           let actor = this.actors.get(id);
           if (!actor) { const object = new THREE.Group(), marker = this.label(); object.userData.id = id; object.visible = false; object.add(marker); this.scene.add(object); actor = { object, marker }; this.actors.set(id, actor); }
-          if (!actor.character) actor.character = await this.character("quest-npc", actor.object);
+          if (!actor.character) actor.character = await this.character(WALK_ON_ASSET[id]!, actor.object);
         }),
       ]).then(([props]) => {
         this.residentProps[npc] = props;
