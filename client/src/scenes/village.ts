@@ -8,6 +8,7 @@ import { nearest } from "../core/world/nearby";
 import type { Bounds, Collider, Vec2 } from "../core/world/types";
 import { translations } from "../content";
 import { DreamEffects } from "./dream-effects";
+import { LightRig } from "./light-rig";
 import { dialogueFocus } from "./feedback";
 import type { MokaView } from "../core/moka-errand";
 import { MokaProps } from "./moka-props";
@@ -31,7 +32,7 @@ type Character = { object: THREE.Object3D; mixer: THREE.AnimationMixer; actions:
 export class Village {
   private scene = new THREE.Scene();
   private camera = new THREE.OrthographicCamera();
-  private light = new THREE.DirectionalLight("#fff0df", 2.9);
+  private lights = new LightRig(this.scene);
   private renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   private effects?: DreamEffects;
   private loader = new GLTFLoader();
@@ -87,10 +88,6 @@ export class Village {
     const draco = new DRACOLoader();
     draco.setDecoderPath(`${import.meta.env.BASE_URL}assets/abraxas/decoders/`); draco.setWorkerLimit(1); this.loader.setDRACOLoader(draco);
     this.scene.fog = new THREE.Fog("#eae3f7", 19, 40);
-    this.scene.add(new THREE.AmbientLight("#fff4ed", .05), new THREE.HemisphereLight("#fff4ed", "#e8ddf4", .75));
-    this.light.castShadow = true; this.light.shadow.camera.near = .1; this.light.shadow.camera.far = 25;
-    this.light.shadow.bias = -.0001; this.light.shadow.normalBias = .02;
-    this.scene.add(this.light, this.light.target);
     this.renderer.shadowMap.enabled = true; this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace; this.renderer.toneMapping = THREE.NoToneMapping;
     this.renderer.domElement.style.background = "linear-gradient(to bottom, #eae3f7 0%, #d8d0f0 38%, #f3d5c5 72%, #94d2cb 100%)";
@@ -510,13 +507,8 @@ export class Village {
     this.viewAspect = w / h; this.portrait = h > w;
     const mobile = navigator.maxTouchPoints > 0 || Math.min(w, h) < 600;
     const shadowSize = Math.min(mobile ? 1024 : 2048, Math.max(512, 2 ** Math.ceil(Math.log2(Math.max(w, h) * Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2)))));
-    const shadowExtent = Math.max(4, this.viewHalfHeight * (this.viewAspect + 1) * 1.1);
-    this.light.shadow.camera.left = this.light.shadow.camera.bottom = -shadowExtent;
-    this.light.shadow.camera.right = this.light.shadow.camera.top = shadowExtent; this.light.shadow.camera.updateProjectionMatrix();
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2));
-    if (this.light.shadow.mapSize.x !== shadowSize) {
-      this.light.shadow.mapSize.set(shadowSize, shadowSize); this.light.shadow.map?.dispose(); this.light.shadow.map = null;
-    }
+    this.lights.resize(this.viewHalfHeight, this.viewAspect, shadowSize);
     this.effects?.resize(mobile, this.renderer.getPixelRatio());
     this.camera.near = .1; this.camera.far = 100; this.renderer.setSize(w, h);
     this.updateCamera(0, true);
@@ -547,7 +539,7 @@ export class Village {
       actor.marker.scale.set(MARKER_SIZE_PX * pixel, MARKER_SIZE_PX * pixel, 1);
       actor.marker.position.copy(actor.object.worldToLocal(box.getCenter(new THREE.Vector3()).addScaledVector(up, top + (8 + MARKER_SIZE_PX / 2) * pixel)));
     }
-    this.light.target.position.copy(this.player.position); this.light.position.copy(this.player.position).add(new THREE.Vector3(4, 10, 5));
+    this.lights.update(dt, this.player.position);
   }
   private tick(): void {
     if (document.hidden) return;

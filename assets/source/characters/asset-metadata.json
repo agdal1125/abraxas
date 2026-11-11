@@ -120,15 +120,15 @@
         "walk",
         "talk"
       ],
-      "revisionAuthor": "Codex (agy 한도로 대체)",
+      "revisionAuthor": "Claude (T019)",
       "budget": {
         "maxTriangles": 3000,
         "maxKiB": 180
       },
       "measured": {
-        "bytes": 47388,
-        "kib": 46.28,
-        "triangles": 2976,
+        "bytes": 47180,
+        "kib": 46.07,
+        "triangles": 2736,
         "primitives": 1,
         "materials": 1,
         "joints": 8,
@@ -142,19 +142,19 @@
         "draco": true,
         "bounds": {
           "min": [
-            -0.1667,
+            -0.1624,
             0.0,
-            -0.1396
+            -0.1361
           ],
           "max": [
-            0.3301,
+            0.3461,
             0.6,
-            0.1437
+            0.1386
           ],
           "size": [
-            0.4967,
+            0.5085,
             0.6,
-            0.2833
+            0.2746
           ]
         },
         "colorVerification": {
@@ -188,18 +188,33 @@
             ],
             "maxDiff255": 0.0
           },
-          "wood": {
-            "paletteHex": "#9B7355",
-            "measuredHex": "#9B7355",
+          "sky": {
+            "paletteHex": "#5BC0F8",
+            "measuredHex": "#5BC0F8",
             "measuredSrgb255": [
-              155.0,
-              115.0,
-              85.0
+              91.0,
+              192.0,
+              248.0
             ],
             "measuredLinear": [
-              0.3278,
-              0.1714,
-              0.0908
+              0.1046,
+              0.5271,
+              0.9387
+            ],
+            "maxDiff255": 0.0
+          },
+          "sunny": {
+            "paletteHex": "#FFD23F",
+            "measuredHex": "#FFD23F",
+            "measuredSrgb255": [
+              255.0,
+              210.0,
+              63.0
+            ],
+            "measuredLinear": [
+              1.0,
+              0.6445,
+              0.0497
             ],
             "maxDiff255": 0.0
           }
@@ -222,15 +237,15 @@
         "walk",
         "talk"
       ],
-      "revisionAuthor": "Codex (agy quota limit)",
+      "revisionAuthor": "Claude (T019)",
       "budget": {
         "maxTriangles": 3000,
         "maxKiB": 180
       },
       "measured": {
-        "bytes": 46648,
-        "kib": 45.55,
-        "triangles": 2888,
+        "bytes": 45696,
+        "kib": 44.62,
+        "triangles": 2780,
         "primitives": 1,
         "materials": 1,
         "joints": 8,
@@ -244,19 +259,19 @@
         "draco": true,
         "bounds": {
           "min": [
-            -0.1451,
+            -0.1446,
             0.0,
-            -0.1337
+            -0.1342
           ],
           "max": [
-            0.1451,
+            0.2084,
             0.6,
-            0.1213
+            0.1225
           ],
           "size": [
-            0.2902,
+            0.353,
             0.6,
-            0.255
+            0.2567
           ]
         },
         "colorVerification": {
@@ -289,6 +304,36 @@
               0.8388
             ],
             "maxDiff255": 0.0
+          },
+          "moka_hair": {
+            "paletteHex": "#7A4E33",
+            "measuredHex": "#7A4E33",
+            "measuredSrgb255": [
+              122.0,
+              78.0,
+              51.0
+            ],
+            "measuredLinear": [
+              0.1946,
+              0.0762,
+              0.0331
+            ],
+            "maxDiff255": 0.0
+          },
+          "crust": {
+            "paletteHex": "#B4692F",
+            "measuredHex": "#B4692F",
+            "measuredSrgb255": [
+              180.0,
+              105.0,
+              47.0
+            ],
+            "measuredLinear": [
+              0.4564,
+              0.1413,
+              0.0284
+            ],
+            "maxDiff255": 0.0
           }
         }
       }
@@ -309,15 +354,15 @@
         "walk",
         "talk"
       ],
-      "revisionAuthor": "Codex (agy quota limit)",
+      "revisionAuthor": "Claude (T019)",
       "budget": {
         "maxTriangles": 3500,
         "maxKiB": 180
       },
       "measured": {
-        "bytes": 47284,
-        "kib": 46.18,
-        "triangles": 3152,
+        "bytes": 47104,
+        "kib": 46.0,
+        "triangles": 2792,
         "primitives": 1,
         "materials": 1,
         "joints": 8,
@@ -391,6 +436,36 @@
               0.016
             ],
             "maxDiff255": 0.0
+          },
+          "indigo": {
+            "paletteHex": "#4A3B8F",
+            "measuredHex": "#4A3B8F",
+            "measuredSrgb255": [
+              74.0,
+              59.0,
+              143.0
+            ],
+            "measuredLinear": [
+              0.0685,
+              0.0437,
+              0.2747
+            ],
+            "maxDiff255": 0.0
+          },
+          "leather": {
+            "paletteHex": "#A0462F",
+            "measuredHex": "#A0462F",
+            "measuredSrgb255": [
+              160.0,
+              70.0,
+              47.0
+            ],
+            "measuredLinear": [
+              0.3515,
+              0.0612,
+              0.0284
+            ],
+            "maxDiff255": 0.0
           }
         }
       }
@@ -411,15 +486,15 @@
         "walk",
         "talk"
       ],
-      "revisionAuthor": "Codex (agy quota limit)",
+      "revisionAuthor": "Claude (T019)",
       "budget": {
         "maxTriangles": 3000,
         "maxKiB": 180
       },
       "measured": {
-        "bytes": 44268,
-        "kib": 43.23,
-        "triangles": 2684,
+        "bytes": 47076,
+        "kib": 45.97,
+        "triangles": 2844,
         "primitives": 1,
         "materials": 1,
         "joints": 8,
@@ -433,19 +508,19 @@
         "draco": true,
         "bounds": {
           "min": [
-            -0.1826,
+            -0.187,
             0.0,
-            -0.1414
+            -0.1325
           ],
           "max": [
-            0.1826,
+            0.2178,
             0.6,
             0.1229
           ],
           "size": [
-            0.3652,
+            0.4048,
             0.6,
-            0.2643
+            0.2554
           ]
         },
         "colorVerification": {
@@ -494,18 +569,33 @@
             ],
             "maxDiff255": 0.0
           },
-          "stone": {
-            "paletteHex": "#777777",
-            "measuredHex": "#777777",
+          "steel": {
+            "paletteHex": "#8A8F96",
+            "measuredHex": "#8A8F96",
             "measuredSrgb255": [
-              119.0,
-              119.0,
-              119.0
+              138.0,
+              143.0,
+              150.0
             ],
             "measuredLinear": [
-              0.1845,
-              0.1845,
-              0.1845
+              0.2542,
+              0.2747,
+              0.305
+            ],
+            "maxDiff255": 0.0
+          },
+          "boot": {
+            "paletteHex": "#5A3E2B",
+            "measuredHex": "#5A3E2B",
+            "measuredSrgb255": [
+              90.0,
+              62.0,
+              43.0
+            ],
+            "measuredLinear": [
+              0.1022,
+              0.0482,
+              0.0242
             ],
             "maxDiff255": 0.0
           }
@@ -528,15 +618,15 @@
         "walk",
         "talk"
       ],
-      "revisionAuthor": "Codex (agy quota limit)",
+      "revisionAuthor": "Claude (T019)",
       "budget": {
         "maxTriangles": 2000,
         "maxKiB": 120
       },
       "measured": {
-        "bytes": 38060,
-        "kib": 37.17,
-        "triangles": 1708,
+        "bytes": 37984,
+        "kib": 37.09,
+        "triangles": 1700,
         "primitives": 1,
         "materials": 1,
         "joints": 8,
@@ -552,7 +642,7 @@
           "min": [
             -0.1451,
             0.0,
-            -0.1132
+            -0.121
           ],
           "max": [
             0.1451,
@@ -562,37 +652,52 @@
           "size": [
             0.2902,
             0.56,
-            0.2495
+            0.2573
           ]
         },
         "colorVerification": {
-          "gray_body": {
-            "paletteHex": "#A0A0A0",
-            "measuredHex": "#A0A0A0",
+          "npc_vest": {
+            "paletteHex": "#9FB09A",
+            "measuredHex": "#9FB09A",
             "measuredSrgb255": [
-              160.0,
-              160.0,
-              160.0
+              159.0,
+              176.0,
+              154.0
             ],
             "measuredLinear": [
-              0.3515,
-              0.3515,
-              0.3515
+              0.3467,
+              0.4342,
+              0.3231
             ],
             "maxDiff255": 0.0
           },
-          "gray_cap": {
-            "paletteHex": "#777777",
-            "measuredHex": "#777777",
+          "npc_shirt": {
+            "paletteHex": "#D9CBB5",
+            "measuredHex": "#D9CBB5",
             "measuredSrgb255": [
-              119.0,
-              119.0,
-              119.0
+              217.0,
+              203.0,
+              181.0
             ],
             "measuredLinear": [
-              0.1845,
-              0.1845,
-              0.1845
+              0.6939,
+              0.5972,
+              0.4621
+            ],
+            "maxDiff255": 0.0
+          },
+          "npc_pants": {
+            "paletteHex": "#8C7B6B",
+            "measuredHex": "#8C7B6B",
+            "measuredSrgb255": [
+              140.0,
+              123.0,
+              107.0
+            ],
+            "measuredLinear": [
+              0.2623,
+              0.1981,
+              0.147
             ],
             "maxDiff255": 0.0
           },
