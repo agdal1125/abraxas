@@ -19,6 +19,7 @@ import type { echoView } from "../core/echo-errand";
 import type { orView } from "../core/or-errand";
 import quest from "../../../content/quests/moka-errand.json";
 import { Demi, whitenPlayer, type DemiMode } from "./demi";
+import { SpringBones } from "./spring-bones";
 
 type Placement = Vec2 & { asset: string; rot?: number; scale?: number; zone?: string };
 type MapData = { spawn: Vec2; terrain: Placement; bounds: Bounds; zones: Record<string, Vec2>; actors: (Placement & { id: string })[]; props: (Placement & { id: string })[] };
@@ -28,7 +29,10 @@ const manifest = import.meta.glob<{ default: { assets: Record<string, Asset> } }
 // 24px keeps the neutral symbol legible on a mobile screen while staying within the policy range.
 const MARKER_SIZE_PX = 24;
 
-type Character = { object: THREE.Object3D; mixer: THREE.AnimationMixer; actions: Map<string, THREE.AnimationAction>; current?: string };
+// Errand walk-ons stand on zones, not in the map's actor list, so their models are named here.
+const WALK_ON_ASSET: Record<string, string> = { "lumi-neighbor-1": "resident-villager-a", "lumi-neighbor-2": "resident-villager-b", "echo-borrower": "resident-villager-b", "or-fisher": "resident-fisher", "or-merchant": "resident-merchant" };
+
+type Character = { object: THREE.Object3D; mixer: THREE.AnimationMixer; springs: SpringBones; actions: Map<string, THREE.AnimationAction>; current?: string };
 
 export class Village {
   private scene = new THREE.Scene();
@@ -100,9 +104,7 @@ export class Village {
     this.player.position.set(map.spawn.x, 0, map.spawn.z); this.cameraTarget.copy(this.player.position); this.scene.add(this.player, this.demi.object, this.postman);
     this.postman.visible = false;
     this.postman.position.set(map.spawn.x - .8, 0, map.spawn.z - .8);
-    const bag = new THREE.Mesh(new THREE.BoxGeometry(.16, .18, .08), new THREE.MeshStandardMaterial({ color: "#c99470", roughness: 1 }));
-    bag.position.set(.18, .24, 0); this.postman.add(bag);
-    loading.push(this.character("quest-npc", this.postman));
+    loading.push(this.character("resident-postman", this.postman));
     loading.push(this.character("player", this.player).then(character => { this.playerCharacter = character; }));
     const scenery: typeof map.props = [];
     for (const prop of map.props) {
@@ -262,7 +264,7 @@ export class Village {
         const review = npc === "or" && this.orView?.phase === "review" && this.orView.choices[3] === "a";
         const zone = review ? id.replace("or-", "or-review-") : id;
         const point = map.zones[zone]; if (!point) throw new Error(`Missing actor zone: ${zone}`);
-        actor.object.position.set(point.x, 0, point.z); this.addColliders({ ...point, asset: "quest-npc" }, id);
+        actor.object.position.set(point.x, 0, point.z); this.addColliders({ ...point, asset: WALK_ON_ASSET[id]! }, id);
       }
     }
   }
@@ -295,7 +297,7 @@ export class Village {
         ...ids.map(async id => {
           let actor = this.actors.get(id);
           if (!actor) { const object = new THREE.Group(), marker = this.label(); object.userData.id = id; object.visible = false; object.add(marker); this.scene.add(object); actor = { object, marker }; this.actors.set(id, actor); }
-          if (!actor.character) actor.character = await this.character("quest-npc", actor.object);
+          if (!actor.character) actor.character = await this.character(WALK_ON_ASSET[id]!, actor.object);
         }),
       ]).then(([props]) => {
         this.residentProps[npc] = props;
@@ -482,8 +484,10 @@ export class Village {
     ctx.fillStyle = gradient; ctx.fillRect(0, 0, 64, 64);
     const shadow = new THREE.Mesh(new THREE.PlaneGeometry(.55, .55), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true, depthWrite: false }));
     shadow.rotation.x = -Math.PI / 2; shadow.position.y = .012; parent.add(shadow);
+    // Secondary bones belong to the spring solver; the exporter still writes rest-pose tracks for them.
+    for (const clip of gltf.animations) clip.tracks = clip.tracks.filter(track => !track.name.startsWith("sec_"));
     const mixer = new THREE.AnimationMixer(object), actions = new Map(gltf.animations.map(clip => [clip.name.toLowerCase(), mixer.clipAction(clip)]));
-    const character: Character = { object, mixer, actions }; this.characters.push(character); this.animate(character, "idle"); return character;
+    const character: Character = { object, mixer, springs: new SpringBones(object, !window.matchMedia("(prefers-reduced-motion: reduce)").matches), actions }; this.characters.push(character); this.animate(character, "idle"); return character;
   }
   private animate(character: Character | undefined, name: string): void {
     if (!character || character.current === name) return;
@@ -587,7 +591,7 @@ export class Village {
     if (this.tapMarker.visible) { const progress = 1 - this.tapTime / .3; this.tapMarker.scale.setScalar(this.tapScale * (1 + progress * .6)); this.tapMarker.material.opacity = .8 * (1 - progress); }
     const destination = this.auto?.path.at(-1); this.destinationMarker.visible = !!destination;
     if (destination) this.destinationMarker.position.set(destination.x, .04, destination.z);
-    for (const character of this.characters) character.mixer.update(dt);
+    for (const character of this.characters) { character.mixer.update(dt); character.springs.update(dt); }
     this.updateCamera(dt);
     this.effects?.update(dt, this.player.position, this.camera);
     this.nature.update(dt, this.player.position, this.camera);

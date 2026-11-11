@@ -1947,25 +1947,25 @@
     },
     {
       "id": "s1j2",
-      "asset": "quest-npc",
+      "asset": "resident-stage",
       "x": 7,
       "z": 5.196152422706632
     },
     {
       "id": "v1j2",
-      "asset": "quest-npc",
+      "asset": "resident-tasting",
       "x": 14,
       "z": 0
     },
     {
       "id": "t1p2",
-      "asset": "quest-npc",
+      "asset": "resident-books",
       "x": -12,
       "z": 3.4641016151377544
     },
     {
       "id": "s2j2",
-      "asset": "quest-npc",
+      "asset": "resident-workshop",
       "x": 1,
       "z": -8.660254037844386
     }
@@ -5735,7 +5735,7 @@
     },
     {
       "id": "moka-tired-neighbor",
-      "asset": "quest-npc",
+      "asset": "resident-villager-a",
       "x": 8.6,
       "z": -2
     },
