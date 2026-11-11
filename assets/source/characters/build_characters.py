@@ -57,6 +57,20 @@ PALETTE = {
     "b": "#FFB020",
     "c": "#8E6BFF",
     "d": "#14B8A6",
+    # T019 personality accents
+    "sunny": "#FFD23F",
+    "sky": "#5BC0F8",
+    "crust": "#B4692F",
+    "moka_hair": "#7A4E33",
+    "indigo": "#4A3B8F",
+    "leather": "#A0462F",
+    "steel": "#8A8F96",
+    "lens": "#BDEBF5",
+    "boot": "#5A3E2B",
+    "npc_vest": "#9FB09A",
+    "npc_shirt": "#D9CBB5",
+    "npc_pants": "#8C7B6B",
+    "npc_cap": "#7A6656",
 }
 
 CONCEPT_SOURCES = {
@@ -278,34 +292,51 @@ def make_pennant_flag(flag_origin):
     return bm
 
 
+def make_flat_prism(pts_xz, origin, half_y, bevel=0.003):
+    """Extrude a convex-or-concave outline in the XZ plane by +-half_y (flags, stripes)."""
+    bm = bmesh.new()
+    front_v = [bm.verts.new((origin[0] + x, origin[1] - half_y, origin[2] + z)) for x, z in pts_xz]
+    back_v = [bm.verts.new((origin[0] + x, origin[1] + half_y, origin[2] + z)) for x, z in pts_xz]
+    n = len(pts_xz)
+    bm.faces.new(front_v)
+    bm.faces.new(list(reversed(back_v)))
+    for i in range(n):
+        ni = (i + 1) % n
+        bm.faces.new((front_v[i], back_v[i], back_v[ni], front_v[ni]))
+    if bevel > 0:
+        bmesh.ops.bevel(bm, geom=bm.edges[:], offset=bevel, segments=1, profile=0.5, affect="EDGES")
+    return bm
+
+
 def add_common_face(parts, head_center, head_rx, head_ry, head_rz, eye_scale=1.0, eye_raise=0.0):
     eye_y = head_center[1] - head_ry * 0.95
     eye_z = head_center[2] - 0.008 + eye_raise
     for side in (-1, 1):
-        bm_eye = make_ellipsoid(0.011 * eye_scale, 0.007, 0.015 * eye_scale, (side * 0.044, eye_y, eye_z), u_seg=8, v_seg=6)
+        bm_eye = make_ellipsoid(0.011 * eye_scale, 0.007, 0.015 * eye_scale, (side * 0.044, eye_y, eye_z), u_seg=6, v_seg=5)
         parts.append(finish_part_mesh(bm_eye, f"eye_{side}", PALETTE["ink"], {"head": 1.0}))
-    bm_mouth = make_ellipsoid(0.012, 0.006, 0.005, (0.0, head_center[1] - head_ry * 0.97, head_center[2] - 0.038), u_seg=8, v_seg=6)
+    bm_mouth = make_ellipsoid(0.012, 0.006, 0.005, (0.0, head_center[1] - head_ry * 0.97, head_center[2] - 0.038), u_seg=6, v_seg=4)
     parts.append(finish_part_mesh(bm_mouth, "mouth", PALETTE["ink"], {"head": 1.0}))
 
 
-def add_common_limbs(parts, leg_color, arm_color, hand_color, shoulder_x=0.092, shoulder_z=0.30, hip_x=0.052, segs=12):
+def add_common_limbs(parts, leg_color, arm_color, hand_color, shoulder_x=0.092, shoulder_z=0.30, hip_x=0.052, segs=12, foot_color=None, arm_v=8, hand_scale=1.0):
     for side, suffix in ((-1, "r"), (1, "l")):
         b_leg = f"leg_{suffix}"
         bm_leg = make_beveled_cylinder(0.036, 0.038, 0.11, (side * hip_x, 0.0, 0.068), segs=segs, bevel_width=0.009, bevel_segments=1)
         parts.append(finish_part_mesh(bm_leg, f"leg_{suffix}_mesh", leg_color, {b_leg: 1.0}))
         bm_foot = make_ellipsoid(0.039, 0.047, 0.025, (side * hip_x, -0.010, 0.021), u_seg=segs, v_seg=6, flatten_bottom=0.28)
-        parts.append(finish_part_mesh(bm_foot, f"foot_{suffix}_mesh", leg_color, {b_leg: 1.0}))
+        parts.append(finish_part_mesh(bm_foot, f"foot_{suffix}_mesh", foot_color or leg_color, {b_leg: 1.0}))
 
     for side, suffix in ((-1, "r"), (1, "l")):
         b_arm = f"arm_{suffix}"
         tilt = (0.0, -side * 0.38, 0.0)
         arm_cx = side * (shoulder_x + 0.020)
         arm_cz = shoulder_z - 0.046
-        bm_arm = make_ellipsoid(0.029, 0.027, 0.068, (arm_cx, 0.0, arm_cz), u_seg=segs, v_seg=8, taper_top=-0.12, tilt_euler=tilt)
+        bm_arm = make_ellipsoid(0.029, 0.027, 0.068, (arm_cx, 0.0, arm_cz), u_seg=segs, v_seg=arm_v, taper_top=-0.12, tilt_euler=tilt)
         parts.append(finish_part_mesh(bm_arm, f"arm_{suffix}_mesh", arm_color, {b_arm: 1.0}))
         hand_cx = side * (shoulder_x + 0.042)
         hand_cz = shoulder_z - 0.095
-        bm_hand = make_ellipsoid(0.026, 0.025, 0.026, (hand_cx, -0.004, hand_cz), u_seg=10, v_seg=6)
+        hs = hand_scale
+        bm_hand = make_ellipsoid(0.026 * hs, 0.025 * hs, 0.026 * hs, (hand_cx, -0.004, hand_cz), u_seg=10, v_seg=6)
         parts.append(finish_part_mesh(bm_hand, f"hand_{suffix}_mesh", hand_color, {b_arm: 1.0}))
 
 
@@ -344,36 +375,52 @@ def build_char_a_parts():
         shoulder_z=0.302,
         hip_x=0.054,
         segs=12,
+        foot_color=PALETTE["sunny"],
+        arm_v=6,
     )
-    for part in parts:
-        if part.name.startswith("foot_"):
-            for item in part.data.color_attributes["COLOR_0"].data:
-                item.color = hex_to_linear_rgba(PALETTE["wood"])
     for side, suffix in ((-1, "r"), (1, "l")):
         cuff = make_beveled_cylinder(0.031, 0.031, 0.018, (side * 0.13, 0.0, 0.231), segs=8, bevel_width=0.002, tilt_euler=(0.0, -side * 0.38, 0.0))
         parts.append(finish_part_mesh(cuff, f"cuff_{suffix}", PALETTE["cream"], {f"arm_{suffix}": 1.0}))
-    bm_torso = make_ellipsoid(0.132, 0.122, 0.122, (0.0, 0.0, 0.222), u_seg=16, v_seg=12, taper_top=0.04)
+    bm_torso = make_ellipsoid(0.132, 0.122, 0.122, (0.0, 0.0, 0.222), u_seg=16, v_seg=10, taper_top=0.04)
     parts.append(finish_part_mesh(bm_torso, "torso", PALETTE["a"], {"body": 1.0}))
     hem = make_torus(0.099, 0.008, (0.0, 0.0, 0.137), major_seg=12, minor_seg=4, scale_xyz=(1.0, 0.93, 1.0))
     parts.append(finish_part_mesh(hem, "hem", PALETTE["cream"], {"body": 1.0}))
-    neck = make_ellipsoid(0.052, 0.050, 0.035, (0.0, 0.0, 0.343), u_seg=10, v_seg=6)
+    neck = make_ellipsoid(0.052, 0.050, 0.035, (0.0, 0.0, 0.343), u_seg=8, v_seg=4)
     parts.append(finish_part_mesh(neck, "neck", PALETTE["a"], {"body": 1.0}))
+    # Sky scarf with one tail blowing to the side: an asymmetric, outgoing accent.
+    scarf = make_torus(0.070, 0.019, (0.0, 0.0, 0.345), major_seg=12, minor_seg=5, scale_xyz=(1.0, 0.95, 1.0))
+    parts.append(finish_part_mesh(scarf, "scarf", PALETTE["sky"], {"body": 1.0}))
+    scarf_tail = make_beveled_box(0.040, 0.014, 0.090, (-0.070, -0.060, 0.300), bevel_width=0.005, tilt_euler=(0.25, 0.0, -0.55))
+    parts.append(finish_part_mesh(scarf_tail, "scarf_tail", PALETTE["sky"], {"body": 1.0}))
 
     head_center = (0.0, 0.0, 0.468)
-    bm_head = make_ellipsoid(0.128, 0.122, 0.124, head_center, u_seg=16, v_seg=12)
+    bm_head = make_ellipsoid(0.128, 0.122, 0.124, head_center, u_seg=16, v_seg=10)
     parts.append(finish_part_mesh(bm_head, "head_mesh", PALETTE["cream"], {"head": 1.0}))
     add_common_face(parts, head_center, 0.128, 0.122, 0.124, 1.25, 0.008)
-    for x, y, z, rx, ry, rz in ((0, 0.012, 0.516, 0.130, 0.126, 0.080), (-0.103, 0.005, 0.494, 0.034, 0.100, 0.064), (0.103, 0.005, 0.494, 0.034, 0.100, 0.064), (-0.075, -0.100, 0.526, 0.039, 0.033, 0.037), (0, -0.112, 0.530, 0.044, 0.030, 0.036), (0.075, -0.100, 0.526, 0.039, 0.033, 0.037)):
-        hair = make_ellipsoid(rx, ry, rz, (x, y, z), u_seg=10, v_seg=6)
+    for x, y, z, rx, ry, rz in ((0, 0.012, 0.522, 0.132, 0.128, 0.082), (-0.103, 0.005, 0.494, 0.034, 0.100, 0.064), (0.103, 0.005, 0.494, 0.034, 0.100, 0.064), (-0.075, -0.100, 0.526, 0.039, 0.033, 0.037), (0, -0.112, 0.530, 0.044, 0.030, 0.036), (0.075, -0.100, 0.526, 0.039, 0.033, 0.037)):
+        hair = make_ellipsoid(rx, ry, rz, (x, y, z), u_seg=8, v_seg=5)
         parts.append(finish_part_mesh(hair, "hair", PALETTE["a"], {"head": 1.0}))
     hair_back = make_ellipsoid(0.119, 0.062, 0.068, (0.0, 0.076, 0.485), u_seg=8, v_seg=4)
     parts.append(finish_part_mesh(hair_back, "hair_back", PALETTE["a"], {"head": 1.0}))
+    # One springy curl popping up from the crown.
+    curl = make_torus(0.022, 0.009, (0.016, 0.004, 0.582), major_seg=10, minor_seg=4, tilt_euler=(math.radians(90), 0.0, math.radians(-25)))
+    parts.append(finish_part_mesh(curl, "hair_curl", PALETTE["a"], {"head": 1.0}))
+    # Sunny round bobble clip on the right side of the hair (G1: no star or badge marks).
+    bobble = make_ellipsoid(0.019, 0.016, 0.019, (-0.127, -0.052, 0.536), u_seg=8, v_seg=5)
+    parts.append(finish_part_mesh(bobble, "hair_bobble", PALETTE["sunny"], {"head": 1.0}))
 
     staff_center = (0.166, -0.004, 0.342)
-    bm_staff = make_beveled_cylinder(0.008, 0.008, 0.280, staff_center, segs=10, bevel_width=0.002, bevel_segments=1, tilt_euler=(0.0, 0.19, 0.0))
+    bm_staff = make_beveled_cylinder(0.008, 0.008, 0.280, staff_center, segs=8, bevel_width=0.002, bevel_segments=1, tilt_euler=(0.0, 0.19, 0.0))
     parts.append(finish_part_mesh(bm_staff, "flag_staff", PALETTE["wood"], {"hand_prop": 1.0}))
-    bm_flag = make_pennant_flag((0.184, -0.004, 0.442))
-    parts.append(finish_part_mesh(bm_flag, "flag_cloth", PALETTE["b"], {"hand_prop": 1.0}))
+    finial = make_ellipsoid(0.014, 0.014, 0.014, (0.193, -0.004, 0.486), u_seg=8, v_seg=5)
+    parts.append(finish_part_mesh(finial, "flag_finial", PALETTE["sunny"], {"hand_prop": 1.0}))
+    # Swallowtail festival banner: sunny field with a coral band at the hoist.
+    flag_origin = (0.186, -0.004, 0.428)
+    # Two convex halves so the swallowtail notch survives triangulation.
+    for half in ([(0.0, 0.050), (0.165, 0.050), (0.118, 0.0), (0.0, 0.0)], [(0.0, 0.0), (0.118, 0.0), (0.165, -0.050), (0.0, -0.050)]):
+        parts.append(finish_part_mesh(make_flat_prism(half, flag_origin, 0.006, bevel=0.0), "flag_cloth", PALETTE["sunny"], {"hand_prop": 1.0}, smooth=False))
+    stripe = [(0.0, 0.050), (0.042, 0.050), (0.042, -0.050), (0.0, -0.050)]
+    parts.append(finish_part_mesh(make_flat_prism(stripe, flag_origin, 0.0085, bevel=0.0), "flag_stripe", PALETTE["a"], {"hand_prop": 1.0}, smooth=False))
     return parts
 
 
@@ -388,8 +435,10 @@ def build_char_b_parts():
         shoulder_z=0.305,
         hip_x=0.054,
         segs=12,
+        foot_color=PALETTE["moka_hair"],
+        arm_v=6,
     )
-    bm_torso = make_ellipsoid(0.118, 0.108, 0.126, (0.0, 0.0, 0.222), u_seg=16, v_seg=12, taper_top=0.28, bulge_bottom=0.20)
+    bm_torso = make_ellipsoid(0.118, 0.108, 0.126, (0.0, 0.0, 0.222), u_seg=16, v_seg=10, taper_top=0.28, bulge_bottom=0.20)
     parts.append(finish_part_mesh(bm_torso, "torso", PALETTE["b"], {"body": 1.0}))
 
     def apron_patch(name, z_min, z_max, x_min, x_max):
@@ -416,20 +465,27 @@ def build_char_b_parts():
     parts.append(finish_part_mesh(make_torus(0.125, 0.005, (0, 0, 0.212), major_seg=32, minor_seg=6, scale_xyz=(1, 0.915, 1)), "apron_waist", PALETTE["cream"], {"body": 1.0}))
 
     head_center = (0.0, 0.0, 0.468)
-    bm_head = make_ellipsoid(0.128, 0.122, 0.124, head_center, u_seg=16, v_seg=12)
+    bm_head = make_ellipsoid(0.128, 0.122, 0.124, head_center, u_seg=16, v_seg=10)
     parts.append(finish_part_mesh(bm_head, "head_mesh", PALETTE["cream"], {"head": 1.0}))
     add_common_face(parts, head_center, 0.128, 0.122, 0.124, 1.25, 0.008)
+    # Neat, symmetric warm-brown bob tucked under a centred puffy baker's cap (fixes hair poking through the cap).
     for name, size, center, color in (
         ("neck", (0.05, 0.05, 0.035), (0, 0, 0.343), PALETTE["b"]),
-        ("hair", (0.128, 0.12, 0.065), (0, 0.015, 0.526), PALETTE["wood"]),
-        ("fringe", (0.022, 0.016, 0.014), (0, -0.105, 0.535), PALETTE["wood"]),
-        ("side_hair", (0.020, 0.035, 0.022), (-0.112, 0.018, 0.530), PALETTE["wood"]),
-        ("side_hair", (0.020, 0.035, 0.022), (0.112, 0.018, 0.530), PALETTE["wood"]),
-        ("hair_back", (0.12, 0.052, 0.045), (0, 0.085, 0.520), PALETTE["wood"]),
-        ("hat", (0.135, 0.125, 0.054), (-0.012, 0.006, 0.564), PALETTE["b"]),
-        ("hat_band", (0.126, 0.119, 0.018), (0, 0.004, 0.542), PALETTE["cream"]),
+        ("hair", (0.128, 0.110, 0.056), (0, 0.030, 0.520), PALETTE["moka_hair"]),
+        ("hair_back", (0.132, 0.100, 0.070), (0, 0.032, 0.490), PALETTE["moka_hair"]),
+        ("hat_band", (0.132, 0.126, 0.020), (0, 0.004, 0.546), PALETTE["cream"]),
     ):
-        parts.append(finish_part_mesh(make_ellipsoid(*size, center, u_seg=8, v_seg=4), name, color, {"body" if name == "neck" else "head": 1.0}))
+        parts.append(finish_part_mesh(make_ellipsoid(*size, center, u_seg=10, v_seg=5), name, color, {"body" if name == "neck" else "head": 1.0}))
+    puff = make_ellipsoid(0.140, 0.132, 0.052, (0, 0.006, 0.568), u_seg=12, v_seg=6, taper_top=-0.10, flatten_bottom=0.30)
+    parts.append(finish_part_mesh(puff, "hat", PALETTE["b"], {"head": 1.0}))
+
+    # A round loaf held in the left hand: the baker who shares warm bread with neighbours.
+    loaf_c = (0.160, -0.052, 0.214)
+    loaf = make_ellipsoid(0.060, 0.052, 0.042, loaf_c, u_seg=10, v_seg=5, flatten_bottom=0.20)
+    parts.append(finish_part_mesh(loaf, "loaf", PALETTE["crust"], {"arm_l": 1.0}))
+    for dx in (-0.016, 0.016):
+        score = make_beveled_box(0.009, 0.058, 0.007, (loaf_c[0] + dx * 1.2, loaf_c[1] - 0.004, loaf_c[2] + 0.038), bevel_width=0.002, tilt_euler=(0.0, 0.0, 0.0))
+        parts.append(finish_part_mesh(score, "loaf_score", PALETTE["cream"], {"arm_l": 1.0}))
     return parts
 
 
@@ -444,24 +500,48 @@ def build_char_c_parts():
         shoulder_z=0.315,
         hip_x=0.048,
         segs=12,
+        foot_color=PALETTE["indigo"],
+        arm_v=6,
     )
     bm_torso = make_beveled_cylinder(0.096, 0.090, 0.235, (0.0, 0.0, 0.225), segs=16, bevel_width=0.028, bevel_segments=2, scale_xy=(1.0, 0.90))
     parts.append(finish_part_mesh(bm_torso, "torso", PALETTE["c"], {"body": 1.0}))
 
     head_center = (0.0, 0.0, 0.492)
-    bm_head = make_ellipsoid(0.142, 0.136, 0.138, head_center, u_seg=16, v_seg=12)
+    bm_head = make_ellipsoid(0.142, 0.136, 0.138, head_center, u_seg=16, v_seg=10)
     parts.append(finish_part_mesh(bm_head, "head_mesh", PALETTE["cream"], {"head": 1.0}))
     add_common_face(parts, head_center, 0.142, 0.136, 0.138, 1.25, 0.008)
+    # Deep indigo bob separates hair from the lavender coat so the head no longer reads as one purple mass.
     for name, size, center in (
         ("hair_back", (0.145, 0.075, 0.125), (0, 0.075, 0.493)),
         ("hair_top", (0.145, 0.130, 0.065), (0, 0.008, 0.568)),
         ("hair_left", (0.026, 0.090, 0.095), (-0.125, 0.0, 0.477)),
         ("hair_right", (0.026, 0.090, 0.095), (0.125, 0.0, 0.477)),
-        ("fringe", (0.110, 0.030, 0.026), (0, -0.116, 0.558)),
     ):
-        parts.append(finish_part_mesh(make_ellipsoid(*size, center, u_seg=12, v_seg=8), name, PALETTE["c"], {"head": 1.0}))
-    parts.append(finish_part_mesh(make_ellipsoid(0.05, 0.05, 0.04, (0, 0, 0.355), u_seg=10, v_seg=6), "neck", PALETTE["c"], {"body": 1.0}))
-    parts.append(finish_part_mesh(make_beveled_box(0.09, 0.055, 0.115, (0.09, -0.035, 0.215), bevel_width=0.006), "book", PALETTE["wood"], {"arm_l": 1.0}))
+        parts.append(finish_part_mesh(make_ellipsoid(*size, center, u_seg=10, v_seg=6), name, PALETTE["indigo"], {"head": 1.0}))
+    # Side-swept fringe: quiet and tidy, leaving the glasses readable.
+    fringe = make_ellipsoid(0.105, 0.030, 0.028, (0.018, -0.116, 0.562), u_seg=10, v_seg=6, tilt_euler=(0.0, 0.16, 0.0))
+    parts.append(finish_part_mesh(fringe, "fringe", PALETTE["indigo"], {"head": 1.0}))
+    parts.append(finish_part_mesh(make_ellipsoid(0.05, 0.05, 0.04, (0, 0, 0.355), u_seg=8, v_seg=4), "neck", PALETTE["cream"], {"body": 1.0}))
+    # High cream collar: a reserved, buttoned-up reader.
+    collar = make_beveled_cylinder(0.072, 0.064, 0.036, (0.0, 0.0, 0.350), segs=14, bevel_width=0.008, bevel_segments=1, scale_xy=(1.0, 0.92))
+    parts.append(finish_part_mesh(collar, "collar", PALETTE["cream"], {"body": 1.0}))
+
+    # Hardcover book in leather with cream page edges, carried in the left arm.
+    book_c = (0.096, -0.040, 0.215)
+    parts.append(finish_part_mesh(make_beveled_box(0.100, 0.060, 0.128, book_c, bevel_width=0.006), "book", PALETTE["leather"], {"arm_l": 1.0}))
+    parts.append(finish_part_mesh(make_beveled_box(0.096, 0.046, 0.132, (book_c[0] + 0.006, book_c[1], book_c[2]), bevel_width=0.0), "book_pages", PALETTE["cream"], {"arm_l": 1.0}, smooth=False))
+    parts.append(finish_part_mesh(make_beveled_box(0.010, 0.004, 0.050, (book_c[0] - 0.010, book_c[1] - 0.004, book_c[2] - 0.080), bevel_width=0.0), "bookmark", PALETTE["sunny"], {"arm_l": 1.0}, smooth=False))
+
+    # Cross-body satchel (left shoulder to right hip): a reader who keeps books close.
+    # G1: no scroll, no open pages, no magnifier or keys; they echo specific choice options.
+    strap = make_beveled_box(0.020, 0.010, 0.250, (0.006, -0.090, 0.245), bevel_width=0.003, tilt_euler=(0.0, math.radians(38), 0.0))
+    parts.append(finish_part_mesh(strap, "satchel_strap", PALETTE["wood"], {"body": 1.0}))
+    bag = make_beveled_box(0.074, 0.040, 0.066, (-0.092, -0.050, 0.150), bevel_width=0.010, bevel_segments=1, tilt_euler=(0.0, 0.0, math.radians(-12)))
+    parts.append(finish_part_mesh(bag, "satchel", PALETTE["wood"], {"body": 1.0}))
+    flap = make_beveled_box(0.076, 0.012, 0.034, (-0.092, -0.074, 0.168), bevel_width=0.004, tilt_euler=(0.0, 0.0, math.radians(-12)))
+    parts.append(finish_part_mesh(flap, "satchel_flap", PALETTE["indigo"], {"body": 1.0}))
+    button = make_ellipsoid(0.010, 0.006, 0.010, (-0.094, -0.082, 0.158), u_seg=6, v_seg=4)
+    parts.append(finish_part_mesh(button, "satchel_button", PALETTE["sunny"], {"body": 1.0}))
 
     glass_y = head_center[1] - 0.136
     glass_z = head_center[2] - 0.006
@@ -479,11 +559,13 @@ def build_char_d_parts():
         parts,
         leg_color=PALETTE["cream"],
         arm_color=PALETTE["cream"],
-        hand_color=PALETTE["wood"],
+        hand_color=PALETTE["boot"],
         shoulder_x=0.118,
         shoulder_z=0.300,
         hip_x=0.058,
         segs=12,
+        foot_color=PALETTE["boot"],
+        hand_scale=1.18,
     )
     bm_torso = make_beveled_box(0.215, 0.155, 0.225, (0.0, 0.0, 0.222), bevel_width=0.026, bevel_segments=2)
     parts.append(finish_part_mesh(bm_torso, "torso", PALETTE["d"], {"body": 1.0}))
@@ -491,54 +573,78 @@ def build_char_d_parts():
     for side, suffix in ((-1, "r"), (1, "l")):
         bm_pad = make_beveled_box(0.072, 0.095, 0.075, (side * 0.122, 0.0, 0.295), bevel_width=0.020, bevel_segments=2, tilt_euler=(0.0, -side * 0.12, 0.0))
         parts.append(finish_part_mesh(bm_pad, f"shoulder_pad_{suffix}", PALETTE["d"], {"body": 0.6, f"arm_{suffix}": 0.4}))
+        # Thick work-glove cuffs.
+        cuff = make_beveled_cylinder(0.032, 0.032, 0.020, (side * 0.150, -0.002, 0.230), segs=10, bevel_width=0.003, tilt_euler=(0.0, -side * 0.38, 0.0))
+        parts.append(finish_part_mesh(cuff, f"glove_cuff_{suffix}", PALETTE["boot"], {f"arm_{suffix}": 1.0}))
 
+    # Tool belt: steel buckle and a leather pouch on the right hip.
     bm_belt = make_beveled_box(0.226, 0.166, 0.028, (0.0, 0.0, 0.165), bevel_width=0.006, bevel_segments=1)
     parts.append(finish_part_mesh(bm_belt, "belt", PALETTE["wood"], {"body": 1.0}))
+    buckle = make_beveled_box(0.036, 0.010, 0.032, (0.0, -0.085, 0.165), bevel_width=0.003)
+    parts.append(finish_part_mesh(buckle, "belt_buckle", PALETTE["steel"], {"body": 1.0}))
+    pouch = make_beveled_box(0.056, 0.034, 0.056, (-0.068, -0.090, 0.142), bevel_width=0.008)
+    parts.append(finish_part_mesh(pouch, "tool_pouch", PALETTE["boot"], {"body": 1.0}))
 
     head_center = (0.0, 0.0, 0.468)
-    bm_head = make_ellipsoid(0.128, 0.122, 0.124, head_center, u_seg=16, v_seg=12)
+    bm_head = make_ellipsoid(0.128, 0.122, 0.124, head_center, u_seg=16, v_seg=10)
     parts.append(finish_part_mesh(bm_head, "head_mesh", PALETTE["cream"], {"head": 1.0}))
     add_common_face(parts, head_center, 0.128, 0.122, 0.124, 1.25, 0.008)
-    parts.append(finish_part_mesh(make_ellipsoid(0.052, 0.05, 0.035, (0, 0, 0.343), u_seg=10, v_seg=6), "neck", PALETTE["d"], {"body": 1.0}))
-    parts.append(finish_part_mesh(make_ellipsoid(0.124, 0.116, 0.066, (0, 0.008, 0.544), u_seg=12, v_seg=8), "hair", PALETTE["ink"], {"head": 1.0}))
-    parts.append(finish_part_mesh(make_ellipsoid(0.117, 0.060, 0.095, (0, 0.083, 0.475), u_seg=12, v_seg=8), "hair_back", PALETTE["ink"], {"head": 1.0}))
+    parts.append(finish_part_mesh(make_ellipsoid(0.052, 0.05, 0.035, (0, 0, 0.343), u_seg=8, v_seg=4), "neck", PALETTE["d"], {"body": 1.0}))
+    parts.append(finish_part_mesh(make_ellipsoid(0.124, 0.116, 0.066, (0, 0.008, 0.544), u_seg=12, v_seg=7), "hair", PALETTE["ink"], {"head": 1.0}))
+    parts.append(finish_part_mesh(make_ellipsoid(0.131, 0.104, 0.098, (0, 0.030, 0.480), u_seg=10, v_seg=6), "hair_back", PALETTE["ink"], {"head": 1.0}))
     parts.append(finish_part_mesh(make_torus(0.122, 0.008, (0, 0.008, 0.535), major_seg=16, minor_seg=4, scale_xyz=(1, 0.94, 1)), "bandana", PALETTE["d"], {"head": 1.0}))
+    parts.append(finish_part_mesh(make_ellipsoid(0.020, 0.025, 0.019, (0.103, 0.043, 0.534), u_seg=8, v_seg=5), "bandana_knot", PALETTE["d"], {"head": 1.0}))
 
-    parts.append(finish_part_mesh(make_ellipsoid(0.020, 0.025, 0.019, (0.103, 0.043, 0.534), u_seg=8, v_seg=6), "bandana_knot", PALETTE["d"], {"head": 1.0}))
+    # Work goggles pushed up on the bandana: ready to test a fix by hand.
+    goggle_y, goggle_z = -0.110, 0.548
+    for side in (-1, 1):
+        rim = make_beveled_cylinder(0.029, 0.029, 0.022, (side * 0.040, goggle_y, goggle_z), segs=10, bevel_width=0.004, tilt_euler=(math.radians(90), 0.0, 0.0))
+        parts.append(finish_part_mesh(rim, f"goggle_rim_{side}", PALETTE["steel"], {"head": 1.0}))
+        lens = make_beveled_cylinder(0.020, 0.020, 0.024, (side * 0.040, goggle_y - 0.001, goggle_z), segs=10, bevel_width=0.0, tilt_euler=(math.radians(90), 0.0, 0.0))
+        parts.append(finish_part_mesh(lens, f"goggle_lens_{side}", PALETTE["lens"], {"head": 1.0}))
+    bridge = make_beveled_box(0.026, 0.012, 0.010, (0.0, goggle_y + 0.004, goggle_z), bevel_width=0.002)
+    parts.append(finish_part_mesh(bridge, "goggle_bridge", PALETTE["steel"], {"head": 1.0}))
 
-    bm_handle = make_beveled_cylinder(0.010, 0.010, 0.135, (0.148, -0.020, 0.195), segs=10, bevel_width=0.002, bevel_segments=1, tilt_euler=(math.radians(75), 0.0, math.radians(-20)))
+    # Hammer held upright at the left side so its T shape reads at game size.
+    hammer_tilt = (0.0, 0.14, 0.0)
+    handle_c = (0.176, -0.012, 0.250)
+    bm_handle = make_beveled_cylinder(0.011, 0.011, 0.170, handle_c, segs=8, bevel_width=0.002, bevel_segments=1, tilt_euler=hammer_tilt)
     parts.append(finish_part_mesh(bm_handle, "hammer_handle", PALETTE["wood"], {"hand_prop": 1.0}))
-    bm_hhead = make_beveled_box(0.062, 0.095, 0.058, (0.130, -0.065, 0.175), bevel_width=0.009, bevel_segments=1, tilt_euler=(math.radians(15), math.radians(10), math.radians(-20)))
-    parts.append(finish_part_mesh(bm_hhead, "hammer_head", PALETTE["stone"], {"hand_prop": 1.0}))
+    head_c = (handle_c[0] + 0.085 * math.sin(0.14), handle_c[1], handle_c[2] + 0.085 * math.cos(0.14) + 0.012)
+    bm_hhead = make_beveled_box(0.060, 0.118, 0.058, head_c, bevel_width=0.009, bevel_segments=1, tilt_euler=hammer_tilt)
+    parts.append(finish_part_mesh(bm_hhead, "hammer_head", PALETTE["steel"], {"hand_prop": 1.0}))
     return parts
 
 
 def build_quest_npc_parts():
-    # Budget <= 2,000 tris: Grayscale body + small dark gray brimmed cap (height 0.56m)
+    # Budget <= 2,000 tris: muted villager (sage vest, oat sleeves, taupe trousers and cap) so the four leads stay the colour accents (height 0.56m)
     parts = []
     add_common_limbs(
         parts,
-        leg_color=PALETTE["gray_body"],
-        arm_color=PALETTE["gray_body"],
-        hand_color=PALETTE["gray_body"],
+        leg_color=PALETTE["npc_pants"],
+        arm_color=PALETTE["npc_shirt"],
+        hand_color=PALETTE["cream"],
         shoulder_x=0.082,
         shoulder_z=0.285,
         hip_x=0.048,
         segs=10,
+        foot_color=PALETTE["boot"],
     )
     bm_torso = make_ellipsoid(0.104, 0.094, 0.115, (0.0, 0.0, 0.208), u_seg=12, v_seg=8, taper_top=0.15)
-    parts.append(finish_part_mesh(bm_torso, "torso", PALETTE["gray_body"], {"body": 1.0}))
+    parts.append(finish_part_mesh(bm_torso, "torso", PALETTE["npc_vest"], {"body": 1.0}))
 
     head_center = (0.0, 0.0, 0.425)
     bm_head = make_ellipsoid(0.120, 0.116, 0.114, head_center, u_seg=12, v_seg=8)
     parts.append(finish_part_mesh(bm_head, "head_mesh", PALETTE["cream"], {"head": 1.0}))
     add_common_face(parts, head_center, 0.120, 0.116, 0.114, 1.25, 0.008)
-    parts.append(finish_part_mesh(make_ellipsoid(0.05, 0.05, 0.035, (0, 0, 0.317), u_seg=8, v_seg=6), "neck", PALETTE["gray_body"], {"body": 1.0}))
+    parts.append(finish_part_mesh(make_ellipsoid(0.05, 0.05, 0.035, (0, 0, 0.317), u_seg=8, v_seg=6), "neck", PALETTE["npc_shirt"], {"body": 1.0}))
 
+    npc_hair = make_ellipsoid(0.118, 0.066, 0.084, (0.0, 0.058, 0.452), u_seg=10, v_seg=6)
+    parts.append(finish_part_mesh(npc_hair, "hair_back", PALETTE["moka_hair"], {"head": 1.0}))
     bm_crown = make_ellipsoid(0.092, 0.096, 0.052, (0.0, 0.0, 0.525), u_seg=12, v_seg=6, flatten_bottom=0.45)
-    parts.append(finish_part_mesh(bm_crown, "cap_crown", PALETTE["gray_cap"], {"head": 1.0}))
+    parts.append(finish_part_mesh(bm_crown, "cap_crown", PALETTE["npc_cap"], {"head": 1.0}))
     bm_brim = make_ellipsoid(0.078, 0.068, 0.012, (0.0, -0.072, 0.506), u_seg=10, v_seg=6, tilt_euler=(0.08, 0.0, 0.0))
-    parts.append(finish_part_mesh(bm_brim, "cap_brim", PALETTE["gray_cap"], {"head": 1.0}))
+    parts.append(finish_part_mesh(bm_brim, "cap_brim", PALETTE["npc_cap"], {"head": 1.0}))
     return parts
 
 
@@ -710,7 +816,12 @@ def create_armature_and_bind(mesh_obj, char_key: str, shoulder_x=0.092, shoulder
     return arm_obj
 
 
-def apply_pose_at_phase(arm_obj, clip_name: str, phase: float):
+# Idle temperament (T019): same neutral clip, only amplitude differs per resident.
+# Lumi bounces, Moka sways gently, Echo and Or stay still. Talk/walk stay shared so reactions remain neutral.
+IDLE_AMPLITUDE = {"char-a": 1.5, "char-b": 1.0, "char-c": 0.7, "char-d": 0.6, "quest-npc": 1.0}
+
+
+def apply_pose_at_phase(arm_obj, clip_name: str, phase: float, idle_amp: float = 1.0):
     s1 = math.sin(phase)
     c1 = math.cos(phase)
     s2 = math.sin(phase * 2.0)
@@ -724,11 +835,12 @@ def apply_pose_at_phase(arm_obj, clip_name: str, phase: float):
 
     if clip_name == "idle":
         # Note: along bone axis is local Y; pitch forward/back is local X; roll sideways is local Z
-        arm_obj.pose.bones["body"].location = (0.0, 0.008 * s1, 0.0)
-        arm_obj.pose.bones["body"].rotation_euler = (0.04 * s1, 0.0, 0.03 * c1)
-        arm_obj.pose.bones["head"].rotation_euler = (-0.06 * s1, 0.04 * s1, 0.04 * c1)
-        arm_obj.pose.bones["arm_l"].rotation_euler = (0.08 * s1, 0.0, 0.04 * (1.0 - c1))
-        arm_obj.pose.bones["arm_r"].rotation_euler = (-0.08 * s1, 0.0, -0.04 * (1.0 - c1))
+        k = idle_amp
+        arm_obj.pose.bones["body"].location = (0.0, 0.008 * k * s1, 0.0)
+        arm_obj.pose.bones["body"].rotation_euler = (0.04 * k * s1, 0.0, 0.03 * k * c1)
+        arm_obj.pose.bones["head"].rotation_euler = (-0.06 * k * s1, 0.04 * k * s1, 0.04 * k * c1)
+        arm_obj.pose.bones["arm_l"].rotation_euler = (0.08 * k * s1, 0.0, 0.04 * k * (1.0 - c1))
+        arm_obj.pose.bones["arm_r"].rotation_euler = (-0.08 * k * s1, 0.0, -0.04 * k * (1.0 - c1))
     elif clip_name == "walk":
         bounce = 0.018 * abs(s1)
         arm_obj.pose.bones["body"].location = (0.0, bounce, 0.0)
@@ -775,7 +887,7 @@ def bake_three_actions(arm_obj, char_key: str):
 
         for f in range(0, end_frame + 1):
             phase = (f / end_frame) * math.tau
-            apply_pose_at_phase(arm_obj, clip_name, phase)
+            apply_pose_at_phase(arm_obj, clip_name, phase, IDLE_AMPLITUDE.get(char_key, 1.0))
             for pb in arm_obj.pose.bones:
                 pb.keyframe_insert(data_path="location", frame=f)
                 pb.keyframe_insert(data_path="rotation_euler", frame=f)
@@ -844,26 +956,33 @@ CHAR_REP_COLORS = {
     "char-a": [
         ("a", PALETTE["a"]),
         ("cream", PALETTE["cream"]),
-        ("wood", PALETTE["wood"]),
+        ("sky", PALETTE["sky"]),
+        ("sunny", PALETTE["sunny"]),
     ],
     "char-b": [
         ("b", PALETTE["b"]),
         ("cream", PALETTE["cream"]),
+        ("moka_hair", PALETTE["moka_hair"]),
+        ("crust", PALETTE["crust"]),
     ],
     "char-c": [
         ("c", PALETTE["c"]),
         ("cream", PALETTE["cream"]),
         ("ink", PALETTE["ink"]),
+        ("indigo", PALETTE["indigo"]),
+        ("leather", PALETTE["leather"]),
     ],
     "char-d": [
         ("d", PALETTE["d"]),
         ("cream", PALETTE["cream"]),
         ("wood", PALETTE["wood"]),
-        ("stone", PALETTE["stone"]),
+        ("steel", PALETTE["steel"]),
+        ("boot", PALETTE["boot"]),
     ],
     "quest-npc": [
-        ("gray_body", PALETTE["gray_body"]),
-        ("gray_cap", PALETTE["gray_cap"]),
+        ("npc_vest", PALETTE["npc_vest"]),
+        ("npc_shirt", PALETTE["npc_shirt"]),
+        ("npc_pants", PALETTE["npc_pants"]),
         ("cream", PALETTE["cream"]),
     ],
 }
@@ -1169,7 +1288,7 @@ def render_character_preview(arm_obj, mesh_obj, char_key: str):
     out_preview = f"{PREVIEW_DIR}/{char_key}.png"
     comp_img.filepath_raw = out_preview
     comp_img.file_format = "PNG"
-    if char_key not in ("player", "char-a"):
+    if char_key != "player":
         comp_img.save()
     bpy.data.images.remove(comp_img)
 
@@ -1422,7 +1541,7 @@ def main():
     all_temp_paths = {}
 
     for key, height, builder_fn, sx, sz, hx, col_r, max_tri, max_kib in specs:
-        if key in ("player", "char-a"):
+        if key == "player":
             continue
         reset_scene()
         parts = builder_fn()
@@ -1444,7 +1563,7 @@ def main():
             "scale": 1,
             "collision": [{"type": "circle", "x": 0, "z": 0, "radius": col_r}],
             "clips": ["idle", "walk", "talk"],
-            "revisionAuthor": "Codex (agy quota limit)",
+            "revisionAuthor": "Claude (T019)",
             "budget": {
                 "maxTriangles": max_tri,
                 "maxKiB": max_kib,
@@ -1468,14 +1587,17 @@ def main():
                 track.mute = True
         all_temp_paths[key] = render_character_preview(arm, mesh, key)
     stitch_lineup_sheets(all_temp_paths)
-    if all(os.path.exists(f"{SOURCE_DIR}/_before/{key}.png") for key in ("char-b", "char-c", "char-d", "quest-npc")):
-        sheet = bpy.data.images.new("lineup_compare", width=2560, height=1440, alpha=True)
-        pixels = [1.0] * (2560 * 1440 * 4)
-        for i, key in enumerate(("char-b", "char-c", "char-d", "quest-npc")):
+    compare_keys = ("char-a", "char-b", "char-c", "char-d", "quest-npc")
+    if all(os.path.exists(f"{SOURCE_DIR}/_before/{key}.png") for key in compare_keys):
+        cols, rows = 3, 2
+        sheet = bpy.data.images.new("lineup_compare", width=1280 * cols, height=720 * rows, alpha=True)
+        pixels = [1.0] * (1280 * cols * 720 * rows * 4)
+        for i, key in enumerate(compare_keys):
             img = bpy.data.images.load(f"{SOURCE_DIR}/_before/{key}.png", check_existing=False)
             src = list(img.pixels)
+            col, row = i % cols, (rows - 1) - i // cols
             for y in range(720):
-                start = (((1 - i // 2) * 720 + y) * 2560 + (i % 2) * 1280) * 4
+                start = ((row * 720 + y) * 1280 * cols + col * 1280) * 4
                 pixels[start:start + 1280 * 4] = src[y * 1280 * 4:(y + 1) * 1280 * 4]
             bpy.data.images.remove(img)
         sheet.pixels = pixels
