@@ -8,6 +8,7 @@ import { nearest } from "../core/world/nearby";
 import type { Bounds, Collider, Vec2 } from "../core/world/types";
 import { translations } from "../content";
 import { DreamEffects } from "./dream-effects";
+import { Nature } from "./nature";
 import { LightRig } from "./light-rig";
 import { dialogueFocus } from "./feedback";
 import type { MokaView } from "../core/moka-errand";
@@ -39,6 +40,7 @@ export class Village {
   private lights = new LightRig(this.scene);
   private renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   private effects?: DreamEffects;
+  private nature = new Nature(this.scene, { props: map.props, zones: map.zones, lake: map.bounds.holes[0] });
   private loader = new GLTFLoader();
   private models = new Map<string, Promise<GLTF>>();
   private actors = new Map<string, { object: THREE.Group; marker: THREE.Sprite; character?: Character }>();
@@ -104,12 +106,15 @@ export class Village {
     this.postman.position.set(map.spawn.x - .8, 0, map.spawn.z - .8);
     loading.push(this.character("resident-postman", this.postman));
     loading.push(this.character("player", this.player).then(character => { this.playerCharacter = character; }));
+    const scenery: typeof map.props = [];
     for (const prop of map.props) {
       if (/^(moka|lumi|echo|or)-/.test(prop.id)) continue;
+      if (prop.id.startsWith("nature-")) { this.addColliders(prop, prop.id); scenery.push(prop); continue; }
       const register = () => { this.addColliders(prop, prop.id); if (translations("ko").examine[prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset]) this.props.set(prop.id, prop); };
       if (prop.asset === "signboard") loading.push(this.place(prop).then(object => { this.propObjects.set(prop.id, object); register(); }).catch(error => console.warn(`Village prop failed to load: ${prop.id}`, error)));
       else { register(); loading.push(this.place(prop).then(object => { this.propObjects.set(prop.id, object); })); }
     }
+    loading.push(this.nature.scenery(scenery, async asset => ({ scene: (await this.load(asset)).scene, scale: manifest[asset]!.scale })));
     for (const actor of map.actors) {
       this.addColliders(actor, actor.id);
       const object = new THREE.Group(); object.position.set(actor.x, 0, actor.z); object.userData.id = actor.id;
@@ -448,7 +453,7 @@ export class Village {
     if (!asset) throw new Error("Missing terrain asset");
     const response = await fetch(`${import.meta.env.BASE_URL}${asset.path}`);
     const missing = response.status === 404 || (response.ok && response.headers.get("content-type")?.includes("text/html"));
-    if (!missing) { if (!response.ok) throw new Error(`Terrain load failed: ${response.status}`); await this.place(map.terrain); return; }
+    if (!missing) { if (!response.ok) throw new Error(`Terrain load failed: ${response.status}`); this.nature.build(await this.place(map.terrain), this.colliders); return; }
     const polygon = (points: Vec2[]) => points.map(point => new THREE.Vector2(point.x, -point.z));
     const shape = new THREE.Shape(polygon(map.bounds.outer));
     for (const hole of map.bounds.holes) shape.holes.push(new THREE.Path(polygon(hole)));
@@ -467,6 +472,7 @@ export class Village {
     const castsShadow = !terrain && !/^(flower-cluster-|grass-|mushroom$|pebbles$)/.test(placement.asset);
     object.traverse(child => { if (child instanceof THREE.Mesh) { child.castShadow = castsShadow; child.receiveShadow = terrain || castsShadow; } });
     object.position.set(placement.x, 0, placement.z); object.rotation.y = placement.rot ?? 0;
+    if (!terrain) this.nature.dress(object, placement.asset);
     object.scale.setScalar(manifest[placement.asset]!.scale * (placement.scale ?? 1)); this.scene.add(object); return object;
   }
   private async character(key: string, parent: THREE.Group): Promise<Character> {
@@ -513,7 +519,7 @@ export class Village {
     const shadowSize = Math.min(mobile ? 1024 : 2048, Math.max(512, 2 ** Math.ceil(Math.log2(Math.max(w, h) * Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2)))));
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2));
     this.lights.resize(this.viewHalfHeight, this.viewAspect, shadowSize);
-    this.effects?.resize(mobile, this.renderer.getPixelRatio());
+    this.effects?.resize(mobile, this.renderer.getPixelRatio()); this.nature.resize(mobile);
     this.camera.near = .1; this.camera.far = 100; this.renderer.setSize(w, h);
     this.updateCamera(0, true);
   }
@@ -588,6 +594,7 @@ export class Village {
     for (const character of this.characters) { character.mixer.update(dt); character.springs.update(dt); }
     this.updateCamera(dt);
     this.effects?.update(dt, this.player.position, this.camera);
+    this.nature.update(dt, this.player.position, this.camera);
     if (this.ready) this.renderer.render(this.scene, this.camera); this.frame = requestAnimationFrame(() => this.tick());
   }
 }
