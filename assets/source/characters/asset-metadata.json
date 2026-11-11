@@ -19,17 +19,18 @@
         "walk",
         "talk"
       ],
+      "revisionAuthor": "Claude (T026-C)",
       "budget": {
         "maxTriangles": 2000,
         "maxKiB": 120
       },
       "measured": {
-        "bytes": 38104,
-        "kib": 37.21,
+        "bytes": 39952,
+        "kib": 39.02,
         "triangles": 1688,
         "primitives": 1,
         "materials": 1,
-        "joints": 8,
+        "joints": 9,
         "clips": [
           "idle",
           "walk",
@@ -120,18 +121,18 @@
         "walk",
         "talk"
       ],
-      "revisionAuthor": "Claude (T019)",
+      "revisionAuthor": "Claude (T026-C)",
       "budget": {
         "maxTriangles": 3000,
         "maxKiB": 180
       },
       "measured": {
-        "bytes": 47180,
-        "kib": 46.07,
+        "bytes": 53476,
+        "kib": 52.22,
         "triangles": 2736,
         "primitives": 1,
         "materials": 1,
-        "joints": 8,
+        "joints": 11,
         "clips": [
           "idle",
           "walk",
@@ -237,18 +238,18 @@
         "walk",
         "talk"
       ],
-      "revisionAuthor": "Claude (T019)",
+      "revisionAuthor": "Claude (T026-C)",
       "budget": {
         "maxTriangles": 3000,
         "maxKiB": 180
       },
       "measured": {
-        "bytes": 45696,
-        "kib": 44.62,
-        "triangles": 2780,
+        "bytes": 50016,
+        "kib": 48.84,
+        "triangles": 2852,
         "primitives": 1,
         "materials": 1,
-        "joints": 8,
+        "joints": 10,
         "clips": [
           "idle",
           "walk",
@@ -266,12 +267,12 @@
           "max": [
             0.2084,
             0.6,
-            0.1225
+            0.1263
           ],
           "size": [
             0.353,
             0.6,
-            0.2567
+            0.2605
           ]
         },
         "colorVerification": {
@@ -354,18 +355,18 @@
         "walk",
         "talk"
       ],
-      "revisionAuthor": "Claude (T019)",
+      "revisionAuthor": "Claude (T026-C)",
       "budget": {
         "maxTriangles": 3500,
         "maxKiB": 180
       },
       "measured": {
-        "bytes": 47104,
-        "kib": 46.0,
+        "bytes": 51464,
+        "kib": 50.26,
         "triangles": 2792,
         "primitives": 1,
         "materials": 1,
-        "joints": 8,
+        "joints": 10,
         "clips": [
           "idle",
           "walk",
@@ -486,18 +487,18 @@
         "walk",
         "talk"
       ],
-      "revisionAuthor": "Claude (T019)",
+      "revisionAuthor": "Claude (T026-C)",
       "budget": {
         "maxTriangles": 3000,
         "maxKiB": 180
       },
       "measured": {
-        "bytes": 47076,
-        "kib": 45.97,
-        "triangles": 2844,
+        "bytes": 54760,
+        "kib": 53.48,
+        "triangles": 2932,
         "primitives": 1,
         "materials": 1,
-        "joints": 8,
+        "joints": 11,
         "clips": [
           "idle",
           "walk",
@@ -618,14 +619,14 @@
         "walk",
         "talk"
       ],
-      "revisionAuthor": "Claude (T019)",
+      "revisionAuthor": "Claude (T026-C)",
       "budget": {
         "maxTriangles": 2000,
         "maxKiB": 120
       },
       "measured": {
-        "bytes": 37984,
-        "kib": 37.09,
+        "bytes": 37592,
+        "kib": 36.71,
         "triangles": 1700,
         "primitives": 1,
         "materials": 1,
