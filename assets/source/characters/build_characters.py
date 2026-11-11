@@ -71,6 +71,19 @@ PALETTE = {
     "npc_shirt": "#D9CBB5",
     "npc_pants": "#8C7B6B",
     "npc_cap": "#7A6656",
+    # T026-D resident colours
+    "post_blue": "#4C9BE8",
+    "navy": "#34507A",
+    "leaf": "#6DAA4B",
+    "leaf_dark": "#4F8A3A",
+    "straw": "#E8D07A",
+    "rose": "#E889A8",
+    "auburn": "#8A4B2D",
+    "charcoal": "#55585F",
+    "sand": "#D8C39A",
+    "olive": "#7E8B4A",
+    "wine": "#8E3D52",
+    "dusty_blue": "#7FA0C2",
 }
 
 CONCEPT_SOURCES = {
@@ -622,36 +635,181 @@ def build_char_d_parts():
     return parts
 
 
-def build_quest_npc_parts():
-    # Budget <= 2,000 tris: muted villager (sage vest, oat sleeves, taupe trousers and cap) so the four leads stay the colour accents (height 0.56m)
+# Residents (T026-D): every supporting villager gets a body colour, a hat or hair shape and one role prop of their own,
+# so the role reads at game size without a name tag. Colours stay clear of the four lead colours (PALETTE a-d).
+# G1: no plates, blueprints, garlands, ribbons, keys, bells or maps; those are measurement choice motifs.
+RESIDENT_HEAD = (0.0, 0.0, 0.425)
+RESIDENT_HAND = (0.124, -0.012, 0.190)
+
+
+def resident_base(parts, torso, sleeves, legs, shape="round", hair="moka_hair", shoes="boot"):
+    """Shared limbs, torso, head, face and back hair. Returns nothing; extras are appended by each builder."""
+    add_common_limbs(parts, leg_color=PALETTE[legs], arm_color=PALETTE[sleeves], hand_color=PALETTE["cream"], shoulder_x=0.082, shoulder_z=0.285, hip_x=0.048, segs=10, foot_color=PALETTE[shoes])
+    if shape == "bell":
+        bm_torso = make_ellipsoid(0.108, 0.098, 0.118, (0.0, 0.0, 0.208), u_seg=10, v_seg=7, taper_top=0.30, bulge_bottom=0.22)
+    elif shape == "block":
+        bm_torso = make_beveled_cylinder(0.100, 0.092, 0.215, (0.0, 0.0, 0.208), segs=10, bevel_width=0.022, bevel_segments=1, scale_xy=(1.0, 0.90))
+    elif shape == "stout":
+        bm_torso = make_ellipsoid(0.120, 0.108, 0.118, (0.0, 0.0, 0.208), u_seg=10, v_seg=7, taper_top=0.05)
+    else:
+        bm_torso = make_ellipsoid(0.104, 0.094, 0.115, (0.0, 0.0, 0.208), u_seg=10, v_seg=7, taper_top=0.15)
+    parts.append(finish_part_mesh(bm_torso, "torso", PALETTE[torso], {"body": 1.0}))
+    parts.append(finish_part_mesh(make_ellipsoid(0.120, 0.116, 0.114, RESIDENT_HEAD, u_seg=12, v_seg=8), "head_mesh", PALETTE["cream"], {"head": 1.0}))
+    add_common_face(parts, RESIDENT_HEAD, 0.120, 0.116, 0.114, 1.25, 0.008)
+    parts.append(finish_part_mesh(make_ellipsoid(0.05, 0.05, 0.035, (0, 0, 0.317), u_seg=8, v_seg=4), "neck", PALETTE[sleeves], {"body": 1.0}))
+    if hair:
+        parts.append(finish_part_mesh(make_ellipsoid(0.118, 0.066, 0.084, (0.0, 0.058, 0.452), u_seg=8, v_seg=5), "hair_back", PALETTE[hair], {"head": 1.0}))
+
+
+def add_part(parts, bm, name, color, bone, smooth=True):
+    parts.append(finish_part_mesh(bm, name, PALETTE[color], {bone: 1.0}, smooth=smooth))
+
+
+def build_resident_postman_parts():
+    # Knows every road: sky-blue uniform, peaked cap and a full mailbag swinging on the hip.
     parts = []
-    add_common_limbs(
-        parts,
-        leg_color=PALETTE["npc_pants"],
-        arm_color=PALETTE["npc_shirt"],
-        hand_color=PALETTE["cream"],
-        shoulder_x=0.082,
-        shoulder_z=0.285,
-        hip_x=0.048,
-        segs=10,
-        foot_color=PALETTE["boot"],
-    )
-    bm_torso = make_ellipsoid(0.104, 0.094, 0.115, (0.0, 0.0, 0.208), u_seg=12, v_seg=8, taper_top=0.15)
-    parts.append(finish_part_mesh(bm_torso, "torso", PALETTE["npc_vest"], {"body": 1.0}))
-
-    head_center = (0.0, 0.0, 0.425)
-    bm_head = make_ellipsoid(0.120, 0.116, 0.114, head_center, u_seg=12, v_seg=8)
-    parts.append(finish_part_mesh(bm_head, "head_mesh", PALETTE["cream"], {"head": 1.0}))
-    add_common_face(parts, head_center, 0.120, 0.116, 0.114, 1.25, 0.008)
-    parts.append(finish_part_mesh(make_ellipsoid(0.05, 0.05, 0.035, (0, 0, 0.317), u_seg=8, v_seg=6), "neck", PALETTE["npc_shirt"], {"body": 1.0}))
-
-    npc_hair = make_ellipsoid(0.118, 0.066, 0.084, (0.0, 0.058, 0.452), u_seg=10, v_seg=6)
-    parts.append(finish_part_mesh(npc_hair, "hair_back", PALETTE["moka_hair"], {"head": 1.0}))
-    bm_crown = make_ellipsoid(0.092, 0.096, 0.052, (0.0, 0.0, 0.525), u_seg=12, v_seg=6, flatten_bottom=0.45)
-    parts.append(finish_part_mesh(bm_crown, "cap_crown", PALETTE["npc_cap"], {"head": 1.0}))
-    bm_brim = make_ellipsoid(0.078, 0.068, 0.012, (0.0, -0.072, 0.506), u_seg=10, v_seg=6, tilt_euler=(0.08, 0.0, 0.0))
-    parts.append(finish_part_mesh(bm_brim, "cap_brim", PALETTE["npc_cap"], {"head": 1.0}))
+    resident_base(parts, torso="post_blue", sleeves="post_blue", legs="navy")
+    add_part(parts, make_ellipsoid(0.100, 0.102, 0.052, (0.0, 0.004, 0.528), u_seg=12, v_seg=6, flatten_bottom=0.45), "cap_crown", "post_blue", "head")
+    add_part(parts, make_torus(0.096, 0.008, (0.0, 0.004, 0.512), major_seg=10, minor_seg=4, scale_xyz=(1.0, 1.03, 1.0)), "cap_band", "cream", "head")
+    add_part(parts, make_ellipsoid(0.082, 0.066, 0.011, (0.0, -0.082, 0.508), u_seg=10, v_seg=4, tilt_euler=(0.10, 0.0, 0.0)), "cap_brim", "navy", "head")
+    add_part(parts, make_beveled_box(0.018, 0.010, 0.240, (0.004, -0.090, 0.235), bevel_width=0.003, tilt_euler=(0.0, math.radians(38), 0.0)), "bag_strap", "wood", "body")
+    add_part(parts, make_beveled_box(0.092, 0.048, 0.080, (-0.100, -0.050, 0.150), bevel_width=0.010, tilt_euler=(0.0, 0.0, math.radians(-12))), "mailbag", "sand", "sec_hang_bag")
+    add_part(parts, make_beveled_box(0.094, 0.012, 0.034, (-0.100, -0.078, 0.174), bevel_width=0.004, tilt_euler=(0.0, 0.0, math.radians(-12))), "mailbag_flap", "wood", "sec_hang_bag")
+    add_part(parts, make_beveled_box(0.052, 0.008, 0.044, (-0.092, -0.036, 0.204), bevel_width=0.0, tilt_euler=(0.0, 0.22, math.radians(-12))), "envelope", "cream", "sec_hang_bag", smooth=False)
     return parts
+
+
+def build_resident_stage_parts():
+    # Keeps the stage in order: green overalls, a knitted hat with a bobble and a broom held upright.
+    parts = []
+    resident_base(parts, torso="leaf", sleeves="cream", legs="leaf", hair="ink")
+    for side in (-1, 1):
+        add_part(parts, make_beveled_box(0.020, 0.014, 0.090, (side * 0.046, -0.078, 0.272), bevel_width=0.003, tilt_euler=(-0.28, 0.0, 0.0)), "overall_strap", "leaf", "body")
+    add_part(parts, make_beveled_box(0.072, 0.012, 0.050, (0.0, -0.094, 0.222), bevel_width=0.004), "bib_pocket", "leaf_dark", "body")
+    add_part(parts, make_ellipsoid(0.125, 0.121, 0.076, (0.0, 0.004, 0.506), u_seg=10, v_seg=5, flatten_bottom=0.35), "knit_hat", "straw", "head")
+    add_part(parts, make_torus(0.118, 0.012, (0.0, 0.004, 0.480), major_seg=10, minor_seg=4), "knit_fold", "cream", "head")
+    add_part(parts, make_ellipsoid(0.030, 0.030, 0.030, (0.0, 0.004, 0.596), u_seg=8, v_seg=5), "knit_bobble", "cream", "sec_soft_bobble")
+    add_part(parts, make_beveled_cylinder(0.008, 0.008, 0.380, (0.146, -0.012, 0.330), segs=6, bevel_width=0.002, tilt_euler=(0.0, 0.10, 0.0)), "broom_pole", "wood", "sec_heavy_broom")
+    add_part(parts, make_beveled_box(0.086, 0.034, 0.016, (0.164, -0.012, 0.512), bevel_width=0.004, tilt_euler=(0.0, 0.10, 0.0)), "broom_binding", "wood", "sec_heavy_broom")
+    add_part(parts, make_beveled_box(0.080, 0.028, 0.066, (0.168, -0.012, 0.552), bevel_width=0.006, tilt_euler=(0.0, 0.10, 0.0), taper_top=-0.25), "broom_bristles", "straw", "sec_heavy_broom")
+    return parts
+
+
+def build_resident_tasting_parts():
+    # Shares food warmly: rose dress, white head kerchief and apron, a clean cloth over the arm.
+    parts = []
+    resident_base(parts, torso="rose", sleeves="rose", legs="cream", shape="bell", hair="auburn")
+    add_part(parts, make_torus(0.100, 0.007, (0.0, 0.0, 0.226), major_seg=10, minor_seg=4, scale_xyz=(1.0, 0.92, 1.0)), "apron_tie", "cream", "body")
+    add_part(parts, make_ellipsoid(0.094, 0.016, 0.070, (0.0, -0.103, 0.162), u_seg=10, v_seg=6), "apron_skirt", "cream", "sec_cloth_apron")
+    add_part(parts, make_ellipsoid(0.108, 0.040, 0.030, (0.0, -0.086, 0.498), u_seg=10, v_seg=4), "hair_front", "auburn", "head")
+    add_part(parts, make_ellipsoid(0.127, 0.123, 0.082, (0.0, 0.014, 0.492), u_seg=10, v_seg=5, flatten_bottom=0.30), "kerchief", "cream", "head")
+    add_part(parts, make_ellipsoid(0.026, 0.020, 0.022, (0.0, 0.126, 0.470), u_seg=8, v_seg=4), "kerchief_knot", "cream", "head")
+    for side, tilt in ((-1, 0.35), (1, -0.35)):
+        add_part(parts, make_beveled_box(0.026, 0.008, 0.074, (side * 0.020, 0.134, 0.428), bevel_width=0.003, tilt_euler=(-0.25, tilt, 0.0)), "kerchief_tail", "cream", "sec_cloth_kerchief")
+    add_part(parts, make_beveled_box(0.054, 0.060, 0.012, (0.128, -0.014, 0.214), bevel_width=0.004), "towel_fold", "cream", "arm_l")
+    add_part(parts, make_beveled_box(0.052, 0.010, 0.086, (0.128, -0.046, 0.172), bevel_width=0.003), "towel_drop", "cream", "sec_cloth_towel")
+    add_part(parts, make_beveled_box(0.054, 0.012, 0.012, (0.128, -0.047, 0.142), bevel_width=0.0), "towel_stripe", "rose", "sec_cloth_towel", smooth=False)
+    return parts
+
+
+def build_resident_books_parts():
+    # Finds every book its place: navy smock, neat collar, a wooden pin through the hair bun and a feather duster.
+    parts = []
+    resident_base(parts, torso="navy", sleeves="navy", legs="charcoal", hair="auburn")
+    add_part(parts, make_beveled_cylinder(0.068, 0.060, 0.030, (0.0, 0.0, 0.320), segs=10, bevel_width=0.006, scale_xy=(1.0, 0.92)), "collar", "cream", "body")
+    for z in (0.252, 0.196):
+        add_part(parts, make_ellipsoid(0.010, 0.006, 0.010, (0.0, -0.098, z), u_seg=6, v_seg=4), "button", "cream", "body")
+    add_part(parts, make_ellipsoid(0.125, 0.119, 0.070, (0.0, 0.010, 0.500), u_seg=10, v_seg=5, flatten_bottom=0.25), "hair_top", "auburn", "head")
+    add_part(parts, make_ellipsoid(0.044, 0.044, 0.040, (0.0, 0.034, 0.580), u_seg=8, v_seg=6), "hair_bun", "auburn", "sec_hair_bun")
+    add_part(parts, make_beveled_cylinder(0.005, 0.005, 0.120, (0.0, 0.034, 0.584), segs=5, bevel_width=0.0, tilt_euler=(0.0, 1.25, 0.0)), "bun_pin", "wood", "sec_hair_bun")
+    add_part(parts, make_beveled_cylinder(0.007, 0.007, 0.170, (0.140, -0.012, 0.262), segs=6, bevel_width=0.002, tilt_euler=(0.0, 0.14, 0.0)), "duster_stick", "wood", "hand_prop")
+    for dx, dz, size in ((0.0, 0.0, 1.0), (-0.022, -0.018, 0.75), (0.022, -0.014, 0.75), (0.004, 0.030, 0.70)):
+        add_part(parts, make_ellipsoid(0.030 * size, 0.030 * size, 0.046 * size, (0.158 + dx, -0.012, 0.378 + dz), u_seg=6, v_seg=4), "duster_feathers", "straw", "sec_soft_duster")
+    return parts
+
+
+def build_resident_workshop_parts():
+    # Hands over parts that fit: leather apron, flat cap, a pencil behind the ear and a try square.
+    parts = []
+    resident_base(parts, torso="charcoal", sleeves="charcoal", legs="sand", shape="block", hair="ink")
+    add_part(parts, make_beveled_box(0.112, 0.012, 0.072, (0.0, -0.090, 0.262), bevel_width=0.004), "apron_bib", "leather", "body")
+    add_part(parts, make_beveled_box(0.160, 0.016, 0.016, (0.0, -0.090, 0.224), bevel_width=0.003), "apron_belt", "boot", "body")
+    add_part(parts, make_beveled_box(0.150, 0.014, 0.104, (0.0, -0.096, 0.166), bevel_width=0.005), "apron_skirt", "leather", "sec_hang_apron")
+    add_part(parts, make_ellipsoid(0.120, 0.124, 0.046, (0.0, -0.004, 0.522), u_seg=12, v_seg=5, flatten_bottom=0.40), "cap_crown", "sand", "head")
+    add_part(parts, make_ellipsoid(0.076, 0.060, 0.010, (0.0, -0.092, 0.506), u_seg=10, v_seg=4, tilt_euler=(0.12, 0.0, 0.0)), "cap_brim", "npc_cap", "head")
+    add_part(parts, make_beveled_cylinder(0.005, 0.005, 0.070, (0.121, -0.030, 0.462), segs=5, bevel_width=0.0, tilt_euler=(1.30, 0.0, 0.0)), "ear_pencil", "crust", "head")
+    add_part(parts, make_beveled_box(0.020, 0.010, 0.210, (0.146, -0.012, 0.268), bevel_width=0.002), "square_blade", "steel", "sec_heavy_square")
+    add_part(parts, make_beveled_box(0.096, 0.016, 0.024, (0.184, -0.012, 0.364), bevel_width=0.003), "square_stock", "wood", "sec_heavy_square")
+    return parts
+
+
+def build_resident_fisher_parts():
+    # Waits by the water: wide straw hat, grey beard, olive vest and a rod with a float that dangles.
+    parts = []
+    resident_base(parts, torso="olive", sleeves="cream", legs="npc_pants", hair="npc_shirt")
+    add_part(parts, make_ellipsoid(0.058, 0.026, 0.034, (0.0, -0.096, 0.350), u_seg=8, v_seg=5), "beard", "npc_shirt", "head")
+    add_part(parts, make_ellipsoid(0.186, 0.180, 0.014, (0.0, 0.0, 0.520), u_seg=14, v_seg=4), "hat_brim", "straw", "sec_soft_hat")
+    add_part(parts, make_ellipsoid(0.098, 0.096, 0.062, (0.0, 0.0, 0.546), u_seg=12, v_seg=6, flatten_bottom=0.30), "hat_crown", "straw", "sec_soft_hat")
+    add_part(parts, make_torus(0.094, 0.008, (0.0, 0.0, 0.534), major_seg=10, minor_seg=4), "hat_band", "leather", "sec_soft_hat")
+    rod_tilt = 0.35
+    add_part(parts, make_beveled_cylinder(0.006, 0.004, 0.500, (0.150, -0.012, 0.400), segs=5, bevel_width=0.0, tilt_euler=(0.0, rod_tilt, 0.0)), "rod", "wood", "hand_prop")
+    tip = (0.150 + 0.250 * math.sin(rod_tilt), -0.012, 0.400 + 0.250 * math.cos(rod_tilt))
+    # G1: a yellow ball under a vertical line reads as the "!" progress marker, so the float is cream and wood and hangs below the shoulder.
+    add_part(parts, make_beveled_box(0.004, 0.004, 0.350, (tip[0], tip[1], tip[2] - 0.175), bevel_width=0.0), "line", "cream", "sec_hang_float", smooth=False)
+    add_part(parts, make_ellipsoid(0.015, 0.015, 0.024, (tip[0], tip[1], tip[2] - 0.368), u_seg=6, v_seg=5), "float", "cream", "sec_hang_float")
+    add_part(parts, make_beveled_cylinder(0.008, 0.005, 0.018, (tip[0], tip[1], tip[2] - 0.342), segs=5, bevel_width=0.0), "float_cap", "wood", "sec_hang_float")
+    return parts
+
+
+def build_resident_merchant_parts():
+    # Carries the shop on the road: wine coat, round hat, moustache and a big bundle on the back.
+    parts = []
+    resident_base(parts, torso="wine", sleeves="wine", legs="sand", shape="stout", hair="ink")
+    add_part(parts, make_torus(0.118, 0.010, (0.0, 0.0, 0.196), major_seg=10, minor_seg=4, scale_xyz=(1.0, 0.90, 1.0)), "sash", "cream", "body")
+    add_part(parts, make_beveled_cylinder(0.082, 0.074, 0.058, (0.0, 0.0, 0.552), segs=10, bevel_width=0.008), "round_hat", "wine", "head")
+    add_part(parts, make_torus(0.082, 0.007, (0.0, 0.0, 0.530), major_seg=10, minor_seg=4), "hat_band", "cream", "head")
+    for side in (-1, 1):
+        add_part(parts, make_ellipsoid(0.024, 0.010, 0.010, (side * 0.022, -0.113, 0.394), u_seg=6, v_seg=4, tilt_euler=(0.0, side * 0.35, 0.0)), "moustache", "ink", "head")
+    add_part(parts, make_beveled_box(0.018, 0.010, 0.250, (-0.004, -0.092, 0.240), bevel_width=0.003, tilt_euler=(0.0, math.radians(-38), 0.0)), "bundle_strap", "cream", "body")
+    add_part(parts, make_ellipsoid(0.098, 0.074, 0.088, (0.0, 0.132, 0.236), u_seg=10, v_seg=6), "bundle", "sand", "sec_hang_bundle")
+    add_part(parts, make_ellipsoid(0.030, 0.026, 0.026, (0.0, 0.118, 0.328), u_seg=8, v_seg=4), "bundle_knot", "sand", "sec_hang_bundle")
+    return parts
+
+
+def build_resident_villager_a_parts():
+    # A neighbour passing by: sage vest, short hair and a cream neckerchief.
+    parts = []
+    resident_base(parts, torso="npc_vest", sleeves="npc_shirt", legs="npc_pants")
+    add_part(parts, make_ellipsoid(0.125, 0.119, 0.066, (0.0, 0.012, 0.500), u_seg=10, v_seg=5, flatten_bottom=0.20), "hair_top", "moka_hair", "head")
+    add_part(parts, make_torus(0.058, 0.014, (0.0, 0.0, 0.322), major_seg=10, minor_seg=4), "neckerchief", "cream", "body")
+    add_part(parts, make_beveled_box(0.030, 0.008, 0.056, (0.016, -0.090, 0.284), bevel_width=0.003, tilt_euler=(-0.2, 0.0, -0.3)), "neckerchief_tail", "cream", "sec_cloth_tie")
+    return parts
+
+
+def build_resident_villager_b_parts():
+    # Another neighbour: dusty-blue dress, headband and a long braid down the back.
+    parts = []
+    resident_base(parts, torso="dusty_blue", sleeves="cream", legs="cream", shape="bell", hair="ink")
+    add_part(parts, make_ellipsoid(0.125, 0.119, 0.068, (0.0, 0.012, 0.500), u_seg=10, v_seg=5, flatten_bottom=0.20), "hair_top", "ink", "head")
+    add_part(parts, make_torus(0.118, 0.008, (0.0, 0.006, 0.512), major_seg=10, minor_seg=4, tilt_euler=(0.25, 0.0, 0.0)), "headband", "cream", "head")
+    for i in range(4):
+        add_part(parts, make_ellipsoid(0.026 - 0.003 * i, 0.024 - 0.003 * i, 0.028, (0.0, 0.112 + 0.006 * i, 0.420 - 0.040 * i), u_seg=6, v_seg=4), "braid", "ink", "sec_hair_braid")
+    add_part(parts, make_ellipsoid(0.014, 0.014, 0.014, (0.0, 0.132, 0.272), u_seg=6, v_seg=4), "braid_tie", "cream", "sec_hair_braid")
+    return parts
+
+
+RESIDENT_SPECS = [
+    # key, height, builder, idle amplitude
+    ("resident-postman", 0.60, build_resident_postman_parts, 1.3),
+    ("resident-stage", 0.60, build_resident_stage_parts, 0.8),
+    ("resident-tasting", 0.57, build_resident_tasting_parts, 1.2),
+    ("resident-books", 0.60, build_resident_books_parts, 0.7),
+    ("resident-workshop", 0.57, build_resident_workshop_parts, 0.6),
+    ("resident-fisher", 0.64, build_resident_fisher_parts, 0.5),
+    ("resident-merchant", 0.58, build_resident_merchant_parts, 1.0),
+    ("resident-villager-a", 0.55, build_resident_villager_a_parts, 0.9),
+    ("resident-villager-b", 0.55, build_resident_villager_b_parts, 1.0),
+]
 
 
 def join_and_fit_height(parts, char_key: str, target_height: float):
@@ -866,6 +1024,31 @@ SECONDARY_BONES = {
         ("sec_cloth_knot", "head", (0.104, 0.044, 0.536), (0.138, 0.070, 0.470)),
         ("sec_heavy_hammer", "hand_prop", (0.160, -0.012, 0.205), (0.188, -0.012, 0.345)),
     ],
+    "resident-postman": [("sec_hang_bag", "body", (-0.094, -0.062, 0.222), (-0.102, -0.058, 0.112))],
+    "resident-stage": [
+        ("sec_soft_bobble", "head", (0.0, 0.004, 0.568), (0.0, 0.004, 0.612)),
+        ("sec_heavy_broom", "hand_prop", (0.126, -0.012, 0.190), (0.168, -0.012, 0.560)),
+    ],
+    "resident-tasting": [
+        ("sec_cloth_apron", "body", (0.0, -0.100, 0.224), (0.0, -0.112, 0.110)),
+        ("sec_cloth_kerchief", "head", (0.0, 0.126, 0.468), (0.0, 0.146, 0.396)),
+        ("sec_cloth_towel", "arm_l", (0.128, -0.044, 0.214), (0.128, -0.048, 0.132)),
+    ],
+    "resident-books": [
+        ("sec_hair_bun", "head", (0.0, 0.034, 0.548), (0.0, 0.034, 0.606)),
+        ("sec_soft_duster", "hand_prop", (0.152, -0.012, 0.340), (0.164, -0.012, 0.420)),
+    ],
+    "resident-workshop": [
+        ("sec_hang_apron", "body", (0.0, -0.094, 0.218), (0.0, -0.100, 0.116)),
+        ("sec_heavy_square", "hand_prop", (0.130, -0.012, 0.190), (0.150, -0.012, 0.370)),
+    ],
+    "resident-fisher": [
+        ("sec_soft_hat", "head", (0.0, 0.0, 0.514), (0.0, 0.0, 0.600)),
+        ("sec_hang_float", "hand_prop", (0.2357, -0.012, 0.6348), (0.2357, -0.012, 0.2600)),
+    ],
+    "resident-merchant": [("sec_hang_bundle", "body", (0.0, 0.090, 0.330), (0.0, 0.134, 0.200))],
+    "resident-villager-a": [("sec_cloth_tie", "body", (0.012, -0.088, 0.310), (0.022, -0.094, 0.256))],
+    "resident-villager-b": [("sec_hair_braid", "head", (0.0, 0.108, 0.440), (0.0, 0.132, 0.270))],
 }
 
 # The game moves characters at 1.4 units per second (client/src/core/world/move.ts). The walk clip plants each
@@ -893,7 +1076,7 @@ def walk_leg_pose(cycle: float):
 
 # Idle temperament (T019): same neutral clip, only amplitude differs per resident.
 # Lumi bounces, Moka sways gently, Echo and Or stay still. Talk/walk stay shared so reactions remain neutral.
-IDLE_AMPLITUDE = {"char-a": 1.5, "char-b": 1.0, "char-c": 0.7, "char-d": 0.6, "quest-npc": 1.0}
+IDLE_AMPLITUDE = {"char-a": 1.5, "char-b": 1.0, "char-c": 0.7, "char-d": 0.6, **{key: amplitude for key, _, _, amplitude in RESIDENT_SPECS}}
 
 
 def apply_pose_at_phase(arm_obj, clip_name: str, phase: float, idle_amp: float = 1.0):
@@ -1522,7 +1705,7 @@ def stitch_lineup_sheets(all_temp_paths: dict):
             sil_pixels[drow : drow + 256 * 4] = pix[srow : srow + 256 * 4]
         bpy.data.images.remove(img)
 
-    all_six = ["player", "char-a", "char-b", "char-c", "char-d", "quest-npc"]
+    all_six = ["player", "char-a", "char-b", "char-c", "char-d", "resident-postman"]
     for idx, key in enumerate(all_six):
         img = bpy.data.images.load(all_temp_paths[key]["sil"])
         img.scale(170, 170)
@@ -1569,6 +1752,25 @@ def stitch_lineup_sheets(all_temp_paths: dict):
     bpy.data.images.remove(turn_sheet)
     print(f"[PREVIEW] Saved {turn_path}")
 
+    residents = [key for key, *_ in RESIDENT_SPECS if key in all_temp_paths]
+    if residents:
+        sheet = bpy.data.images.new("residents_lineup", width=170 * len(residents), height=340, alpha=True)
+        pixels = bg_rgba * (170 * len(residents) * 340)
+        for row, view in enumerate(["quarter", "front"]):
+            for column, key in enumerate(residents):
+                img = bpy.data.images.load(all_temp_paths[key][view])
+                img.scale(170, 170)
+                pix = list(img.pixels)
+                for y in range(170):
+                    start = ((row * 170 + y) * 170 * len(residents) + column * 170) * 4
+                    pixels[start : start + 170 * 4] = pix[y * 170 * 4 : (y + 1) * 170 * 4]
+                bpy.data.images.remove(img)
+        sheet.pixels = pixels
+        sheet.filepath_raw = f"{PREVIEW_DIR}/residents-lineup.png"
+        sheet.file_format = "PNG"
+        sheet.save()
+        bpy.data.images.remove(sheet)
+
     for key, vmap in all_temp_paths.items():
         for vname, tpath in vmap.items():
             if os.path.exists(tpath):
@@ -1613,7 +1815,7 @@ def main():
         ("char-b", 0.60, build_char_b_parts, 0.082, 0.305, 0.054, 0.18, 3000, 180),
         ("char-c", 0.65, build_char_c_parts, 0.088, 0.315, 0.048, 0.18, 3500, 180),
         ("char-d", 0.60, build_char_d_parts, 0.118, 0.300, 0.058, 0.20, 3000, 180),
-        ("quest-npc", 0.56, build_quest_npc_parts, 0.082, 0.285, 0.048, 0.18, 2000, 120),
+        *[(key, height, builder, 0.082, 0.285, 0.048, 0.18, 2000, 120) for key, height, builder, _ in RESIDENT_SPECS],
     ]
 
     metadata = {
@@ -1624,9 +1826,13 @@ def main():
     }
     with open(f"{SOURCE_DIR}/asset-metadata.json", "r", encoding="utf-8") as f:
         metadata["assets"] = json.load(f)["assets"]
+    metadata["assets"].pop("quest-npc", None)
+    only = [key for key in os.environ.get("ABRAXAS_ONLY", "").split(",") if key]
     all_temp_paths = {}
 
     for key, height, builder_fn, sx, sz, hx, col_r, max_tri, max_kib in specs:
+        if only and key not in only:
+            continue
         reset_scene()
         parts = builder_fn()
         mesh_obj = join_and_fit_height(parts, key, height)
@@ -1647,19 +1853,19 @@ def main():
             "scale": 1,
             "collision": [{"type": "circle", "x": 0, "z": 0, "radius": col_r}],
             "clips": ["idle", "walk", "talk"],
-            "revisionAuthor": "Claude (T026-C)",
+            "revisionAuthor": "Claude (T026-D)" if key.startswith("resident-") else "Claude (T026-C)",
             "budget": {
                 "maxTriangles": max_tri,
                 "maxKiB": max_kib,
             },
             "measured": info,
         }
-        if key == "quest-npc":
-            entry["sharedBy"] = ["s1j2", "s2j2", "s3j2", "s4j2"]
         metadata["assets"][key] = entry
 
     # Build lineup from the actual deployed GLBs, including unchanged models.
     for key, *_ in specs:
+        if not os.path.exists(f"{EXPORT_DIR}/{key}.glb"):
+            continue
         reset_scene()
         bpy.ops.import_scene.gltf(filepath=f"{EXPORT_DIR}/{key}.glb")
         imported = list(bpy.context.selected_objects)
@@ -1671,7 +1877,7 @@ def main():
                 track.mute = True
         all_temp_paths[key] = render_character_preview(arm, mesh, key)
     stitch_lineup_sheets(all_temp_paths)
-    compare_keys = ("char-a", "char-b", "char-c", "char-d", "quest-npc")
+    compare_keys = ("char-a", "char-b", "char-c", "char-d")
     if all(os.path.exists(f"{SOURCE_DIR}/_before/{key}.png") for key in compare_keys):
         cols, rows = 3, 2
         sheet = bpy.data.images.new("lineup_compare", width=1280 * cols, height=720 * rows, alpha=True)
