@@ -35,3 +35,15 @@ it("leaves ordinary bones alone", () => {
   walk(arm, 1, 1.4);
   expect(arm.bone.quaternion.equals(new THREE.Quaternion())).toBe(true);
 });
+
+it("keeps a skinned mesh in step with its skeleton away from the origin", () => {
+  const home = new THREE.Group(), root = new THREE.Bone(), cap = new THREE.Bone(); cap.name = "sec_shell_cap_110"; root.add(cap);
+  const geometry = new THREE.BoxGeometry(.2, .2, .2), count = geometry.getAttribute("position").count;
+  geometry.setAttribute("skinIndex", new THREE.Uint16BufferAttribute(new Array(count * 4).fill(0), 4));
+  geometry.setAttribute("skinWeight", new THREE.Float32BufferAttribute(new Array(count * 4).fill(0).map((_, i) => i % 4 ? 0 : 1), 4));
+  const mesh = new THREE.SkinnedMesh(geometry, new THREE.MeshBasicMaterial()); mesh.add(root); mesh.bind(new THREE.Skeleton([root, cap]));
+  home.add(mesh); home.position.set(6, 0, 10);
+  new SpringBones(home, false).update(1 / 60);
+  mesh.skeleton.update(); mesh.computeBoundingBox();
+  expect(mesh.boundingBox!.max.x).toBeLessThan(1);
+});

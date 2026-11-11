@@ -25,7 +25,7 @@ export class SpringBones {
   private springs: Spring[] = [];
   private time = 0;
 
-  constructor(root: THREE.Object3D, private breeze = true) {
+  constructor(private root: THREE.Object3D, private breeze = true) {
     root.traverse(bone => {
       const match = NAME.exec(bone.name), material = match && MATERIALS[match[1]!];
       if (!match || !material) return;
@@ -38,10 +38,12 @@ export class SpringBones {
   update(dt: number): void {
     if (dt <= 0) return;
     this.time += dt;
+    // Refresh the whole character at once. Updating only the bone chain would leave a skinned mesh's bind matrix
+    // behind its skeleton, and bounds computed in that state land at the character's world position.
+    this.root.parent?.updateWorldMatrix(true, false); this.root.updateMatrixWorld(true);
     const head = new THREE.Vector3(), target = new THREE.Vector3(), parentTurn = new THREE.Quaternion(), force = new THREE.Vector3(), direction = new THREE.Vector3(), restDirection = new THREE.Vector3(), step = new THREE.Vector3();
     for (const spring of this.springs) {
       const { bone, material } = spring, parent = bone.parent!;
-      parent.updateWorldMatrix(true, false);
       head.copy(bone.position).applyMatrix4(parent.matrixWorld);
       parent.getWorldQuaternion(parentTurn);
       restDirection.copy(spring.restAxis).applyQuaternion(parentTurn);
