@@ -62,3 +62,8 @@
 - 저장소 · agent worktree에 체크아웃된 브랜치의 PR을 `gh pr merge --delete-branch`로 병합하면 원격 병합 뒤 로컬 브랜치 삭제에서 멈춤 → 그 브랜치는 `--delete-branch` 없이 병합하고 `git push origin --delete <브랜치>`로 원격만 지운다 (2026-11-08)
 - E2E · 실행 중인 E2E의 worktree를 rebase해 결과가 섞임 → E2E가 끝난 뒤 rebase하고, rebase 뒤에는 `npm --prefix client run ink`로 다시 컴파일한 다음 새로 돌린다 (2026-11-08)
 - E2E · `ABRAXAS_BROWSER=chrome`처럼 이름만 주면 'Browser not found' → 실행 파일 절대 경로를 준다(`C:/Program Files/Google/Chrome/Application/chrome.exe`) (2026-11-08)
+- 아트 · 건물과 나무의 그림자가 땅에 안 보이고 벽면이 평평함 → 방향광이 카메라와 같은 쪽에 있어 그림자가 물체 뒤로 떨어짐 → 해를 화면 옆으로 옮긴다. 그림자 설정보다 빛의 방위를 먼저 본다 (2026-11-11)
+- 렌더 · 뼈를 고친 뒤 카메라가 섬 전체로 멀어짐 → 뼈 사슬만 `updateWorldMatrix`로 갱신하면 `SkinnedMesh`의 bind 행렬이 뒤처지고, 그때 계산된 경계 상자가 인물의 월드 위치만큼 커짐 → 인물 전체를 `updateMatrixWorld(true)`로 갱신한다 (2026-11-11)
+- 아트 · 걷는 발이 미끄러짐 → 클립이 다리만 흔들어 자연 속도(0.3 u/s)가 이동 속도(1.4 u/s)와 다름 → 디딘 발이 몸 기준 이동 속도로 뒤로 가게 쓰고 생성기에서 오차를 단언한다 (2026-11-11)
+- 아트 · 런타임이 움직일 뼈가 클립 재생 때 제자리로 돌아감 → glTF 내보내기는 키가 없는 뼈에도 정지 트랙을 씀 → 불러올 때 그 뼈의 트랙을 지운다 (2026-11-11)
+- 에이전트 · subagent에게 worktree 경로를 줘도 그곳에 쓰지 못하고 자기 격리 worktree(`agent-*`)에서 작업함 → 보고의 브랜치를 cherry-pick하고, 문서는 복사해 온다 (2026-11-11)
