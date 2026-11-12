@@ -2,6 +2,7 @@ import { Village } from "./scenes/village";
 import { Game } from "./ui/game";
 import { configurePlayTransport } from "./net/plays";
 import { enterFullscreenOnTouch, fullscreenSupported } from "./fullscreen";
+import { offerSwipeToHideToolbar } from "./soft-fullscreen";
 import "./style.css";
 
 const app = document.querySelector<HTMLElement>("#app")!;
@@ -34,16 +35,7 @@ updateViewport();
 if (fullscreenSupported()) {
   enterFullscreenOnTouch();
 } else if (window.matchMedia("(pointer: coarse)").matches && !window.matchMedia("(display-mode: standalone)").matches && !window.matchMedia("(display-mode: fullscreen)").matches && !(navigator as Navigator & { standalone?: boolean }).standalone) {
-  let dismissed = false;
-  try { dismissed = localStorage.getItem("abraxas:install-hint-dismissed") === "1"; } catch { /* Storage may be unavailable. */ }
-  if (!dismissed) {
-    const hint = document.createElement("div"), close = document.createElement("button");
-    hint.className = "install-hint"; hint.textContent = "홈 화면에 추가하면 전체 화면으로 즐길 수 있어요";
-    close.type = "button"; close.textContent = "닫기"; close.addEventListener("click", () => {
-      hint.remove(); try { localStorage.setItem("abraxas:install-hint-dismissed", "1"); } catch { /* Storage may be unavailable. */ }
-    });
-    hint.append(close); document.body.append(hint);
-  }
+  offerSwipeToHideToolbar();
 }
 
 const village = new Village(app);
