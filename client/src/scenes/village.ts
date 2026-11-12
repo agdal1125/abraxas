@@ -40,7 +40,7 @@ export class Village {
   private lights = new LightRig(this.scene);
   private renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   private effects?: DreamEffects;
-  private nature = new Nature(this.scene, { props: map.props, zones: map.zones, lake: map.bounds.holes[0] });
+  private nature = new Nature(this.scene, { props: map.props, zones: map.zones, lake: map.bounds.holes[0], actors: map.actors, outer: map.bounds.outer, bridges: map.bounds.bridges.map(bridge => bridge.points) });
   private loader = new GLTFLoader();
   private models = new Map<string, Promise<GLTF>>();
   private actors = new Map<string, { object: THREE.Group; marker: THREE.Sprite; character?: Character }>();
