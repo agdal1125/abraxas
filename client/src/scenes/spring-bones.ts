@@ -17,6 +17,8 @@ const MATERIALS: Record<string, Material> = {
 const NAME = /^sec_([a-z]+)_\w+_(\d{3})$/;
 const WIND = new THREE.Vector3(1, 0, -.4).normalize().multiplyScalar(1.4);
 const STEP = 1 / 120;
+// Scratch values shared by every character: update() runs to completion, so nothing is held between calls and no vectors are allocated per frame.
+const head = new THREE.Vector3(), target = new THREE.Vector3(), parentTurn = new THREE.Quaternion(), force = new THREE.Vector3(), direction = new THREE.Vector3(), restDirection = new THREE.Vector3(), step = new THREE.Vector3(), targetVelocity = new THREE.Vector3();
 
 type Spring = { bone: THREE.Object3D; material: Material; length: number; rest: THREE.Quaternion; restAxis: THREE.Vector3; tip?: THREE.Vector3; target: THREE.Vector3; velocity: THREE.Vector3; phase: number };
 
@@ -41,7 +43,6 @@ export class SpringBones {
     // Refresh the whole character at once. Updating only the bone chain would leave a skinned mesh's bind matrix
     // behind its skeleton, and bounds computed in that state land at the character's world position.
     this.root.parent?.updateWorldMatrix(true, false); this.root.updateMatrixWorld(true);
-    const head = new THREE.Vector3(), target = new THREE.Vector3(), parentTurn = new THREE.Quaternion(), force = new THREE.Vector3(), direction = new THREE.Vector3(), restDirection = new THREE.Vector3(), step = new THREE.Vector3();
     for (const spring of this.springs) {
       const { bone, material } = spring, parent = bone.parent!;
       head.copy(bone.position).applyMatrix4(parent.matrixWorld);
@@ -50,7 +51,8 @@ export class SpringBones {
       target.copy(head).addScaledVector(restDirection, spring.length);
       // A first frame or a teleport starts at rest instead of whipping across the map.
       if (!spring.tip || spring.tip.distanceTo(target) > spring.length * 4) { spring.tip = target.clone(); spring.target.copy(target); spring.velocity.set(0, 0, 0); }
-      const omega = material.hz * Math.PI * 2, targetVelocity = step.copy(target).sub(spring.target).divideScalar(dt).clone(), steps = Math.ceil(dt / STEP), h = dt / steps;
+      targetVelocity.copy(target).sub(spring.target).divideScalar(dt);
+      const omega = material.hz * Math.PI * 2, steps = Math.ceil(dt / STEP), h = dt / steps;
       const gust = this.breeze ? material.wind * (Math.sin(this.time * 1.3 + spring.phase) + .5 * Math.sin(this.time * 2.9 + spring.phase * 2)) : 0;
       for (let i = 1; i <= steps; i++) {
         step.copy(spring.target).lerp(target, i / steps);
