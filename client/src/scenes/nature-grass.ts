@@ -108,13 +108,14 @@ const BLADES = 6;
 const TINTS = ["#4a9a40", "#58a84a", "#66b252", "#4f9e5a", "#74b955"].map(hex => new THREE.Color(hex));
 
 // One flat triangle per blade: dark at the root, bright at the tip. Wind bends the tips in the vertex shader.
+// Blades stay ankle-high (a character is about .6 tall) so feet remain visible on the ground.
 function tuftGeometry(): THREE.BufferGeometry {
   const random = seeded(7), positions: number[] = [], colors: number[] = [], normals: number[] = [];
   const push = (x: number, y: number, z: number, shade: number) => { positions.push(x, y, z); colors.push(shade, shade, shade * .92); normals.push(0, 1, 0); };
   for (let blade = 0; blade < BLADES; blade++) {
     const angle = random() * Math.PI * 2, spread = .045 * Math.sqrt(random()), ox = Math.cos(angle) * spread, oz = Math.sin(angle) * spread;
     const yaw = random() * Math.PI, c = Math.cos(yaw), s = Math.sin(yaw);
-    const h = .11 + random() * .1, w = .024 + random() * .012, lean = (random() - .5) * .1;
+    const h = .05 + random() * .04, w = .024 + random() * .012, lean = (random() - .5) * .1;
     const at = (x: number, y: number, bend: number): [number, number, number] => [ox + c * x - s * bend, y, oz + s * x + c * bend];
     const [l, r, tip] = [at(-w, 0, 0), at(w, 0, 0), at(0, h, lean)];
     push(...l, .5); push(...r, .5); push(...tip, 1.4);
@@ -149,7 +150,7 @@ export class GrassField {
   constructor(scene: THREE.Scene, ground: GroundSampler, colliders: Collider[], perUnit = 44) {
     const material = liteMaterial();
     material.vertexColors = true;
-    applyWind(material, { amp: .055, height: .24, grass: true });
+    applyWind(material, { amp: .026, height: .1, grass: true });
     this.mesh = new THREE.InstancedMesh(tuftGeometry(), material, CAPACITY);
     this.mesh.count = 0; this.mesh.frustumCulled = false; this.mesh.castShadow = false; this.mesh.receiveShadow = true; this.mesh.name = "grass-field";
     this.mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);

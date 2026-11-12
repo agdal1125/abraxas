@@ -54,7 +54,7 @@ export function applyWind(material: THREE.Material, { amp, height, grass }: Patc
         transformed += windLocal(wWm, position);
         vec2 away = wWm[3].xz - uPlayer.xz;
         float near = 1. - smoothstep(.0, .38, length(away));
-        vec3 push = vec3(normalize(away + 1e-4), 0.).xzy * near * .09 * pow(clamp(position.y / uHeight, 0., 1.), 1.5);
+        vec3 push = vec3(normalize(away + 1e-4), 0.).xzy * near * uHeight * .38 * pow(clamp(position.y / uHeight, 0., 1.), 1.5);
         transformed += (transpose(mat3(wWm)) * push) / max(dot(wWm[0].xyz, wWm[0].xyz), 1e-4);`);
     } else {
       vertex = vertex.replace("#include <begin_vertex>", `#include <begin_vertex>

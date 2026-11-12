@@ -34,3 +34,11 @@
 - 드로콜·삼각형 전후 수치를 같은 지점에서 잰 값으로 보고한다.
 - `npm --prefix client run typecheck`, `npm --prefix client test`, `npm --prefix client run build`, `npm --prefix client run check:size`, 한국어 E2E 통과.
 - 캡처는 `docs/reviews/T026-A/`에 둔다. 실기기 FPS는 미측정으로 적는다.
+
+## 후속: 풀 높이 (2026-11-12)
+
+사람이 병합된 화면을 보고 풀을 낮추기로 했다. 풀이 인물의 발치를 가려 발이 땅에 닿는 모습이 안 보였다.
+
+- 풀잎 높이를 0.11~0.21 u에서 0.05~0.09 u로 낮췄다. 포기 크기 배율(0.75~1.45)을 곱하면 땅 위 높이는 0.04~0.13 u이고, 인물의 키는 약 0.6 u다.
+- 바람의 진폭과 기준 높이, 주인공이 지나갈 때 풀이 눕는 폭을 새 높이에 맞춰 줄였다. 포기 수, 밀도, 드로콜은 그대로다.
+- 전후 캡처: `docs/reviews/T026-A/grass-height-before-after-740.jpg`(게임 크기), `grass-height-before-after-zoom.png`(3배 확대).
