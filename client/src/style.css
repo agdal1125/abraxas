@@ -42,3 +42,9 @@ body{font-family:var(--font-body)}
 @keyframes loading-spin{to{transform:rotate(360deg)}}
 @keyframes rotate-hint{0%,20%,100%{transform:rotate(90deg)}60%,80%{transform:rotate(0)}}
 @media (prefers-reduced-motion:reduce){.loading-screen::before,.rotate-notice::before{animation:none}}
+/* Phone browsers: a drag that starts on the HUD or a dialogue must not pan, bounce, or zoom the page, which would slide the address bar in and out under the player's thumb. */
+html,body{overscroll-behavior:none}
+#app{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+.title,.dialogue.has-choices .panel,.dialogue.has-choices .choices,.hud-menu-card{touch-action:pan-y;overscroll-behavior:contain}
+.result .panel{-webkit-user-select:text;user-select:text}
+input,textarea{-webkit-user-select:text;user-select:text;touch-action:manipulation}
