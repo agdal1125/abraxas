@@ -235,7 +235,7 @@ try {
     if (!clicked) throw new Error("Start button not found");
     for (let i = 0; i < 150 && !await evaluate("!!window.__abraxas?.game.snapshot && !localStorage.getItem('abraxas:pending-command')"); i++) await sleep(200);
     if (!await evaluate("!!window.__abraxas?.game.snapshot && !localStorage.getItem('abraxas:pending-command')")) throw new Error("Current play did not load");
-    await evaluate("(() => { const v = window.__abraxas.village, original = v.onInteract; window.__e2eArrivals = []; v.onInteract = id => { window.__e2eArrivals.push(id); original(id); }; })()");
+    await evaluate("(() => { const v = window.__abraxas.village, original = v.onInteract; window.__e2eArrivals = []; v.onInteract = id => { window.__e2eArrivals.push(id); original(id); }; const blocked = v.onPathBlocked; window.__e2eBlocked = []; v.onPathBlocked = () => { window.__e2eBlocked.push({ at: [v.player.position.x, v.player.position.z], t: Math.round(performance.now()) }); blocked(); }; })()");
   }
   await startPage();
   let pendingWalk = null;
@@ -296,7 +296,7 @@ try {
     lastSnapshot = snapshot;
     if (pendingWalk && info.walking) pendingWalk.walked = true;
     if (pendingWalk && info.arrivals.includes(pendingWalk.id)) { if (pendingWalk.pointer && pendingWalk.npc) { pointerEvidence[pendingWalk.npc]++; if (pendingWalk.input === "touch") touchEvidence[pendingWalk.npc]++; } interactionEvidence[pendingWalk.pointer ? "pointer" : "direct"]++; if (pendingWalk.pointer) interactionEvidence[pendingWalk.input]++; if (pendingWalk.walked) interactionEvidence.walked++; pendingWalk = null; }
-    if (pendingWalk && !info.walking && !info.arrivals.includes(pendingWalk.id)) { errors.push(`Interaction did not arrive: ${pendingWalk.id}`); break; }
+    if (pendingWalk && !info.walking && !info.arrivals.includes(pendingWalk.id)) { const diag = await evaluate(`(() => { const v = window.__abraxas.village, id = ${JSON.stringify(pendingWalk.id)}, a = v.actors.get(id), t = v.target(id); return JSON.stringify({ now: Math.round(performance.now()), walked: ${JSON.stringify(!!pendingWalk.walked)}, blocked: window.__e2eBlocked.slice(-3), player: [v.player.position.x, v.player.position.z], target: t && [t.x, t.z], actorVisible: a?.object.visible, actorPos: a && [a.object.position.x, a.object.position.z], available: v.available.has(id), enabled: v.enabled, ready: v.ready, portrait: v.portrait, talking: v.talking, nearby: v.nearby, activeIds: v.echoView?.activeTargetIds, phase: v.echoView?.phase, far: a?.character?.far }); })()`); errors.push(`Interaction did not arrive: ${pendingWalk.id} ${diag}`); break; }
     if (segments.at(-1) !== key) { segments.push(key); await shot(`${String(segments.length).padStart(2, "0")}-${key.replace(/[^a-z0-9_]/gi, "-")}`); }
     if (scenario === "resume" && snapshot && !info.pending) {
       let checkpoint;
