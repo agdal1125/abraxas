@@ -38,8 +38,10 @@ export function enterFullscreenOnTouch(win: Window = window, doc: Document = doc
   const ask = () => { if (!doc.fullscreenElement) void setFullscreen(true, doc).then(active => { if (active) entered = true; }); };
   const onLift = (event: Event) => { if ((event as PointerEvent).pointerType === "touch") { lastLift = event.timeStamp; ask(); } };
   const onClick = (event: Event) => { if (event.timeStamp - lastLift < 1000) ask(); };
-  win.addEventListener("pointerup", onLift, true); win.addEventListener("click", onClick, true);
+  // An options object, not a bare boolean: older Node EventTargets (used by the tests) ignore a boolean on removal.
+  const capture = { capture: true };
+  win.addEventListener("pointerup", onLift, capture); win.addEventListener("click", onClick, capture);
   doc.addEventListener("fullscreenchange", () => {
-    if (entered && !doc.fullscreenElement) { win.removeEventListener("pointerup", onLift, true); win.removeEventListener("click", onClick, true); }
+    if (entered && !doc.fullscreenElement) { win.removeEventListener("pointerup", onLift, capture); win.removeEventListener("click", onClick, capture); }
   });
 }
