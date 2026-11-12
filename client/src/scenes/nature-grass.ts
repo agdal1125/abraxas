@@ -124,6 +124,12 @@ export function blocked(x: number, z: number, colliders: Collider[], margin: num
   return false;
 }
 
+/** An icosahedron with one vertex triple per face. Three builds it non-indexed already; the guard keeps that true if it ever changes. */
+export function flatIcosahedron(): THREE.BufferGeometry {
+  const geometry = new THREE.IcosahedronGeometry(1, 0);
+  return geometry.index ? geometry.toNonIndexed() : geometry;
+}
+
 /** `blocked` with a spatial hash: each query tests only the shapes near the point. Margins up to `MAX_MARGIN` are exact. */
 export class Obstacles {
   static readonly MAX_MARGIN = 1;

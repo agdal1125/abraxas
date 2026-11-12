@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import type { Vec2 } from "../core/world/types";
-import { seeded } from "./nature-grass";
+import { flatIcosahedron, seeded } from "./nature-grass";
 import { liteMaterial, wind } from "./nature-wind";
 
 type V3 = [number, number, number];
@@ -55,7 +55,7 @@ export class Backdrop {
     }
 
     // Clouds: a few flattened lumps each, low around the island and drifting slowly with the wind.
-    const lumps = new THREE.IcosahedronGeometry(1, 0).toNonIndexed(), p = lumps.getAttribute("position");
+    const lumps = flatIcosahedron(), p = lumps.getAttribute("position");
     const TOP: V3 = [1, .97, 1], UNDER: V3 = [.84, .82, .94];
     for (let k = 0; k < 24; k++) {
       const at = spot(random() * Math.PI * 2, 2.5 + random() * 18), y = -4.5 + random() * 5.5, parts = 2 + Math.floor(random() * 3);

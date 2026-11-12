@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import type { Collider, Vec2 } from "../core/world/types";
 import { BiomeMap, patchNoise, type Biome } from "./nature-biome";
-import { GroundSampler, Obstacles, TINTS, seeded, tuftGeometry } from "./nature-grass";
+import { GroundSampler, Obstacles, TINTS, flatIcosahedron, seeded, tuftGeometry } from "./nature-grass";
 import { ScatterLayer } from "./nature-layer";
 import { applyWind, liteMaterial } from "./nature-wind";
 
@@ -73,7 +73,7 @@ function coverGeometry(): THREE.BufferGeometry {
 function shrubGeometry(): THREE.BufferGeometry {
   const random = seeded(53), soup = new Soup();
   for (const [ox, oz, rx, ry] of [[0, 0, .17, .11], [.1, .06, .1, .075]] as const) {
-    const ico = new THREE.IcosahedronGeometry(1, 0).toNonIndexed(), p = ico.getAttribute("position");
+    const ico = flatIcosahedron(), p = ico.getAttribute("position");
     const jitter = new Map<string, V3>();
     const vertex = (i: number): V3 => {
       const key = `${p.getX(i).toFixed(3)},${p.getY(i).toFixed(3)},${p.getZ(i).toFixed(3)}`;
