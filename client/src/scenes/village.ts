@@ -2,8 +2,9 @@ import * as THREE from "three";
 import { GLTFLoader, type GLTF } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { clone } from "three/addons/utils/SkeletonUtils.js";
-import { step } from "../core/world/move";
+import { step, walkable } from "../core/world/move";
 import { findPath, findPathVia, followPath } from "../core/world/autowalk";
+import { DEMI_FOLLOW, DEMI_RESTED, pickDemiSpot, stepDemiPlay, tapDemi, type DemiPlay, type DemiSpot } from "../core/world/demi-play";
 import { nearest, targetDistance } from "../core/world/nearby";
 import type { Bounds, Collider, Vec2 } from "../core/world/types";
 import { translations } from "../content";
@@ -30,6 +31,11 @@ const map = import.meta.glob<{ default: MapData }>("../../../content/world/villa
 const manifest = import.meta.glob<{ default: { assets: Record<string, Asset> } }>("../../../content/assets/manifest.json", { eager: true })["../../../content/assets/manifest.json"]!.default.assets;
 // 24px keeps the neutral symbol legible on a mobile screen while staying within the policy range.
 const MARKER_SIZE_PX = 24;
+const DEMI_ID = "demi";
+const DEMI_RUN = 2;
+const DEMI_SIDESTEP = .4;
+// Decoration only: the dog must never point at something an errand or a choice depends on.
+const DEMI_SNIFF_ASSETS = new Set(["bench", "barrel", "log", "bush", "tree-young", "tree-layered", "tree-round", "tree-slender", "rock-large", "rock-small", "well"]);
 const NEARBY_RANGE = .85;
 const RESIDENT_ACTORS = new Set(["lumi-neighbor-1", "lumi-neighbor-2", "echo-borrower", "or-fisher", "or-merchant"]);
 
@@ -55,6 +61,8 @@ export class Village {
   private demi = new Demi(map.spawn);
   private demiMode: DemiMode = "hidden";
   private demiPath?: { path: Vec2[]; target: Vec2; best: number; stalled: number };
+  private demiPlay: DemiPlay = DEMI_FOLLOW;
+  private demiRoute?: { path: Vec2[]; target: Vec2; best: number; stalled: number };
   private postman = new THREE.Group();
   private cameraTarget = new THREE.Vector3();
   private viewHalfHeight = 1.55;
@@ -170,9 +178,10 @@ export class Village {
     });
     if (!document.hidden) this.frame = requestAnimationFrame(() => this.tick());
   }
-  setEnabled(value: boolean): void { this.enabled = value; if (value) { this.talking = undefined; this.speaker = null; } else { this.auto = undefined; this.input = { x: 0, z: 0 }; this.nearby = null; this.onNearbyChange(null); } this.setAvailable([...this.available]); }
+  setEnabled(value: boolean): void { this.enabled = value; if (!value) this.stopDemiPlay(); if (value) { this.talking = undefined; this.speaker = null; } else { this.auto = undefined; this.input = { x: 0, z: 0 }; this.nearby = null; this.onNearbyChange(null); } this.setAvailable([...this.available]); }
   setDemiMode(mode: DemiMode): void {
     if (mode === this.demiMode) return;
+    this.stopDemiPlay();
     if (mode === "follow") this.demi.reset(this.player.position);
     this.demiMode = mode; this.demi.setMode(mode, this.player.position); this.demiPath = undefined;
     if (mode === "lead" || mode === "ending") {
@@ -190,6 +199,65 @@ export class Village {
     if (this.gathered && !wasGathered && spot) { this.player.position.set(spot.x, 0, spot.z); this.cameraTarget.copy(this.player.position); }
   }
   focusSpeaker(id: string | null): void { this.speaker = id && this.target(id) ? id : null; this.setAvailable([...this.available]); }
+  private stopDemiPlay(): void {
+    if (!this.demiPlay || this.demiPlay.kind === "follow") return;
+    this.demiPlay = DEMI_RESTED; this.demiRoute = undefined; this.demi.release(this.player.position);
+    if (this.demi.object.position.distanceTo(this.player.position) > 1.5) this.demi.reset(this.player.position);
+  }
+  private demiRouteTo(target: Vec2, path: Vec2[] | null): boolean {
+    this.demiRoute = path ? { path, target, best: Infinity, stalled: 0 } : undefined;
+    return !!path;
+  }
+  private demiRouteToPlayer(): boolean {
+    const target = { x: this.player.position.x, z: this.player.position.z };
+    return this.demiRouteTo(target, findPath(this.demi.object.position, target, this.colliders, map.bounds));
+  }
+  private enterDemiPlay(next: DemiPlay): void {
+    this.demiPlay = next; this.demiRoute = undefined;
+    const dog = this.demi.object.position, player = this.player.position;
+    switch (next.kind) {
+      case "follow": this.demi.release(player); return;
+      case "pet": this.demi.hold("pet"); this.demi.face(player); return;
+      case "gesture": this.demi.hold(next.gesture); return;
+      case "wander": {
+        const spots: DemiSpot[] = map.props.filter(prop => DEMI_SNIFF_ASSETS.has(prop.asset)).map(prop => ({ x: prop.x, z: prop.z, extent: Math.max(0, ...(manifest[prop.asset]?.collision ?? []).map(shape => shape.type === "circle" ? shape.radius : Math.max(shape.halfX, shape.halfZ))) * (prop.scale ?? 1) }));
+        const stop = pickDemiSpot(spots, dog, player, walkable(this.colliders, map.bounds), Math.random());
+        if (!stop) { this.enterDemiPlay(DEMI_RESTED); return; }
+        this.demi.hold(null); this.demiRouteTo(stop, [stop]); return;
+      }
+      case "come":
+        this.demi.hold(null);
+        if (!this.demiRouteToPlayer()) { this.demi.reset(player); this.enterDemiPlay(DEMI_RESTED); }
+    }
+  }
+  private tapDemi(): void {
+    const dog = this.demi.object.position, player = this.player.position, distance = dog.distanceTo(player);
+    const next = tapDemi(distance);
+    // The dog often stands inside the player's feet, so it trots out to screen-right to be seen.
+    const beside = { x: player.x + DEMI_SIDESTEP, z: player.z - DEMI_SIDESTEP };
+    if (next.kind === "pet" && distance < .5 && walkable(this.colliders, map.bounds)(dog, beside)) {
+      this.enterDemiPlay({ kind: "come", thenPet: true });
+      this.demiRouteTo(beside, [beside]);
+      return;
+    }
+    this.enterDemiPlay(next);
+  }
+  private updateDemiPlay(dt: number, playerMoving: boolean): void {
+    if (this.demiMode !== "follow" || !this.enabled || !this.ready) return;
+    const dog = this.demi.object.position, player = this.player.position;
+    if (this.demiPlay.kind === "come" && this.demiRoute && Math.hypot(this.demiRoute.target.x - player.x, this.demiRoute.target.z - player.z) > .6 && !this.demiRouteToPlayer()) { this.demi.reset(player); this.enterDemiPlay(DEMI_RESTED); return; }
+    let arrived = false;
+    if (this.demiRoute) {
+      const running = this.demiPlay.kind === "come";
+      const result = followPath({ position: { x: dog.x, z: dog.z }, ...this.demiRoute, status: "walking" }, this.demiRoute.target, this.colliders, map.bounds, running ? dt * DEMI_RUN : dt);
+      this.demi.walkTo(result.position);
+      if (result.status === "blocked") { if (running) this.demi.reset(player); this.enterDemiPlay(DEMI_RESTED); return; }
+      arrived = result.status === "arrived";
+      this.demiRoute = arrived ? undefined : { ...this.demiRoute, path: result.path, best: result.best, stalled: result.stalled };
+    }
+    const next = stepDemiPlay(this.demiPlay, { dt, playerMoving, distance: Math.hypot(dog.x - player.x, dog.z - player.z), arrived, roll: Math.random() });
+    if (next.kind === this.demiPlay.kind) this.demiPlay = next; else this.enterDemiPlay(next);
+  }
   targetScreenPos(id: string): { x: number; y: number; onScreen: boolean } | null {
     const target = this.target(id); if (!target) return null;
     const point = new THREE.Vector3(target.x, 0, target.z).project(this.camera);
@@ -340,7 +408,7 @@ export class Village {
     const path = findPath(this.player.position, target, this.colliders, map.bounds, point => this.visible(id, position, point));
     if (!path) { this.onPathBlocked(); return; }
     const destination = path.at(-1) ?? this.player.position;
-    this.player.position.set(destination.x, 0, destination.z); this.cameraTarget.copy(this.player.position); this.demi?.reset(this.player.position);
+    this.player.position.set(destination.x, 0, destination.z); this.cameraTarget.copy(this.player.position); this.stopDemiPlay(); this.demi?.reset(this.player.position);
   }
   async resumeLumi(): Promise<void> { await this.resumeResident("lumi"); }
   async resumeEcho(): Promise<void> { await this.resumeResident("echo"); }
@@ -361,6 +429,7 @@ export class Village {
     if (!path) return false;
     const destination = path.at(-1) ?? this.player.position;
     this.player.position.set(destination.x, 0, destination.z);
+    this.stopDemiPlay();
     this.demi?.reset(this.player.position);
     this.cameraTarget.copy(this.player.position);
     return true;
@@ -441,6 +510,7 @@ export class Village {
     this.interactTarget(id);
   }
   private target(id: string): (Vec2 & { colliders?: Collider[] }) | undefined {
+    if (id === DEMI_ID) return this.demiMode === "follow" ? { x: this.demi.object.position.x, z: this.demi.object.position.z } : undefined;
     const actor = this.actors.get(id), prop = this.props.get(id);
     if (actor && actor.object.visible !== false) return { x: actor.object.position.x, z: actor.object.position.z };
     if (prop) return { x: prop.x, z: prop.z, colliders: this.collidersOf(id) };
@@ -448,6 +518,7 @@ export class Village {
   }
   interactTarget(id: string): void {
     if (!this.enabled || !this.ready || this.portrait || this.talking) return;
+    if (id === DEMI_ID) { this.tapDemi(); return; }
     const target = this.target(id); if (!target) return;
     if ((this.activeTargets(id) || this.residentActor(id)) && !this.available.has(id)) return;
     const actorAtTarget = this.actors.get(id);
@@ -476,9 +547,9 @@ export class Village {
     const rect = this.renderer.domElement.getBoundingClientRect();
     if (!rect.width || !rect.height || clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) return null;
     const candidates: { id: string; distance: number; available: boolean }[] = [];
-    for (const id of [...this.actors.keys(), ...this.props.keys()]) {
+    for (const id of [...this.actors.keys(), ...this.props.keys(), DEMI_ID]) {
       const target = this.target(id); if (!target || ((this.activeTargets(id) || this.residentActor(id)) && !this.available.has(id))) continue;
-      const actor = this.actors.get(id), object = actor?.character?.object ?? this.propObjects.get(id);
+      const actor = this.actors.get(id), object = actor?.character?.object ?? this.propObjects.get(id) ?? (id === DEMI_ID ? this.demi.object : undefined);
       const box = object ? new THREE.Box3().setFromObject(object) : new THREE.Box3();
       if (box.isEmpty()) box.set(new THREE.Vector3(target.x, 0, target.z), new THREE.Vector3(target.x, .6, target.z));
       let left = Infinity, right = -Infinity, top = Infinity, bottom = -Infinity;
@@ -639,6 +710,7 @@ export class Village {
     }
     this.animate(this.playerCharacter, moving ? "walk" : "idle");
     this.demi.update(this.player.position, dt);
+    this.updateDemiPlay(dt, moving);
     if (this.demiPath && Math.hypot(this.player.position.x - this.demi.object.position.x, this.player.position.z - this.demi.object.position.z) < 1.5) {
       const result = followPath({ position: this.demi.object.position, ...this.demiPath, status: "walking" }, this.demiPath.target, this.colliders, map.bounds, dt);
       const dx = result.position.x - this.demi.object.position.x, dz = result.position.z - this.demi.object.position.z;

@@ -12,6 +12,7 @@
   "howTo": {
     "move": "Drag the screen to walk",
     "examine": "Tap people and things to look closer",
+    "dog": "Tap the dog to pet it or call it over",
     "choose": "Visit the villagers, hear their requests, and choose.\nYou can't take a choice back, but none of them is wrong."
   },
   "installGuide": {

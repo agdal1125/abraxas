@@ -25,6 +25,17 @@ it("follows recorded corners and resets after a teleport", () => {
   expect(dog.object.position.z).toBe(10);
 });
 
+it("stays put while held and comes back to following when released", () => {
+  const dog = new Demi({ x: 0, z: 0 });
+  dog.setMode("follow", { x: 0, z: 0 });
+  dog.hold("pet");
+  for (let i = 1; i <= 10; i++) dog.update({ x: i / 10, z: 0 }, .1);
+  expect(dog.object.position.x).toBe(0);
+  dog.release({ x: 1, z: 0 });
+  for (let i = 1; i <= 10; i++) dog.update({ x: 1 + i / 10, z: 0 }, .1);
+  expect(dog.object.position.x).toBeGreaterThan(0);
+});
+
 it("whitens only the player geometry and keeps shared materials intact", () => {
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute("color", new THREE.Float32BufferAttribute([.2, .3, .4, .6, .7, .8], 3));

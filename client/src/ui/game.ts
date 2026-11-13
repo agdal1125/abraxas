@@ -124,7 +124,7 @@ export class Game {
     if (page === "confirm") { add(this.ui.hud.restart, () => { close(); this.restart(); }); add(this.ui.hud.cancel, () => this.settings()); }
     else if (page === "howTo") {
       const steps = document.createElement("ol"), copy = this.ui.howTo;
-      for (const text of [copy.move, copy.examine, this.ui.intent.prompt, ...copy.choose.split("\n")]) { const step = document.createElement("li"); step.textContent = text; steps.append(step); }
+      for (const text of [copy.move, copy.examine, copy.dog, this.ui.intent.prompt, ...copy.choose.split("\n")]) { const step = document.createElement("li"); step.textContent = text; steps.append(step); }
       card.append(steps); add(this.ui.hud.back, () => this.settings());
     }
     else if (page === "credits") {
