@@ -53,6 +53,7 @@ func TestEndingThresholdAndCompanion(t *testing.T) {
 		}
 		e.data.Rules.AffinityStart = tc.start
 		e.data.Rules.AffinityGain = 0
+		e.data.Rules.AffinityThinkingGain = 0
 		d := NewDoc(NewSnapshot("play", "v"))
 		d.Snapshot.Segment = "confession"
 		companion := "lumi"

@@ -31,7 +31,7 @@ test("interlude resumes at each unanswered knot with Demi seated", async () => {
 
 test("gate asks all unanswered questions in order while Demi waits", async () => {
   const events: string[] = [];
-  const game = Object.assign(Object.create(Game.prototype), { state: { segment: "gate", log: [] }, village: { setStoryScene: (x: string) => events.push(x), setDemiMode: (x: string) => events.push(x) }, narrative: async (_file: string, knot: string, choice: boolean) => { events.push(knot); if (choice) game.state.log.push({ id: knot, pick: "a" }); }, finish: () => events.push("finish") });
+  const game = Object.assign(Object.create(Game.prototype), { state: { segment: "gate", log: [] }, fragmentsReveal: async () => {}, village: { setStoryScene: (x: string) => events.push(x), setDemiMode: (x: string) => events.push(x) }, narrative: async (_file: string, knot: string, choice: boolean) => { events.push(knot); if (choice) game.state.log.push({ id: knot, pick: "a" }); }, finish: () => events.push("finish") });
   await game.lateScene();
   expect(events).toEqual(["gate", "gate", "gate_intro", "gate_a", "gate_b", "gate_c", "gate_d", "gate_outro", "follow", "finish"]);
 });
@@ -241,4 +241,18 @@ test("resident dialogue parser failure offers a retry and resumes the selected k
     expect(fetcher).toHaveBeenCalledTimes(2);
     expect(game.story).not.toBeNull();
   } finally { vi.doUnmock("inkjs"); vi.unstubAllGlobals(); }
+});
+
+test("auto-advance fires only for the panel that armed it", () => {
+  vi.useFakeTimers(); vi.stubGlobal("window", { setTimeout: (fn: () => void, ms: number) => setTimeout(fn, ms) });
+  try {
+    const game = Object.assign(Object.create(Game.prototype), { token: 1, autoAdvance: true, autoTimer: 0, autoPending: null, settingsMenu: { hidden: true } });
+    expect(game.autoDelay("짧다")).toBe(1200); expect(game.autoDelay("가".repeat(60))).toBe(5000); expect(game.autoDelay("가".repeat(12))).toBe(2000);
+    const stale = vi.fn(); game.autoPending = { token: 1, fire: stale, ms: 1200 }; game.resumeAuto(); game.token = 2; vi.advanceTimersByTime(5000);
+    expect(stale).not.toHaveBeenCalled();
+    const live = vi.fn(); game.autoPending = { token: 2, fire: live, ms: 1200 }; game.resumeAuto(); game.settingsMenu.hidden = false; vi.advanceTimersByTime(5000);
+    expect(live).not.toHaveBeenCalled();
+    game.settingsMenu.hidden = true; game.resumeAuto(); vi.advanceTimersByTime(1199); expect(live).not.toHaveBeenCalled(); vi.advanceTimersByTime(1);
+    expect(live).toHaveBeenCalledOnce();
+  } finally { vi.useRealTimers(); vi.unstubAllGlobals(); }
 });

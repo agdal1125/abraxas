@@ -1,0 +1,228 @@
+{
+  "name": "all-thinking",
+  "note": "Every theme-axis answer differs from the NPC's current pole, so affinity grows only by the thinking gain.",
+  "playId": "golden-all-thinking",
+  "log": [
+    {
+      "id": "prologue_01",
+      "pick": "a"
+    },
+    {
+      "id": "prologue_02",
+      "pick": "a"
+    },
+    {
+      "id": "prologue_03",
+      "pick": "a"
+    },
+    {
+      "id": "lumi_01",
+      "pick": "a"
+    },
+    {
+      "id": "lumi_02",
+      "pick": "b"
+    },
+    {
+      "id": "lumi_03",
+      "pick": "b"
+    },
+    {
+      "id": "lumi_04",
+      "pick": "a"
+    },
+    {
+      "id": "lumi_05",
+      "pick": "b"
+    },
+    {
+      "id": "lumi_06",
+      "pick": "a"
+    },
+    {
+      "id": "interlude_1_01",
+      "pick": "a"
+    },
+    {
+      "id": "interlude_1_02",
+      "pick": "a"
+    },
+    {
+      "id": "moka_01",
+      "pick": "a"
+    },
+    {
+      "id": "moka_02",
+      "pick": "a"
+    },
+    {
+      "id": "moka_03",
+      "pick": "b"
+    },
+    {
+      "id": "moka_04",
+      "pick": "b"
+    },
+    {
+      "id": "moka_05",
+      "pick": "b"
+    },
+    {
+      "id": "moka_06",
+      "pick": "b"
+    },
+    {
+      "id": "interlude_2_01",
+      "pick": "a"
+    },
+    {
+      "id": "interlude_2_02",
+      "pick": "a"
+    },
+    {
+      "id": "echo_01",
+      "pick": "a"
+    },
+    {
+      "id": "echo_02",
+      "pick": "a"
+    },
+    {
+      "id": "echo_03",
+      "pick": "b"
+    },
+    {
+      "id": "echo_04",
+      "pick": "b"
+    },
+    {
+      "id": "echo_05",
+      "pick": "b"
+    },
+    {
+      "id": "echo_06",
+      "pick": "b"
+    },
+    {
+      "id": "interlude_3_01",
+      "pick": "a"
+    },
+    {
+      "id": "interlude_3_02",
+      "pick": "a"
+    },
+    {
+      "id": "or_01",
+      "pick": "b"
+    },
+    {
+      "id": "or_02",
+      "pick": "b"
+    },
+    {
+      "id": "or_03",
+      "pick": "a"
+    },
+    {
+      "id": "or_04",
+      "pick": "a"
+    },
+    {
+      "id": "or_05",
+      "pick": "a"
+    },
+    {
+      "id": "or_06",
+      "pick": "a"
+    },
+    {
+      "id": "festival_01",
+      "pick": "a"
+    },
+    {
+      "id": "festival_02",
+      "pick": "a"
+    },
+    {
+      "id": "festival_03",
+      "pick": "a"
+    },
+    {
+      "id": "festival_04",
+      "pick": "a"
+    },
+    {
+      "id": "festival_05",
+      "pick": "a"
+    },
+    {
+      "id": "gate_a",
+      "pick": "a"
+    },
+    {
+      "id": "gate_b",
+      "pick": "a"
+    },
+    {
+      "id": "gate_c",
+      "pick": "a"
+    },
+    {
+      "id": "gate_d",
+      "pick": "a"
+    }
+  ],
+  "expect": {
+    "s": {
+      "A": 27,
+      "B": 3,
+      "C": -21,
+      "D": -21,
+      "E": 0
+    },
+    "type": "OHKC",
+    "modifier": "between",
+    "npcs": {
+      "lumi": {
+        "s": {
+          "A": 10,
+          "B": 30,
+          "C": 10,
+          "D": 30,
+          "E": 30
+        },
+        "affinity": 44
+      },
+      "moka": {
+        "s": {
+          "A": 30,
+          "B": 10,
+          "C": -30,
+          "D": -10,
+          "E": 30
+        },
+        "affinity": 44
+      },
+      "echo": {
+        "s": {
+          "A": -30,
+          "B": -10,
+          "C": 10,
+          "D": -30,
+          "E": -30
+        },
+        "affinity": 44
+      },
+      "or": {
+        "s": {
+          "A": -10,
+          "B": -30,
+          "C": -30,
+          "D": 10,
+          "E": -30
+        },
+        "affinity": 44
+      }
+    }
+  }
+}
