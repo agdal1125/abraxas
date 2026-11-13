@@ -31,4 +31,4 @@
 .cinematic p { grid-column: 1 / -1; margin: 0; text-align: center; }
 .cinematic p:empty { display: none; }
 .cinematic button { min-width: 104px; min-height: 48px; padding: 0.5rem 1.25rem; font-size: 16px; cursor: pointer; }
-.cinematic button:focus-visible { outline: 3px solid white; outline-offset: 3px; }
+.cinematic button:focus-visible { outline: 3px solid white; outline-offset: -6px; }
