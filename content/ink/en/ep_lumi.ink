@@ -49,23 +49,18 @@ Lumi: Which song should we open with?
 -> END
 
 === lumi_table ===
-Make decorations at the chosen table.
 -> END
 
 === lumi_card ===
-Place the chosen performance card on the stage plan.
 -> END
 
 === lumi_notice_pickup ===
-Pick up the chosen notice tool.
 -> END
 
 === lumi_notice_first ===
-Share the festival news at the first stop.
 -> END
 
 === lumi_notice_second ===
-Share the festival news at the second stop.
 -> END
 
 === lumi_notice_first_a ===
@@ -85,7 +80,6 @@ You leave a notice at the mailbox.
 -> END
 
 === lumi_notice_return ===
-Return the notice tool.
 -> END
 
 === lumi_stagekeeper ===
@@ -93,35 +87,27 @@ Stagehand: We're short one garland for the post. Could you find more material?
 -> END
 
 === lumi_material_pickup ===
-Pick up the chosen decoration material.
 -> END
 
 === lumi_material_delivery ===
-Bring the material to the stage workbench.
 -> END
 
 === lumi_arrange ===
-Hang the decorations by matching each loop to its shape.
 -> END
 
 === lumi_welcome ===
-Welcome guests at the chosen place.
 -> END
 
 === lumi_return ===
-Return to Lumi.
 -> END
 
 === lumi_score_pickup ===
-Pick up the chosen march score.
 -> END
 
 === lumi_score_delivery ===
-Bring the score to the musicians' stand.
 -> END
 
 === lumi_report ===
-Tell Lumi the preparations are finished.
 -> END
 
 === lumi_completed ===

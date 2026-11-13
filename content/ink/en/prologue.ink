@@ -18,8 +18,11 @@ You: I'm not sure. I can't remember.
 Mail Carrier: Did you fall from the sky?
 You: Maybe I did.
 Mail Carrier: I was joking, but you're serious?
-Mail Carrier: Neat and blank as a fresh white envelope.
 Mail Carrier: No address is just fine. Take your time looking around.
+-> END
+
+=== postman_name ===
+Mail Carrier: Neat and blank as a fresh white envelope.
 Mail Carrier: What name should I call you by?
 -> END
 
