@@ -49,15 +49,6 @@
 * [완성된 종을 광장으로 옮기며 사람들과 이야기를 나눈다 # item:or_06 # pick:b]
 -> END
 
-=== or_fire ===
--> END
-
-=== or_bucket_pickup ===
--> END
-
-=== or_find_sand ===
--> END
-
 === or_find_sand_a ===
 지도에는 개울가 모래 채집지가 표시되어 있다.
 -> END
@@ -70,23 +61,8 @@
 상인: 물가를 따라가면 모래가 있어. 조심히 다녀와.
 -> END
 
-=== or_sand ===
--> END
-
-=== or_sand_delivery ===
--> END
-
-=== or_gears ===
--> END
-
-=== or_weight ===
--> END
-
 === or_assistant ===
 공방 조수: 이건 등불 승강 장치 도면이야. 걸이도 여기 둘게.
--> END
-
-=== or_review ===
 -> END
 
 === or_review_a ===
@@ -97,36 +73,20 @@
 혼자 도면을 살펴보는 동안 오르가 조용히 기다린다.
 -> END
 
-=== or_lantern_link ===
--> END
-
-=== or_hook ===
--> END
-
-=== or_return ===
--> END
-
-=== or_finish ===
--> END
-
 === or_finish_a ===
 연장을 닦아 걸었다. 종은 나중에 주민들이 옮기기로 한다.
 -> END
 
 === or_finish_b ===
-완성된 종을 들었다. 광장으로 옮기자.
--> END
-
-=== or_bell_delivery ===
--> END
-
-=== or_report ===
+완성된 종을 들었다.
 -> END
 
 === or_report_a ===
+오르: 다 됐군. 공방이 조용하다.
 -> END
 
 === or_report_b ===
+오르: 종이 잘 걸렸어. 소리가 광장까지 닿겠다.
 -> END
 
 === or_completed ===

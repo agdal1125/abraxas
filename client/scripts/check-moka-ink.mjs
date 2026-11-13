@@ -9,7 +9,7 @@ const read = (path) => readFile(resolve(root, path), "utf8");
 const items = JSON.parse(await read("content/scoring/items.json")).items;
 const english = JSON.parse(await read("content/i18n/en/items.json"));
 const ids = Array.from({ length: 6 }, (_, i) => `moka_0${i + 1}`);
-const knots = ["moka_meet", "moka_pick_up", "moka_deliver", "moka_delivered", "moka_reservation", "moka_reservation_action", "moka_choose_display", "moka_arrange", "moka_share", "moka_share_action", "moka_order", "moka_order_action", "moka_return", "moka_feedback", "moka_report", "moka_completed"];
+const knots = ["moka_meet", "moka_delivered", "moka_reservation", "moka_choose_display", "moka_arrange", "moka_share", "moka_order", "moka_feedback", "moka_report", "moka_completed"];
 const choiceKnots = ["moka_meet", "moka_reservation", "moka_choose_display", "moka_share", "moka_order", "moka_feedback"];
 
 function forbidden(text) {

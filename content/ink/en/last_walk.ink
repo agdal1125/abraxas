@@ -2,7 +2,7 @@
 
 === walk_intro ===
 Today's faces have gathered in the plaza.
-Demi watches quietly beside you.
+The dog watches quietly beside you.
 You: Let's say hello for a moment.
 -> END
 

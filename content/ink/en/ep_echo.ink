@@ -52,35 +52,8 @@ Echo: How should we share this story?
 * [Let readers add their own endings # item:echo_06 # pick:b]
 -> END
 
-=== echo_enclose ===
--> END
-
-=== echo_book_pickup ===
--> END
-
-=== echo_book_delivery ===
--> END
-
-=== echo_search ===
--> END
-
-=== echo_record_pickup ===
--> END
-
-=== echo_record_delivery ===
--> END
-
-=== echo_notebook_pickup ===
--> END
-
-=== echo_notebook_delivery ===
--> END
-
 === echo_organizer ===
 Book Keeper: Shall we find where these books belong?
--> END
-
-=== echo_arrange ===
 -> END
 
 === echo_reading ===
@@ -92,19 +65,8 @@ The older sister checked dates and bridge repairs.
 Come spring, they met once more upon that bridge.
 -> END
 
-=== echo_bookmark ===
--> END
-
-=== echo_return ===
--> END
-
-=== echo_legend_pickup ===
--> END
-
-=== echo_legend_delivery ===
--> END
-
 === echo_report ===
+Echo: The shelves have found their places.
 -> END
 
 === echo_completed ===

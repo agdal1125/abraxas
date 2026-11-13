@@ -52,35 +52,8 @@
 * [읽는 이들이 새 결말을 덧붙이는 열린 책으로 꾸미자 # item:echo_06 # pick:b]
 -> END
 
-=== echo_enclose ===
--> END
-
-=== echo_book_pickup ===
--> END
-
-=== echo_book_delivery ===
--> END
-
-=== echo_search ===
--> END
-
-=== echo_record_pickup ===
--> END
-
-=== echo_record_delivery ===
--> END
-
-=== echo_notebook_pickup ===
--> END
-
-=== echo_notebook_delivery ===
--> END
-
 === echo_organizer ===
 책 정리인: 이 책들도 자리를 찾아볼까.
--> END
-
-=== echo_arrange ===
 -> END
 
 === echo_reading ===
@@ -92,19 +65,8 @@
 봄이 오자 둘은 그 다리에서 다시 만났다.
 -> END
 
-=== echo_bookmark ===
--> END
-
-=== echo_return ===
--> END
-
-=== echo_legend_pickup ===
--> END
-
-=== echo_legend_delivery ===
--> END
-
 === echo_report ===
+에코: 서가가 제자리를 찾았네.
 -> END
 
 === echo_completed ===

@@ -8,12 +8,6 @@
 * [빵이 눌려 상하지 않도록 완만한 길로 안전하게 걸어간다 # item:moka_01 # pick:b]
 -> END
 
-=== moka_pick_up ===
--> END
-
-=== moka_deliver ===
--> END
-
 === moka_delivered ===
 시식 안내인: 빵집에서 왔구나. 기다리고 있었어.
 시식 안내인: 고마워! 출출했는데 좋은 때에 왔네.
@@ -26,9 +20,6 @@
 * [장부에 적힌 예약 내역을 함께 보며 사실부터 확인한다 # item:moka_02 # pick:a]
 -> END
 * [손님이 민망하지 않게 먼저 안심시키며 원하는 빵을 준다 # item:moka_02 # pick:b]
--> END
-
-=== moka_reservation_action ===
 -> END
 
 === moka_choose_display ===
@@ -50,20 +41,11 @@
 * [누구에게나 공평하게 같은 크기로 잘라 접시에 담아 둔다 # item:moka_04 # pick:b]
 -> END
 
-=== moka_share_action ===
--> END
-
 === moka_order ===
 모카: 저녁 파이도 구워야 해. 얼마나 구우면 좋을까?
 * [손님이 몰릴 기회를 살려 평소보다 두 배 많이 굽자 # item:moka_05 # pick:a]
 -> END
 * [남아 버리는 손실이 없게 예약된 수량만큼만 구워 내자 # item:moka_05 # pick:b]
--> END
-
-=== moka_order_action ===
--> END
-
-=== moka_return ===
 -> END
 
 === moka_feedback ===
@@ -75,6 +57,7 @@
 -> END
 
 === moka_report ===
+모카: 오늘 일은 여기까지야. 덕분에 한숨 돌렸어.
 -> END
 
 === moka_completed ===

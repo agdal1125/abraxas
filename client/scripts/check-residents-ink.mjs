@@ -22,7 +22,10 @@ for (const npc of ["lumi", "echo", "or"]) {
     const ui = JSON.parse(await read(`content/i18n/${lang}/${npc}-errand.json`));
     const sourceKnots = [...source.matchAll(/^===\s*(\w+)\s*===\s*$/gm)].map((match) => match[1]);
     assert.equal(new Set(sourceKnots).size, sourceKnots.length, `${lang} ${npc}: duplicate knots`);
-    for (const phase of Object.keys(quest.phases).filter((phase) => phase !== "locked")) assert.ok(sourceKnots.includes(`${npc}_${phase}`), `${lang} ${npc}: missing ${phase}`);
+    // Phase knots are optional (the HUD goal covers plain steps); choices and the closing report line are not.
+    const phases = Object.keys(quest.phases).filter((phase) => phase !== "locked");
+    for (const phase of phases.filter((phase) => phase.startsWith("choose_") || (phase === "report" && npc !== "or"))) assert.ok(sourceKnots.includes(`${npc}_${phase}`), `${lang} ${npc}: missing ${phase}`);
+    for (const knot of sourceKnots) assert.ok(knot === `${npc}_completed` || phases.some((phase) => knot === `${npc}_${phase}` || knot.startsWith(`${npc}_${phase}_`)), `${lang} ${npc}: knot ${knot} matches no phase`);
     const branches = npc === "lumi" ? ["notice_first", "notice_second"] : npc === "or" ? ["find_sand", "review", "finish", "report"] : [];
     for (const phase of branches) for (const pick of ["a", "b"]) assert.ok(sourceKnots.includes(`${npc}_${phase}_${pick}`), `${lang} ${npc}: missing ${phase}_${pick}`);
     const choices = [...source.matchAll(/^\*\s*\[(.*?)\s+#\s*item:(\w+)\s+#\s*pick:([ab])\]\s*$/gm)].map(([, text, id, pick]) => ({ text, id, pick }));

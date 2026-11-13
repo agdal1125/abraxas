@@ -48,21 +48,6 @@ Lumi: Which song should we open with?
 * [Start with the village’s familiar old march # item:lumi_06 # pick:b]
 -> END
 
-=== lumi_table ===
--> END
-
-=== lumi_card ===
--> END
-
-=== lumi_notice_pickup ===
--> END
-
-=== lumi_notice_first ===
--> END
-
-=== lumi_notice_second ===
--> END
-
 === lumi_notice_first_a ===
 Villager: Thanks for telling me. I'll come when it starts.
 -> END
@@ -79,35 +64,12 @@ You post a notice on the board.
 You leave a notice at the mailbox.
 -> END
 
-=== lumi_notice_return ===
--> END
-
 === lumi_stagekeeper ===
 Stagehand: We're short one garland for the post. Could you find more material?
 -> END
 
-=== lumi_material_pickup ===
--> END
-
-=== lumi_material_delivery ===
--> END
-
-=== lumi_arrange ===
--> END
-
-=== lumi_welcome ===
--> END
-
-=== lumi_return ===
--> END
-
-=== lumi_score_pickup ===
--> END
-
-=== lumi_score_delivery ===
--> END
-
 === lumi_report ===
+Lumi: Done already? We're all set to welcome everyone!
 -> END
 
 === lumi_completed ===

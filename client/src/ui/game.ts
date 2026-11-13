@@ -243,6 +243,7 @@ export class Game {
     const questIndex = speakerName ? Math.max(questNames.indexOf(speakerName), quests.indexOf(speakerName)) : -1;
     if (residentIndex >= 0 || questIndex >= 0) this.worldApi.focusSpeaker?.(residentIndex >= 0 ? "ABCD"[residentIndex]! : quests[questIndex]!);
     if (speakerName && (match || residentIndex >= 0 || questIndex >= 0)) { const name = document.createElement("span"); name.className = "speaker"; name.textContent = residentNames[residentIndex] ?? questNames[questIndex] ?? speakerName; name.style.backgroundColor = ["var(--char-a)", "var(--char-b)", "var(--char-c)", "var(--char-d)"][residentIndex] ?? "var(--char-npc)"; if (residentIndex < 0) name.style.color = "var(--paper)"; panel.append(name); }
+    else panel.classList.add("narration");
     panel.append(p);
     if (buttons.length === 1 && buttons[0]![0] === this.ui.next) { panel.classList.add("continue"); panel.dataset.action = "next"; panel.tabIndex = 0; panel.setAttribute("role", "button"); panel.setAttribute("aria-label", this.ui.next); panel.addEventListener("click", () => run(buttons[0]![1])); panel.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); if (!event.repeat) run(buttons[0]![1]); } }); const indicator = document.createElement("span"); indicator.className = "indicator"; indicator.textContent = "▼"; indicator.setAttribute("aria-hidden", "true"); panel.append(indicator); const advance = buttons[0]![1]; this.autoPending = { token, fire: () => run(advance), ms: this.autoDelay(p.textContent ?? text) }; }
     this.overlay.append(panel); this.resumeAuto();
@@ -477,23 +478,39 @@ export class Game {
       this.story = story; this.lastLine = ""; this.advance();
     } catch { if (token === this.token) this.panel(translations(this.state.lang).moka.status.contentUnavailable, [[translations(this.state.lang).moka.status.tryAgain, () => void this.openMoka()]]); }
   }
-  private async mokaNarrative(knot: string, after: () => void): Promise<void> {
+  private async mokaNarrative(knot: string, after: () => void, finalLabel?: string): Promise<void> {
     const token = ++this.token;
     try {
       const response = await fetch(`./ink/${this.state.lang}/ep_moka.json`);
       if (!response.ok) throw new Error("ink_unavailable");
       const { Story } = await import("inkjs");
       const content = await response.text(); await loadDialogueFonts(content);
-      const story = new Story(content); story.ChoosePathString(knot);
+      const story = new Story(content);
       if (token !== this.token) return;
-      this.reloadDialogue = () => { void this.mokaNarrative(knot, after); };
-      const next = () => { while (story.canContinue) { const line = (story.Continue() ?? "").trim(); if (line) { this.panel(line, [[this.ui.next, next]]); return; } } this.reloadDialogue = null; after(); };
-      next();
-    } catch { if (token === this.token) this.panel(translations(this.state.lang).moka.status.contentUnavailable, [[translations(this.state.lang).moka.status.tryAgain, () => void this.mokaNarrative(knot, after)]]); }
+      if (!story.KnotContainerWithName(knot)) { after(); return; }
+      story.ChoosePathString(knot);
+      this.reloadDialogue = () => { void this.mokaNarrative(knot, after, finalLabel); };
+      this.playLines(story, after, finalLabel);
+    } catch { if (token === this.token) this.panel(translations(this.state.lang).moka.status.contentUnavailable, [[translations(this.state.lang).moka.status.tryAgain, () => void this.mokaNarrative(knot, after, finalLabel)]]); }
+  }
+  // Shows each line with a Next tap; finalLabel replaces Next on the last line so a closing line can carry its own action.
+  private playLines(story: Story, after: () => void, finalLabel?: string): void {
+    const done = () => { this.reloadDialogue = null; after(); };
+    const next = () => {
+      while (story.canContinue) {
+        const line = (story.Continue() ?? "").trim();
+        if (!line) continue;
+        const closing = finalLabel && !story.canContinue;
+        this.panel(line, [closing ? [finalLabel, done] : [this.ui.next, next]]);
+        return;
+      }
+      done();
+    };
+    next();
   }
   private resident(): Resident | null { const id = this.state.segment.slice(3); return this.state.segment.startsWith("ep_") && (id === "lumi" || id === "echo" || id === "or") ? id : null; }
   private residentView(npc: Resident) { return npc === "lumi" ? lumiView(this.snapshot!) : npc === "echo" ? echoView(this.snapshot!) : orView(this.snapshot!); }
-  private async residentNarrative(npc: Resident, knot: string, after: () => void, choice = false): Promise<void> {
+  private async residentNarrative(npc: Resident, knot: string, after: () => void, choice = false, finalLabel?: string): Promise<void> {
     if (choice) this.village.setDemiMode("sit");
     const token = ++this.token;
     try {
@@ -501,13 +518,14 @@ export class Game {
       if (!response.ok) throw new Error("ink_unavailable");
       const { Story } = await import("inkjs");
       const content = await response.text(); await loadDialogueFonts(content);
-      const story = new Story(content); story.ChoosePathString(knot);
+      const story = new Story(content);
       if (token !== this.token) return;
-      this.reloadDialogue = () => { void this.residentNarrative(npc, knot, after, choice); };
+      if (!choice && !story.KnotContainerWithName(knot)) { after(); return; }
+      story.ChoosePathString(knot);
+      this.reloadDialogue = () => { void this.residentNarrative(npc, knot, after, choice, finalLabel); };
       if (choice) { this.story = story; this.lastLine = ""; this.advance(); return; }
-      const next = () => { while (story.canContinue) { const line = (story.Continue() ?? "").trim(); if (line) { this.panel(line, [[this.ui.next, next]]); return; } } this.reloadDialogue = null; after(); };
-      next();
-    } catch { if (token === this.token) { const status = translations(this.state.lang).residents[npc].status; this.panel(status.contentUnavailable, [[status.tryAgain, () => void this.residentNarrative(npc, knot, after, choice)]]); } }
+      this.playLines(story, after, finalLabel);
+    } catch { if (token === this.token) { const status = translations(this.state.lang).residents[npc].status; this.panel(status.contentUnavailable, [[status.tryAgain, () => void this.residentNarrative(npc, knot, after, choice, finalLabel)]]); } }
   }
   private interactResident(npc: Resident, id: string): void {
     if (!this.snapshot || !this.residentView(npc).activeTargetIds.includes(id)) { this.world(); return; }
@@ -522,13 +540,14 @@ export class Game {
     if (id === `${npc}-rest`) { void this.command(command, () => this.world()); return; }
     const choiceId = npc === "lumi" ? "lumi_03" : phase === "find_sand" ? "or_02" : phase === "review" ? "or_04" : "or_06";
     const pick = snapshot.answers.find(answer => answer.id === choiceId)?.pick;
-    const branch = (npc === "lumi" && (phase === "notice_first" || phase === "notice_second")) || (npc === "or" && ["find_sand", "review", "finish", "report"].includes(phase));
+    const branch = (npc === "lumi" && (phase === "notice_first" || phase === "notice_second")) || (npc === "or" && ["find_sand", "review", "finish"].includes(phase));
     const finished = (result: CommandResult) => {
       const done = () => { if (command.kind !== "complete") { this.world(); return; } const hearts = result.snapshot.episodeEnd?.hearts ?? 0; void this.residentNarrative(npc, `${npc}_completed`, () => this.panel(`${"♥".repeat(hearts)}${"♡".repeat(5 - hearts)}`, [[this.ui.next, () => this.world()]])); };
       if (branch && pick) void this.residentNarrative(npc, `${npc}_${phase}_${pick}`, done); else done();
     };
-    const send = () => { if (command.kind === "complete") this.panel(this.ui.finishErrand, [[this.ui.finishErrand, () => void this.command(command, finished)]]); else void this.command(command, finished); };
-    if (branch) send(); else void this.residentNarrative(npc, `${npc}_${phase}`, send);
+    const send = () => void this.command(command, finished);
+    if (command.kind === "complete") void this.residentNarrative(npc, npc === "or" ? `or_report_${pick}` : `${npc}_report`, send, false, this.ui.finishErrand);
+    else if (branch) send(); else void this.residentNarrative(npc, `${npc}_${phase}`, send);
   }
   private residentsBoard(npc: Resident): void {
     if (!this.snapshot) return;
@@ -542,15 +561,13 @@ export class Game {
     const phase = this.snapshot.moka.phase;
     if (["choose_route", "reservation", "choose_display", "share", "order", "feedback"].includes(phase)) { void this.openMoka(); return; }
     if (phase === "arrange") { void this.mokaNarrative("moka_arrange", () => this.board()); return; }
-    if (phase === "report") { void this.mokaNarrative("moka_report", () => this.panel(this.ui.finishErrand, [[this.ui.finishErrand, () => void this.command({ kind: "complete", targetId: "B" }, result => { const hearts = result.snapshot.episodeEnd?.hearts ?? 0; void this.mokaNarrative("moka_completed", () => this.panel(`${"♥".repeat(hearts)}${"♡".repeat(5 - hearts)}`, [[this.ui.next, () => this.world()]])); })]])); return; }
+    if (phase === "report") { void this.mokaNarrative("moka_report", () => void this.command({ kind: "complete", targetId: "B" }, result => { const hearts = result.snapshot.episodeEnd?.hearts ?? 0; void this.mokaNarrative("moka_completed", () => this.panel(`${"♥".repeat(hearts)}${"♡".repeat(5 - hearts)}`, [[this.ui.next, () => this.world()]])); }), this.ui.finishErrand); return; }
     let command: Command;
     if (phase === "pick_up") command = { kind: "pickup", targetId: id };
     else if (phase === "deliver") command = { kind: id === "moka-rest" ? (this.snapshot.moka.basket === "player" ? "set_down" : "pickup") : "deliver", targetId: id };
     else if (phase === "return") command = { kind: "talk", targetId: id };
     else command = { kind: "act", targetId: id };
-    const knots: Partial<Record<PlaySnapshot["moka"]["phase"], string>> = { pick_up: "moka_pick_up", deliver: "moka_deliver", reservation_action: "moka_reservation_action", share_action: "moka_share_action", order_action: "moka_order_action", return: "moka_return" };
-    const send = () => void this.command(command, () => { if (command.kind === "deliver") void this.mokaNarrative("moka_delivered", () => this.world()); else this.world(); });
-    const knot = knots[phase]; if (knot) void this.mokaNarrative(knot, send); else send();
+    void this.command(command, () => { if (command.kind === "deliver") void this.mokaNarrative("moka_delivered", () => this.world()); else this.world(); });
   }
   private board(): void {
     if (!this.snapshot || this.snapshot.moka.phase !== "arrange") { this.world(); return; }
