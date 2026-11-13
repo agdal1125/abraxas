@@ -86,8 +86,144 @@
         "talk"
       ]
     },
-    "quest-npc": {
-      "path": "assets/abraxas/characters/quest-npc.glb",
+    "resident-postman": {
+      "path": "assets/abraxas/characters/resident-postman.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ]
+    },
+    "resident-stage": {
+      "path": "assets/abraxas/characters/resident-stage.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ]
+    },
+    "resident-tasting": {
+      "path": "assets/abraxas/characters/resident-tasting.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ]
+    },
+    "resident-books": {
+      "path": "assets/abraxas/characters/resident-books.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ]
+    },
+    "resident-workshop": {
+      "path": "assets/abraxas/characters/resident-workshop.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ]
+    },
+    "resident-fisher": {
+      "path": "assets/abraxas/characters/resident-fisher.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ]
+    },
+    "resident-merchant": {
+      "path": "assets/abraxas/characters/resident-merchant.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ]
+    },
+    "resident-villager-a": {
+      "path": "assets/abraxas/characters/resident-villager-a.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "circle",
+          "x": 0,
+          "z": 0,
+          "radius": 0.18
+        }
+      ],
+      "clips": [
+        "idle",
+        "walk",
+        "talk"
+      ]
+    },
+    "resident-villager-b": {
+      "path": "assets/abraxas/characters/resident-villager-b.glb",
       "scale": 1,
       "collision": [
         {
@@ -509,15 +645,67 @@
       "scale": 1,
       "collision": []
     },
-    "prop-moka-basket": { "path": "assets/abraxas/environment/prop-moka-basket.glb", "scale": 1, "collision": [] },
-    "prop-moka-display": { "path": "assets/abraxas/environment/prop-moka-display.glb", "scale": 1, "collision": [{ "type": "box", "x": 0, "z": 0, "halfX": 0.38, "halfZ": 0.2 }] },
-    "prop-moka-bread-round": { "path": "assets/abraxas/environment/prop-moka-bread-round.glb", "scale": 1, "collision": [] },
-    "prop-moka-bread-long": { "path": "assets/abraxas/environment/prop-moka-bread-long.glb", "scale": 1, "collision": [] },
-    "prop-moka-bread-flower": { "path": "assets/abraxas/environment/prop-moka-bread-flower.glb", "scale": 1, "collision": [] },
-    "prop-moka-dropoff": { "path": "assets/abraxas/environment/prop-moka-dropoff.glb", "scale": 1, "collision": [{ "type": "box", "x": 0, "z": 0, "halfX": 0.27, "halfZ": 0.2 }] },
-    "prop-moka-ledger": { "path": "assets/abraxas/environment/prop-moka-ledger.glb", "scale": 1, "collision": [] },
-    "prop-moka-plate": { "path": "assets/abraxas/environment/prop-moka-plate.glb", "scale": 1, "collision": [] },
-    "prop-moka-mold": { "path": "assets/abraxas/environment/prop-moka-mold.glb", "scale": 1, "collision": [] },
+    "prop-moka-basket": {
+      "path": "assets/abraxas/environment/prop-moka-basket.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-moka-display": {
+      "path": "assets/abraxas/environment/prop-moka-display.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.38,
+          "halfZ": 0.2
+        }
+      ]
+    },
+    "prop-moka-bread-round": {
+      "path": "assets/abraxas/environment/prop-moka-bread-round.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-moka-bread-long": {
+      "path": "assets/abraxas/environment/prop-moka-bread-long.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-moka-bread-flower": {
+      "path": "assets/abraxas/environment/prop-moka-bread-flower.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-moka-dropoff": {
+      "path": "assets/abraxas/environment/prop-moka-dropoff.glb",
+      "scale": 1,
+      "collision": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "halfX": 0.27,
+          "halfZ": 0.2
+        }
+      ]
+    },
+    "prop-moka-ledger": {
+      "path": "assets/abraxas/environment/prop-moka-ledger.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-moka-plate": {
+      "path": "assets/abraxas/environment/prop-moka-plate.glb",
+      "scale": 1,
+      "collision": []
+    },
+    "prop-moka-mold": {
+      "path": "assets/abraxas/environment/prop-moka-mold.glb",
+      "scale": 1,
+      "collision": []
+    },
     "signboard": {
       "path": "assets/abraxas/environment/signboard.glb",
       "scale": 1,

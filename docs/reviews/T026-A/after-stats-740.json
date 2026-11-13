@@ -1,0 +1,79 @@
+{
+ "viewport": "740x360",
+ "dpr": 1,
+ "mobileDensity": true,
+ "stats": {
+  "entrance": {
+   "full": {
+    "calls": 84,
+    "tris": 41869
+   },
+   "withoutShadowPass": {
+    "calls": 57,
+    "tris": 31301
+   },
+   "grassTufts": 941,
+   "stoneVertices": 936
+  },
+  "plaza": {
+   "full": {
+    "calls": 96,
+    "tris": 54295
+   },
+   "withoutShadowPass": {
+    "calls": 59,
+    "tris": 35875
+   },
+   "grassTufts": 863,
+   "stoneVertices": 1740
+  },
+  "bakery": {
+   "full": {
+    "calls": 97,
+    "tris": 63962
+   },
+   "withoutShadowPass": {
+    "calls": 56,
+    "tris": 40062
+   },
+   "grassTufts": 879,
+   "stoneVertices": 1440
+  },
+  "lake": {
+   "full": {
+    "calls": 87,
+    "tris": 46463
+   },
+   "withoutShadowPass": {
+    "calls": 44,
+    "tris": 28015
+   },
+   "grassTufts": 903,
+   "stoneVertices": 2424
+  },
+  "gate": {
+   "full": {
+    "calls": 61,
+    "tris": 38380
+   },
+   "withoutShadowPass": {
+    "calls": 38,
+    "tris": 28168
+   },
+   "grassTufts": 888,
+   "stoneVertices": 936
+  },
+  "road": {
+   "full": {
+    "calls": 83,
+    "tris": 49482
+   },
+   "withoutShadowPass": {
+    "calls": 45,
+    "tris": 33214
+   },
+   "grassTufts": 857,
+   "stoneVertices": 1032
+  }
+ }
+}

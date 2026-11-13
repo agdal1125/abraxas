@@ -22,7 +22,7 @@ const edges = boundaries(map.bounds);
 function check(active, completed, variant = '') {
   const actors = map.actors.map(actor => ({ ...actor }));
   if (active) { const [id, point] = moved[active]; Object.assign(actors.find(a => a.id === id), zone(point)); }
-  for (const id of npcIds[active] ?? []) actors.push({ id, asset: 'quest-npc', ...zone(active === 'or' && variant === 'review' ? id.replace('or-', 'or-review-') : id) });
+  for (const id of npcIds[active] ?? []) actors.push({ id, asset: 'resident-villager-a', ...zone(active === 'or' && variant === 'review' ? id.replace('or-', 'or-review-') : id) });
   if (active === 'or' && variant === 'report' || !active && completed.includes('or') && variant === 'report') Object.assign(actors.find(a => a.id === 'D'), zone('or-report'));
   const props = map.props.filter(p => !/^(moka|lumi|echo|or)-/.test(p.id) || p.id.startsWith(`${active}-`) || completed.some(npc => p.id.startsWith(`${npc}-`)));
   const colliders = [...props, ...actors].flatMap(p => {

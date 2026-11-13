@@ -1,6 +1,6 @@
 # 마지막 산책과 근거 있는 결과 카드 구현 계획
 
-상태: 사람 승인, 구현 중 (2026-11-07). 결정 1~3은 권고안으로 확정했다.
+상태: 구현 완료 (2026-11-07). 결정 1~3은 권고안으로 확정했다. 실기기와 플레이 느낌은 아직 확인하지 못했다.
 
 ## 왜 하는가
 
@@ -81,7 +81,7 @@ type Reflection = {
 
 `Game.ending()`에서 `demi_reveal` 뒤, `confession_intro` 앞에 넣는다. 고백을 이미 마쳤으면 건너뛴다. 새 segment와 서버 상태를 만들지 않으므로 새로고침하면 다시 재생될 뿐이다.
 
-네 사람이 한 명씩 말한다. NPC마다 변화가 가장 큰 축을 하나 고른다. 우선순위는 `turned`, `wavering`, `deepened`, `steady`이고, 같으면 `themeAxes` 순서를 따른다.
+고백 장면부터 주인공과 네 사람을 광장의 `ending-*` 위치로 모은다. 네 사람이 한 명씩 말한다. NPC마다 변화가 가장 큰 축을 하나 고른다. 우선순위는 `turned`, `wavering`, `deepened`, `steady`이고, 같으면 `themeAxes` 순서를 따른다.
 
 대사는 `content/ink/{ko,en}/last_walk.ink`의 `walk_<npc>_<axis>_<shift>` 노트에 둔다. 8개 축 × 4단계 × 2개 언어로 64개 노트이고, 도입 노트 `walk_intro`가 언어별로 하나씩 더 있다.
 

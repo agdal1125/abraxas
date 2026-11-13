@@ -1,12 +1,13 @@
 ---
 name: 3dviz-abraxas
-description: Abraxas의 기존 3D 캐릭터·NPC·역할 소품을 다듬을 때 실제 게임 크기의 실루엣, 연결부, 상태 표현과 소스·GLB 정합성을 설계·검토한다. 범용 3D 앱 생성이나 측정 로직 변경에는 적용하지 않는다.
+description: Abraxas의 기존 3D 캐릭터·NPC·역할 소품·환경 자산을 다듬을 때 실제 게임 크기의 실루엣, 연결부, 상태 표현과 소스·GLB 정합성을 설계·검토한다. 범용 3D 앱 생성이나 측정 로직 변경에는 적용하지 않는다.
 ---
 
 # Abraxas 3D 외관 다듬기
 
 ## 먼저 읽을 기준
 
+- 환경 자산은 `assets/source/environment/`의 생성기로 만들고, [T018-P3 결정](../../../docs/tasks/T018-P3-faceted-direction.md)의 플랫 셰이딩·재료 색·부재 단위 형태를 따른다. 아래의 '둥근 형태' 기준은 인물에만 적용한다. 합격 판단은 `lowpoly-art-gate`로 한다.
 - [측정 무결성](../../rules/game-design-policy.md): 선택 전 기대 답변 암시와 선택 후 평가성 몸짓을 막는다. 수치·문항·초대권 변경은 이 스킬의 일이 아니다.
 - [디자인 시스템](../../../docs/art/design-system.md), 필요한 역할 정보만 [스타일 가이드](../../../docs/art/style-guide.md): 최신 결정이 우선한다. 약 3등신·성별 중립·선명한 대표색·정사영을 보존하고 얼굴 없는 알 껍질 주인공을 결함으로 취급하지 않는다.
 - [위임과 파일 소유권](../../rules/delegation.md), [개선 제안](../../../docs/design/character-npc-polish-plan.md): 현재 사용자 지시와 실제 승인 범위를 확인한다. 제안 문서는 사람의 승인 기록을 대신하지 않는다. 계획만 요청받았다면 코드·아트를 만들지 않는다.

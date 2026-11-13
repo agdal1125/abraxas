@@ -53,35 +53,27 @@ Echo: How should we share this story?
 -> END
 
 === echo_enclose ===
-Tuck the chosen note into the picture book.
 -> END
 
 === echo_book_pickup ===
-Pick up the bundle of picture books.
 -> END
 
 === echo_book_delivery ===
-Deliver the picture book to the borrower.
 -> END
 
 === echo_search ===
-Examine the chosen shelves or the attic door.
 -> END
 
 === echo_record_pickup ===
-Pick up the festival chronicle you found.
 -> END
 
 === echo_record_delivery ===
-Bring the chronicle to the reading table.
 -> END
 
 === echo_notebook_pickup ===
-Pick up the recipe notebook.
 -> END
 
 === echo_notebook_delivery ===
-Place the recipe notebook in the chosen spot.
 -> END
 
 === echo_organizer ===
@@ -89,7 +81,6 @@ Book Keeper: Shall we find where these books belong?
 -> END
 
 === echo_arrange ===
-Pick a book, then place it by its matching topic sign.
 -> END
 
 === echo_reading ===
@@ -102,23 +93,18 @@ Come spring, they met once more upon that bridge.
 -> END
 
 === echo_bookmark ===
-Place a bookmark at the passage you liked best.
 -> END
 
 === echo_return ===
-Return to Echo.
 -> END
 
 === echo_legend_pickup ===
-Pick up the book of legends.
 -> END
 
 === echo_legend_delivery ===
-Place the legend book on the chosen display.
 -> END
 
 === echo_report ===
-Tell Echo the sorting is complete.
 -> END
 
 === echo_completed ===
