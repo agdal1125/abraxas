@@ -20,6 +20,7 @@ import type { orView } from "../core/or-errand";
 import quest from "../../../content/quests/moka-errand.json";
 import { Demi, whitenPlayer, type DemiMode } from "./demi";
 import { SpringBones } from "./spring-bones";
+import { assetUrl } from "../asset-url";
 
 type Placement = Vec2 & { asset: string; rot?: number; scale?: number; zone?: string };
 type MapData = { spawn: Vec2; terrain: Placement; bounds: Bounds; zones: Record<string, Vec2>; actors: (Placement & { id: string })[]; props: (Placement & { id: string })[] };
@@ -451,9 +452,11 @@ export class Village {
   private async ground(): Promise<void> {
     const asset = manifest[map.terrain.asset];
     if (!asset) throw new Error("Missing terrain asset");
-    const response = await fetch(`${import.meta.env.BASE_URL}${asset.path}`);
-    const missing = response.status === 404 || (response.ok && response.headers.get("content-type")?.includes("text/html"));
-    if (!missing) { if (!response.ok) throw new Error(`Terrain load failed: ${response.status}`); this.nature.build(await this.place(map.terrain), this.colliders); return; }
+    // Start the real load at once. Only when it fails do we probe whether the file is simply absent (a dev server answers 200 with HTML).
+    try { this.nature.build(await this.place(map.terrain), this.colliders); return; } catch (error) {
+      const response = await fetch(assetUrl(asset.path)).catch(() => undefined);
+      if (!response || !(response.status === 404 || (response.ok && response.headers.get("content-type")?.includes("text/html")))) throw error;
+    }
     const polygon = (points: Vec2[]) => points.map(point => new THREE.Vector2(point.x, -point.z));
     const shape = new THREE.Shape(polygon(map.bounds.outer));
     for (const hole of map.bounds.holes) shape.holes.push(new THREE.Path(polygon(hole)));
@@ -463,7 +466,7 @@ export class Village {
   private load(key: string): Promise<GLTF> {
     const asset = manifest[key];
     if (!asset || !/^assets\/abraxas\/[\w/-]+\.glb$/.test(asset.path) || asset.path.includes("..")) return Promise.reject(new Error(`Invalid asset: ${key}`));
-    if (!this.models.has(key)) this.models.set(key, this.loader.loadAsync(`${import.meta.env.BASE_URL}${asset.path}`).catch(error => { this.models.delete(key); throw error; }));
+    if (!this.models.has(key)) this.models.set(key, this.loader.loadAsync(assetUrl(asset.path)).catch(error => { this.models.delete(key); throw error; }));
     return this.models.get(key)!;
   }
   private async place(placement: Placement): Promise<THREE.Object3D> {
