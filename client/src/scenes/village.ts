@@ -4,10 +4,12 @@ import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { clone } from "three/addons/utils/SkeletonUtils.js";
 import { step } from "../core/world/move";
 import { findPath, findPathVia, followPath } from "../core/world/autowalk";
-import { nearest } from "../core/world/nearby";
+import { nearest, targetDistance } from "../core/world/nearby";
 import type { Bounds, Collider, Vec2 } from "../core/world/types";
 import { translations } from "../content";
 import { DreamEffects } from "./dream-effects";
+import { Nature } from "./nature";
+import { LightRig } from "./light-rig";
 import { dialogueFocus } from "./feedback";
 import type { MokaView } from "../core/moka-errand";
 import { MokaProps } from "./moka-props";
@@ -17,6 +19,9 @@ import type { echoView } from "../core/echo-errand";
 import type { orView } from "../core/or-errand";
 import quest from "../../../content/quests/moka-errand.json";
 import { Demi, whitenPlayer, type DemiMode } from "./demi";
+import { SpringBones } from "./spring-bones";
+import { assetUrl } from "../asset-url";
+import { QualityGovernor, QUALITY_STEPS } from "./quality";
 
 type Placement = Vec2 & { asset: string; rot?: number; scale?: number; zone?: string };
 type MapData = { spawn: Vec2; terrain: Placement; bounds: Bounds; zones: Record<string, Vec2>; actors: (Placement & { id: string })[]; props: (Placement & { id: string })[] };
@@ -25,15 +30,21 @@ const map = import.meta.glob<{ default: MapData }>("../../../content/world/villa
 const manifest = import.meta.glob<{ default: { assets: Record<string, Asset> } }>("../../../content/assets/manifest.json", { eager: true })["../../../content/assets/manifest.json"]!.default.assets;
 // 24px keeps the neutral symbol legible on a mobile screen while staying within the policy range.
 const MARKER_SIZE_PX = 24;
+const NEARBY_RANGE = .85;
+const RESIDENT_ACTORS = new Set(["lumi-neighbor-1", "lumi-neighbor-2", "echo-borrower", "or-fisher", "or-merchant"]);
 
-type Character = { object: THREE.Object3D; mixer: THREE.AnimationMixer; actions: Map<string, THREE.AnimationAction>; current?: string };
+// Errand walk-ons stand on zones, not in the map's actor list, so their models are named here.
+const WALK_ON_ASSET: Record<string, string> = { "lumi-neighbor-1": "resident-villager-a", "lumi-neighbor-2": "resident-villager-b", "echo-borrower": "resident-villager-b", "or-fisher": "resident-fisher", "or-merchant": "resident-merchant" };
+
+type Character = { object: THREE.Object3D; mixer: THREE.AnimationMixer; springs: SpringBones; actions: Map<string, THREE.AnimationAction>; current?: string; far?: boolean };
 
 export class Village {
   private scene = new THREE.Scene();
   private camera = new THREE.OrthographicCamera();
-  private light = new THREE.DirectionalLight("#fff0df", 2.9);
+  private lights = new LightRig(this.scene);
   private renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   private effects?: DreamEffects;
+  private nature = new Nature(this.scene, { props: map.props, zones: map.zones, lake: map.bounds.holes[0], actors: map.actors, outer: map.bounds.outer, bridges: map.bounds.bridges.map(bridge => bridge.points) });
   private loader = new GLTFLoader();
   private models = new Map<string, Promise<GLTF>>();
   private actors = new Map<string, { object: THREE.Group; marker: THREE.Sprite; character?: Character }>();
@@ -77,6 +88,10 @@ export class Village {
   private portrait = false;
   onNearbyChange: (target: { id: string; available: boolean; examine?: boolean } | null) => void = () => {};
   private lastTime = 0;
+  private frameCount = 0;
+  private covered = false;
+  private qualityStep = 0;
+  private governor = new QualityGovernor();
   private frame = 0;
   onInteract: (id: string) => void = () => {};
   onPathBlocked: () => void = () => {};
@@ -86,11 +101,9 @@ export class Village {
     if (import.meta.env.DEV) Object.assign(this, { teleport: (x: number, z: number) => { this.player.position.set(x, 0, z); this.cameraTarget.copy(this.player.position); } });
     const draco = new DRACOLoader();
     draco.setDecoderPath(`${import.meta.env.BASE_URL}assets/abraxas/decoders/`); draco.setWorkerLimit(1); this.loader.setDRACOLoader(draco);
+    // Nothing moves the scene root. Left on auto-update it would force a full matrix pass over every descendant each frame.
+    this.scene.matrixAutoUpdate = false;
     this.scene.fog = new THREE.Fog("#eae3f7", 19, 40);
-    this.scene.add(new THREE.AmbientLight("#fff4ed", .05), new THREE.HemisphereLight("#fff4ed", "#e8ddf4", .75));
-    this.light.castShadow = true; this.light.shadow.camera.near = .1; this.light.shadow.camera.far = 25;
-    this.light.shadow.bias = -.0001; this.light.shadow.normalBias = .02;
-    this.scene.add(this.light, this.light.target);
     this.renderer.shadowMap.enabled = true; this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace; this.renderer.toneMapping = THREE.NoToneMapping;
     this.renderer.domElement.style.background = "linear-gradient(to bottom, #eae3f7 0%, #d8d0f0 38%, #f3d5c5 72%, #94d2cb 100%)";
@@ -101,16 +114,17 @@ export class Village {
     this.player.position.set(map.spawn.x, 0, map.spawn.z); this.cameraTarget.copy(this.player.position); this.scene.add(this.player, this.demi.object, this.postman);
     this.postman.visible = false;
     this.postman.position.set(map.spawn.x - .8, 0, map.spawn.z - .8);
-    const bag = new THREE.Mesh(new THREE.BoxGeometry(.16, .18, .08), new THREE.MeshStandardMaterial({ color: "#c99470", roughness: 1 }));
-    bag.position.set(.18, .24, 0); this.postman.add(bag);
-    loading.push(this.character("quest-npc", this.postman));
+    loading.push(this.character("resident-postman", this.postman));
     loading.push(this.character("player", this.player).then(character => { this.playerCharacter = character; }));
+    const scenery: typeof map.props = [];
     for (const prop of map.props) {
       if (/^(moka|lumi|echo|or)-/.test(prop.id)) continue;
+      if (prop.id.startsWith("nature-")) { this.addColliders(prop, prop.id); scenery.push(prop); continue; }
       const register = () => { this.addColliders(prop, prop.id); if (translations("ko").examine[prop.zone ? `${prop.asset}.${prop.zone}` : prop.asset]) this.props.set(prop.id, prop); };
       if (prop.asset === "signboard") loading.push(this.place(prop).then(object => { this.propObjects.set(prop.id, object); register(); }).catch(error => console.warn(`Village prop failed to load: ${prop.id}`, error)));
       else { register(); loading.push(this.place(prop).then(object => { this.propObjects.set(prop.id, object); })); }
     }
+    loading.push(this.nature.scenery(scenery, async asset => ({ scene: (await this.load(asset)).scene, scale: manifest[asset]!.scale })));
     for (const actor of map.actors) {
       this.addColliders(actor, actor.id);
       const object = new THREE.Group(); object.position.set(actor.x, 0, actor.z); object.userData.id = actor.id;
@@ -127,6 +141,9 @@ export class Village {
     this.renderer.domElement.addEventListener("pointerdown", event => { if (pointer) { pointer = undefined; return; } pointer = { id: event.pointerId, x: event.clientX, y: event.clientY }; });
     this.renderer.domElement.addEventListener("pointercancel", () => { pointer = undefined; });
     this.renderer.domElement.addEventListener("pointerup", event => { if (pointer?.id === event.pointerId && Math.hypot(event.clientX - pointer.x, event.clientY - pointer.y) < 14) { const id = this.hitTargetAt(event.clientX, event.clientY); if (id) this.interactTarget(id); } pointer = undefined; });
+    // ?quality=0..3 pins a step for hands-on comparison on a device and turns the automatic governor off.
+    const pin = typeof location === "undefined" ? null : new URLSearchParams(location.search).get("quality");
+    if (pin !== null && /^[0-3]$/.test(pin) && Number(pin) < QUALITY_STEPS.length) { this.governor = new QualityGovernor(0); this.qualityStep = Number(pin); this.renderer.shadowMap.autoUpdate = QUALITY_STEPS[this.qualityStep]!.shadowEvery === 1; }
     this.resize();
     const modelsReady = Promise.all(loading).then(() => { performance.mark("village:models-ready"); });
     const effectsReady = this.effects.whenReady.then(() => { performance.mark("village:effects-ready"); });
@@ -149,7 +166,7 @@ export class Village {
     window.addEventListener("abraxas:viewport", (event: Event) => { this.portrait = !!(event as CustomEvent<{ portrait: boolean }>).detail?.portrait; if (this.portrait) { this.input = { x: 0, z: 0 }; this.auto = undefined; } this.resize(); });
     document.addEventListener("visibilitychange", () => {
       cancelAnimationFrame(this.frame);
-      if (!document.hidden) { this.lastTime = 0; this.frame = requestAnimationFrame(() => this.tick()); }
+      if (!document.hidden) { this.lastTime = 0; this.governor.resetWindow(); this.frame = requestAnimationFrame(() => this.tick()); }
     });
     if (!document.hidden) this.frame = requestAnimationFrame(() => this.tick());
   }
@@ -224,9 +241,9 @@ export class Village {
   setEchoView(view: ReturnType<typeof echoView> | null): void { this.echoView = view; this.setResidentView("echo"); }
   setOrView(view: ReturnType<typeof orView> | null): void { this.orView = view; this.setResidentView("or"); }
   private activeTargets(id: string): boolean {
-    return [this.mokaView, this.lumiView, this.echoView, this.orView].some(view => view?.activeTargetIds.includes(id));
+    return !!(this.mokaView?.activeTargetIds.includes(id) || this.lumiView?.activeTargetIds.includes(id) || this.echoView?.activeTargetIds.includes(id) || this.orView?.activeTargetIds.includes(id));
   }
-  private residentActor(id: string): boolean { return ["lumi-neighbor-1", "lumi-neighbor-2", "echo-borrower", "or-fisher", "or-merchant"].includes(id); }
+  private residentActor(id: string): boolean { return RESIDENT_ACTORS.has(id); }
   private retryResidentLoading(): void {
     for (const npc of ["lumi", "echo", "or"] as const) {
       const view = this[`${npc}View`];
@@ -264,7 +281,7 @@ export class Village {
         const review = npc === "or" && this.orView?.phase === "review" && this.orView.choices[3] === "a";
         const zone = review ? id.replace("or-", "or-review-") : id;
         const point = map.zones[zone]; if (!point) throw new Error(`Missing actor zone: ${zone}`);
-        actor.object.position.set(point.x, 0, point.z); this.addColliders({ ...point, asset: "quest-npc" }, id);
+        actor.object.position.set(point.x, 0, point.z); this.addColliders({ ...point, asset: WALK_ON_ASSET[id]! }, id);
       }
     }
   }
@@ -297,7 +314,7 @@ export class Village {
         ...ids.map(async id => {
           let actor = this.actors.get(id);
           if (!actor) { const object = new THREE.Group(), marker = this.label(); object.userData.id = id; object.visible = false; object.add(marker); this.scene.add(object); actor = { object, marker }; this.actors.set(id, actor); }
-          if (!actor.character) actor.character = await this.character("quest-npc", actor.object);
+          if (!actor.character) actor.character = await this.character(WALK_ON_ASSET[id]!, actor.object);
         }),
       ]).then(([props]) => {
         this.residentProps[npc] = props;
@@ -318,7 +335,7 @@ export class Village {
     const id = view.resumePointId;
     const placement = this.target(id) ?? [...map.actors, ...map.props].find(entry => entry.id === id);
     if (!placement) throw new Error(`Missing resume point: ${id}`);
-    const target = { x: placement.x, z: placement.z, colliders: this.actors.has(id) ? [] : this.colliders.filter((_, index) => this.colliderOwners[index] === id) };
+    const target = { x: placement.x, z: placement.z, colliders: this.actors.has(id) ? [] : this.collidersOf(id) };
     const position = new THREE.Vector3(target.x, 0, target.z);
     const path = findPath(this.player.position, target, this.colliders, map.bounds, point => this.visible(id, position, point));
     if (!path) { this.onPathBlocked(); return; }
@@ -338,7 +355,7 @@ export class Village {
     if (!placement) return false;
     const actor = this.actors.get(id);
     const actorPosition = actor?.object.position || placement;
-    const target = { x: actorPosition.x, z: actorPosition.z, colliders: actor ? [] : this.colliders.filter((_, index) => this.colliderOwners[index] === id) };
+    const target = { x: actorPosition.x, z: actorPosition.z, colliders: actor ? [] : this.collidersOf(id) };
     const position = new THREE.Vector3(target.x, 0, target.z);
     const path = findPath(this.player.position, target, this.colliders, map.bounds, point => this.visible(id, position, point));
     if (!path) return false;
@@ -368,26 +385,54 @@ export class Village {
         return Math.hypot(start.x + dx * t - shape.x, start.z + dz * t - shape.z) < shape.radius;
       }
       const c = Math.cos(shape.rot), s = Math.sin(shape.rot), x = start.x - shape.x, z = start.z - shape.z;
-      const origin = [c * x - s * z, s * x + c * z], delta = [c * dx - s * dz, s * dx + c * dz], half = [shape.halfX, shape.halfZ];
+      // The segment in the box's own axes, tested against the box one axis at a time (no temporary arrays: this runs for every collider).
+      const originX = c * x - s * z, originZ = s * x + c * z, deltaX = c * dx - s * dz, deltaZ = s * dx + c * dz;
       let low = 0, high = 1;
       for (let i = 0; i < 2; i++) {
-        if (Math.abs(delta[i]!) < 1e-9) { if (Math.abs(origin[i]!) > half[i]!) return false; continue; }
-        const a = (-half[i]! - origin[i]!) / delta[i]!, b = (half[i]! - origin[i]!) / delta[i]!;
+        const origin = i ? originZ : originX, delta = i ? deltaZ : deltaX, half = i ? shape.halfZ : shape.halfX;
+        if (Math.abs(delta) < 1e-9) { if (Math.abs(origin) > half) return false; continue; }
+        const a = (-half - origin) / delta, b = (half - origin) / delta;
         low = Math.max(low, Math.min(a, b)); high = Math.min(high, Math.max(a, b)); if (low > high) return false;
       }
       return true;
     });
   }
+  private ownerIndex?: { colliders: Collider[]; owners: (string | undefined)[]; size: number; byOwner: Map<string, Collider[]> };
+  /** The colliders a prop or actor owns, kept in a lookup that rebuilds only when the collider list changes. */
+  private collidersOf(id: string): Collider[] {
+    let index = this.ownerIndex;
+    if (!index || index.colliders !== this.colliders || index.owners !== this.colliderOwners || index.size !== this.colliders.length) {
+      const byOwner = new Map<string, Collider[]>();
+      this.colliders.forEach((shape, i) => { const owner = this.colliderOwners[i]; if (owner !== undefined) { const list = byOwner.get(owner); if (list) list.push(shape); else byOwner.set(owner, [shape]); } });
+      index = this.ownerIndex = { colliders: this.colliders, owners: this.colliderOwners, size: this.colliders.length, byOwner };
+    }
+    return index.byOwner.get(id) ?? [];
+  }
+  // Only targets within reach can be chosen, so the costly line-of-sight test runs after the cheap distance test.
   private findNearby(previous?: string | null): string | null {
-    const active = [...this.props.values()].filter(prop => this.activeTargets(prop.id) && this.available.has(prop.id) && this.visible(prop.id, new THREE.Vector3(prop.x, 0, prop.z))).map(prop => ({ ...prop, colliders: this.colliders.filter((_, index) => this.colliderOwners[index] === prop.id) }));
-    const activeId = nearest(this.player.position, active, .85, previous);
-    if (activeId) return activeId;
-    const targets = [...this.actors].filter(([id, actor]) => actor.object.visible && (!this.residentActor(id) || this.available.has(id)) && this.visible(id, actor.object.position) && (this.available.has(id) || ![...this.actors].some(([otherId, other]) => other.object.visible && this.available.has(otherId) && other.object.position.distanceToSquared(actor.object.position) < 1e-8))).map(([id, actor]) => ({ id, x: actor.object.position.x, z: actor.object.position.z }));
     const pos = { x: this.player.position.x, z: this.player.position.z };
-    const actor = nearest(pos, targets, .85, previous);
+    const reach = NEARBY_RANGE + 0.1;
+    const propTargets = (include: (prop: Placement & { id: string }) => boolean) => {
+      const result: (Placement & { id: string; colliders: Collider[] })[] = [];
+      for (const prop of this.props.values()) {
+        if (!include(prop)) continue;
+        const colliders = this.collidersOf(prop.id);
+        if (targetDistance(pos, { x: prop.x, z: prop.z, colliders }) <= reach && this.visible(prop.id, new THREE.Vector3(prop.x, 0, prop.z))) result.push({ ...prop, colliders });
+      }
+      return result;
+    };
+    const activeId = nearest(pos, propTargets(prop => this.activeTargets(prop.id) && this.available.has(prop.id)), NEARBY_RANGE, previous);
+    if (activeId) return activeId;
+    const targets: { id: string; x: number; z: number }[] = [];
+    for (const [id, actor] of this.actors) {
+      if (!actor.object.visible || (this.residentActor(id) && !this.available.has(id))) continue;
+      const target = { id, x: actor.object.position.x, z: actor.object.position.z };
+      if (targetDistance(pos, target) > reach || !this.visible(id, actor.object.position)) continue;
+      if (this.available.has(id) || ![...this.actors].some(([otherId, other]) => other.object.visible && this.available.has(otherId) && other.object.position.distanceToSquared(actor.object.position) < 1e-8)) targets.push(target);
+    }
+    const actor = nearest(pos, targets, NEARBY_RANGE, previous);
     if (actor) return actor;
-    const props = [...this.props.values()].filter(prop => (!this.activeTargets(prop.id) || this.available.has(prop.id)) && this.visible(prop.id, new THREE.Vector3(prop.x, 0, prop.z))).map(prop => ({ ...prop, colliders: this.colliders.filter((_, index) => this.colliderOwners[index] === prop.id) }));
-    return nearest(pos, props, .85, previous);
+    return nearest(pos, propTargets(prop => !this.activeTargets(prop.id) || this.available.has(prop.id)), NEARBY_RANGE, previous);
   }
   interactNearby(): void {
     if (!this.enabled || !this.ready || this.portrait || this.talking) return;
@@ -398,7 +443,7 @@ export class Village {
   private target(id: string): (Vec2 & { colliders?: Collider[] }) | undefined {
     const actor = this.actors.get(id), prop = this.props.get(id);
     if (actor && actor.object.visible !== false) return { x: actor.object.position.x, z: actor.object.position.z };
-    if (prop) return { x: prop.x, z: prop.z, colliders: this.colliders.filter((_, index) => this.colliderOwners[index] === id) };
+    if (prop) return { x: prop.x, z: prop.z, colliders: this.collidersOf(id) };
     return undefined;
   }
   interactTarget(id: string): void {
@@ -451,9 +496,11 @@ export class Village {
   private async ground(): Promise<void> {
     const asset = manifest[map.terrain.asset];
     if (!asset) throw new Error("Missing terrain asset");
-    const response = await fetch(`${import.meta.env.BASE_URL}${asset.path}`);
-    const missing = response.status === 404 || (response.ok && response.headers.get("content-type")?.includes("text/html"));
-    if (!missing) { if (!response.ok) throw new Error(`Terrain load failed: ${response.status}`); await this.place(map.terrain); return; }
+    // Start the real load at once. Only when it fails do we probe whether the file is simply absent (a dev server answers 200 with HTML).
+    try { this.nature.build(await this.place(map.terrain), this.colliders); return; } catch (error) {
+      const response = await fetch(assetUrl(asset.path)).catch(() => undefined);
+      if (!response || !(response.status === 404 || (response.ok && response.headers.get("content-type")?.includes("text/html")))) throw error;
+    }
     const polygon = (points: Vec2[]) => points.map(point => new THREE.Vector2(point.x, -point.z));
     const shape = new THREE.Shape(polygon(map.bounds.outer));
     for (const hole of map.bounds.holes) shape.holes.push(new THREE.Path(polygon(hole)));
@@ -463,8 +510,12 @@ export class Village {
   private load(key: string): Promise<GLTF> {
     const asset = manifest[key];
     if (!asset || !/^assets\/abraxas\/[\w/-]+\.glb$/.test(asset.path) || asset.path.includes("..")) return Promise.reject(new Error(`Invalid asset: ${key}`));
-    if (!this.models.has(key)) this.models.set(key, this.loader.loadAsync(`${import.meta.env.BASE_URL}${asset.path}`).catch(error => { this.models.delete(key); throw error; }));
+    if (!this.models.has(key)) this.models.set(key, this.loader.loadAsync(assetUrl(asset.path)).catch(error => { this.models.delete(key); throw error; }));
     return this.models.get(key)!;
+  }
+  /** A frozen subtree keeps its current matrices: three skips composing and multiplying them every frame. */
+  private freeze(root: THREE.Object3D, frozen: boolean): void {
+    root.traverse(node => { node.matrixAutoUpdate = !frozen; node.matrixWorldAutoUpdate = !frozen; });
   }
   private async place(placement: Placement): Promise<THREE.Object3D> {
     const gltf = await this.load(placement.asset); const object = gltf.scene.clone();
@@ -472,7 +523,12 @@ export class Village {
     const castsShadow = !terrain && !/^(flower-cluster-|grass-|mushroom$|pebbles$)/.test(placement.asset);
     object.traverse(child => { if (child instanceof THREE.Mesh) { child.castShadow = castsShadow; child.receiveShadow = terrain || castsShadow; } });
     object.position.set(placement.x, 0, placement.z); object.rotation.y = placement.rot ?? 0;
-    object.scale.setScalar(manifest[placement.asset]!.scale * (placement.scale ?? 1)); this.scene.add(object); return object;
+    if (!terrain) this.nature.dress(object, placement.asset);
+    object.scale.setScalar(manifest[placement.asset]!.scale * (placement.scale ?? 1)); this.scene.add(object);
+    // Placed props never move (wind and sway run in shaders), so their matrices are computed once instead of every frame.
+    // The lake plants are the exception: the water bobs them by writing their transforms.
+    if (!/^water-/.test(placement.asset)) { object.updateMatrixWorld(true); this.freeze(object, true); }
+    return object;
   }
   private async character(key: string, parent: THREE.Group): Promise<Character> {
     const gltf = await this.load(key); const object = clone(gltf.scene); object.scale.setScalar(manifest[key]!.scale); parent.add(object);
@@ -483,8 +539,10 @@ export class Village {
     ctx.fillStyle = gradient; ctx.fillRect(0, 0, 64, 64);
     const shadow = new THREE.Mesh(new THREE.PlaneGeometry(.55, .55), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true, depthWrite: false }));
     shadow.rotation.x = -Math.PI / 2; shadow.position.y = .012; parent.add(shadow);
+    // Secondary bones belong to the spring solver; the exporter still writes rest-pose tracks for them.
+    for (const clip of gltf.animations) clip.tracks = clip.tracks.filter(track => !track.name.startsWith("sec_"));
     const mixer = new THREE.AnimationMixer(object), actions = new Map(gltf.animations.map(clip => [clip.name.toLowerCase(), mixer.clipAction(clip)]));
-    const character: Character = { object, mixer, actions }; this.characters.push(character); this.animate(character, "idle"); return character;
+    const character: Character = { object, mixer, springs: new SpringBones(object, !window.matchMedia("(prefers-reduced-motion: reduce)").matches), actions }; this.characters.push(character); this.animate(character, "idle"); return character;
   }
   private animate(character: Character | undefined, name: string): void {
     if (!character || character.current === name) return;
@@ -508,22 +566,18 @@ export class Village {
     const size = new THREE.Box3().setFromObject(object).getSize(new THREE.Vector3());
     return Math.max(1, Math.hypot(size.x, size.z) / .6);
   }
-  private resize(): void {
+  private resize(keepCamera = false): void {
     const w = this.renderer.domElement.parentElement!.clientWidth, h = this.renderer.domElement.parentElement!.clientHeight;
     if (!w || !h) return;
     this.viewAspect = w / h; this.portrait = h > w;
     const mobile = navigator.maxTouchPoints > 0 || Math.min(w, h) < 600;
-    const shadowSize = Math.min(mobile ? 1024 : 2048, Math.max(512, 2 ** Math.ceil(Math.log2(Math.max(w, h) * Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2)))));
-    const shadowExtent = Math.max(4, this.viewHalfHeight * (this.viewAspect + 1) * 1.1);
-    this.light.shadow.camera.left = this.light.shadow.camera.bottom = -shadowExtent;
-    this.light.shadow.camera.right = this.light.shadow.camera.top = shadowExtent; this.light.shadow.camera.updateProjectionMatrix();
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2));
-    if (this.light.shadow.mapSize.x !== shadowSize) {
-      this.light.shadow.mapSize.set(shadowSize, shadowSize); this.light.shadow.map?.dispose(); this.light.shadow.map = null;
-    }
-    this.effects?.resize(mobile, this.renderer.getPixelRatio());
+    const ratio = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2, QUALITY_STEPS[this.qualityStep]!.pixelRatio);
+    const shadowSize = Math.min(mobile ? 1024 : 2048, Math.max(512, 2 ** Math.ceil(Math.log2(Math.max(w, h) * ratio))));
+    this.renderer.setPixelRatio(ratio);
+    this.lights.resize(this.viewHalfHeight, this.viewAspect, shadowSize);
+    this.effects?.resize(mobile, this.renderer.getPixelRatio()); this.nature.resize(mobile);
     this.camera.near = .1; this.camera.far = 100; this.renderer.setSize(w, h);
-    this.updateCamera(0, true);
+    if (!keepCamera) this.updateCamera(0, true);
   }
   private updateCamera(dt: number, snap = false): void {
     const speaker = this.speaker ? this.target(this.speaker) : undefined;
@@ -551,11 +605,21 @@ export class Village {
       actor.marker.scale.set(MARKER_SIZE_PX * pixel, MARKER_SIZE_PX * pixel, 1);
       actor.marker.position.copy(actor.object.worldToLocal(box.getCenter(new THREE.Vector3()).addScaledVector(up, top + (8 + MARKER_SIZE_PX / 2) * pixel)));
     }
-    this.light.target.position.copy(this.player.position); this.light.position.copy(this.player.position).add(new THREE.Vector3(4, 10, 5));
+    this.lights.update(dt, this.player.position);
+  }
+  /** Moves to a lower quality step chosen by the frame-time governor. */
+  private applyQuality(step: number): void {
+    this.qualityStep = step;
+    this.renderer.shadowMap.autoUpdate = QUALITY_STEPS[step]!.shadowEvery === 1;
+    this.resize(true);
   }
   private tick(): void {
     if (document.hidden) return;
+    // The opening film covers the whole canvas; drawing the village behind it only slows the video down.
+    if (this.ready && this.frameCount % 10 === 0) this.covered = !!document.querySelector(".cinematic");
+    if (this.covered) { this.frameCount++; this.lastTime = 0; this.frame = requestAnimationFrame(() => this.tick()); return; }
     const now = performance.now() / 1000, elapsed = this.lastTime ? now - this.lastTime : 0, dt = Math.min(elapsed, .05); this.lastTime = now;
+    if (this.ready) { const next = this.governor.sample(elapsed); if (next !== null) this.applyQuality(next); }
     let moving = false, distance = 0;
     if (this.enabled && this.ready && !this.portrait && this.auto) {
       const target = this.target(this.auto.id);
@@ -593,9 +657,19 @@ export class Village {
     if (this.tapMarker.visible) { const progress = 1 - this.tapTime / .3; this.tapMarker.scale.setScalar(this.tapScale * (1 + progress * .6)); this.tapMarker.material.opacity = .8 * (1 - progress); }
     const destination = this.auto?.path.at(-1); this.destinationMarker.visible = !!destination;
     if (destination) this.destinationMarker.position.set(destination.x, .04, destination.z);
-    for (const character of this.characters) character.mixer.update(dt);
+    // Characters far outside the view are not posed or drawn, so their animation, spring and matrix work is skipped until they come back.
+    const reach = Math.hypot(this.cameraHalfHeight * this.viewAspect, this.cameraHalfHeight / Math.sin(THREE.MathUtils.degToRad(35))) + 3;
+    for (const character of this.characters) {
+      const at = character.object.parent!.position, far = Math.hypot(at.x - this.cameraTarget.x, at.z - this.cameraTarget.z) > reach;
+      if (far !== !!character.far) { character.far = far; this.freeze(character.object, far); if (!far) character.object.updateMatrixWorld(true); }
+      if (!far) { character.mixer.update(dt); character.springs.update(dt); }
+    }
     this.updateCamera(dt);
     this.effects?.update(dt, this.player.position, this.camera);
+    this.nature.update(dt, this.player.position, this.camera);
+    const every = QUALITY_STEPS[this.qualityStep]!.shadowEvery;
+    if (every > 1) this.renderer.shadowMap.needsUpdate = this.frameCount % every === 0;
+    this.frameCount++;
     if (this.ready) this.renderer.render(this.scene, this.camera); this.frame = requestAnimationFrame(() => this.tick());
   }
 }

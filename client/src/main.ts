@@ -1,6 +1,8 @@
 import { Village } from "./scenes/village";
 import { Game } from "./ui/game";
 import { configurePlayTransport } from "./net/plays";
+import { enterFullscreenOnTouch, fullscreenSupported } from "./fullscreen";
+import { offerSwipeToHideToolbar } from "./soft-fullscreen";
 import "./style.css";
 
 const app = document.querySelector<HTMLElement>("#app")!;
@@ -30,13 +32,10 @@ window.visualViewport?.addEventListener("scroll", scheduleViewport);
 document.addEventListener("fullscreenchange", scheduleViewport);
 updateViewport();
 
-if (document.fullscreenEnabled && document.documentElement.requestFullscreen) {
-  const enterFullscreen = (event: PointerEvent) => {
-    if (event.pointerType !== "touch") return;
-    window.removeEventListener("pointerdown", enterFullscreen, true);
-    if (!document.fullscreenElement) void document.documentElement.requestFullscreen().catch(() => {});
-  };
-  window.addEventListener("pointerdown", enterFullscreen, true);
+if (fullscreenSupported()) {
+  enterFullscreenOnTouch();
+} else if (window.matchMedia("(pointer: coarse)").matches && !window.matchMedia("(display-mode: standalone)").matches && !window.matchMedia("(display-mode: fullscreen)").matches && !(navigator as Navigator & { standalone?: boolean }).standalone) {
+  offerSwipeToHideToolbar();
 }
 
 const village = new Village(app);

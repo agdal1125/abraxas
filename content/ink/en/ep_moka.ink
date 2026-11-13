@@ -9,11 +9,9 @@ Moka: I checked the basket. Which path will you take?
 -> END
 
 === moka_pick_up ===
-The walnut bread basket sits outside the bakery.
 -> END
 
 === moka_deliver ===
-Deliver the basket to the stand outside the forge.
 -> END
 
 === moka_delivered ===
@@ -31,7 +29,6 @@ Moka: What should we do?
 -> END
 
 === moka_reservation_action ===
-Check the ledger or hand the bread to the customer.
 -> END
 
 === moka_choose_display ===
@@ -43,7 +40,6 @@ Moka: Would you help with the display? How should we arrange it?
 
 === moka_arrange ===
 Moka: Take your time.
-Pick a pastry, then place it on the matching shape.
 -> END
 
 === moka_share ===
@@ -55,7 +51,6 @@ Moka: How should we share what is left?
 -> END
 
 === moka_share_action ===
-Hand the bread to the neighbor or plate the slices.
 -> END
 
 === moka_order ===
@@ -66,11 +61,9 @@ Moka: Time to bake evening pies. How much should we make?
 -> END
 
 === moka_order_action ===
-Collect the dough bundle for the chosen quantity.
 -> END
 
 === moka_return ===
-The dough is ready. Return to Moka at the bakery.
 -> END
 
 === moka_feedback ===
@@ -82,7 +75,6 @@ Moka: How do they look to you?
 -> END
 
 === moka_report ===
-Finish wrapping up the errand with Moka.
 -> END
 
 === moka_completed ===

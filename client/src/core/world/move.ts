@@ -27,7 +27,18 @@ function segments(polygon: Vec2[]): Segment[] {
   return polygon.map((a, i) => ({ a, b: polygon[(i + 1) % polygon.length]! })).filter(s => length(sub(s.b, s.a)) > EPS);
 }
 
+// Bounds and colliders are never mutated after they are created, so their derived edge lists are computed once.
+// boundaries() is quadratic in the number of edges and used to run again on every movement step.
+const boundaryCache = new WeakMap<Bounds, Segment[]>();
+const boxCache = new WeakMap<object, Segment[]>();
+
 function boundaries(bounds: Bounds): Segment[] {
+  let result = boundaryCache.get(bounds);
+  if (!result) boundaryCache.set(bounds, result = computeBoundaries(bounds));
+  return result;
+}
+
+function computeBoundaries(bounds: Bounds): Segment[] {
   const all = [bounds.outer, ...bounds.holes, ...bounds.bridges.map(b => b.points)].flatMap(segments);
   const result: Segment[] = [];
   for (const edge of all) {
@@ -84,14 +95,22 @@ function segmentHit(p: Vec2, v: Vec2, edge: Segment, radius: number): Hit | null
 }
 
 function boxEdges(box: Extract<Collider, { type: 'box' }>): Segment[] {
+  let edges = boxCache.get(box);
+  if (!edges) boxCache.set(box, edges = computeBoxEdges(box));
+  return edges;
+}
+
+function computeBoxEdges(box: Extract<Collider, { type: 'box' }>): Segment[] {
   const c = Math.cos(box.rot), s = Math.sin(box.rot);
   const points: [number, number][] = [[-box.halfX, -box.halfZ], [box.halfX, -box.halfZ], [box.halfX, box.halfZ], [-box.halfX, box.halfZ]];
   return segments(points.map(([x, z]) => ({ x: box.x + c * x + s * z, z: box.z - s * x + c * z })));
 }
 
 function distanceToSegment(p: Vec2, edge: Segment): number {
-  const d = sub(edge.b, edge.a), t = Math.max(0, Math.min(1, dot(sub(p, edge.a), d) / dot(d, d)));
-  return length(sub(p, add(edge.a, mul(d, t))));
+  // Same arithmetic as the vector helpers, written out so the per-step safety checks do not allocate.
+  const dx = edge.b.x - edge.a.x, dz = edge.b.z - edge.a.z;
+  const t = Math.max(0, Math.min(1, ((p.x - edge.a.x) * dx + (p.z - edge.a.z) * dz) / (dx * dx + dz * dz)));
+  return Math.hypot(p.x - (edge.a.x + dx * t), p.z - (edge.a.z + dz * t));
 }
 
 export function walkable(colliders: Collider[], bounds: Bounds, radius = 0.18): (a: Vec2, b: Vec2) => boolean {
@@ -117,12 +136,24 @@ export function step(pos: Vec2, input: Vec2, dt: number, colliders: Collider[], 
   const magnitude = length(input), displacement = mul(input, Math.max(0, Math.min(dt, 0.05)) * speed / Math.max(1, magnitude));
   const count = Math.max(1, Math.ceil(length(displacement) / 0.04)), delta = mul(displacement, 1 / count);
   let current = pos;
+  const solid = [...edges, ...boxes.flat()];
   for (let i = 0; i < count; i++) {
     let remaining = delta, candidate = current;
     for (let iteration = 0; iteration < 3 && length(remaining) > EPS; iteration++) {
-      const hits = [...edges, ...boxes.flat()].map(edge => segmentHit(candidate, remaining, edge, radius));
-      for (const collider of colliders) if (collider.type === 'circle') hits.push(circleHit(candidate, remaining, collider, radius + collider.radius));
-      const hit = hits.filter((h): h is Hit => h !== null).sort((a, b) => a.t - b.t)[0];
+      // A hit needs the candidate to come within radius + |remaining| of the shape, so far shapes are skipped without allocating.
+      const reach = radius + length(remaining) * 1.000001 + 1e-6;
+      let hit: Hit | undefined;
+      for (const edge of solid) {
+        if (Math.min(edge.a.x, edge.b.x) - reach > candidate.x || Math.max(edge.a.x, edge.b.x) + reach < candidate.x
+          || Math.min(edge.a.z, edge.b.z) - reach > candidate.z || Math.max(edge.a.z, edge.b.z) + reach < candidate.z) continue;
+        const found = segmentHit(candidate, remaining, edge, radius);
+        if (found && (!hit || found.t < hit.t)) hit = found;
+      }
+      for (const collider of colliders) {
+        if (collider.type !== 'circle' || Math.hypot(candidate.x - collider.x, candidate.z - collider.z) > reach + collider.radius) continue;
+        const found = circleHit(candidate, remaining, collider, radius + collider.radius);
+        if (found && (!hit || found.t < hit.t)) hit = found;
+      }
       if (!hit) { candidate = add(candidate, remaining); remaining = { x: 0, z: 0 }; break; }
       candidate = add(candidate, mul(remaining, hit.t));
       remaining = mul(remaining, 1 - hit.t);

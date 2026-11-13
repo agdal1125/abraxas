@@ -49,23 +49,18 @@
 -> END
 
 === lumi_table ===
-정한 자리에서 장식을 만들자.
 -> END
 
 === lumi_card ===
-고른 공연 카드를 무대 계획판에 놓자.
 -> END
 
 === lumi_notice_pickup ===
-정한 안내 도구를 집자.
 -> END
 
 === lumi_notice_first ===
-첫 번째 장소에 축제 소식을 전하자.
 -> END
 
 === lumi_notice_second ===
-두 번째 장소에도 축제 소식을 전하자.
 -> END
 
 === lumi_notice_first_a ===
@@ -85,7 +80,6 @@
 -> END
 
 === lumi_notice_return ===
-안내 도구를 제자리에 돌려놓자.
 -> END
 
 === lumi_stagekeeper ===
@@ -93,35 +87,27 @@
 -> END
 
 === lumi_material_pickup ===
-정한 장식 재료를 집자.
 -> END
 
 === lumi_material_delivery ===
-재료를 무대 작업대에 전하자.
 -> END
 
 === lumi_arrange ===
-같은 모양의 고리와 표식을 이어 장식을 걸자.
 -> END
 
 === lumi_welcome ===
-정한 자리에서 손님을 맞이하자.
 -> END
 
 === lumi_return ===
-루미에게 돌아가자.
 -> END
 
 === lumi_score_pickup ===
-고른 행진곡 악보를 집자.
 -> END
 
 === lumi_score_delivery ===
-악보를 악사 받침대에 전하자.
 -> END
 
 === lumi_report ===
-루미에게 준비를 마쳤다고 알리자.
 -> END
 
 === lumi_completed ===
