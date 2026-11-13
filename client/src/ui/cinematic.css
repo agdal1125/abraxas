@@ -1,27 +1,34 @@
+/* Fills the game box, which follows the visible viewport, so the buttons stay on screen under a browser address bar. */
 .cinematic {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 100;
-  display: flex;
-  align-items: center;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, auto));
+  grid-template-rows: minmax(0, 1fr) auto auto;
   justify-content: center;
-  flex-wrap: wrap;
-  align-content: center;
-  gap: 0.75rem;
-  padding: 1rem;
+  align-items: center;
+  gap: 8px 12px;
+  padding: calc(8px + env(safe-area-inset-top, 0px)) calc(12px + env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) calc(12px + env(safe-area-inset-left, 0px));
   background: #17191b;
   color: white;
+  /* The game overlay that hosts this is pointer-events: none, so a tap would fall through to the world. */
+  pointer-events: auto;
+  touch-action: manipulation;
 }
 
 .cinematic video {
+  grid-column: 1 / -1;
   display: block;
   width: 100%;
-  max-height: 75vh;
+  height: 100%;
+  min-height: 0;
   object-fit: contain;
 }
 
 .cinematic video[hidden], .cinematic button[hidden] { display: none; }
-.cinematic p { width: 100%; text-align: center; }
+.cinematic p { grid-column: 1 / -1; margin: 0; text-align: center; }
 .cinematic p:empty { display: none; }
-.cinematic button { min-height: 44px; padding: 0.5rem 1rem; cursor: pointer; }
+.cinematic button { min-width: 104px; min-height: 48px; padding: 0.5rem 1.25rem; font-size: 16px; cursor: pointer; }
 .cinematic button:focus-visible { outline: 3px solid white; outline-offset: 3px; }

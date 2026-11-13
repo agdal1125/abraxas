@@ -1,3 +1,4 @@
+import { fullscreenSupported, isFullscreen, setFullscreen } from "../fullscreen";
 import type { Story } from "inkjs";
 import { data, translations } from "../content";
 import { episodeStage, nextSegment } from "../core/flow";
@@ -127,6 +128,7 @@ export class Game {
       add(`${this.ui.hud.language}: ${this.state.lang === "ko" ? "한국어" : "English"}`, () => { this.state.lang = this.state.lang === "ko" ? "en" : "ko"; this.save(); this.updateHud(); this.reloadDialogue?.(); this.settings(); });
       add(`${this.ui.hud.largeText}: ${this.largeText ? this.ui.hud.on : this.ui.hud.off}`, () => { this.setTextSize(!this.largeText); this.settings(); });
       add(`${this.ui.hud.autoAdvance}: ${this.autoAdvance ? this.ui.hud.on : this.ui.hud.off}`, () => { this.setAutoAdvance(!this.autoAdvance); this.settings(); });
+      if (fullscreenSupported()) add(`${this.ui.hud.fullscreen}: ${isFullscreen() ? this.ui.hud.on : this.ui.hud.off}`, () => { void setFullscreen(!isFullscreen()).then(() => { if (!this.settingsMenu.hidden) this.settings(); }); });
       add(this.ui.hud.credits, () => this.settings("credits")); add(this.ui.hud.restart, () => this.settings("confirm")); add(this.ui.hud.close, close);
     }
     this.settingsMenu.replaceChildren(card); card.querySelector("button")?.focus();

@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import type { Collider } from "../core/world/types";
-import { applyWind, liteMaterial } from "./nature-wind";
 
 export function seeded(seed: number): () => number {
   let a = seed >>> 0;
@@ -13,9 +12,12 @@ export class GroundSampler {
   private readonly minZ: number;
   private readonly cols: number;
   private readonly rows: number;
-  private readonly kind: Uint8Array; // 0 none, 1 grass, 2 other
+  private readonly kind: Uint8Array; // 0 none, 1 grass, 2 path or stone, 3 water
   private readonly top: Float32Array;
   private readonly rgb: Uint8Array;
+  private readonly toPath: Float32Array; // distance in world units to the nearest path or stone cell
+  private readonly toWater: Float32Array;
+  private readonly toEdge: Float32Array; // distance to the nearest cell with no terrain, or to the edge of the raster
 
   constructor(terrain: THREE.Object3D, readonly cell = .1) {
     terrain.updateMatrixWorld(true);
@@ -34,6 +36,7 @@ export class GroundSampler {
     this.cols = Math.max(1, Math.ceil((maxX - minX) / cell)); this.rows = Math.max(1, Math.ceil((maxZ - minZ) / cell));
     this.kind = new Uint8Array(this.cols * this.rows); this.top = new Float32Array(this.cols * this.rows).fill(-9); this.rgb = new Uint8Array(this.cols * this.rows * 3);
     for (const mesh of meshes) this.rasterize(mesh);
+    this.toPath = this.distance(i => this.kind[i] === 2); this.toWater = this.distance(i => this.kind[i] === 3); this.toEdge = this.distance((i, ix, iz) => this.kind[i] === 0 || ix === 0 || iz === 0 || ix === this.cols - 1 || iz === this.rows - 1);
     this.erode();
   }
 
@@ -61,10 +64,27 @@ export class GroundSampler {
         if (y <= this.top[cell]!) continue;
         const r = w0 * c[0]![0]! + w1 * c[1]![0]! + w2 * c[2]![0]!, g = w0 * c[0]![1]! + w1 * c[1]![1]! + w2 * c[2]![1]!, bl = w0 * c[0]![2]! + w1 * c[1]![2]! + w2 * c[2]![2]!;
         this.top[cell] = y;
-        this.kind[cell] = y > -.012 && g > r * 1.15 && g > bl * 1.3 ? 1 : 2;
+        this.kind[cell] = y <= -.012 ? 3 : g > r * 1.15 && g > bl * 1.3 ? 1 : 2;
         this.rgb[cell * 3] = Math.min(255, r * 255); this.rgb[cell * 3 + 1] = Math.min(255, g * 255); this.rgb[cell * 3 + 2] = Math.min(255, bl * 255);
       }
     }
+  }
+
+  /** Two-pass chamfer distance transform (in world units) from every cell the predicate accepts. */
+  private distance(source: (i: number, ix: number, iz: number) => boolean): Float32Array {
+    const { cols, rows, cell } = this, d = new Float32Array(cols * rows).fill(1e3);
+    for (let iz = 0; iz < rows; iz++) for (let ix = 0; ix < cols; ix++) if (source(iz * cols + ix, ix, iz)) d[iz * cols + ix] = 0;
+    const D = 1.4142;
+    const relax = (ix: number, iz: number, dx: number, dz: number, w: number) => {
+      const x = ix + dx, z = iz + dz;
+      if (x < 0 || z < 0 || x >= cols || z >= rows) return;
+      const i = iz * cols + ix, v = d[z * cols + x]! + w;
+      if (v < d[i]!) d[i] = v;
+    };
+    for (let iz = 0; iz < rows; iz++) for (let ix = 0; ix < cols; ix++) { relax(ix, iz, -1, 0, 1); relax(ix, iz, 0, -1, 1); relax(ix, iz, -1, -1, D); relax(ix, iz, 1, -1, D); }
+    for (let iz = rows - 1; iz >= 0; iz--) for (let ix = cols - 1; ix >= 0; ix--) { relax(ix, iz, 1, 0, 1); relax(ix, iz, 0, 1, 1); relax(ix, iz, 1, 1, D); relax(ix, iz, -1, 1, D); }
+    for (let i = 0; i < d.length; i++) d[i] = Math.min(d[i]!, 1e3) * cell;
+    return d;
   }
 
   // Keep one cell of margin around paths, water, and the coast so blades do not hang over them.
@@ -82,6 +102,10 @@ export class GroundSampler {
     return ix < 0 || iz < 0 || ix >= this.cols || iz >= this.rows ? -1 : iz * this.cols + ix;
   }
   grass(x: number, z: number): boolean { const i = this.at(x, z); return i >= 0 && this.kind[i] === 1; }
+  /** Distance in world units to the nearest path or stone surface (large when none is near). */
+  pathDistance(x: number, z: number): number { const i = this.at(x, z); return i < 0 ? 0 : this.toPath[i]!; }
+  waterDistance(x: number, z: number): number { const i = this.at(x, z); return i < 0 ? 0 : this.toWater[i]!; }
+  edgeDistance(x: number, z: number): number { const i = this.at(x, z); return i < 0 ? 0 : this.toEdge[i]!; }
   height(x: number, z: number): number { const i = this.at(x, z); return i >= 0 ? this.top[i]! : 0; }
   color(x: number, z: number, into: THREE.Color): THREE.Color { const i = this.at(x, z); return i < 0 ? into.setRGB(.2, .36, .14) : into.setRGB(this.rgb[i * 3]! / 255, this.rgb[i * 3 + 1]! / 255, this.rgb[i * 3 + 2]! / 255); }
   get bounds(): { minX: number; minZ: number; maxX: number; maxZ: number } { return { minX: this.minX, minZ: this.minZ, maxX: this.minX + this.cols * this.cell, maxZ: this.minZ + this.rows * this.cell }; }
@@ -100,16 +124,37 @@ export function blocked(x: number, z: number, colliders: Collider[], margin: num
   return false;
 }
 
-type Tuft = { x: number; y: number; z: number; yaw: number; size: number; rank: number; tint: number };
+/** An icosahedron with one vertex triple per face. Three builds it non-indexed already; the guard keeps that true if it ever changes. */
+export function flatIcosahedron(): THREE.BufferGeometry {
+  const geometry = new THREE.IcosahedronGeometry(1, 0);
+  return geometry.index ? geometry.toNonIndexed() : geometry;
+}
 
-const CELL = 3;
-const CAPACITY = 2600;
+/** `blocked` with a spatial hash: each query tests only the shapes near the point. Margins up to `MAX_MARGIN` are exact. */
+export class Obstacles {
+  static readonly MAX_MARGIN = 1;
+  private readonly cells = new Map<number, Collider[]>();
+  constructor(colliders: Collider[], private readonly size = 2) {
+    for (const shape of colliders) {
+      const reach = (shape.type === "circle" ? shape.radius : Math.hypot(shape.halfX, shape.halfZ)) + Obstacles.MAX_MARGIN;
+      for (let cx = Math.floor((shape.x - reach) / size); cx <= Math.floor((shape.x + reach) / size); cx++) for (let cz = Math.floor((shape.z - reach) / size); cz <= Math.floor((shape.z + reach) / size); cz++) {
+        const key = cx * 4099 + cz, list = this.cells.get(key);
+        if (list) list.push(shape); else this.cells.set(key, [shape]);
+      }
+    }
+  }
+  blocked(x: number, z: number, margin: number): boolean {
+    const list = this.cells.get(Math.floor(x / this.size) * 4099 + Math.floor(z / this.size));
+    return !!list && blocked(x, z, list, margin);
+  }
+}
+
 const BLADES = 6;
-const TINTS = ["#4a9a40", "#58a84a", "#66b252", "#4f9e5a", "#74b955"].map(hex => new THREE.Color(hex));
+export const TINTS = ["#4a9a40", "#58a84a", "#66b252", "#4f9e5a", "#74b955"].map(hex => new THREE.Color(hex));
 
 // One flat triangle per blade: dark at the root, bright at the tip. Wind bends the tips in the vertex shader.
 // Blades stay ankle-high (a character is about .6 tall) so feet remain visible on the ground.
-function tuftGeometry(): THREE.BufferGeometry {
+export function tuftGeometry(): THREE.BufferGeometry {
   const random = seeded(7), positions: number[] = [], colors: number[] = [], normals: number[] = [];
   const push = (x: number, y: number, z: number, shade: number) => { positions.push(x, y, z); colors.push(shade, shade, shade * .92); normals.push(0, 1, 0); };
   for (let blade = 0; blade < BLADES; blade++) {
@@ -127,85 +172,3 @@ function tuftGeometry(): THREE.BufferGeometry {
   return geometry;
 }
 
-/**
- * Low-poly grass on every walkable cell. All tufts live in one InstancedMesh (one draw call); only the tufts near the
- * view are written into it, so triangle cost follows the screen, not the map.
- */
-export class GrassField {
-  readonly mesh: THREE.InstancedMesh;
-  private cells = new Map<number, Tuft[]>();
-  private density = 1;
-  private lastX = Infinity;
-  private lastZ = Infinity;
-  private lastExtent = 0;
-  private lastDensity = -1;
-  private readonly matrix = new THREE.Matrix4();
-  private readonly quaternion = new THREE.Quaternion();
-  private readonly up = new THREE.Vector3(0, 1, 0);
-  private readonly scale = new THREE.Vector3();
-  private readonly point = new THREE.Vector3();
-  private readonly color = new THREE.Color();
-  total = 0;
-
-  constructor(scene: THREE.Scene, ground: GroundSampler, colliders: Collider[], perUnit = 44) {
-    const material = liteMaterial();
-    material.vertexColors = true;
-    applyWind(material, { amp: .026, height: .1, grass: true });
-    this.mesh = new THREE.InstancedMesh(tuftGeometry(), material, CAPACITY);
-    this.mesh.count = 0; this.mesh.frustumCulled = false; this.mesh.castShadow = false; this.mesh.receiveShadow = true; this.mesh.name = "grass-field";
-    this.mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-    this.mesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(CAPACITY * 3), 3); this.mesh.instanceColor.setUsage(THREE.DynamicDrawUsage);
-    scene.add(this.mesh);
-    this.scatter(ground, colliders, perUnit);
-  }
-
-  private scatter(ground: GroundSampler, colliders: Collider[], perUnit: number): void {
-    const random = seeded(20261110), step = 1 / Math.sqrt(perUnit), b = ground.bounds;
-    for (let z = b.minZ; z < b.maxZ; z += step) for (let x = b.minX; x < b.maxX; x += step) {
-      const px = x + (random() - .5) * step * 1.7, pz = z + (random() - .5) * step * 1.7, roll = random(), size = random(), yaw = random(), rank = random(), tint = random();
-      if (!ground.grass(px, pz)) continue;
-      // Slow patchiness: some meadows are lush, some thin.
-      const patch = .5 + .5 * Math.sin(px * .31 + Math.sin(pz * .23) * 2) * Math.cos(pz * .27 - px * .11);
-      if (roll > .5 + .5 * patch || blocked(px, pz, colliders, .08)) continue;
-      const key = Math.floor(px / CELL) * 4099 + Math.floor(pz / CELL);
-      const list = this.cells.get(key) ?? []; this.cells.set(key, list);
-      list.push({ x: px, y: ground.height(px, pz), z: pz, yaw: yaw * Math.PI * 2, size: .75 + size * .7 * (.6 + .4 * patch), rank, tint: Math.min(TINTS.length - 1, Math.floor(tint * TINTS.length)) });
-      this.total++;
-    }
-  }
-
-  /** `density` 1 on desktop; less on phones, where fill rate matters more than detail. */
-  setDensity(value: number): void { this.density = value; }
-
-  update(camera: THREE.OrthographicCamera): void {
-    const extent = camera.right - camera.left + camera.top - camera.bottom;
-    const moved = Math.hypot(camera.position.x - this.lastX, camera.position.z - this.lastZ);
-    if (moved < .18 && Math.abs(extent - this.lastExtent) < .01 && this.density === this.lastDensity) return;
-    this.lastX = camera.position.x; this.lastZ = camera.position.z; this.lastExtent = extent; this.lastDensity = this.density;
-    // Ground footprint of the view, to know which hash cells to scan.
-    let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
-    const direction = camera.getWorldDirection(new THREE.Vector3());
-    for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]] as const) {
-      this.point.set(sx * 1.2, sy * 1.2, 0).unproject(camera);
-      const t = -this.point.y / direction.y;
-      minX = Math.min(minX, this.point.x + direction.x * t); maxX = Math.max(maxX, this.point.x + direction.x * t);
-      minZ = Math.min(minZ, this.point.z + direction.z * t); maxZ = Math.max(maxZ, this.point.z + direction.z * t);
-    }
-    let n = 0;
-    for (let cx = Math.floor(minX / CELL); cx <= Math.floor(maxX / CELL) && n < CAPACITY; cx++) for (let cz = Math.floor(minZ / CELL); cz <= Math.floor(maxZ / CELL); cz++) {
-      const list = this.cells.get(cx * 4099 + cz); if (!list) continue;
-      for (const tuft of list) {
-        if (tuft.rank > this.density || n >= CAPACITY) continue;
-        this.point.set(tuft.x, tuft.y + .1, tuft.z).project(camera);
-        if (Math.abs(this.point.x) > 1.12 || Math.abs(this.point.y) > 1.2) continue;
-        this.quaternion.setFromAxisAngle(this.up, tuft.yaw);
-        this.mesh.setMatrixAt(n, this.matrix.compose(this.point.set(tuft.x, tuft.y, tuft.z), this.quaternion, this.scale.setScalar(tuft.size)));
-        this.mesh.setColorAt(n, this.color.copy(TINTS[tuft.tint]!));
-        n++;
-      }
-    }
-    this.mesh.count = n;
-    this.mesh.instanceMatrix.needsUpdate = true;
-    if (this.mesh.instanceColor) this.mesh.instanceColor.needsUpdate = true;
-  }
-}
