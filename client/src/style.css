@@ -191,3 +191,21 @@ input {
 .panel form input { flex: 1; min-width: 0; width: 100%; }
 .panel form p { grid-column: 1 / -1; grid-row: 2; color: #A33A1E; }
 .panel form p:empty { display: none; }
+
+/* Phone browsers: a drag that starts on the HUD or a dialogue must not pan, bounce, or zoom the page, which would slide the address bar in and out under the player's thumb. */
+html,body{overscroll-behavior:none}
+#app{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+.title,.dialogue.has-choices .panel,.dialogue.has-choices .choices,.hud-menu-card{touch-action:pan-y;overscroll-behavior:contain}
+.result .panel{-webkit-user-select:text;user-select:text}
+input,textarea{-webkit-user-select:text;user-select:text;touch-action:manipulation}
+/* Browsers without element fullscreen (iPhone): the page is taller than the screen so one swipe up folds the address bar. The game box is fixed and does not move. */
+html.soft-fullscreen,html.soft-fullscreen body{height:auto;overflow:visible}
+html.soft-fullscreen{overflow-y:auto}
+.soft-fullscreen-spacer{height:200vh;height:200lvh;pointer-events:none}
+.swipe-hint{position:fixed;inset:0;z-index:95;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:calc(16px + env(safe-area-inset-top,0px)) calc(24px + env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) calc(24px + env(safe-area-inset-left,0px));background:rgba(59,42,34,.86);color:#fff;text-align:center;touch-action:pan-y}
+.swipe-hint[hidden]{display:none}
+.swipe-hint::before{content:'';width:18px;height:18px;margin-bottom:6px;border-top:4px solid #fff;border-left:4px solid #fff;transform:rotate(45deg);animation:swipe-hint-rise 1.4s ease-in-out infinite}
+.swipe-hint strong{font-size:20px}.swipe-hint small{margin-top:6px;font-size:13px;opacity:.8}
+.swipe-hint button{margin-top:10px;padding:0 18px;border:1.5px solid rgba(255,255,255,.7);background:transparent;color:#fff;font:inherit;font-size:14px;touch-action:manipulation}
+@keyframes swipe-hint-rise{0%,100%{transform:translateY(6px) rotate(45deg);opacity:.5}50%{transform:translateY(-6px) rotate(45deg);opacity:1}}
+@media (prefers-reduced-motion:reduce){.swipe-hint::before{animation:none}}
