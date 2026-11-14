@@ -45,5 +45,5 @@
 | 벤치마크 리서치 | `docs/research/` |
 | 심리 자문 기록 | `docs/psych/` |
 | 작업 지시서 · 검수 보고서 | `docs/tasks/`, `docs/reviews/` |
-| 기능 QA 보고서 | `docs/qa/` |
+| 기능 QA 보고서 · 플레이테스트 양식 · 출시 점검표 | `docs/qa/` |
 | 콘텐츠 구조(흐름·NPC·퀘스트) | `docs/gdd/content-structure.md` |
