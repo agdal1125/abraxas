@@ -6,6 +6,22 @@ type Focus = { x: number; z: number };
 // shadows fall sideways across the ground and the two visible wall faces get different brightness.
 const SUN_DIRECTION = new THREE.Vector3(-3.2, 5.6, 5.3).normalize();
 const SUN_DISTANCE = 14;
+// The village camera looks down at 35 degrees, so on the ground screen right runs along (1, 0, -1) and screen up
+// along (-1, 0, -1).
+const VIEW_TILT = THREE.MathUtils.degToRad(35);
+const VIEW_RIGHT = new THREE.Vector3(1, 0, -1).normalize();
+const VIEW_UP = new THREE.Vector3(-1, 0, -1).normalize();
+const TO_CAMERA = new THREE.Vector3(1, Math.SQRT2 * Math.tan(VIEW_TILT), 1).normalize();
+// Shadows have to land on everything up to about character height. A point that high is drawn over ground lying
+// farther along the view, so the box covers the slab of the view between the ground and that height. SLAB is the
+// distance along the view from the ground to the middle of the slab; SLAB_CENTRE is that middle slid back onto the
+// ground along the sunlight, which leaves it at the same place in the shadow map.
+const RECEIVER_HEIGHT = .7;
+const SLAB = RECEIVER_HEIGHT / 2 / Math.sin(VIEW_TILT);
+const SLAB_CENTRE = TO_CAMERA.clone().multiplyScalar(SLAB).addScaledVector(SUN_DIRECTION, -TO_CAMERA.y * SLAB / SUN_DIRECTION.y);
+// Casters this tall over the visible ground have to stay in front of the shadow camera's near plane (.5), which also
+// sits about .5 nearer than the slab's middle.
+const CASTER_HEIGHT = 3;
 
 // Layered sines instead of hashed noise: the pattern is identical on every GPU precision.
 // The shade colour is written straight to the sRGB canvas, so it is a display-space multiplier.
@@ -30,6 +46,7 @@ export class LightRig {
   private right = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), SUN_DIRECTION).normalize();
   private up = new THREE.Vector3();
   private texel = 0;
+  private distance = SUN_DISTANCE;
   private reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   constructor(scene: THREE.Scene) {
@@ -43,11 +60,16 @@ export class LightRig {
     scene.add(this.sun, this.sun.target, this.sky, this.cloudShade);
   }
 
-  /** Fits the shadow map to the ground the camera can see. */
+  /** Fits the shadow map to what the camera can see, around the view centre that `update` receives. */
   resize(halfHeight: number, aspect: number, mapSize: number): void {
-    // The camera looks down at 35 degrees, so the visible ground is halfHeight / sin(35deg) deep and halfHeight * aspect wide.
-    const extent = Math.max(3, halfHeight * Math.max(aspect, 1.75) * 1.15), camera = this.sun.shadow.camera;
-    camera.left = camera.bottom = -extent; camera.right = camera.top = extent; camera.updateProjectionMatrix();
+    // The visible ground reaches halfHeight * aspect to each side and halfHeight / sin(35deg) up and down the screen,
+    // and the slab above it reaches SLAB along the view either way from its middle. The box takes the farthest reach
+    // along the shadow camera's axes, with a small margin for the texel snapping and the soft edge.
+    const across = halfHeight * aspect, deep = halfHeight / Math.sin(VIEW_TILT);
+    const reach = (axis: THREE.Vector3) => across * Math.abs(VIEW_RIGHT.dot(axis)) + deep * Math.abs(VIEW_UP.dot(axis)) + SLAB * Math.abs(TO_CAMERA.dot(axis));
+    const extent = Math.max(3, Math.max(reach(this.right), reach(this.up)) * 1.02), depth = reach(SUN_DIRECTION), camera = this.sun.shadow.camera;
+    this.distance = Math.max(SUN_DISTANCE, depth + CASTER_HEIGHT / SUN_DIRECTION.y + 2);
+    camera.left = camera.bottom = -extent; camera.right = camera.top = extent; camera.far = this.distance + depth + 1; camera.updateProjectionMatrix();
     if (this.sun.shadow.mapSize.x !== mapSize) { this.sun.shadow.mapSize.set(mapSize, mapSize); this.sun.shadow.map?.dispose(); this.sun.shadow.map = null; }
     this.texel = 2 * extent / mapSize;
   }
@@ -56,8 +78,8 @@ export class LightRig {
     if (!this.reduced.matches) this.cloudShade.material.uniforms.time!.value += dt;
     this.cloudShade.position.set(focus.x, 0, focus.z);
     // Moving the shadow camera in whole texels keeps shadow edges from crawling while the player walks.
-    const point = new THREE.Vector3(focus.x, 0, focus.z);
+    const point = new THREE.Vector3(focus.x + SLAB_CENTRE.x, 0, focus.z + SLAB_CENTRE.z);
     if (this.texel) for (const axis of [this.right, this.up]) { const along = point.dot(axis); point.addScaledVector(axis, Math.round(along / this.texel) * this.texel - along); }
-    this.sun.target.position.copy(point); this.sun.position.copy(point).addScaledVector(SUN_DIRECTION, SUN_DISTANCE);
+    this.sun.target.position.copy(point); this.sun.position.copy(point).addScaledVector(SUN_DIRECTION, this.distance);
   }
 }

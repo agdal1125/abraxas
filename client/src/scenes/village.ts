@@ -30,6 +30,8 @@ const map = import.meta.glob<{ default: MapData }>("../../../content/world/villa
 const manifest = import.meta.glob<{ default: { assets: Record<string, Asset> } }>("../../../content/assets/manifest.json", { eager: true })["../../../content/assets/manifest.json"]!.default.assets;
 // 24px keeps the neutral symbol legible on a mobile screen while staying within the policy range.
 const MARKER_SIZE_PX = 24;
+// Where the camera sits relative to the point it looks at: down at 35 degrees along (-1, -, -1).
+const CAMERA_OFFSET = new THREE.Vector3(10, 10 * Math.tan(THREE.MathUtils.degToRad(35)) * Math.SQRT2, 10);
 const NEARBY_RANGE = .85;
 const RESIDENT_ACTORS = new Set(["lumi-neighbor-1", "lumi-neighbor-2", "echo-borrower", "or-fisher", "or-merchant"]);
 
@@ -570,10 +572,11 @@ export class Village {
     const ratio = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2, QUALITY_STEPS[this.qualityStep]!.pixelRatio);
     const shadowSize = Math.min(mobile ? 1024 : 2048, Math.max(512, 2 ** Math.ceil(Math.log2(Math.max(w, h) * ratio))));
     this.renderer.setPixelRatio(ratio);
-    this.lights.resize(this.viewHalfHeight, this.viewAspect, shadowSize);
     this.effects?.resize(mobile, this.renderer.getPixelRatio()); this.nature.resize(mobile);
     this.camera.near = .1; this.camera.far = 100; this.renderer.setSize(w, h);
     if (!keepCamera) this.updateCamera(0, true);
+    // After updateCamera, which measures the view height for the new size.
+    this.lights.resize(this.viewHalfHeight, this.viewAspect, shadowSize);
   }
   private updateCamera(dt: number, snap = false): void {
     const speaker = this.speaker ? this.target(this.speaker) : undefined;
@@ -581,7 +584,7 @@ export class Village {
       : this.enabled ? this.player.position.clone().add(new THREE.Vector3(this.input.x, 0, this.input.z).multiplyScalar(.25)).add(new THREE.Vector3(1, -Math.sqrt(2) / Math.tan(THREE.MathUtils.degToRad(35)), 1).normalize().multiplyScalar(this.viewHalfHeight * -.12)) : this.cameraTarget;
     this.cameraTarget.lerp(focus, snap ? 1 : 1 - Math.exp(-5 * dt));
     const target = this.cameraTarget.clone();
-    this.camera.position.copy(target).add(new THREE.Vector3(10, 10 * Math.tan(THREE.MathUtils.degToRad(35)) * Math.sqrt(2), 10)); this.camera.lookAt(target); this.camera.updateMatrixWorld();
+    this.camera.position.copy(target).add(CAMERA_OFFSET); this.camera.lookAt(target); this.camera.updateMatrixWorld();
     if (snap && this.playerCharacter) {
       const size = new THREE.Box3().setFromObject(this.playerCharacter.object).getSize(new THREE.Vector3());
       const m = this.camera.matrixWorldInverse.elements;
@@ -601,7 +604,8 @@ export class Village {
       actor.marker.scale.set(MARKER_SIZE_PX * pixel, MARKER_SIZE_PX * pixel, 1);
       actor.marker.position.copy(actor.object.worldToLocal(box.getCenter(new THREE.Vector3()).addScaledVector(up, top + (8 + MARKER_SIZE_PX / 2) * pixel)));
     }
-    this.lights.update(dt, this.player.position);
+    // Shadows are fitted around the ground at the middle of the view, which sits up-screen of the player.
+    this.lights.update(dt, target.addScaledVector(CAMERA_OFFSET, -target.y / CAMERA_OFFSET.y));
   }
   /** Moves to a lower quality step chosen by the frame-time governor. */
   private applyQuality(step: number): void {
