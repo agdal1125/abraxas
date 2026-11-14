@@ -21,9 +21,24 @@ function setup() {
   const controls = new Controls(app as unknown as HTMLElement, village);
   controls.setActive(true, "ko");
   const pointer = (type: string, x: number, y: number, time: number, id = 1) => { const event = Object.assign(new Event(type, { cancelable: true }), { pointerId: id, pointerType: "touch", button: 0, clientX: x, clientY: y }); Object.defineProperty(event, "timeStamp", { value: time }); app.dispatchEvent(event); };
-  const key = (code: string) => windowTarget.dispatchEvent(Object.assign(new Event("keydown", { cancelable: true }), { code, repeat: false }));
-  return { app, village, windowTarget, pointer, key };
+  const key = (code: string, target?: Element) => { const event = Object.assign(new Event("keydown", { cancelable: true }), { code, repeat: false }); if (target) Object.defineProperty(event, "target", { value: target }); windowTarget.dispatchEvent(event); };
+  return { app, village, windowTarget, documentTarget, pointer, key };
 }
+
+function hudButton() { return Object.assign(new Element(), { closest: (selector: string) => selector.includes("button") ? {} : null, blur: vi.fn() }); }
+
+it("lets arrows walk while a HUD button keeps focus, and leaves Space to the button", () => {
+  const { key, village } = setup(), button = hudButton();
+  key("ArrowUp", button); expect(village.setMoveInput).toHaveBeenLastCalledWith(0, 1);
+  key("Space", button); expect(village.interactNearby).not.toHaveBeenCalled();
+});
+
+it("takes focus off a HUD button when the player taps the world", () => {
+  const { pointer, documentTarget } = setup(), button = hudButton();
+  Object.assign(documentTarget, { activeElement: button });
+  pointer("pointerdown", 700, 200, 0);
+  expect(button.blur).toHaveBeenCalledOnce();
+});
 
 it("interacts on a short tap but not a drag or a long press", () => {
   const { pointer, village } = setup();
