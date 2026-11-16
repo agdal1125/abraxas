@@ -1,0 +1,86 @@
+{
+ "spawn": {
+  "full": {
+   "calls": 78,
+   "tris": 35158,
+   "geoms": 28,
+   "tex": 10
+  },
+  "noShadow": {
+   "calls": 52,
+   "tris": 24902
+  }
+ },
+ "entrance": {
+  "full": {
+   "calls": 78,
+   "tris": 35158,
+   "geoms": 28,
+   "tex": 10
+  },
+  "noShadow": {
+   "calls": 52,
+   "tris": 24902
+  }
+ },
+ "plaza": {
+  "full": {
+   "calls": 90,
+   "tris": 47516,
+   "geoms": 36,
+   "tex": 13
+  },
+  "noShadow": {
+   "calls": 54,
+   "tris": 29676
+  }
+ },
+ "bakery": {
+  "full": {
+   "calls": 93,
+   "tris": 57440,
+   "geoms": 42,
+   "tex": 16
+  },
+  "noShadow": {
+   "calls": 53,
+   "tris": 34020
+  }
+ },
+ "lake": {
+  "full": {
+   "calls": 80,
+   "tris": 38902,
+   "geoms": 47,
+   "tex": 16
+  },
+  "noShadow": {
+   "calls": 38,
+   "tris": 21262
+  }
+ },
+ "gate": {
+  "full": {
+   "calls": 56,
+   "tris": 32050,
+   "geoms": 49,
+   "tex": 16
+  },
+  "noShadow": {
+   "calls": 34,
+   "tris": 22150
+  }
+ },
+ "road": {
+  "full": {
+   "calls": 78,
+   "tris": 43274,
+   "geoms": 54,
+   "tex": 19
+  },
+  "noShadow": {
+   "calls": 41,
+   "tris": 27350
+  }
+ }
+}

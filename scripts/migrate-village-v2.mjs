@@ -106,7 +106,7 @@ if (v1.version !== 2) {
   }));
   const actors = v1.actors.map(({ id, zone, ...pos }) => {
     if (zone && !zones[zone]) throw new Error(`Unknown zone: ${zone}`);
-    return { id, asset: /^[ABCD]$/.test(id) ? `char-${id.toLowerCase()}` : 'quest-npc', ...(zone ? { zone } : {}), ...(zone ? zones[zone] : point(pos)) };
+    return { id, asset: /^[ABCD]$/.test(id) ? `char-${id.toLowerCase()}` : ({ s1j2: 'resident-stage', v1j2: 'resident-tasting', t1p2: 'resident-books', s2j2: 'resident-workshop' })[id] ?? 'resident-villager-a', ...(zone ? { zone } : {}), ...(zone ? zones[zone] : point(pos)) };
   });
   const v2 = { version: 2, spawn: zones.entrance, terrain: { asset: 'terrain', x: 0, z: 0, rot: 0, scale: 1 }, bounds: { outer, holes, bridges }, zones, paths, actors, props };
   Object.assign(v1, v2);
