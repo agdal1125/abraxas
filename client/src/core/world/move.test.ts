@@ -31,6 +31,15 @@ describe('world movement', () => {
     expect(p.x - p.z).toBeLessThan(-0.25);
   });
 
+  it('keeps cached edges per bounds and per collider object', () => {
+    const narrow: Bounds = { outer: rect(-1, -1, 1, 1), holes: [], bridges: [] };
+    expect(walk({ x: 0, z: 0 }, { x: 1, z: 0 }, 40, [], bounds).x).toBeGreaterThan(1.5);
+    expect(walk({ x: 0, z: 0 }, { x: 1, z: 0 }, 40, [], narrow).x).toBeLessThanOrEqual(0.820001);
+    const wall = (x: number): Collider[] => [{ type: 'box', x, z: 0, halfX: 0.05, halfZ: 2, rot: 0 }];
+    expect(walk({ x: 0, z: 0 }, { x: 1, z: 0 }, 40, wall(1)).x).toBeLessThan(0.8);
+    expect(walk({ x: 0, z: 0 }, { x: 1, z: 0 }, 40, wall(3)).x).toBeGreaterThan(2);
+  });
+
   it('keeps the whole player inside the island', () => {
     const p = walk({ x: 4, z: 0 }, { x: 1, z: 0.5 }, 30);
     expect(p.x).toBeLessThanOrEqual(4.820001);
