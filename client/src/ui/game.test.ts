@@ -31,7 +31,7 @@ test("interlude resumes at each unanswered knot with Demi seated", async () => {
 
 test("gate asks all unanswered questions in order while Demi waits", async () => {
   const events: string[] = [];
-  const game = Object.assign(Object.create(Game.prototype), { state: { segment: "gate", log: [] }, village: { setStoryScene: (x: string) => events.push(x), setDemiMode: (x: string) => events.push(x) }, narrative: async (_file: string, knot: string, choice: boolean) => { events.push(knot); if (choice) game.state.log.push({ id: knot, pick: "a" }); }, finish: () => events.push("finish") });
+  const game = Object.assign(Object.create(Game.prototype), { state: { segment: "gate", log: [] }, fragmentsReveal: async () => {}, village: { setStoryScene: (x: string) => events.push(x), setDemiMode: (x: string) => events.push(x) }, narrative: async (_file: string, knot: string, choice: boolean) => { events.push(knot); if (choice) game.state.log.push({ id: knot, pick: "a" }); }, finish: () => events.push("finish") });
   await game.lateScene();
   expect(events).toEqual(["gate", "gate", "gate_intro", "gate_a", "gate_b", "gate_c", "gate_d", "gate_outro", "follow", "finish"]);
 });
@@ -70,11 +70,22 @@ test("a confirmed non-NPC choice shows its thinking reaction", () => {
 
 test("result cards use the server result without displaying its codes or numbers", () => {
   const panel = vi.fn();
-  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko", log: [] }, snapshot: { confession: { npcId: "lumi", reason: "both", outcome: "waiting" }, result: { type: "OHVG", modifier: "today", npcTypes: { lumi: "ILKC", moka: "OHKC", echo: "ILVC", or: "ILKG" } }, festivalCompanion: "moka" }, panel, overlay: { querySelectorAll: () => [] } });
+  const answers = [...data.items, ...data.tiebreakers].map(item => ({ id: item.id, pick: "a" }));
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko", log: [] }, snapshot: { playId: "p", answers, confession: { npcId: "lumi", reason: "both", outcome: "waiting" }, result: { type: "OHVG", modifier: "today", npcTypes: { lumi: "ILKC", moka: "OHKC", echo: "ILVC", or: "ILKG" } }, festivalCompanion: "moka" }, panel, overlay: { querySelectorAll: () => [] } });
   for (let card = 0; card < 3; card++) game.result(card);
   for (const call of panel.mock.calls) expect(call[0]).not.toMatch(/OHVG|ILKC|\d/);
   expect(panel.mock.calls[0]![0]).toContain(translations("ko").ui.result.first);
   expect(panel.mock.calls[1]![0]).toContain(translations("ko").ui.result.reflection.both);
+  expect(panel.mock.calls[0]![0]).toContain(translations("ko").ui.result.values);
+  const momentsButton = panel.mock.calls[0]![1].find((button: unknown[]) => button[2] === "result-moments");
+  const pickText = data.items.find(item => item.axis === "A")!.picks.a!.text;
+  const shown = panel.mock.calls.slice(0, 3).map(call => call[0]).join("\n");
+  momentsButton[1]();
+  const moments = panel.mock.calls[3]![0];
+  expect(moments).toContain("‘");
+  expect(moments).not.toMatch(/OHVG|ILKC|\d/);
+  expect(shown).not.toContain(pickText);
+  expect(shown).not.toContain("‘");
 });
 
 test("resuming before the name was saved asks for it again", async () => {
@@ -87,11 +98,19 @@ test("resuming before the name was saved asks for it again", async () => {
 test.each(["accepted", "waiting"])("confession follows the server outcome %s", async outcome => {
   const events: string[] = [];
   const command = vi.fn((_command: unknown, after: (result: unknown) => void) => after({ snapshot: { confession: { npcId: "echo", reason: "both", outcome } } }));
-  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko" }, snapshot: {}, demiRevealed: true, village: { setStoryScene: vi.fn(), setDemiMode: vi.fn() }, selectEnding: vi.fn().mockResolvedValueOnce("echo").mockResolvedValueOnce("both"), command, narrative: async (_file: string, knot: string) => { events.push(knot); if (knot.startsWith("confession_echo_")) throw new Error("stop"); } });
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko" }, snapshot: { playId: "p", answers: [] }, demiRevealed: true, village: { setStoryScene: vi.fn(), setDemiMode: vi.fn() }, selectEnding: vi.fn().mockResolvedValueOnce("echo").mockResolvedValueOnce("both"), command, narrative: async (_file: string, knot: string) => { events.push(knot); if (knot.startsWith("confession_echo_")) throw new Error("stop"); } });
   await expect(game.ending()).rejects.toThrow("stop");
   expect(command).toHaveBeenCalledOnce();
   expect(command.mock.calls[0]![0]).toEqual({ kind: "confess", npcId: "echo", reason: "both" });
   expect(events.at(-1)).toBe(`confession_echo_${outcome}`);
+  expect(events.slice(0, 6)).toEqual(["walk_intro", "walk_lumi_A_steady", "walk_moka_B_steady", "walk_echo_B_steady", "walk_or_A_steady", "confession_intro"]);
+});
+
+test("the last walk is skipped once the confession is confirmed", async () => {
+  const events: string[] = [];
+  const game = Object.assign(Object.create(Game.prototype), { state: { lang: "ko" }, snapshot: { playId: "p", answers: [], confession: { npcId: "echo", reason: "both", outcome: "waiting" } }, demiRevealed: true, village: { setStoryScene: vi.fn(), setDemiMode: vi.fn() }, narrative: async (_file: string, knot: string) => { events.push(knot); throw new Error("stop"); } });
+  await expect(game.ending()).rejects.toThrow("stop");
+  expect(events).toEqual(["confession_echo_waiting"]);
 });
 
 test("a local choice is not confirmed when storage fails", () => {
@@ -222,4 +241,18 @@ test("resident dialogue parser failure offers a retry and resumes the selected k
     expect(fetcher).toHaveBeenCalledTimes(2);
     expect(game.story).not.toBeNull();
   } finally { vi.doUnmock("inkjs"); vi.unstubAllGlobals(); }
+});
+
+test("auto-advance fires only for the panel that armed it", () => {
+  vi.useFakeTimers(); vi.stubGlobal("window", { setTimeout: (fn: () => void, ms: number) => setTimeout(fn, ms) });
+  try {
+    const game = Object.assign(Object.create(Game.prototype), { token: 1, autoAdvance: true, autoTimer: 0, autoPending: null, settingsMenu: { hidden: true } });
+    expect(game.autoDelay("짧다")).toBe(1200); expect(game.autoDelay("가".repeat(60))).toBe(5000); expect(game.autoDelay("가".repeat(12))).toBe(2000);
+    const stale = vi.fn(); game.autoPending = { token: 1, fire: stale, ms: 1200 }; game.resumeAuto(); game.token = 2; vi.advanceTimersByTime(5000);
+    expect(stale).not.toHaveBeenCalled();
+    const live = vi.fn(); game.autoPending = { token: 2, fire: live, ms: 1200 }; game.resumeAuto(); game.settingsMenu.hidden = false; vi.advanceTimersByTime(5000);
+    expect(live).not.toHaveBeenCalled();
+    game.settingsMenu.hidden = true; game.resumeAuto(); vi.advanceTimersByTime(1199); expect(live).not.toHaveBeenCalled(); vi.advanceTimersByTime(1);
+    expect(live).toHaveBeenCalledOnce();
+  } finally { vi.useRealTimers(); vi.unstubAllGlobals(); }
 });

@@ -4,7 +4,7 @@ import { clone } from "three/addons/utils/SkeletonUtils.js";
 import type { MokaView, SlotId } from "../core/moka-errand";
 
 type Placement = { id: string; asset: string; x: number; z: number; rot?: number };
-const keys = [...["basket", "display", "bread-round", "bread-long", "bread-flower", "dropoff", "ledger", "plate", "mold"].map(key => `prop-moka-${key}`), "quest-npc"];
+const keys = [...["basket", "display", "bread-round", "bread-long", "bread-flower", "dropoff", "ledger", "plate", "mold"].map(key => `prop-moka-${key}`), "resident-villager-a"];
 
 export class MokaProps {
   private group = new THREE.Group();

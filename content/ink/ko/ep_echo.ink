@@ -53,35 +53,27 @@
 -> END
 
 === echo_enclose ===
-고른 쪽지를 그림책에 끼우자.
 -> END
 
 === echo_book_pickup ===
-그림책 꾸러미를 집자.
 -> END
 
 === echo_book_delivery ===
-그림책을 빌려 간 주민에게 전하자.
 -> END
 
 === echo_search ===
-정한 서가나 다락 입구를 살펴보자.
 -> END
 
 === echo_record_pickup ===
-찾은 기록철을 집자.
 -> END
 
 === echo_record_delivery ===
-기록철을 열람대에 전하자.
 -> END
 
 === echo_notebook_pickup ===
-요리 수첩을 집자.
 -> END
 
 === echo_notebook_delivery ===
-정한 자리에 요리 수첩을 놓자.
 -> END
 
 === echo_organizer ===
@@ -89,7 +81,6 @@
 -> END
 
 === echo_arrange ===
-책을 고른 뒤 같은 주제 표식의 자리에 놓자.
 -> END
 
 === echo_reading ===
@@ -102,23 +93,18 @@
 -> END
 
 === echo_bookmark ===
-고른 감상이 담긴 대목에 책갈피를 놓자.
 -> END
 
 === echo_return ===
-에코에게 돌아가자.
 -> END
 
 === echo_legend_pickup ===
-전설집을 집자.
 -> END
 
 === echo_legend_delivery ===
-고른 전시대에 전설집을 놓자.
 -> END
 
 === echo_report ===
-에코에게 정리를 마쳤다고 알리자.
 -> END
 
 === echo_completed ===

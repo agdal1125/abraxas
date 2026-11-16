@@ -18,7 +18,7 @@
     "lumi_01": {
       "speaker": "lumi",
       "empathy": "Yes! That spot will be wonderful!",
-      "thinking": "Oh, I wonder what stories will bloom there!"
+      "thinking": "Oh, I wonder what you'll make there!"
     },
     "lumi_02": {
       "speaker": "lumi",
@@ -32,7 +32,7 @@
     },
     "lumi_04": {
       "speaker": "lumi",
-      "empathy": "Great! That will make lovely decorations!",
+      "empathy": "Great! Let's decorate with that!",
       "thinking": "Wow, what kind of garland will come together!"
     },
     "lumi_05": {
@@ -43,7 +43,7 @@
     "lumi_06": {
       "speaker": "lumi",
       "empathy": "Nice! Let's listen together!",
-      "thinking": "Wow, I'm already curious about the opening note!"
+      "thinking": "Wow, I wonder how everyone will look as they listen!"
     },
     "interlude_1_01": {
       "speaker": "player",
@@ -53,7 +53,7 @@
     "interlude_1_02": {
       "speaker": "player",
       "empathy": "That scene caught my eye.",
-      "thinking": "Ah, looking at it that way brings something new."
+      "thinking": "Ah, I found myself stopping to watch."
     },
     "moka_01": {
       "speaker": "moka",
@@ -62,8 +62,8 @@
     },
     "moka_02": {
       "speaker": "moka",
-      "empathy": "Sure, let's look through it together.",
-      "thinking": "Ah, that is a thoughtful way to look at it."
+      "empathy": "Sure, let's do it that way.",
+      "thinking": "Ah, that's one way to sort it out."
     },
     "moka_03": {
       "speaker": "moka",
@@ -77,7 +77,7 @@
     },
     "moka_05": {
       "speaker": "moka",
-      "empathy": "Yes, let's knead just that much.",
+      "empathy": "Yes, let's make that many.",
       "thinking": "Ah, what rich aroma will fill the oven today."
     },
     "moka_06": {
@@ -93,7 +93,7 @@
     "interlude_2_02": {
       "speaker": "player",
       "empathy": "Handling it like this works too.",
-      "thinking": "There was a story hidden in this box after all."
+      "thinking": "This box is more fun than I thought."
     },
     "echo_01": {
       "speaker": "echo",
@@ -107,7 +107,7 @@
     },
     "echo_03": {
       "speaker": "echo",
-      "empathy": "Yes, that shelf holds a meaning of its own.",
+      "empathy": "Yes, that spot has a meaning of its own.",
       "thinking": "I wonder how the notebook will be read there."
     },
     "echo_04": {
@@ -117,7 +117,7 @@
     },
     "echo_05": {
       "speaker": "echo",
-      "empathy": "Yes, that passage stays with you.",
+      "empathy": "Yes, that part is a good one.",
       "thinking": "I would like to read that scene once more."
     },
     "echo_06": {
@@ -183,7 +183,7 @@
     "festival_04": {
       "speaker": "or",
       "empathy": "Good. Let's try it.",
-      "thinking": "Let's see how far the light reaches."
+      "thinking": "Let's see where it lights up first."
     },
     "festival_05": {
       "speaker": "player",
@@ -203,7 +203,7 @@
     "gate_c": {
       "speaker": "player",
       "empathy": "That path stayed with me too.",
-      "thinking": "I wonder what sights await along that path."
+      "thinking": "That path will be waiting for me."
     },
     "gate_d": {
       "speaker": "player",

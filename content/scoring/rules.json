@@ -4,6 +4,7 @@
   "npcStep": 20,
   "affinityStart": 20,
   "affinityGain": 12,
+  "affinityThinkingGain": 4,
   "errandAffinityGain": 8,
   "affinityMin": 0,
   "affinityMax": 100,

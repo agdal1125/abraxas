@@ -2,6 +2,8 @@
 
 클라이언트(TypeScript)와 서버(Go)가 같은 파일을 읽는다. 형식을 바꾸면 `scripts/check-scoring.mjs`와 양쪽 파서를 함께 고친다.
 
+`situation`과 `note`는 설계 메모다. 플레이어가 보는 장면 설명은 `content/ink/`의 대사가 정본이며, `situation`의 내용이 ink에 없으면 ink에 넣거나 `situation`을 고친다. `picks.*.text`는 ink 선택지와 글자까지 같아야 한다(`client/scripts/check-dialogue.mjs`).
+
 ## `items.json`
 
 ```jsonc
@@ -62,4 +64,5 @@
 
 - `scoreLimit`: 플레이어·NPC 성향 범위(±100), `tieThreshold`: 경계 구간과 수식어 기준(10)
 - `npcStep`: NPC 성향 이동 폭(20), `affinityStart`·`affinityGain`·`affinityMin`·`affinityMax`: 호감도 시작(20)·일치 시 증가(+12)·범위(0~100)
+- `affinityThinkingGain`: 불일치 시 호감도 증가(+4)
 - `errandAffinityGain`: 담당 심부름 완료 시 호감도 증가(+8). 서버가 검증한 완료 사건을 회차당 한 번 합산하고 기존 범위로 제한한다.
