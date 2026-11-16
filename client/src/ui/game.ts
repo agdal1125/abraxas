@@ -1,4 +1,4 @@
-import { showIntent, showMoveHint } from "./intro-hints";
+import { moveHintKey, showIntent, showMoveHint } from "./intro-hints";
 import { currentDisplayEnv, installGuideFor, openInstallGuide } from "./install-guide";
 import { fullscreenSupported, isFullscreen, setFullscreen } from "../fullscreen";
 import type { Story } from "inkjs";
@@ -123,7 +123,7 @@ export class Game {
     if (page === "confirm") { add(this.ui.hud.restart, () => { close(); this.restart(); }); add(this.ui.hud.cancel, () => this.settings()); }
     else if (page === "howTo") {
       const steps = document.createElement("ol"), copy = this.ui.howTo;
-      for (const text of [copy.move, copy.examine, this.ui.intent.prompt, ...copy.choose.split("\n")]) { const step = document.createElement("li"); step.textContent = text; steps.append(step); }
+      for (const text of [copy[moveHintKey()], copy.examine, this.ui.intent.prompt, copy.visit, ...copy.choose.split("\n")]) { const step = document.createElement("li"); step.textContent = text; steps.append(step); }
       card.append(steps); add(this.ui.hud.back, () => this.settings());
     }
     else if (page === "credits") {
@@ -404,7 +404,7 @@ export class Game {
     await this.narrative(segment, segment === "interlude_2" ? `${segment}_outro_${lastPick}` : `${segment}_outro`);
     this.village.setDemiMode("follow"); this.finish();
   }
-  private showWorld(available: string[]): void { this.reloadDialogue = null; this.village.setDemiMode("follow"); this.worldApi.focusSpeaker?.(null); this.exploring = true; this.targets = available; this.updateHud(); this.syncFragments(true); this.token++; this.overlay.replaceChildren(); showMoveHint(this.overlay, [this.ui.howTo.move, this.ui.howTo.examine]); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
+  private showWorld(available: string[]): void { this.reloadDialogue = null; this.village.setDemiMode("follow"); this.worldApi.focusSpeaker?.(null); this.exploring = true; this.targets = available; this.updateHud(); this.syncFragments(true); this.token++; this.overlay.replaceChildren(); showMoveHint(this.overlay, [this.ui.howTo[moveHintKey()], this.ui.howTo.examine]); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
   private answered(segment: string): number { return data.items.filter(item => item.segment === segment && this.state.log.some(entry => entry.id === item.id)).length; }
   private interact(id: string): void {
     if (this.snapshot?.segment === "ep_moka") { this.interactMoka(id); return; }

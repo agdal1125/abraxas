@@ -6,13 +6,15 @@
     "language": "한국어"
   },
   "intent": {
-    "text": "Where you walk and what you say\ntell others who you are before your name does.\nStay a while, and go where your heart leads.",
+    "text": "Even without memories, your steps lead somewhere.\nIn this village, there is no one to impress.\nStay a while, and go where your heart leads.",
     "prompt": "Tap the screen to continue"
   },
   "howTo": {
-    "move": "Drag the screen to walk",
+    "moveTouch": "Drag in the lower left to walk",
+    "moveKeys": "Use the arrow keys or WASD to walk",
     "examine": "Tap people and things to look closer",
-    "choose": "Visit the villagers, hear their requests, and choose.\nYou can't take a choice back, but none of them is wrong."
+    "visit": "Visit the villagers and hear their requests",
+    "choose": "Pick whichever feels right to you.\nYou can't take a choice back, but there are no right answers."
   },
   "installGuide": {
     "button": "Play full screen",
