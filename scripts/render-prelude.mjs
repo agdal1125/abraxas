@@ -8,10 +8,11 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const source = join(root, 'assets/source/cinematics');
-const out = join(source, 'prelude-v2/out');
+const out = join(source, 'prelude-v3/out');
 const frames = join(out, 'frames');
-const output = join(root, 'client/public/cinematics/prelude-v2.mp4');
+const output = join(root, 'client/public/cinematics/prelude-v3.mp4');
 const DURATION = '51.42';
+const TITLE_AT = '47.24';
 // 13 MiB folder limit minus the audio track and the credits file.
 const VIDEO_BITRATE = '1900k';
 
@@ -37,7 +38,7 @@ function renderFrames(args) {
   const draft = args.includes('--draft');
   const start = option(args, '--start');
   const end = option(args, '--end');
-  const script = ['-b', '--factory-startup', '--python-exit-code', '1', '-P', join(source, 'prelude-v2/build_film.py'), '--'];
+  const script = ['-b', '--factory-startup', '--python-exit-code', '1', '-P', join(source, 'prelude-v3/build_film.py'), '--'];
   if (stills) {
     run(blender, [...script, '--t', stills, '--out', join(out, 'stills')]);
   } else if (draft) {
@@ -51,10 +52,10 @@ function renderFrames(args) {
 
 function encode() {
   if (!existsSync(frames) || readdirSync(frames).length === 0) throw Error('Render the frames first');
-  const graph = "[1:v]format=rgba,fade=t=in:st=47.2:d=1.2:alpha=1[title];[0:v][title]overlay=0:0,fade=t=out:st=50:d=1.42:color=white,format=yuv420p[v]";
+  const graph = "[1:v]format=rgba[title];[0:v][title]overlay=0:0:eof_action=repeat,format=yuv420p[v]";
   const input = [
     '-y', '-framerate', '24', '-i', join(frames, '%04d.png'),
-    '-loop', '1', '-framerate', '24', '-i', join(source, 'prelude-v2/title.png'),
+    '-framerate', '24', '-itsoffset', TITLE_AT, '-i', join(source, 'prelude-v3/title/%06d.png'),
     '-i', join(source, 'prelude-audio-v1.m4a'),
     '-filter_complex', graph, '-map', '[v]', '-t', DURATION,
     '-c:v', 'libx264', '-profile:v', 'high', '-preset', 'veryslow', '-b:v', VIDEO_BITRATE,

@@ -77,7 +77,7 @@ export function playPrelude(
       showFallback();
     } else {
       timer = setTimeout(showFallback, 10_000);
-      video.src = `${import.meta.env.BASE_URL}cinematics/prelude-v2.mp4`;
+      video.src = `${import.meta.env.BASE_URL}cinematics/prelude-v3.mp4`;
       start();
     }
   });

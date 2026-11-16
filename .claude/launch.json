@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "play",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["scripts/dev-play.mjs"],
+      "port": 5173
+    }
+  ]
+}

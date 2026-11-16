@@ -1,25 +1,32 @@
 ---
 name: art-asset
-description: Generates and registers 2D art assets for Abraxas (characters, backgrounds, UI, result cards) in the project's pastel SD quarter-view style using an image generation model such as Nano Banana. Use when the user asks for a sprite, background, icon, character sheet, result card illustration, or placeholder art.
+description: Abraxas 2D 산출물(유형 일러스트, 공유 카드와 OG 이미지, UI 아이콘, 무드 시안)을 만들고 등록한다. 3D 게임 에셋은 3dviz-abraxas와 Blender 생성기를 쓴다.
 ---
 
-# 아트 에셋 만들기
+# 2D 아트 에셋 만들기
 
-먼저 `docs/art/style-guide.md`와 `.agents/rules/design-policy.md`를 읽는다.
+먼저 `docs/art/design-system.md`와 `docs/memory/decisions.md`의 아트 결정을 읽는다. `docs/art/style-guide.md`와 `.agents/rules/design-policy.md`에는 옛 파스텔·2등신·세로 기준이 섞여 있다. 충돌하면 최신 결정을 따른다.
 
 ## 순서
 
-1. **요청 정리**: 종류(bg/chr/ui/fx/card), 용도(어느 씬), 크기, 투명 배경 여부, 변형 수.
-2. **기준 이미지 확인**: 같은 캐릭터·장소의 승인된 에셋이 `client/public/assets/`에 있으면 참조 이미지로 넣어 일관성을 유지한다. 없으면 `docs/art/reference/`의 무드 레퍼런스를 쓴다.
-3. **프롬프트 작성**: 스타일 가이드의 '공통 프롬프트 머리말' + 대상 설명 + 금지 요소. 캐릭터는 정면·3/4·측면 시트를 먼저 만든 뒤 표정·포즈를 파생한다.
-4. **생성**: 이미지 생성 모델로 2~4안을 만든다. 결과는 `assets/_generated/<종류>/<이름>-v<번호>.png`로 저장하고, 같은 이름의 `.prompt.md`에 프롬프트·모델·참조 이미지·날짜를 남긴다.
-5. **후처리**: 캐릭터·UI는 배경 제거(투명 PNG), 배경은 WebP 변환. 기준 해상도(720×1280) 대비 크기를 맞춘다.
-6. **사람 확인**: 후보를 보여주고 고른 안만 `client/public/assets/<종류>/`로 옮긴다. 승인 전에는 게임 코드에서 참조하지 않는다.
-7. **기록**: 승인된 에셋을 `docs/art/asset-registry.md`에 한 줄 추가(파일, 씬, 원본 프롬프트 경로, 승인일).
+1. **요청 정리**: 종류(card/ui/fx/mood), 쓰는 곳, 크기, 투명 배경 여부, 변형 수.
+2. **제작 방식 고르기**: 게임 속 인물과 세계가 나오는 그림은 Blender 원본을 렌더해 만든다. 영상과 게임을 같은 설계로 맞춘 데미처럼 게임과 같은 얼굴을 유지하기 위해서다. 단순한 아이콘은 SVG로 그린다. 이미지 생성 모델은 사람이 원할 때 무드 시안으로만 쓴다.
+3. **크기**: 공유 카드는 세로 1080×1920, OG 이미지는 1200×630을 시작값으로 한다. 게임 화면 안 크기는 740×360과 844×390에서 확인한다.
+4. **산출**: 후보는 `assets/_generated/<종류>/<이름>-v<번호>.png`에 둔다. 스크립트나 프롬프트, 모델, 참조 이미지, 날짜를 같은 이름의 `.prompt.md`에 남긴다.
+5. **후처리**: 투명이 필요하면 PNG, 그 외에는 WebP를 쓴다. 전체 용량은 `npm --prefix client run check:size`로 확인한다.
+6. **사람 확인**: 후보를 보여 주고 고른 안만 `client/public/assets/`로 옮긴다. 승인 전에는 게임 코드에서 참조하지 않는다.
+7. **기록**: 승인된 에셋을 `docs/art/asset-registry.md`에 한 줄 추가한다(파일, 쓰는 곳, 원본 경로, 승인일).
+
+## 공유 카드 기준
+
+- 유형 이름과 그림이 작은 썸네일에서도 읽힌다.
+- 선택 내용, 축 이름, 수치, 내부 코드, 'MBTI'를 넣지 않는다.
+- 유형 사이에 우열이 느껴지는 색과 표현을 쓰지 않는다.
+- 전문 심리검사가 아니라는 고지 위치는 `abraxas-ux-copy`와 맞춘다.
 
 ## 하지 말 것
 
 - 실존 작품·캐릭터·브랜드를 이름으로 지정하거나 닮게 만들기.
-- 공략 캐릭터에 성별이 드러나는 고정 요소 넣기(성별 중립 원칙).
-- 주인공 얼굴을 세밀하게 그리기(외형 최소화 원칙).
+- 공략 캐릭터에 성별이 드러나는 고정 요소 넣기.
+- 주인공에게 얼굴 넣기.
 - 비용이 큰 고해상도·대량 생성을 사람 확인 없이 돌리기. 한 번에 4장 이하.

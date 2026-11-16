@@ -46,6 +46,7 @@ type rules struct {
 	NPCStep              int `json:"npcStep"`
 	AffinityStart        int `json:"affinityStart"`
 	AffinityGain         int `json:"affinityGain"`
+	AffinityThinkingGain int `json:"affinityThinkingGain"`
 	ErrandAffinityGain   int `json:"errandAffinityGain"`
 	AffinityMin          int `json:"affinityMin"`
 	AffinityMax          int `json:"affinityMax"`
@@ -163,9 +164,11 @@ func (data Data) calculate(input Input, complete bool) (Result, map[string]strin
 				reactions[item.ID] = "empathy"
 			}
 			npc.S[item.Axis] = bound(current+chosen*r.NPCStep, -r.ScoreLimit, r.ScoreLimit)
+			gain := r.AffinityThinkingGain
 			if chosen == expected {
-				npc.Affinity = bound(npc.Affinity+r.AffinityGain, r.AffinityMin, r.AffinityMax)
+				gain = r.AffinityGain
 			}
+			npc.Affinity = bound(npc.Affinity+gain, r.AffinityMin, r.AffinityMax)
 			result.NPCs[item.NPC] = npc
 		}
 	}

@@ -3,9 +3,9 @@ import { clamp } from "../clamp";
 const axes = ["A", "B", "C", "D", "E"] as const;
 type Axis = typeof axes[number];
 type Scores = Record<Axis, number>;
-type Item = { id: string; axis: Axis; npc?: string | null; picks: Record<string, { w: Partial<Scores> }> };
-type Rules = { scoreLimit: number; tieThreshold: number; npcStep: number; affinityStart: number; affinityGain: number; errandAffinityGain: number; affinityMin: number; affinityMax: number; festivalAffinityGain: number; confessionThreshold: number };
-export type Data = { items: Item[]; tiebreakers: Item[]; npcs: { id: string; start: Scores }[]; rules: Rules };
+type Item = { id: string; axis: Axis; npc?: string | null; picks: Record<string, { w: Partial<Scores>; values?: string[] }> };
+type Rules = { scoreLimit: number; tieThreshold: number; npcStep: number; affinityStart: number; affinityGain: number; affinityThinkingGain: number; errandAffinityGain: number; affinityMin: number; affinityMax: number; festivalAffinityGain: number; confessionThreshold: number };
+export type Data = { items: Item[]; tiebreakers: Item[]; npcs: { id: string; start: Scores; themeAxes: ("A" | "B" | "C" | "D")[] }[]; rules: Rules };
 export type Input = { playId: string; log: { id: string; pick: string }[]; completedErrands?: string[] };
 
 function expectedPole(current: number, playId: string, id: string): number {
@@ -51,7 +51,7 @@ function accumulate(input: Input, data: Data) {
       const chosen = Math.sign(pick.w[item.axis] ?? 0);
       reactions[item.id] = expected === chosen ? "empathy" : "thinking";
       npc.s[item.axis] = limit(current + chosen * rules.npcStep);
-      if (expected === chosen) npc.affinity = clamp(npc.affinity + rules.affinityGain, rules.affinityMin, rules.affinityMax);
+      npc.affinity = clamp(npc.affinity + (expected === chosen ? rules.affinityGain : rules.affinityThinkingGain), rules.affinityMin, rules.affinityMax);
     }
   }
   if (input.completedErrands !== undefined && !Array.isArray(input.completedErrands)) throw new Error("Invalid completed errands");
@@ -64,8 +64,8 @@ function accumulate(input: Input, data: Data) {
 }
 
 export function progress(input: Input, data: Data) {
-  const { npcs, reactions } = accumulate(input, data);
-  return { npcs, reactions };
+  const { s, npcs, reactions } = accumulate(input, data);
+  return { s, npcs, reactions };
 }
 
 export function score(input: Input, data: Data) {

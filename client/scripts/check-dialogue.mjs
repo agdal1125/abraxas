@@ -18,6 +18,7 @@ const required = {
   gate: ["gate_intro", ...["a", "b", "c", "d"].map(n => `gate_${n}`), "gate_outro"],
   confession: ["demi_reveal", "confession_intro", "confession_send", ...residents.flatMap(n => ["accepted", "waiting"].map(o => `confession_${n}_${o}`))],
   ending: ["ending_shell", "ending_cards", "ending_walk"],
+  last_walk: ["walk_intro", ...Object.entries({ lumi: "AC", moka: "BD", echo: "BC", or: "AD" }).flatMap(([n, axes]) => [...axes].flatMap(a => ["deepened", "steady", "wavering", "turned"].map(s => `walk_${n}_${a}_${s}`)))],
   ...Object.fromEntries(["lumi", "echo", "or"].map(n => [`ep_${n}`, sequence(`${n}_choose_`, 6)])),
   ep_moka: ["moka_meet", "moka_reservation", "moka_choose_display", "moka_share", "moka_order", "moka_feedback"],
 };
