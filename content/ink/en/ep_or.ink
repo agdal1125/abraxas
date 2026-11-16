@@ -82,11 +82,11 @@ You lift the finished bell.
 -> END
 
 === or_report_a ===
-Or: Done. The forge is quiet.
+Or: Done. The villagers will hang the bell in the square.
 -> END
 
 === or_report_b ===
-Or: The bell hangs well. It'll carry across the square.
+Or: Done. The bell is up in the square.
 -> END
 
 === or_completed ===
