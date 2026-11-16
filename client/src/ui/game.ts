@@ -1,4 +1,4 @@
-import { showIntent, showMoveHint } from "./intro-hints";
+import { moveHintKey, showIntent, showMoveHint } from "./intro-hints";
 import { mapLegend, renderVillageMap } from "./village-map";
 import { currentDisplayEnv, installGuideFor, openInstallGuide } from "./install-guide";
 import { fullscreenSupported, isFullscreen, setFullscreen } from "../fullscreen";
@@ -80,8 +80,10 @@ export class Game {
   private settingsMenu = document.createElement("div");
   private exploring = false;
   private targets: string[] = [];
-  private get worldApi() { return this.village as Village & { focusSpeaker?: (id: string | null) => void; targetScreenPos?: (id: string) => { x: number; y: number; onScreen: boolean } | null; setLumiView: (view: ReturnType<typeof lumiView> | null) => void; setEchoView: (view: ReturnType<typeof echoView> | null) => void; setOrView: (view: ReturnType<typeof orView> | null) => void; resumeLumi: () => Promise<void>; resumeEcho: () => Promise<void>; resumeOr: () => Promise<void> }; }
+  private get worldApi() { return this.village as Village & { focusSpeaker?: (id: string | null) => void; setChoicesTop?: (top: number | null) => void; targetScreenPos?: (id: string) => { x: number; y: number; onScreen: boolean } | null; setLumiView: (view: ReturnType<typeof lumiView> | null) => void; setEchoView: (view: ReturnType<typeof echoView> | null) => void; setOrView: (view: ReturnType<typeof orView> | null) => void; resumeLumi: () => Promise<void>; resumeEcho: () => Promise<void>; resumeOr: () => Promise<void> }; }
   constructor(app: HTMLElement, private village: Village) {
+    // The village clears its choices offset on a viewport change; measure the rebuilt layout again once it settles.
+    window.addEventListener("abraxas:viewport", () => requestAnimationFrame(() => this.syncChoicesFocus()));
     this.controls = new Controls(app, village as Village & VillageInput);
     try { this.largeText = localStorage.getItem("abraxas-large-text") === "true"; } catch { /* Continue in memory if storage is unavailable. */ }
     try { this.autoAdvance = localStorage.getItem("abraxas-auto-advance") === "true"; } catch { /* Continue in memory if storage is unavailable. */ }
@@ -124,7 +126,8 @@ export class Game {
     if (page === "confirm") { add(this.ui.hud.restart, () => { close(); this.restart(); }); add(this.ui.hud.cancel, () => this.settings()); }
     else if (page === "howTo") {
       const steps = document.createElement("ol"), copy = this.ui.howTo;
-      for (const text of [copy.move, copy.examine, copy.dog, this.ui.intent.prompt, ...copy.choose.split("\n")]) { const step = document.createElement("li"); step.textContent = text; steps.append(step); }
+      for (const text of [copy[moveHintKey()], copy.examine, copy.dog, this.ui.intent.prompt, copy.visit, ...copy.choose.split("
+")]) { const step = document.createElement("li"); step.textContent = text; steps.append(step); }
       card.append(steps); add(this.ui.hud.back, () => this.settings());
     }
     else if (page === "credits") {
@@ -224,7 +227,7 @@ export class Game {
     requestAnimationFrame(this.updateDirection);
   };
   private panel(text: string, buttons: [string, () => void, string?][], kind: "dialogue" | "title" | "result" = "dialogue", speaker?: string): void {
-    this.exploring = false; this.updateHud(); this.token++; const token = this.token; this.clearAuto(); this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.replaceChildren(); if (this.overlay.dataset) delete this.overlay.dataset.scene; this.overlay.className = `overlay ${kind}`;
+    this.exploring = false; this.updateHud(); this.token++; const token = this.token; this.clearAuto(); this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.choicesBox = null; this.worldApi.setChoicesTop?.(null); this.overlay.replaceChildren(); if (this.overlay.dataset) delete this.overlay.dataset.scene; this.overlay.className = `overlay ${kind}`;
     const panel = document.createElement("div"); panel.className = "panel";
     const run = (action: () => void) => { if (token === this.token) { this.token++; action(); } };
     const button = (label: string, action: () => void, itemId?: string) => { const element = document.createElement("button"); element.textContent = label; if (itemId) element.dataset.itemId = itemId; else element.dataset.action = label === this.ui.next ? "next" : "select"; element.addEventListener("click", () => run(action)); return element; };
@@ -246,8 +249,11 @@ export class Game {
     panel.append(p);
     if (buttons.length === 1 && buttons[0]![0] === this.ui.next) { panel.classList.add("continue"); panel.dataset.action = "next"; panel.tabIndex = 0; panel.setAttribute("role", "button"); panel.setAttribute("aria-label", this.ui.next); panel.addEventListener("click", () => run(buttons[0]![1])); panel.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); if (!event.repeat) run(buttons[0]![1]); } }); const indicator = document.createElement("span"); indicator.className = "indicator"; indicator.textContent = "▼"; indicator.setAttribute("aria-hidden", "true"); panel.append(indicator); const advance = buttons[0]![1]; this.autoPending = { token, fire: () => run(advance), ms: this.autoDelay(p.textContent ?? text) }; }
     this.overlay.append(panel); this.resumeAuto();
-    if (buttons.length > 0 && !(buttons.length === 1 && buttons[0]![0] === this.ui.next)) { this.overlay.classList.add("has-choices"); const choices = document.createElement("div"); choices.className = "choices"; for (const [label, action, itemId] of buttons) choices.append(button(label, action, itemId)); this.overlay.append(choices); }
+    if (buttons.length > 0 && !(buttons.length === 1 && buttons[0]![0] === this.ui.next)) { this.overlay.classList.add("has-choices"); const choices = document.createElement("div"); choices.className = "choices"; for (const [label, action, itemId] of buttons) choices.append(button(label, action, itemId)); this.overlay.append(choices); this.choicesBox = choices; this.syncChoicesFocus(); }
   }
+  /** Tells the camera where the choices box starts so the speaking pair stays above it. */
+  private choicesBox: HTMLElement | null = null;
+  private syncChoicesFocus(): void { const box = this.choicesBox; this.worldApi.setChoicesTop?.(box?.isConnected ? box.getBoundingClientRect().top : null); }
   private applySnapshot(snapshot: PlaySnapshot): boolean {
     if (!contentVersionMatches(snapshot, __CONTENT_VERSION__)) { this.panel(translations(this.state.lang).moka.status.version, []); return false; }
     this.snapshot = snapshot;
@@ -422,7 +428,7 @@ export class Game {
     await this.narrative(segment, segment === "interlude_2" ? `${segment}_outro_${lastPick}` : `${segment}_outro`);
     this.village.setDemiMode("follow"); this.finish();
   }
-  private showWorld(available: string[]): void { this.reloadDialogue = null; this.village.setDemiMode("follow"); this.worldApi.focusSpeaker?.(null); this.exploring = true; this.targets = available; this.updateHud(); this.syncFragments(true); this.token++; this.overlay.replaceChildren(); showMoveHint(this.overlay, [this.ui.howTo.move, this.ui.howTo.examine]); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
+  private showWorld(available: string[]): void { this.reloadDialogue = null; this.village.setDemiMode("follow"); this.worldApi.focusSpeaker?.(null); this.exploring = true; this.targets = available; this.updateHud(); this.syncFragments(true); this.token++; this.overlay.replaceChildren(); showMoveHint(this.overlay, [this.ui.howTo[moveHintKey()], this.ui.howTo.examine]); this.controls.setActive(true, this.state.lang); this.village.setAvailable(available); this.village.setEnabled(true); }
   private answered(segment: string): number { return data.items.filter(item => item.segment === segment && this.state.log.some(entry => entry.id === item.id)).length; }
   private interact(id: string): void {
     if (this.snapshot?.segment === "ep_moka") { this.interactMoka(id); return; }

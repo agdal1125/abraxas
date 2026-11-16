@@ -12,7 +12,7 @@
 .map-legend li { display: flex; align-items: center; gap: 8px; }
 .map-legend li::before { content: ""; flex: none; width: 12px; height: 12px; border-radius: 50%; }
 .map-legend .is-player::before { background: var(--plank); box-shadow: 0 0 0 2px var(--wood-text); }
-.map-legend .is-target::before { background: var(--marker); box-shadow: 0 0 0 2px var(--wood); }
+.map-legend .is-target::before { background: var(--marker); box-shadow: 0 0 0 2px var(--wood); border-radius: 0; transform: rotate(45deg); }
 
 .map-land { fill: #BFD08E; stroke: #EAD9A8; stroke-width: .4; }
 .map-road { fill: none; stroke: #E8D6A6; stroke-linecap: round; stroke-linejoin: round; }
@@ -20,7 +20,7 @@
 .map-tree { fill: #6F9457; }
 .map-building { fill: var(--wood); }
 .map-zone { fill: var(--ink); stroke: var(--paper); stroke-width: .3; paint-order: stroke; font: 700 1.05px var(--font-body); text-anchor: middle; }
-.map-player { fill: var(--plank); stroke: var(--wood-text); stroke-width: .22; }
-.map-target { fill: var(--marker); stroke: var(--wood); stroke-width: .18; animation: map-target 1.2s ease-in-out infinite alternate; }
+.map-player { fill: var(--plank); stroke: var(--wood-edge); stroke-width: .25; }
+.map-target { fill: var(--marker); stroke: var(--wood); stroke-width: .3; animation: map-target 1.2s ease-in-out infinite alternate; }
 @keyframes map-target { to { opacity: .45; } }
 @media (prefers-reduced-motion: reduce) { .map-target { animation: none; } }

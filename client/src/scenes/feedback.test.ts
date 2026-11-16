@@ -15,3 +15,29 @@ it("frames nearby characters above the dialogue without changing their scale", (
     expect(Math.abs(projected.x)).toBeLessThan(1);
   }
 });
+
+function feetTopPx(width: number, height: number, halfHeight: number, choicesTop?: number): number {
+  const player = new THREE.Vector3(0, 0, 0), speaker = new THREE.Vector3(.8, 0, 0);
+  const target = dialogueFocus(player, speaker, halfHeight, choicesTop === undefined ? undefined : { top: choicesTop, viewportHeight: height });
+  const aspect = width / height;
+  const camera = new THREE.OrthographicCamera(-halfHeight * aspect, halfHeight * aspect, halfHeight, -halfHeight, .1, 100);
+  camera.position.copy(target).add(new THREE.Vector3(10, 10 * Math.tan(THREE.MathUtils.degToRad(35)) * Math.SQRT2, 10));
+  camera.lookAt(target); camera.updateMatrixWorld(); camera.updateProjectionMatrix();
+  const feet = new THREE.Vector3(.4, 0, 0).project(camera);
+  return (1 - feet.y) / 2 * height;
+}
+
+it.each([[740, 360, 111], [844, 390, 131]])("puts the pair's feet 8px above the choices at %ix%i", (width, height, choicesTop) => {
+  const halfHeight = height * 1.8 / 140; // a 1.8 unit character is 70px tall
+  expect(feetTopPx(width, height, halfHeight, choicesTop)).toBeCloseTo(choicesTop - 8, 3);
+});
+
+it("keeps the head line 12px below the top when the choices start too high", () => {
+  const halfHeight = 360 * 1.8 / 140;
+  expect(feetTopPx(740, 360, halfHeight, 40)).toBeCloseTo(70 + 12, 3);
+});
+
+it("matches the base framing when there are no choices", () => {
+  const halfHeight = 360 * 1.8 / 140;
+  expect(feetTopPx(740, 360, halfHeight)).toBeCloseTo(360 / 2 - (halfHeight / 3 - .35 * Math.cos(THREE.MathUtils.degToRad(35))) * 360 / (2 * halfHeight), 1);
+});

@@ -6,14 +6,16 @@
     "language": "한국어"
   },
   "intent": {
-    "text": "Where you walk and what you say\ntell others who you are before your name does.\nStay a while, and go where your heart leads.",
+    "text": "Even without memories, your steps lead somewhere.\nIn this village, there is no one to impress.\nStay a while, and go where your heart leads.",
     "prompt": "Tap the screen to continue"
   },
   "howTo": {
-    "move": "Drag the screen to walk",
+    "moveTouch": "Drag in the lower left to walk",
+    "moveKeys": "Use the arrow keys or WASD to walk",
     "examine": "Tap people and things to look closer",
     "dog": "Tap the dog to pet it or call it over",
-    "choose": "Visit the villagers, hear their requests, and choose.\nYou can't take a choice back, but none of them is wrong."
+    "visit": "Visit the villagers and hear their requests",
+    "choose": "Pick whichever feels right to you.\nYou can't take a choice back, but there are no right answers."
   },
   "installGuide": {
     "button": "Play full screen",
@@ -129,7 +131,7 @@
       "turned": "At first: {from}. Now closer to this: {to}."
     }
   },
-  "map": { "open": "Map", "title": "Village map", "here": "You are here", "target": "Places to go", "zones": { "plaza": "Plaza", "bakery": "Bakery", "library": "Library", "smithy": "Smithy", "lake": "Lakeside", "entrance": "Entrance", "gate": "Memory Gate" } },
+  "map": { "open": "Map", "title": "Village map", "here": "You are here", "target": "Places to go", "zones": { "plaza": "Plaza", "bakery": "Bakery", "library": "Library", "smithy": "Smithy", "lake": "Lakeside", "entrance": "Entrance", "gate": "Gate of Memory" } },
   "hud": {
     "goal": { "hub": "Find someone to visit in the village", "character": "Find the person waiting for you", "quest": "Find the villager who needs help", "return": "Go back and meet them again", "interlude": "Take a quiet moment by the lake", "festival": "Head to the plaza", "gate": "Head to the Gate of Memory" },
     "settings": "Settings", "close": "Close", "language": "Language", "largeText": "Large text", "fullscreen": "Full screen", "autoAdvance": "Auto-advance", "on": "On", "off": "Off", "restart": "Start over", "confirm": "Erase your progress and start over?", "cancel": "Cancel", "share": "Share",
