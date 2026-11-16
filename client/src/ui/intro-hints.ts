@@ -1,5 +1,10 @@
 const MOVE_HINT_SEEN = "abraxas-move-hint-seen";
 
+/** Picks the movement hint key by input type: touch drags the stick, keyboards use arrows/WASD. */
+export function moveHintKey(): "moveTouch" | "moveKeys" {
+  try { return window.matchMedia("(pointer: coarse)").matches ? "moveTouch" : "moveKeys"; } catch { return "moveKeys"; }
+}
+
 export function showIntent(parent: HTMLElement, copy: { text: string; prompt: string }): Promise<void> {
   return new Promise(resolve => {
     const card = document.createElement("button"), text = document.createElement("p"), prompt = document.createElement("small");
