@@ -211,6 +211,8 @@ export class Demi {
 
   release(position: Vec2): void {
     this.held = false; this.gesture = null; this.trail = []; this.last = { ...position };
+    // End the petting heart at once so it cannot linger over a measurement choice.
+    this.heartAge = HEART_LIFE; this.heart.visible = false;
   }
 
   walkTo(position: Vec2): void {
