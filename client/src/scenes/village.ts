@@ -587,7 +587,9 @@ export class Village {
   }
   private updateCamera(dt: number, snap = false): void {
     const speaker = this.speaker ? this.target(this.speaker) : undefined;
-    const focus = !this.enabled && speaker ? dialogueFocus(this.player.position, new THREE.Vector3(speaker.x, 0, speaker.z), this.viewHalfHeight, this.choicesTop === null ? undefined : { top: this.choicesTop - this.renderer.domElement.getBoundingClientRect().top, viewportHeight: this.renderer.domElement.clientHeight })
+    // With choices on screen the pair, or the player alone when nobody else speaks, is framed above the choices box.
+    const choices = this.choicesTop === null ? undefined : { top: this.choicesTop - this.renderer.domElement.getBoundingClientRect().top, viewportHeight: this.renderer.domElement.clientHeight };
+    const focus = !this.enabled && (speaker || choices) ? dialogueFocus(this.player.position, speaker ? new THREE.Vector3(speaker.x, 0, speaker.z) : this.player.position, this.viewHalfHeight, choices)
       : this.enabled ? this.player.position.clone().add(new THREE.Vector3(this.input.x, 0, this.input.z).multiplyScalar(.25)).add(new THREE.Vector3(1, -Math.sqrt(2) / Math.tan(THREE.MathUtils.degToRad(35)), 1).normalize().multiplyScalar(this.viewHalfHeight * -.12)) : this.cameraTarget;
     this.cameraTarget.lerp(focus, snap ? 1 : 1 - Math.exp(-5 * dt));
     const target = this.cameraTarget.clone();
