@@ -1,6 +1,6 @@
 import { expect, it } from "vitest";
 import { translations } from "../content";
-import { toMapPoint, villageMapScene } from "./village-map";
+import { diamondPath, toMapPoint, villageMapScene } from "./village-map";
 
 it("keeps the directions the player sees on the village screen", () => {
   const origin = toMapPoint({ x: 0, z: 0 });
@@ -28,4 +28,8 @@ it("frames every labelled place inside the picture", () => {
     expect(zone.y).toBeGreaterThan(top);
     expect(zone.y).toBeLessThan(top + height);
   }
+});
+
+it("draws a target as a diamond centred on its point", () => {
+  expect(diamondPath({ x: 10, y: 5 })).toBe("M10.00 4.30l0.7 0.7l-0.7 0.7l-0.7 -0.7Z");
 });

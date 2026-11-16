@@ -36,6 +36,18 @@ it("stays put while held and comes back to following when released", () => {
   expect(dog.object.position.x).toBeGreaterThan(0);
 });
 
+it("hides the petting heart immediately on release", () => {
+  const dog = new Demi({ x: 0, z: 0 });
+  const heart = dog.object.children.find(child => child.renderOrder === 10)!;
+  dog.hold("pet");
+  dog.update({ x: 0, z: 0 }, .1);
+  expect(heart.visible).toBe(true);
+  dog.release({ x: 0, z: 0 });
+  expect(heart.visible).toBe(false);
+  dog.update({ x: 0, z: 0 }, .1);
+  expect(heart.visible).toBe(false);
+});
+
 it("whitens only the player geometry and keeps shared materials intact", () => {
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute("color", new THREE.Float32BufferAttribute([.2, .3, .4, .6, .7, .8], 3));

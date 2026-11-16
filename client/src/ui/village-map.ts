@@ -62,6 +62,10 @@ function svg<K extends keyof SVGElementTagNameMap>(tag: K, attributes: Record<st
   return element;
 }
 
+// Targets are diamonds so they differ from the round player marker by shape, not colour alone.
+export const diamondPath = ({ x, y }: MapPoint, half = 0.7) =>
+  `M${x.toFixed(2)} ${(y - half).toFixed(2)}l${half} ${half}l${-half} ${half}l${-half} ${-half}Z`;
+
 const dot = ({ x, y }: MapPoint, radius: number, className: string) => svg("circle", { cx: x.toFixed(2), cy: y.toFixed(2), r: radius }, className);
 
 export function renderVillageMap(markers: VillageMapMarkers, label: string, zoneNames: Record<ZoneId, string>): SVGSVGElement {
@@ -77,7 +81,7 @@ export function renderVillageMap(markers: VillageMapMarkers, label: string, zone
     name.textContent = zoneNames[zone.id];
     root.append(name);
   }
-  for (const target of markers.targets) root.append(dot(toMapPoint(target), .55, "map-target"));
+  for (const target of markers.targets) root.append(svg("path", { d: diamondPath(toMapPoint(target)) }, "map-target"));
   root.append(dot(toMapPoint(markers.player), .6, "map-player"));
   return root;
 }

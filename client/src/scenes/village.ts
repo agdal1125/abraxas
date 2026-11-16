@@ -78,6 +78,8 @@ export class Village {
   private nearby: string | null = null;
   private talking?: string;
   private speaker: string | null = null;
+  /** Top edge of the choices box in viewport CSS px; null while no choices are shown. */
+  private choicesTop: number | null = null;
   private available = new Set<string>();
   private mokaView: MokaView | null = null;
   private mokaProps?: MokaProps;
@@ -180,7 +182,7 @@ export class Village {
     });
     if (!document.hidden) this.frame = requestAnimationFrame(() => this.tick());
   }
-  setEnabled(value: boolean): void { this.enabled = value; if (!value) this.stopDemiPlay(); if (value) { this.talking = undefined; this.speaker = null; } else { this.auto = undefined; this.input = { x: 0, z: 0 }; this.nearby = null; this.onNearbyChange(null); } this.setAvailable([...this.available]); }
+  setEnabled(value: boolean): void { this.enabled = value; if (!value) this.stopDemiPlay(); if (value) { this.choicesTop = null; this.talking = undefined; this.speaker = null; } else { this.auto = undefined; this.input = { x: 0, z: 0 }; this.nearby = null; this.onNearbyChange(null); } this.setAvailable([...this.available]); }
   setDemiMode(mode: DemiMode): void {
     if (mode === this.demiMode) return;
     this.stopDemiPlay();
@@ -200,7 +202,8 @@ export class Village {
     const spot = map.zones["ending-player"];
     if (this.gathered && !wasGathered && spot) { this.player.position.set(spot.x, 0, spot.z); this.cameraTarget.copy(this.player.position); }
   }
-  focusSpeaker(id: string | null): void { this.speaker = id && this.target(id) ? id : null; this.setAvailable([...this.available]); }
+  setChoicesTop(top: number | null): void { this.choicesTop = top; }
+  focusSpeaker(id: string | null): void { if (!id) this.choicesTop = null; this.speaker = id && this.target(id) ? id : null; this.setAvailable([...this.available]); }
   private stopDemiPlay(): void {
     if (!this.demiPlay || this.demiPlay.kind === "follow") return;
     this.demiPlay = DEMI_RESTED; this.demiRoute = undefined; this.demi.release(this.player.position);
@@ -642,7 +645,7 @@ export class Village {
   private resize(keepCamera = false): void {
     const w = this.renderer.domElement.parentElement!.clientWidth, h = this.renderer.domElement.parentElement!.clientHeight;
     if (!w || !h) return;
-    this.viewAspect = w / h; this.portrait = h > w;
+    this.viewAspect = w / h; this.portrait = h > w; if (!keepCamera) this.choicesTop = null;
     const mobile = navigator.maxTouchPoints > 0 || Math.min(w, h) < 600;
     const ratio = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2, QUALITY_STEPS[this.qualityStep]!.pixelRatio);
     const shadowSize = Math.min(mobile ? 1024 : 2048, Math.max(512, 2 ** Math.ceil(Math.log2(Math.max(w, h) * ratio))));
@@ -655,7 +658,7 @@ export class Village {
   }
   private updateCamera(dt: number, snap = false): void {
     const speaker = this.speaker ? this.target(this.speaker) : undefined;
-    const focus = !this.enabled && speaker ? dialogueFocus(this.player.position, new THREE.Vector3(speaker.x, 0, speaker.z), this.viewHalfHeight)
+    const focus = !this.enabled && speaker ? dialogueFocus(this.player.position, new THREE.Vector3(speaker.x, 0, speaker.z), this.viewHalfHeight, this.choicesTop === null ? undefined : { top: this.choicesTop - this.renderer.domElement.getBoundingClientRect().top, viewportHeight: this.renderer.domElement.clientHeight })
       : this.enabled ? this.player.position.clone().add(new THREE.Vector3(this.input.x, 0, this.input.z).multiplyScalar(.25)).add(new THREE.Vector3(1, -Math.sqrt(2) / Math.tan(THREE.MathUtils.degToRad(35)), 1).normalize().multiplyScalar(this.viewHalfHeight * -.12)) : this.cameraTarget;
     this.cameraTarget.lerp(focus, snap ? 1 : 1 - Math.exp(-5 * dt));
     const target = this.cameraTarget.clone();
