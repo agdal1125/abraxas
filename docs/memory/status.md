@@ -42,7 +42,7 @@
 - [x] 오프닝 영상 납품: client/public/cinematics/prelude-v1.mp4 (51초, 720p, 11.7MiB). 용량 기준은 게임 10MB와 영상 13MB로 분리
 - [ ] 다음: 실기기에서 영상 재생 확인, 음악의 개별 출처 URL을 credits에 추가
 - [ ] 다음: 결과 카드 화면 디자인 다듬기
-- [ ] 다음: 실제 폰(iOS 사파리·안드로이드·카카오톡 인앱) 성능 확인, 실제 App Check·운영 저장·배포
+- [ ] 다음: 실제 폰(iOS 사파리·안드로이드·카카오톡 인앱) 성능 확인, 실제 App Check·운영 저장·배포. 기록은 docs/qa/playtest-template.md, 운영 전 점검은 docs/qa/launch-checklist.md
 
 - [x] T018 환경 각진 저폴리 전환(#67, 심부름 소품·길 연결 후속 PR): 환경 자산, 지형, 조명, 심부름 소품. 사람 승인 후 병합
 - [x] 오프닝 영상 재제작: client/public/cinematics/prelude-v2.mp4 (51초, 720p, 12.4MiB). Blender Cycles, 원본 assets/source/cinematics/prelude-v2/, 렌더 scripts/render-prelude.mjs. 소리는 v1 그대로
