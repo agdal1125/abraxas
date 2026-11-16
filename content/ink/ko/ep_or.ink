@@ -50,15 +50,12 @@
 -> END
 
 === or_fire ===
-정한 불 세기로 화덕을 조절하자.
 -> END
 
 === or_bucket_pickup ===
-빈 양동이를 집자.
 -> END
 
 === or_find_sand ===
-지도를 살피거나 나루터의 낚시꾼에게 길을 묻자.
 -> END
 
 === or_find_sand_a ===
@@ -74,19 +71,15 @@
 -> END
 
 === or_sand ===
-개울가에서 양동이에 모래를 채우자.
 -> END
 
 === or_sand_delivery ===
-모래를 대장간 연마대에 전하자.
 -> END
 
 === or_gears ===
-시계탑 정비판에서 톱니와 같은 모양의 축을 맞추자.
 -> END
 
 === or_weight ===
-고른 추를 달자.
 -> END
 
 === or_assistant ===
@@ -94,7 +87,6 @@
 -> END
 
 === or_review ===
-정한 방식으로 등불 도면을 살펴보자.
 -> END
 
 === or_review_a ===
@@ -106,19 +98,15 @@
 -> END
 
 === or_lantern_link ===
-등불 도면에서 표시된 이음 한 곳을 연결하자.
 -> END
 
 === or_hook ===
-정한 방법으로 등불 걸이를 손보자.
 -> END
 
 === or_return ===
-오르에게 돌아가자.
 -> END
 
 === or_finish ===
-연장을 정리하거나 완성된 종을 집자.
 -> END
 
 === or_finish_a ===
@@ -130,19 +118,15 @@
 -> END
 
 === or_bell_delivery ===
-종을 광장 받침대에 전하자.
 -> END
 
 === or_report ===
-오르에게 일을 마쳤다고 알리자.
 -> END
 
 === or_report_a ===
-대장간에서 오르에게 일을 마쳤다고 알리자.
 -> END
 
 === or_report_b ===
-광장에 합류한 오르에게 일을 마쳤다고 알리자.
 -> END
 
 === or_completed ===

@@ -19,9 +19,10 @@ test("opening sequence keeps the dog seated for every measurement and reaction",
     mode: value => { events.push(value); },
     knot: async value => { events.push(value); },
     name: async () => { events.push("name"); },
-    questions: async () => { events.push("question", "reaction"); },
+    question: async value => { events.push(value, "reaction"); },
+    questions: async () => { events.push("questions"); },
   }, true);
-  expect(events).toEqual(["prelude", "entrance", "lead", "demi_follow", "follow", "postman_intro", "name", "postman_named", "sit", "question", "reaction", "follow", "prologue_outro"]);
+  expect(events).toEqual(["prelude", "entrance", "lead", "demi_follow", "follow", "postman_intro", "sit", "prologue_01", "reaction", "follow", "postman_name", "name", "postman_named", "sit", "questions", "follow", "prologue_outro"]);
 });
 
 test("resume skips the prelude and introductory dialogue but keeps the measurement scene", async () => {
@@ -32,7 +33,8 @@ test("resume skips the prelude and introductory dialogue but keeps the measureme
     mode: value => { events.push(value); },
     knot: async value => { events.push(value); },
     name: async () => { events.push("name"); },
-    questions: async () => { events.push("question"); },
+    question: async value => { events.push(value); },
+    questions: async () => { events.push("questions"); },
   }, false);
-  expect(events).toEqual(["entrance", "sit", "question", "follow", "prologue_outro"]);
+  expect(events).toEqual(["entrance", "sit", "questions", "follow", "prologue_outro"]);
 });

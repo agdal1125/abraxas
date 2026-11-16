@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { assetUrl } from "../asset-url";
 
 type Spot = { asset: string; x: number; z: number };
 
@@ -15,7 +16,7 @@ export class DreamEffects {
     const loading: Promise<unknown>[] = [];
     const make = (name: string, count: number, size: number, blending: THREE.Blending = THREE.NormalBlending) => {
       const texture = new THREE.Texture();
-      loading.push(new THREE.TextureLoader().loadAsync(`${import.meta.env.BASE_URL}assets/abraxas/fx/fx-${name}.png`).then(loaded => { texture.image = loaded.image; texture.needsUpdate = true; }));
+      loading.push(new THREE.TextureLoader().loadAsync(assetUrl(`assets/abraxas/fx/fx-${name}.png`)).then(loaded => { texture.image = loaded.image; texture.needsUpdate = true; }));
       texture.colorSpace = THREE.SRGBColorSpace;
       const geometry = new THREE.BufferGeometry();
       geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(count * 3), 3));

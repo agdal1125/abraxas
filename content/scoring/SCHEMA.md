@@ -2,6 +2,8 @@
 
 클라이언트(TypeScript)와 서버(Go)가 같은 파일을 읽는다. 형식을 바꾸면 `scripts/check-scoring.mjs`와 양쪽 파서를 함께 고친다.
 
+`situation`과 `note`는 설계 메모다. 플레이어가 보는 장면 설명은 `content/ink/`의 대사가 정본이며, `situation`의 내용이 ink에 없으면 ink에 넣거나 `situation`을 고친다. `picks.*.text`는 ink 선택지와 글자까지 같아야 한다(`client/scripts/check-dialogue.mjs`).
+
 ## `items.json`
 
 ```jsonc
