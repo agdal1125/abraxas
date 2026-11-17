@@ -7,7 +7,6 @@
       "commands": [
         { "kind": "open_episode", "npcId": "moka" },
         { "kind": "choice", "itemId": "moka_01", "pick": "a" },
-        { "kind": "pickup", "targetId": "moka-basket-source" },
         { "kind": "set_down", "targetId": "moka-rest" },
         { "kind": "pickup", "targetId": "moka-rest" },
         { "kind": "deliver", "targetId": "moka-workshop-dropoff" },
@@ -20,7 +19,6 @@
         { "kind": "act", "targetId": "moka-tasting-plate" },
         { "kind": "choice", "itemId": "moka_05", "pick": "a" },
         { "kind": "act", "targetId": "moka-dough-double" },
-        { "kind": "talk", "targetId": "B" },
         { "kind": "choice", "itemId": "moka_06", "pick": "b" },
         { "kind": "complete", "targetId": "B" }
       ],
@@ -31,7 +29,6 @@
       "commands": [
         { "kind": "open_episode", "npcId": "moka" },
         { "kind": "choice", "itemId": "moka_01", "pick": "b" },
-        { "kind": "pickup", "targetId": "moka-basket-source" },
         { "kind": "deliver", "targetId": "moka-workshop-dropoff" },
         { "kind": "choice", "itemId": "moka_02", "pick": "b" },
         { "kind": "act", "targetId": "moka-reservation-bread" },
@@ -46,7 +43,6 @@
         { "kind": "act", "targetId": "moka-tired-neighbor" },
         { "kind": "choice", "itemId": "moka_05", "pick": "b" },
         { "kind": "act", "targetId": "moka-dough-reserved" },
-        { "kind": "talk", "targetId": "B" },
         { "kind": "choice", "itemId": "moka_06", "pick": "a" },
         { "kind": "complete", "targetId": "B" }
       ],
@@ -57,16 +53,16 @@
     { "name": "choice before opening", "after": 0, "command": { "kind": "choice", "itemId": "moka_01", "pick": "a" } },
     { "name": "wrong item order", "after": 1, "command": { "kind": "choice", "itemId": "moka_02", "pick": "a" } },
     { "name": "wrong basket", "after": 2, "command": { "kind": "pickup", "targetId": "other-basket" } },
-    { "name": "delivery while basket is on rest", "after": 4, "command": { "kind": "deliver", "targetId": "moka-workshop-dropoff" } },
-    { "name": "complete before delivery", "after": 3, "command": { "kind": "complete", "targetId": "B" } },
-    { "name": "wrong action for answer", "after": 7, "command": { "kind": "act", "targetId": "moka-reservation-bread" } },
-    { "name": "wrong shape", "after": 9, "command": { "kind": "place", "breadId": "roll-1", "slotId": "walnut-left" } },
-    { "name": "unknown bread", "after": 9, "command": { "kind": "place", "breadId": "unknown", "slotId": "walnut-left" } },
-    { "name": "prototype names are not IDs", "after": 9, "command": { "kind": "place", "breadId": "toString", "slotId": "toString" } },
-    { "name": "bread already used", "after": 10, "command": { "kind": "place", "breadId": "flower-2", "slotId": "flower-right" } },
-    { "name": "occupied slot", "after": 10, "command": { "kind": "place", "breadId": "flower-1", "slotId": "flower-left" } },
-    { "name": "incomplete arrangement", "after": 10, "command": { "kind": "choice", "itemId": "moka_04", "pick": "a" } },
-    { "name": "finish segment cannot skip report", "after": 17, "command": { "kind": "finish_segment" } }
+    { "name": "delivery while basket is on rest", "after": 3, "command": { "kind": "deliver", "targetId": "moka-workshop-dropoff" } },
+    { "name": "complete before delivery", "after": 2, "command": { "kind": "complete", "targetId": "B" } },
+    { "name": "wrong action for answer", "after": 6, "command": { "kind": "act", "targetId": "moka-reservation-bread" } },
+    { "name": "wrong shape", "after": 8, "command": { "kind": "place", "breadId": "roll-1", "slotId": "walnut-left" } },
+    { "name": "unknown bread", "after": 8, "command": { "kind": "place", "breadId": "unknown", "slotId": "walnut-left" } },
+    { "name": "prototype names are not IDs", "after": 8, "command": { "kind": "place", "breadId": "toString", "slotId": "toString" } },
+    { "name": "bread already used", "after": 9, "command": { "kind": "place", "breadId": "flower-2", "slotId": "flower-right" } },
+    { "name": "occupied slot", "after": 9, "command": { "kind": "place", "breadId": "flower-1", "slotId": "flower-left" } },
+    { "name": "incomplete arrangement", "after": 9, "command": { "kind": "choice", "itemId": "moka_04", "pick": "a" } },
+    { "name": "finish segment cannot skip report", "after": 15, "command": { "kind": "finish_segment" } }
   ],
   "transportCases": [
     { "name": "same key and body", "expected": "original_receipt_no_change" },
