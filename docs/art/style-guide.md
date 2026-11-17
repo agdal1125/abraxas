@@ -38,6 +38,8 @@
 | 하늘 | #BFE3F2 |
 | 글자 | #4A3B32 (바탕 크림 대비 4.5:1 이상 유지) |
 
+화면 UI 기준은 `docs/art/design-system.md`에 있다. 이 문서는 옛 기준이다.
+
 ## 글꼴
 
 - 본문 UI: Pretendard (SIL OFL). 

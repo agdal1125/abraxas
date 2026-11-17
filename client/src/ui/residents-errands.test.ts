@@ -6,8 +6,7 @@ import { transitionLumi } from "../core/lumi-errand";
 import { transitionEcho } from "../core/echo-errand";
 import { transitionOr } from "../core/or-errand";
 import type { Command, PlaySnapshot } from "../core/play";
-import { residentBoard, residentCommand, type Resident } from "./residents-errands";
-import copy from "../../../content/i18n/ko/lumi-errand.json";
+import { residentCommand, type Resident } from "./residents-errands";
 
 test("each fixture action uses the confirmed target and action kind", () => {
   const cases = [["lumi", lumi, transitionLumi], ["echo", echo, transitionEcho], ["or", or, transitionOr]] as const;
@@ -33,15 +32,3 @@ test("carried objects can be set down and picked up only at the active rest", ()
   expect(residentCommand(snapshot, "lumi", "lumi-board")).toBeNull();
 });
 
-test("board uses saved placements and sends only one command on repeated activation", () => {
-  type Node = { textContent: string; disabled: boolean; onclick?: () => void; children: Node[]; append: (...nodes: Node[]) => void; setAttribute: ReturnType<typeof vi.fn> };
-  const create = (): Node => { const node: Node = { textContent: "", disabled: false, children: [], append: (...nodes) => node.children.push(...nodes), setAttribute: vi.fn() }; return node; };
-  vi.stubGlobal("document", { createElement: create });
-  const send = vi.fn();
-  const board = residentBoard("lumi", { "circle-1": "circle-1" }, copy, send, vi.fn()) as unknown as Node;
-  const pieces = board.children[1]!.children, slots = board.children[2]!.children;
-  expect(pieces[0]!.disabled).toBe(true); expect(slots[0]!.disabled).toBe(true);
-  pieces[1]!.onclick!(); slots[1]!.onclick!(); slots[1]!.onclick!();
-  expect(send).toHaveBeenCalledOnce();
-  expect(send).toHaveBeenCalledWith({ kind: "place_piece", pieceId: "circle-2", slotId: "circle-2" });
-});

@@ -1,6 +1,8 @@
 -> or_choose_01
 
 === or_choose_01 ===
+대장간 화덕에서 뜨거운 바람이 훅 끼친다.
+오르: 왔군. 일손이면 환영이야.
 오르: 축제 종을 만들고 있어.
 오르: 종을 달굴 차례야.
 오르: 불은 어떻게 할까?
@@ -49,44 +51,16 @@
 * [완성된 종을 광장으로 옮기며 사람들과 이야기를 나눈다 # item:or_06 # pick:b]
 -> END
 
-=== or_fire ===
--> END
-
-=== or_bucket_pickup ===
--> END
-
-=== or_find_sand ===
--> END
-
 === or_find_sand_a ===
 지도에는 개울가 모래 채집지가 표시되어 있다.
 -> END
 
 === or_find_sand_b ===
-낚시꾼: 고운 모래는 저쪽 개울가에 있어. 상인도 길을 알 거야.
--> END
-
-=== or_merchant ===
-상인: 물가를 따라가면 모래가 있어. 조심히 다녀와.
--> END
-
-=== or_sand ===
--> END
-
-=== or_sand_delivery ===
--> END
-
-=== or_gears ===
--> END
-
-=== or_weight ===
+낚시꾼: 고운 모래는 저쪽 개울가에 있어. 물가를 따라가 봐.
 -> END
 
 === or_assistant ===
 공방 조수: 이건 등불 승강 장치 도면이야. 걸이도 여기 둘게.
--> END
-
-=== or_review ===
 -> END
 
 === or_review_a ===
@@ -97,39 +71,23 @@
 혼자 도면을 살펴보는 동안 오르가 조용히 기다린다.
 -> END
 
-=== or_lantern_link ===
--> END
-
-=== or_hook ===
--> END
-
-=== or_return ===
--> END
-
-=== or_finish ===
--> END
-
 === or_finish_a ===
 연장을 닦아 걸었다. 종은 나중에 주민들이 옮기기로 한다.
 -> END
 
 === or_finish_b ===
-완성된 종을 들었다. 광장으로 옮기자.
--> END
-
-=== or_bell_delivery ===
--> END
-
-=== or_report ===
+완성된 종을 들었다.
 -> END
 
 === or_report_a ===
+오르: 다 됐군. 종은 주민들이 광장에 걸어 줄 거다.
 -> END
 
 === or_report_b ===
+오르: 다 됐군. 종이 광장에 걸렸다.
 -> END
 
 === or_completed ===
-오르: 손을 보태 줘서 고마워.
-오르: 축제에서 보자.
+오르: 종소리, 기대해.
+오르: 등불이 켜지면 들릴 거야.
 -> END

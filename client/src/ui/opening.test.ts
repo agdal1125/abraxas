@@ -14,6 +14,8 @@ test("name validation trims and counts Unicode characters without accepting cont
 test("opening sequence keeps the dog seated for every measurement and reaction", async () => {
   const events: string[] = [];
   await openingSequence({
+    intent: async () => { events.push("intent"); },
+    howToChoose: async () => { events.push("howToChoose"); },
     prelude: async () => { events.push("prelude"); },
     scene: value => { events.push(value); },
     mode: value => { events.push(value); },
@@ -22,12 +24,14 @@ test("opening sequence keeps the dog seated for every measurement and reaction",
     question: async value => { events.push(value, "reaction"); },
     questions: async () => { events.push("questions"); },
   }, true);
-  expect(events).toEqual(["prelude", "entrance", "lead", "demi_follow", "follow", "postman_intro", "sit", "prologue_01", "reaction", "follow", "postman_name", "name", "postman_named", "sit", "questions", "follow", "prologue_outro"]);
+  expect(events).toEqual(["intent", "prelude", "entrance", "lead", "demi_follow", "follow", "postman_intro", "howToChoose", "sit", "prologue_01", "reaction", "follow", "postman_name", "name", "postman_named", "sit", "questions", "follow", "prologue_outro"]);
 });
 
 test("resume skips the prelude and introductory dialogue but keeps the measurement scene", async () => {
   const events: string[] = [];
   await openingSequence({
+    intent: async () => { events.push("intent"); },
+    howToChoose: async () => { events.push("howToChoose"); },
     prelude: async () => { events.push("prelude"); },
     scene: value => { events.push(value); },
     mode: value => { events.push(value); },

@@ -6,20 +6,15 @@
     "choose_02": "공연 고르기",
     "card": "공연 카드 놓기",
     "choose_03": "축제 소식 전할 방법 고르기",
-    "notice_pickup": "안내 도구 집기",
     "notice_first": "첫 장소에 소식 전하기",
     "notice_second": "두 번째 장소에 소식 전하기",
-    "notice_return": "안내 도구 돌려놓기",
     "stagekeeper": "무대지기 만나기",
     "choose_04": "장식 재료 고르기",
-    "material_pickup": "장식 재료 집기",
     "material_delivery": "장식 재료를 무대 작업대에 전하기",
     "arrange": "같은 모양의 고리 걸기",
     "choose_05": "손님맞이 방법 고르기",
     "welcome": "손님 맞이하기",
-    "return": "루미에게 돌아가기",
     "choose_06": "행진곡 고르기",
-    "score_pickup": "악보 집기",
     "score_delivery": "악보를 악사 받침대에 전하기",
     "report": "루미에게 보고하기",
     "completed": "루미의 심부름을 마쳤어요",
@@ -68,6 +63,30 @@
     "empty": "빈 자리",
     "linkHint": "표시된 이음을 연결하세요.",
     "linkAuto": "자동으로 연결하기"
+  },
+  "game": {
+    "watch": "잘 보세요…",
+    "yourTurn": "같은 순서로 눌러 주세요.",
+    "retry": "순서가 달라요. 다시 보여 줄게요.",
+    "action": "",
+    "early": "",
+    "late": "",
+    "marks": [
+      "분홍 리본",
+      "노랑 리본",
+      "민트 리본",
+      "보라 리본"
+    ],
+    "marksField": [
+      "솔방울",
+      "노란 잎",
+      "초록 잎",
+      "붉은 잎"
+    ],
+    "title": "꽃줄 엮기",
+    "howto": "장식이 빛나는 순서를 기억했다가 그대로 눌러 주세요.",
+    "cleared": "꽃줄 한 줄 완성!",
+    "round": "{n}/{total}"
   },
   "status": {
     "saving": "선택을 저장하고 있어요.",

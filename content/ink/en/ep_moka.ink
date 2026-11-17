@@ -1,6 +1,8 @@
 -> END
 
 === moka_meet ===
+The bakery is full of a warm, toasty smell.
+Moka: Welcome. I could use a hand right now.
 Moka: Freshly baked walnut bread! Could you take it to the workshop?
 Moka: I checked the basket. Which path will you take?
 * [Run up the steep shortcut to deliver it warm # item:moka_01 # pick:a]
@@ -8,15 +10,9 @@ Moka: I checked the basket. Which path will you take?
 * [Take the gentler path to keep it from getting crushed # item:moka_01 # pick:b]
 -> END
 
-=== moka_pick_up ===
--> END
-
-=== moka_deliver ===
--> END
-
 === moka_delivered ===
-Tasting Guide: From the bakery? I was waiting for this!
-Tasting Guide: Thanks! Just in time for a break.
+Tasting Guide: Moka's walnut bread? A snack for the workshop?
+Tasting Guide: I'll share it out with the workers. Thank you!
 -> END
 
 === moka_reservation ===
@@ -26,9 +22,6 @@ Moka: What should we do?
 * [Check the order with them # item:moka_02 # pick:a]
 -> END
 * [Reassure them and give them the bread they asked for # item:moka_02 # pick:b]
--> END
-
-=== moka_reservation_action ===
 -> END
 
 === moka_choose_display ===
@@ -50,20 +43,11 @@ Moka: How should we share what is left?
 * [Cut equal portions for everyone # item:moka_04 # pick:b]
 -> END
 
-=== moka_share_action ===
--> END
-
 === moka_order ===
 Moka: Time to bake evening pies. How much should we make?
 * [Bake extra for a possible rush # item:moka_05 # pick:a]
 -> END
 * [Bake the reserved amount to avoid waste # item:moka_05 # pick:b]
--> END
-
-=== moka_order_action ===
--> END
-
-=== moka_return ===
 -> END
 
 === moka_feedback ===
@@ -75,9 +59,10 @@ Moka: How do they look to you?
 -> END
 
 === moka_report ===
+Moka: That's everything for today. You gave me room to breathe.
 -> END
 
 === moka_completed ===
-Moka: Thank you for helping.
-Moka: The bakery feels so much warmer now.
+Moka: Thank you so much. The smell will reach the square.
+Moka: I'll save you a fresh one for the festival.
 -> END

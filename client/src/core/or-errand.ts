@@ -34,20 +34,20 @@ export function transitionOr(snapshot: PlaySnapshot, command: Command, completed
     return entries.length === Object.keys(content.slots).length && new Set(entries.map(([, piece]) => piece)).size === entries.length && entries.every(([slot, piece]) => Object.hasOwn(content.slots, slot) && typeof piece === "string" && Object.hasOwn(content.pieces, piece) && content.slots[slot as keyof typeof content.slots] === content.pieces[piece as keyof typeof content.pieces]);
   };
   const selected = (kind: string) => command.kind === kind && "targetId" in command && targets.includes(command.targetId) && command.targetId !== "or-rest";
-  const choices: Partial<Record<OrPhase, [string, OrPhase]>> = { choose_01: ["or_01", "fire"], choose_02: ["or_02", "bucket_pickup"], choose_03: ["or_03", "weight"], choose_04: ["or_04", "review"], choose_05: ["or_05", "hook"], choose_06: ["or_06", "finish"] };
-  const transport: Partial<Record<OrPhase, keyof OrState["objects"]>> = { bucket_pickup: "bucket", find_sand: "bucket", merchant: "bucket", sand: "bucket", sand_delivery: "bucket", finish: "bell", bell_delivery: "bell" };
+  const choices: Partial<Record<OrPhase, [string, OrPhase]>> = { choose_01: ["or_01", "fire"], choose_02: ["or_02", "find_sand"], choose_03: ["or_03", "weight"], choose_04: ["or_04", "review"], choose_05: ["or_05", "hook"], choose_06: ["or_06", "finish"] };
+  // Choosing how to find sand hands over the bucket at once; there is no separate pickup step.
+  const carry: Partial<Record<OrPhase, keyof OrState["objects"]>> = { choose_02: "bucket" };
+  const transport: Partial<Record<OrPhase, keyof OrState["objects"]>> = { find_sand: "bucket", sand: "bucket", sand_delivery: "bucket", finish: "bell", bell_delivery: "bell" };
   const object = transport[phase];
   if (phase === "locked" && command.kind === "open_episode" && command.npcId === "or" && snapshot.segment === "hub" && !snapshot.completedEpisodes.includes("or")) { state.phase = "choose_01"; next.segment = "ep_or"; }
-  else if (command.kind === "choice") { const rule = choices[phase]; if (!rule || command.itemId !== rule[0] || (command.pick !== "a" && command.pick !== "b") || next.answers.some(a => a.id === command.itemId)) return reject(); next.answers.push({ id: command.itemId, pick: command.pick }); state.phase = rule[1]; }
+  else if (command.kind === "choice") { const rule = choices[phase]; if (!rule || command.itemId !== rule[0] || (command.pick !== "a" && command.pick !== "b") || next.answers.some(a => a.id === command.itemId)) return reject(); next.answers.push({ id: command.itemId, pick: command.pick }); state.phase = rule[1]; const held = carry[phase]; if (held) state.objects[held] = "player"; }
   else if (object && command.kind === "set_down" && command.targetId === "or-rest" && state.objects[object] === "player") state.objects[object] = "or-rest";
   else if (object && command.kind === "pickup" && command.targetId === "or-rest" && state.objects[object] === "or-rest" && carried.length === 0) state.objects[object] = "player";
-  else if (phase === "bucket_pickup" && selected("pickup") && state.objects.bucket === "source" && carried.length === 0) { state.objects.bucket = "player"; state.phase = "find_sand"; }
-  else if (phase === "find_sand" && state.objects.bucket === "player" && selected(snapshot.answers.find(a => a.id === "or_02")?.pick === "a" ? "act" : "talk")) state.phase = snapshot.answers.find(a => a.id === "or_02")?.pick === "a" ? "sand" : "merchant";
-  else if (phase === "merchant" && state.objects.bucket === "player" && selected("talk")) state.phase = "sand";
+  else if (phase === "find_sand" && state.objects.bucket === "player" && selected(snapshot.answers.find(a => a.id === "or_02")?.pick === "a" ? "act" : "talk")) state.phase = "sand";
   else if (phase === "sand" && state.objects.bucket === "player" && selected("act")) state.phase = "sand_delivery";
   else if (phase === "sand_delivery" && state.objects.bucket === "player" && selected("deliver")) { state.objects.bucket = "delivered"; state.phase = "gears"; }
-  else if ((phase === "fire" || phase === "weight" || phase === "review" || phase === "lantern_link" || phase === "hook") && selected("act")) state.phase = phase === "fire" ? "choose_02" : phase === "weight" ? "assistant" : phase === "review" ? "lantern_link" : phase === "lantern_link" ? "choose_05" : "return";
-  else if ((phase === "assistant" || phase === "return") && selected("talk")) state.phase = phase === "assistant" ? "choose_04" : "choose_06";
+  else if ((phase === "fire" || phase === "weight" || phase === "review" || phase === "lantern_link" || phase === "hook") && selected("act")) state.phase = phase === "fire" ? "choose_02" : phase === "weight" ? "assistant" : phase === "review" ? "lantern_link" : phase === "lantern_link" ? "choose_05" : "choose_06";
+  else if (phase === "assistant" && selected("talk")) state.phase = "choose_04";
   else if (phase === "finish" && snapshot.answers.find(a => a.id === "or_06")?.pick === "a" && selected("act")) state.phase = "report";
   else if (phase === "finish" && snapshot.answers.find(a => a.id === "or_06")?.pick === "b" && selected("pickup") && state.objects.bell === "source" && carried.length === 0) { state.objects.bell = "player"; state.phase = "bell_delivery"; }
   else if (phase === "bell_delivery" && selected("deliver") && state.objects.bell === "player") { state.objects.bell = "delivered"; state.phase = "report"; }

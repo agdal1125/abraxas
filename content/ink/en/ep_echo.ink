@@ -1,6 +1,8 @@
 -> echo_choose_01
 
 === echo_choose_01 ===
+The library's return box is close to overflowing.
+Echo: You came to help? ...Thank you. I was short on hands.
 Echo: You look like an empty bookshelf.
 Echo: What you write there will be up to you.
 Echo: There's a tea stain on this picture book.
@@ -52,35 +54,9 @@ Echo: How should we share this story?
 * [Let readers add their own endings # item:echo_06 # pick:b]
 -> END
 
-=== echo_enclose ===
--> END
-
-=== echo_book_pickup ===
--> END
-
-=== echo_book_delivery ===
--> END
-
-=== echo_search ===
--> END
-
-=== echo_record_pickup ===
--> END
-
-=== echo_record_delivery ===
--> END
-
-=== echo_notebook_pickup ===
--> END
-
-=== echo_notebook_delivery ===
--> END
-
 === echo_organizer ===
+Book Keeper: You're helping Echo? I look after the shelves.
 Book Keeper: Shall we find where these books belong?
--> END
-
-=== echo_arrange ===
 -> END
 
 === echo_reading ===
@@ -92,22 +68,11 @@ The older sister checked dates and bridge repairs.
 Come spring, they met once more upon that bridge.
 -> END
 
-=== echo_bookmark ===
--> END
-
-=== echo_return ===
--> END
-
-=== echo_legend_pickup ===
--> END
-
-=== echo_legend_delivery ===
--> END
-
 === echo_report ===
+Echo: The shelves have found their places.
 -> END
 
 === echo_completed ===
-Echo: Thank you for looking after the books with me.
-Echo: See you again at the festival.
+Echo: The books seem to breathe again. Thanks to you.
+Echo: I'll record tonight too. Every bit of it.
 -> END

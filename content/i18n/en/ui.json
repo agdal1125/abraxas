@@ -5,6 +5,33 @@
     "start": "Start",
     "language": "한국어"
   },
+  "intent": {
+    "text": "Even without memories, your steps lead somewhere.\nIn this village, there is no one to impress.\nStay a while, and go where your heart leads.",
+    "prompt": "Tap the screen to continue"
+  },
+  "howTo": {
+    "moveTouch": "Drag in the lower left to walk",
+    "moveKeys": "Use the arrow keys or WASD to walk",
+    "examine": "Tap people and things to look closer",
+    "dog": "Tap the dog to pet it or call it over",
+    "visit": "Visit the villagers and hear their requests",
+    "choose": "Pick whichever feels right to you.\nYou can't take a choice back, but there are no right answers."
+  },
+  "installGuide": {
+    "button": "Play full screen",
+    "close": "Close",
+    "home-screen": [
+      "Tap your browser's Share or menu button",
+      "Choose 'Add to Home Screen'",
+      "Open Abraxas from your home screen to hide the address bar",
+      "The home screen version starts from the beginning"
+    ],
+    "open-browser": [
+      "Tap the menu at the top right",
+      "Choose 'Open in another browser'",
+      "Tap this button again in the browser"
+    ]
+  },
   "hub": {
     "prompt": "Who will you visit next?"
   },
@@ -104,10 +131,11 @@
       "turned": "At first: {from}. Now closer to this: {to}."
     }
   },
+  "map": { "open": "Map", "title": "Village map", "here": "You are here", "target": "Places to go", "zones": { "plaza": "Plaza", "bakery": "Bakery", "library": "Library", "smithy": "Smithy", "lake": "Lakeside", "entrance": "Entrance", "gate": "Gate of Memory" } },
   "hud": {
-    "goal": { "hub": "Find someone to visit in the village", "character": "Find the person waiting for you", "quest": "Find the villager who needs help", "return": "Go back and meet them again", "interlude": "Take a quiet moment by the lake", "festival": "Head to the plaza", "gate": "Head to the Gate of Memory" },
-    "settings": "Settings", "close": "Close", "language": "Language", "largeText": "Large text", "fullscreen": "Full screen", "autoAdvance": "Auto-advance", "on": "On", "off": "Off", "restart": "Start over", "confirm": "Erase your progress and start over?", "cancel": "Cancel", "share": "Share",
-    "credits": "Credits", "creditsMusic": "Music: The Day We Smiled (60s Edit) — HoneyTune, Internet Archive", "creditsSounds": "Sound effects use CC0 materials.", "creditsList": "Full sound effects list", "back": "Back",
+    "goal": { "hub": "Find someone to help with the festival", "character": "Find the person waiting for you", "quest": "Find the villager who needs help", "return": "Go back and meet them again", "interlude": "Take a quiet moment by the lake", "festival": "Head to the plaza", "gate": "Head to the Gate of Memory" },
+    "settings": "Settings", "close": "Close", "language": "Language", "largeText": "Large text", "sound": "Sound", "fullscreen": "Full screen", "autoAdvance": "Auto-advance", "on": "On", "off": "Off", "restart": "Start over", "confirm": "Erase your progress and start over?", "cancel": "Cancel", "share": "Share",
+    "howTo": "How to play", "credits": "Credits", "creditsMusic": "Music: The Day We Smiled (60s Edit) — HoneyTune, Internet Archive", "creditsSounds": "Sound effects use CC0 materials.", "creditsList": "Full sound effects list", "back": "Back",
     "fragments": "Memory fragments {n}/{max}", "fragmentFound": "Found a memory fragment ({n}/{max})", "fragmentsGate": "Memory fragments gathered so far", "fragmentsContinue": "Tap to continue"
   }
 }

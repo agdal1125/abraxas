@@ -1,6 +1,8 @@
 -> echo_choose_01
 
 === echo_choose_01 ===
+도서관 반납 상자가 넘칠 듯 차 있다.
+에코: 도와주러 왔다고? …고마워. 손이 모자랐어.
 에코: 네 모습은 빈 책장을 닮았네.
 에코: 무엇을 적을지는 네 몫이겠지.
 에코: 그림책에 찻잔 자국이 남았어.
@@ -52,35 +54,9 @@
 * [읽는 이들이 새 결말을 덧붙이는 열린 책으로 꾸미자 # item:echo_06 # pick:b]
 -> END
 
-=== echo_enclose ===
--> END
-
-=== echo_book_pickup ===
--> END
-
-=== echo_book_delivery ===
--> END
-
-=== echo_search ===
--> END
-
-=== echo_record_pickup ===
--> END
-
-=== echo_record_delivery ===
--> END
-
-=== echo_notebook_pickup ===
--> END
-
-=== echo_notebook_delivery ===
--> END
-
 === echo_organizer ===
+책 정리인: 에코를 돕는 손님이구나. 난 서가 정리를 맡고 있어.
 책 정리인: 이 책들도 자리를 찾아볼까.
--> END
-
-=== echo_arrange ===
 -> END
 
 === echo_reading ===
@@ -92,22 +68,11 @@
 봄이 오자 둘은 그 다리에서 다시 만났다.
 -> END
 
-=== echo_bookmark ===
--> END
-
-=== echo_return ===
--> END
-
-=== echo_legend_pickup ===
--> END
-
-=== echo_legend_delivery ===
--> END
-
 === echo_report ===
+에코: 서가가 제자리를 찾았네.
 -> END
 
 === echo_completed ===
-에코: 같이 돌봐 줘서 고마워.
-에코: 축제에서 다시 보자.
+에코: 책들이 다시 숨을 쉬는 것 같아. 네 덕분이야.
+에코: 오늘 밤 일도 기록해 둘게. 빠짐없이.
 -> END

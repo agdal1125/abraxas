@@ -1,7 +1,8 @@
 -> lumi_choose_01
 
 === lumi_choose_01 ===
-루미: 안녕! 축제 준비 중이야.
+천막 아래 리본과 꽃줄이 수북이 쌓여 있다.
+루미: 도와주러 왔어? 정말? 고마워!
 루미: 와! 네 모습이 하얀 구름 같아!
 루미: 네 자리도 있어. 어디서 같이 할까?
 * [한쪽 탁자에서 내가 맡은 장식 리본을 조용히 묶을게 # item:lumi_01 # pick:a]
@@ -48,21 +49,6 @@
 * [귀에 익어 편안한 마을의 옛 행진곡으로 시작하자 # item:lumi_06 # pick:b]
 -> END
 
-=== lumi_table ===
--> END
-
-=== lumi_card ===
--> END
-
-=== lumi_notice_pickup ===
--> END
-
-=== lumi_notice_first ===
--> END
-
-=== lumi_notice_second ===
--> END
-
 === lumi_notice_first_a ===
 주민: 알려 줘서 고마워. 시작할 때 갈게.
 -> END
@@ -79,37 +65,15 @@
 우편함에 안내문을 넣었다.
 -> END
 
-=== lumi_notice_return ===
--> END
-
 === lumi_stagekeeper ===
 무대지기: 기둥 하나에 걸 꽃줄이 모자라. 재료를 더 구해 줄래?
 -> END
 
-=== lumi_material_pickup ===
--> END
-
-=== lumi_material_delivery ===
--> END
-
-=== lumi_arrange ===
--> END
-
-=== lumi_welcome ===
--> END
-
-=== lumi_return ===
--> END
-
-=== lumi_score_pickup ===
--> END
-
-=== lumi_score_delivery ===
--> END
-
 === lumi_report ===
+루미: 벌써 다 끝냈어? 손님 맞을 준비가 다 됐네!
 -> END
 
 === lumi_completed ===
-루미: 함께해 줘서 고마워! 축제에서 또 만나자.
+루미: 다 됐다! 오늘 밤 천막이 제일 반짝일 거야!
+루미: 등불 켜질 때 꼭 와! 맨 앞자리 맡아 둘게!
 -> END
