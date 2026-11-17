@@ -48,21 +48,6 @@
 * [귀에 익어 편안한 마을의 옛 행진곡으로 시작하자 # item:lumi_06 # pick:b]
 -> END
 
-=== lumi_table ===
--> END
-
-=== lumi_card ===
--> END
-
-=== lumi_notice_pickup ===
--> END
-
-=== lumi_notice_first ===
--> END
-
-=== lumi_notice_second ===
--> END
-
 === lumi_notice_first_a ===
 주민: 알려 줘서 고마워. 시작할 때 갈게.
 -> END
@@ -79,35 +64,12 @@
 우편함에 안내문을 넣었다.
 -> END
 
-=== lumi_notice_return ===
--> END
-
 === lumi_stagekeeper ===
 무대지기: 기둥 하나에 걸 꽃줄이 모자라. 재료를 더 구해 줄래?
 -> END
 
-=== lumi_material_pickup ===
--> END
-
-=== lumi_material_delivery ===
--> END
-
-=== lumi_arrange ===
--> END
-
-=== lumi_welcome ===
--> END
-
-=== lumi_return ===
--> END
-
-=== lumi_score_pickup ===
--> END
-
-=== lumi_score_delivery ===
--> END
-
 === lumi_report ===
+루미: 벌써 다 끝냈어? 손님 맞을 준비가 다 됐네!
 -> END
 
 === lumi_completed ===
