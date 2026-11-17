@@ -62,10 +62,6 @@
           "targetId": "echo-kind-note"
         },
         {
-          "kind": "pickup",
-          "targetId": "echo-picture-book"
-        },
-        {
           "kind": "deliver",
           "targetId": "echo-borrower"
         },
@@ -79,10 +75,6 @@
           "targetId": "echo-history-shelf"
         },
         {
-          "kind": "pickup",
-          "targetId": "echo-history-record"
-        },
-        {
           "kind": "deliver",
           "targetId": "echo-reading-desk"
         },
@@ -90,10 +82,6 @@
           "kind": "choice",
           "itemId": "echo_03",
           "pick": "a"
-        },
-        {
-          "kind": "pickup",
-          "targetId": "echo-notebook"
         },
         {
           "kind": "deliver",
@@ -152,17 +140,9 @@
           "targetId": "echo-bookmark-words"
         },
         {
-          "kind": "talk",
-          "targetId": "C"
-        },
-        {
           "kind": "choice",
           "itemId": "echo_06",
           "pick": "a"
-        },
-        {
-          "kind": "pickup",
-          "targetId": "echo-legend"
         },
         {
           "kind": "deliver",
@@ -205,10 +185,6 @@
           "targetId": "echo-rules-note"
         },
         {
-          "kind": "pickup",
-          "targetId": "echo-picture-book"
-        },
-        {
           "kind": "deliver",
           "targetId": "echo-borrower"
         },
@@ -222,10 +198,6 @@
           "targetId": "echo-attic-door"
         },
         {
-          "kind": "pickup",
-          "targetId": "echo-attic-record"
-        },
-        {
           "kind": "deliver",
           "targetId": "echo-reading-desk"
         },
@@ -233,10 +205,6 @@
           "kind": "choice",
           "itemId": "echo_03",
           "pick": "b"
-        },
-        {
-          "kind": "pickup",
-          "targetId": "echo-notebook"
         },
         {
           "kind": "deliver",
@@ -268,17 +236,9 @@
           "targetId": "echo-bookmark-clues"
         },
         {
-          "kind": "talk",
-          "targetId": "C"
-        },
-        {
           "kind": "choice",
           "itemId": "echo_06",
           "pick": "b"
-        },
-        {
-          "kind": "pickup",
-          "targetId": "echo-legend"
         },
         {
           "kind": "deliver",
@@ -326,14 +286,14 @@
     },
     {
       "name": "finish cannot skip",
-      "after": 25,
+      "after": 21,
       "command": {
         "kind": "finish_segment"
       }
     },
     {
       "name": "final action required",
-      "after": 25,
+      "after": 21,
       "command": {
         "kind": "complete",
         "targetId": "C"
@@ -341,7 +301,7 @@
     },
     {
       "name": "unknown puzzle IDs",
-      "after": 14,
+      "after": 11,
       "command": {
         "kind": "place_piece",
         "pieceId": "toString",

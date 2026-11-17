@@ -28,7 +28,7 @@ describe("Or errand", () => {
   it("requires the carried object to be recovered from the rest", () => {
     let snapshot = structuredClone(fixture.initial) as PlaySnapshot;
     const commands = fixture.success[0]!.commands;
-    const pickup = commands.findIndex(c => c.kind === "pickup" && "targetId" in c && c.targetId === "or-bucket");
+    const pickup = commands.findIndex(c => c.kind === "choice" && "itemId" in c && c.itemId === "or_02"); // the bucket is handed over with this choice
     for (const command of commands.slice(0, pickup + 1)) snapshot = transitionOr(snapshot, command as Command, fixture.completedAt);
     snapshot = transitionOr(snapshot, { kind: "set_down", targetId: "or-rest" });
     expect(orView(snapshot).activeTargetIds).toEqual(["or-rest"]);

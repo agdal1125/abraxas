@@ -135,6 +135,9 @@ func TestResidentRestAndCorruptPlacements(t *testing.T) {
 				t.Fatal(err)
 			}
 			d := NewDoc(f.Initial)
+			held := func() map[string]string {
+				return map[string]*ResidentState{"lumi": &d.Snapshot.Lumi, "echo": &d.Snapshot.Echo, "or": &d.Snapshot.Or}[npc].Objects
+			}
 			stopped := false
 			for _, c := range f.Success[0].Commands {
 				if c.Kind == "complete" {
@@ -143,7 +146,8 @@ func TestResidentRestAndCorruptPlacements(t *testing.T) {
 				if _, err := e.Apply(&d, c, f.CompletedAt); err != nil {
 					t.Fatal(err)
 				}
-				if c.Kind == "pickup" && !stopped {
+				// The first step that leaves an object in hand: a choice or action now hands it over, not a pickup.
+				if !stopped && carrying(held()) {
 					stopped = true
 					rest := npc + "-rest"
 					if _, err := e.Apply(&d, Command{Kind: "set_down", TargetID: rest}, f.CompletedAt); err != nil {
@@ -163,7 +167,7 @@ func TestResidentRestAndCorruptPlacements(t *testing.T) {
 				}
 			}
 			if !stopped {
-				t.Fatal("fixture has no pickup")
+				t.Fatal("fixture never carries an object")
 			}
 			var state *ResidentState
 			switch npc {
