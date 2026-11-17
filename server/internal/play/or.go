@@ -12,11 +12,12 @@ func (e *Engine) or(s *Snapshot, c Command, at string) error {
 		s.EpisodeEnd = nil
 		return nil
 	}
-	choices := map[string][2]string{"choose_01": {"or_01", "fire"}, "choose_02": {"or_02", "bucket_pickup"}, "choose_03": {"or_03", "weight"}, "choose_04": {"or_04", "review"}, "choose_05": {"or_05", "hook"}, "choose_06": {"or_06", "finish"}}
+	choices := map[string][2]string{"choose_01": {"or_01", "fire"}, "choose_02": {"or_02", "find_sand"}, "choose_03": {"or_03", "weight"}, "choose_04": {"or_04", "review"}, "choose_05": {"or_05", "hook"}, "choose_06": {"or_06", "finish"}}
 	if rule, ok := choices[p]; ok && residentChoice(s, st, c, rule[0], rule[1]) {
+		carryOnChoice(st, map[string]string{"choose_02": "bucket"}[p])
 		return nil
 	}
-	objects := map[string]string{"bucket_pickup": "bucket", "find_sand": "bucket", "merchant": "bucket", "sand": "bucket", "sand_delivery": "bucket", "finish": "bell", "bell_delivery": "bell"}
+	objects := map[string]string{"find_sand": "bucket", "sand": "bucket", "sand_delivery": "bucket", "finish": "bell", "bell_delivery": "bell"}
 	object := objects[p]
 	if residentRest(st, c, "or", object) {
 		return nil
@@ -24,14 +25,9 @@ func (e *Engine) or(s *Snapshot, c Command, at string) error {
 	branches := map[string]string{"fire": "or_01", "find_sand": "or_02", "weight": "or_03", "review": "or_04", "hook": "or_05", "finish": "or_06"}
 	selected := func(kind string) bool { return residentTarget(s, q, st, c, kind, branches[p]) }
 	switch {
-	case p == "bucket_pickup" && selected("pickup") && st.Objects["bucket"] == "source" && !carrying(st.Objects):
-		st.Objects["bucket"] = "player"
-		st.Phase = "find_sand"
 	case p == "find_sand" && st.Objects["bucket"] == "player" && answer(s, "or_02") == "a" && selected("act"):
 		st.Phase = "sand"
 	case p == "find_sand" && st.Objects["bucket"] == "player" && answer(s, "or_02") == "b" && selected("talk"):
-		st.Phase = "merchant"
-	case p == "merchant" && st.Objects["bucket"] == "player" && selected("talk"):
 		st.Phase = "sand"
 	case p == "sand" && st.Objects["bucket"] == "player" && selected("act"):
 		st.Phase = "sand_delivery"
@@ -39,9 +35,9 @@ func (e *Engine) or(s *Snapshot, c Command, at string) error {
 		st.Objects["bucket"] = "delivered"
 		st.Phase = "gears"
 	case (p == "fire" || p == "weight" || p == "review" || p == "lantern_link" || p == "hook") && selected("act"):
-		st.Phase = map[string]string{"fire": "choose_02", "weight": "assistant", "review": "lantern_link", "lantern_link": "choose_05", "hook": "return"}[p]
-	case (p == "assistant" || p == "return") && selected("talk"):
-		st.Phase = map[string]string{"assistant": "choose_04", "return": "choose_06"}[p]
+		st.Phase = map[string]string{"fire": "choose_02", "weight": "assistant", "review": "lantern_link", "lantern_link": "choose_05", "hook": "choose_06"}[p]
+	case p == "assistant" && selected("talk"):
+		st.Phase = "choose_04"
 	case p == "finish" && answer(s, "or_06") == "a" && selected("act"):
 		st.Phase = "report"
 	case p == "finish" && answer(s, "or_06") == "b" && selected("pickup") && st.Objects["bell"] == "source" && !carrying(st.Objects):

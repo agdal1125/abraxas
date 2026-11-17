@@ -76,20 +76,12 @@
           "pick": "a"
         },
         {
-          "kind": "pickup",
-          "targetId": "lumi-horn"
-        },
-        {
           "kind": "talk",
           "targetId": "lumi-neighbor-1"
         },
         {
           "kind": "talk",
           "targetId": "lumi-neighbor-2"
-        },
-        {
-          "kind": "deliver",
-          "targetId": "lumi-notice-return"
         },
         {
           "kind": "talk",
@@ -99,10 +91,6 @@
           "kind": "choice",
           "itemId": "lumi_04",
           "pick": "a"
-        },
-        {
-          "kind": "pickup",
-          "targetId": "lumi-ribbon-source"
         },
         {
           "kind": "deliver",
@@ -148,17 +136,9 @@
           "targetId": "lumi-welcome-postcard"
         },
         {
-          "kind": "talk",
-          "targetId": "A"
-        },
-        {
           "kind": "choice",
           "itemId": "lumi_06",
           "pick": "a"
-        },
-        {
-          "kind": "pickup",
-          "targetId": "lumi-score-new"
         },
         {
           "kind": "deliver",
@@ -215,20 +195,12 @@
           "pick": "b"
         },
         {
-          "kind": "pickup",
-          "targetId": "lumi-notices"
-        },
-        {
           "kind": "act",
           "targetId": "lumi-board"
         },
         {
           "kind": "act",
           "targetId": "lumi-mailbox"
-        },
-        {
-          "kind": "deliver",
-          "targetId": "lumi-notice-return"
         },
         {
           "kind": "talk",
@@ -238,10 +210,6 @@
           "kind": "choice",
           "itemId": "lumi_04",
           "pick": "b"
-        },
-        {
-          "kind": "pickup",
-          "targetId": "lumi-field-source"
         },
         {
           "kind": "deliver",
@@ -260,17 +228,9 @@
           "targetId": "lumi-welcome-plaza"
         },
         {
-          "kind": "talk",
-          "targetId": "A"
-        },
-        {
           "kind": "choice",
           "itemId": "lumi_06",
           "pick": "b"
-        },
-        {
-          "kind": "pickup",
-          "targetId": "lumi-score-old"
         },
         {
           "kind": "deliver",
@@ -318,14 +278,14 @@
     },
     {
       "name": "finish cannot skip",
-      "after": 24,
+      "after": 20,
       "command": {
         "kind": "finish_segment"
       }
     },
     {
       "name": "final action required",
-      "after": 24,
+      "after": 20,
       "command": {
         "kind": "complete",
         "targetId": "A"
@@ -333,7 +293,7 @@
     },
     {
       "name": "unknown puzzle IDs",
-      "after": 14,
+      "after": 11,
       "command": {
         "kind": "place_piece",
         "pieceId": "toString",

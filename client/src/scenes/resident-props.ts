@@ -144,14 +144,14 @@ export class ResidentProps {
   }
 
   private setOr(view: ReturnType<typeof orView>): void {
-    const filled = !["bucket_pickup", "find_sand", "merchant", "sand"].includes(view.phase);
+    const filled = !["find_sand", "sand"].includes(view.phase);
     if (view.objects.bucket !== "source") this.objects.get("or-bucket")!.visible = false;
     const bell = this.objects.get("or-bell")!;
     if (view.objects.bell !== "source") bell.visible = false;
     else if (view.phase === "completed" || view.phase === "report") bell.visible = view.choices[5] === "a";
     this.move(filled ? "prop-or-bucket-sand" : "prop-or-bucket-empty", view.objects.bucket, "or-grinding-bench");
     this.move("prop-or-bell", view.objects.bell, "or-plaza-stand");
-    if (this.link) this.link.visible = ["choose_05", "hook", "return", "choose_06", "finish", "bell_delivery", "report", "completed"].includes(view.phase);
+    if (this.link) this.link.visible = ["choose_05", "hook", "choose_06", "finish", "bell_delivery", "report", "completed"].includes(view.phase);
     const diagram = this.objects.get("or-lantern-link")!; diagram.visible ||= !!this.link?.visible;
   }
 }

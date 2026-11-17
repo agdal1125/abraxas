@@ -9,7 +9,7 @@ import { walkable } from "../core/world/move";
 import type { Bounds, Collider } from "../core/world/types";
 
 const view = (patch: Partial<ReturnType<typeof lumiView>> = {}): ReturnType<typeof lumiView> => ({
-  phase: "notice_pickup", objectiveKey: "", activeTargetIds: ["lumi-horn"], resumePointId: "lumi-horn", carriedObjectId: null,
+  phase: "choose_03", objectiveKey: "", activeTargetIds: ["A"], resumePointId: "A", carriedObjectId: null,
   objects: { notice: "source", material: "source", score: "source" }, placements: {}, choices: ["a", "a", "a", "a", "a", "a"], ...patch
 });
 const model = async (key: string): Promise<GLTF> => { const scene = new THREE.Group(); scene.name = key; return { scene } as GLTF; };
@@ -19,7 +19,8 @@ describe("resident props", () => {
     const scene = new THREE.Scene(), player = new THREE.Group(); scene.add(player);
     const props = await ResidentProps.load("lumi", scene, player, map.props.filter(p => p.id.startsWith("lumi-")), model);
     props.setView(view());
-    expect(props.objects.get("lumi-horn")?.visible).toBe(true);
+    // The horn is handed over with the lumi_03 choice, so it never waits at its source as a target.
+    expect(props.objects.get("lumi-horn")?.visible).toBe(false);
     props.setView(view({ phase: "notice_first", activeTargetIds: ["lumi-neighbor-1", "lumi-rest"], carriedObjectId: "notice", objects: { notice: "player", material: "source", score: "source" } }));
     expect(props.objects.get("lumi-horn")?.visible).toBe(false);
     expect(player.children.some(o => o.name === "prop-lumi-horn" && o.visible)).toBe(true);
