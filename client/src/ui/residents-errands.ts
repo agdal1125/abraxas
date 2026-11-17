@@ -35,5 +35,6 @@ export function residentBoard(npc: Resident, placements: Record<string, string |
   const total = Object.keys(slots).length, placed = Object.values(placements).filter(Boolean).length;
   const { round, size } = roundPlan(total, placed, MINIGAME_ROUNDS);
   const place = () => send(nextPlacements(pieces, slots, placements, size).map(([pieceId, slotId]) => ({ kind: "place_piece", pieceId, slotId })));
-  return minigameBoard({ kind: KINDS[npc], index: round, rounds: MINIGAME_ROUNDS, field: npc === "lumi" && answers.find(a => a.id === "lumi_04")?.pick === "b" }, copy.game, { auto: copy.puzzle.auto, close: copy.puzzle.close, onAuto: () => send([{ kind: "auto_arrange" }]), onClose: close }, place);
+  const variant = npc === "lumi" && answers.find(a => a.id === "lumi_04")?.pick === "b" ? "field" : undefined;
+  return minigameBoard({ kind: KINDS[npc], index: round, rounds: MINIGAME_ROUNDS, variant }, copy.game, { auto: copy.puzzle.auto, close: copy.puzzle.close, onAuto: () => send([{ kind: "auto_arrange" }]), onClose: close }, place);
 }
