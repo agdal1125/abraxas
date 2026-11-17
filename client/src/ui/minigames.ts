@@ -5,8 +5,9 @@ import { aligned, gauge, inZone, scrambled, seeded, sequence, shelfHint, shuffle
 // and renders the next round. The element the player should tap next carries data-solve, so the
 // manual E2E scenario can play it the way a person would.
 export type MinigameKind = "ribbons" | "oven" | "shelf" | "gears";
-export type MinigameCopy = { title: string; howto: string; watch: string; yourTurn: string; retry: string; cleared: string; action: string; early: string; late: string; marks: string[]; round: string };
+export type MinigameCopy = { title: string; howto: string; watch: string; yourTurn: string; retry: string; cleared: string; action: string; early: string; late: string; marks: string[]; marksField?: string[]; round: string };
 export type Round = { kind: MinigameKind; index: number; rounds: number; label?: string; variant?: string };
+// round.variant "field" (lumi_04 = b) swaps the ribbon bows for a pinecone and leaves; order, length and tones stay the same.
 export type Controls = { auto: string; close: string; onAuto: () => void; onClose: () => void };
 
 export const MINIGAME_ROUNDS = 3;
@@ -44,13 +45,18 @@ type Game = (stage: HTMLElement, status: HTMLElement, copy: MinigameCopy, round:
 
 // A faceted bow: two loops, a knot and two tails, each with a lighter and a darker face like the village's flat shading.
 const BOW = `<svg viewBox="0 0 64 64"><path class="dark" d="M30 32 8 18 6 44Z"/><path class="light" d="M30 32 8 18 18 34Z"/><path class="dark" d="M34 32 56 18 58 44Z"/><path class="light" d="M34 32 56 18 46 34Z"/><path class="dark" d="M28 34 20 60 27 56 31 36Z"/><path class="light" d="M36 34 44 60 37 56 33 36Z"/><rect class="knot" x="26" y="26" width="12" height="12" rx="2"/></svg>`;
+// Field pieces for lumi_04 = b: one pinecone, then three leaves, in the same four slots.
+const CONE = `<svg viewBox="0 0 64 64"><path class="light" d="M32 6 14 20 14 46 32 60Z"/><path class="dark" d="M32 6 50 20 50 46 32 60Z"/><rect class="knot" x="16" y="24" width="32" height="3"/><rect class="knot" x="16" y="34" width="32" height="3"/><rect class="knot" x="20" y="44" width="24" height="3"/></svg>`;
+const LEAF = `<svg viewBox="0 0 64 64"><path class="light" d="M32 4 12 30 32 52Z"/><path class="dark" d="M32 4 52 30 32 52Z"/><rect class="knot" x="30" y="48" width="4" height="12"/></svg>`;
 // Lumi: watch the ribbons light up, then tap them back in the same order. A garland fills one pennant per correct tap.
 const ribbons: Game = (stage, status, copy, round, win) => {
+  const field = round.variant === "field", marks = field ? copy.marksField ?? copy.marks : copy.marks;
+  if (field) stage.dataset.look = "field";
   const order = sequence(RIBBONS, 3 + round.index, seeded(101 + round.index));
   const garland = document.createElement("div"); garland.className = "garland"; garland.setAttribute("aria-hidden", "true");
   const flags = order.map(() => { const flag = document.createElement("span"); flag.className = "pennant"; garland.append(flag); return flag; });
   const row = document.createElement("div"); row.className = "ribbon-row";
-  const buttons = RIBBONS.map((color, i) => { const b = document.createElement("button"); b.className = `ribbon ribbon-${color}`; b.dataset.ribbon = color; b.setAttribute("aria-label", copy.marks[i] ?? color); b.append(art("ribbon-art", BOW)); row.append(b); return b; });
+  const buttons = RIBBONS.map((color, i) => { const b = document.createElement("button"); b.className = `ribbon ribbon-${color}`; b.dataset.ribbon = color; b.setAttribute("aria-label", marks[i] ?? color); b.append(art("ribbon-art", field ? (i === 0 ? CONE : LEAF) : BOW)); row.append(b); return b; });
   stage.append(garland, row);
   let step = 0, timers: ReturnType<typeof setTimeout>[] = [];
   const mark = () => { for (const b of buttons) delete b.dataset.solve; if (step < order.length) buttons[RIBBONS.indexOf(order[step]!)]!.dataset.solve = "1"; };

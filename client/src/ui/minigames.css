@@ -24,6 +24,10 @@
 .ribbon:disabled { opacity: .8; cursor: default; }
 .ribbon-pink { --tone: #f4a7b9; --shade: #d9768f; } .ribbon-yellow { --tone: #f6d77a; --shade: #d9aa3f; }
 .ribbon-mint { --tone: #9fd8c3; --shade: #5fae93; } .ribbon-lilac { --tone: #c7b2e8; --shade: #9a7fcb; }
+/* Field theme (lumi_04 = b): pinecone and leaves, brown / yellow / green / red, in the same four slots. */
+[data-look="field"] .ribbon-pink { --tone: #8a5a3a; --shade: #5e3a22; } [data-look="field"] .ribbon-yellow { --tone: #e8c94a; --shade: #b8962a; }
+[data-look="field"] .ribbon-mint { --tone: #5fa65a; --shade: #3f7a3c; } [data-look="field"] .ribbon-lilac { --tone: #c4483a; --shade: #8f2f25; }
+[data-look="field"] .pennant.ribbon-pink { background: #8a5a3a; } [data-look="field"] .pennant.ribbon-yellow { background: #e8c94a; } [data-look="field"] .pennant.ribbon-mint { background: #5fa65a; } [data-look="field"] .pennant.ribbon-lilac { background: #c4483a; }
 .pennant.ribbon-pink { background: #f4a7b9; } .pennant.ribbon-yellow { background: #f6d77a; } .pennant.ribbon-mint { background: #9fd8c3; } .pennant.ribbon-lilac { background: #c7b2e8; }
 
 /* Moka: a brick oven; the bread in the mouth browns with the needle. */

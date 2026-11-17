@@ -30,10 +30,11 @@ const KINDS: Record<Resident, MinigameKind> = { lumi: "ribbons", echo: "shelf", 
 
 // One round of the resident's minigame. Winning sends the round's share of matching placements;
 // the server still checks every placement, so the minigame only decides when they are sent.
-export function residentBoard(npc: Resident, placements: Record<string, string | undefined>, copy: Copy, send: (commands: Command[]) => void, close: () => void): HTMLElement {
+export function residentBoard(npc: Resident, placements: Record<string, string | undefined>, copy: Copy, send: (commands: Command[]) => void, close: () => void, answers: readonly { id: string; pick?: string }[] = []): HTMLElement {
   const quest = quests[npc], pieces: Record<string, string> = quest.pieces, slots: Record<string, string> = quest.slots;
   const total = Object.keys(slots).length, placed = Object.values(placements).filter(Boolean).length;
   const { round, size } = roundPlan(total, placed, MINIGAME_ROUNDS);
   const place = () => send(nextPlacements(pieces, slots, placements, size).map(([pieceId, slotId]) => ({ kind: "place_piece", pieceId, slotId })));
-  return minigameBoard({ kind: KINDS[npc], index: round, rounds: MINIGAME_ROUNDS }, copy.game, { auto: copy.puzzle.auto, close: copy.puzzle.close, onAuto: () => send([{ kind: "auto_arrange" }]), onClose: close }, place);
+  const variant = npc === "lumi" && answers.find(a => a.id === "lumi_04")?.pick === "b" ? "field" : undefined;
+  return minigameBoard({ kind: KINDS[npc], index: round, rounds: MINIGAME_ROUNDS, variant }, copy.game, { auto: copy.puzzle.auto, close: copy.puzzle.close, onAuto: () => send([{ kind: "auto_arrange" }]), onClose: close }, place);
 }

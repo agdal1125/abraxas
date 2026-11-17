@@ -77,8 +77,14 @@
       "Mint ribbon",
       "Lilac ribbon"
     ],
+    "marksField": [
+      "Pinecone",
+      "Yellow leaf",
+      "Green leaf",
+      "Red leaf"
+    ],
     "title": "Weave the garland",
-    "howto": "Remember the order the ribbons light up, then tap them back.",
+    "howto": "Remember the order the decorations light up, then tap them back.",
     "cleared": "One garland done!",
     "round": "{n}/{total}"
   },
