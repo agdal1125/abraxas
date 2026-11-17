@@ -5,6 +5,21 @@
     "start": "Start",
     "language": "한국어"
   },
+  "installGuide": {
+    "button": "Play full screen",
+    "close": "Close",
+    "home-screen": [
+      "Tap your browser's Share or menu button",
+      "Choose 'Add to Home Screen'",
+      "Open Abraxas from your home screen to hide the address bar",
+      "The home screen version starts from the beginning"
+    ],
+    "open-browser": [
+      "Tap the menu at the top right",
+      "Choose 'Open in another browser'",
+      "Tap this button again in the browser"
+    ]
+  },
   "hub": {
     "prompt": "Who will you visit next?"
   },
