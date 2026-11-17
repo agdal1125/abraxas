@@ -68,6 +68,24 @@
     "linkHint": "Connect the marked joint.",
     "linkAuto": "Connect automatically"
   },
+  "game": {
+    "watch": "",
+    "yourTurn": "",
+    "retry": "",
+    "action": "",
+    "early": "",
+    "late": "",
+    "marks": [
+      "First gear",
+      "Second gear",
+      "Third gear",
+      "Fourth gear"
+    ],
+    "title": "Set the gears",
+    "howto": "Tap a gear to turn it until every tooth points up.",
+    "cleared": "The gears mesh and turn!",
+    "round": "{n}/{total}"
+  },
   "status": {
     "saving": "Saving your choice.",
     "retry": "You can continue when you're connected.",
