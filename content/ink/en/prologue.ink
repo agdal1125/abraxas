@@ -11,7 +11,7 @@ You: You want me to follow? Alright, let's go.
 At the edge of the village, you meet a mail carrier with a satchel.
 Mail Carrier: Oh, a face I haven't seen. Where did you come from?
 You: I... can't remember.
-Mail Carrier: Visitors like you turn up now and then.
+Mail Carrier: Visitors like you turn up in Dori Village now and then.
 Mail Carrier: Tonight, when the festival lights go up, the Gate of Memory opens.
 Mail Carrier: Lost visitors have found their memories there.
 Mail Carrier: No address is just fine. Take your time looking around.
