@@ -18,9 +18,9 @@ export function residentCommand(snapshot: PlaySnapshot, npc: Resident, targetId:
   const phase = snapshot[npc].phase;
   if (targetId === `${npc}-rest`) return { kind: view.carriedObjectId ? "set_down" : "pickup", targetId };
   if (phase === "report") return { kind: "complete", targetId };
-  if (phase.endsWith("_pickup") || (npc === "or" && phase === "finish" && snapshot.answers.find(a => a.id === "or_06")?.pick === "b")) return { kind: "pickup", targetId };
-  if (phase.endsWith("_delivery") || phase === "notice_return") return { kind: "deliver", targetId };
-  if (["stagekeeper", "organizer", "assistant", "return", "merchant"].includes(phase) || (npc === "lumi" && ["notice_first", "notice_second"].includes(phase) && snapshot.answers.find(a => a.id === "lumi_03")?.pick === "a") || (npc === "or" && phase === "find_sand" && snapshot.answers.find(a => a.id === "or_02")?.pick === "b")) return { kind: "talk", targetId };
+  if ((npc === "or" && phase === "finish" && snapshot.answers.find(a => a.id === "or_06")?.pick === "b")) return { kind: "pickup", targetId };
+  if (phase.endsWith("_delivery")) return { kind: "deliver", targetId };
+  if (["stagekeeper", "organizer", "assistant"].includes(phase) || (npc === "lumi" && ["notice_first", "notice_second"].includes(phase) && snapshot.answers.find(a => a.id === "lumi_03")?.pick === "a") || (npc === "or" && phase === "find_sand" && snapshot.answers.find(a => a.id === "or_02")?.pick === "b")) return { kind: "talk", targetId };
   if (["table", "card", "notice_first", "notice_second", "welcome", "enclose", "search", "reading", "bookmark", "fire", "find_sand", "sand", "weight", "review", "lantern_link", "hook", "finish"].includes(phase)) return { kind: "act", targetId };
   return null;
 }
