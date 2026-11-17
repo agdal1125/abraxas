@@ -85,8 +85,8 @@
       "V"
     ],
     "title": "Sort the shelf",
-    "howto": "Tap two books to swap them until the marks run in order.",
-    "cleared": "The shelf is neat again!",
+    "howto": "Tap two books to swap them until the marks for the arrangement you chose run in order.",
+    "cleared": "Every book is in the spot you chose!",
     "round": "{n}/{total}"
   },
   "status": {
