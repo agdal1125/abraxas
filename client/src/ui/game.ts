@@ -562,7 +562,7 @@ export class Game {
     if (!this.snapshot) return;
     this.exploring = false; this.updateHud(); this.token++; this.controls.setActive(false, this.state.lang); this.village.setEnabled(false); this.overlay.replaceChildren(); this.overlay.className = "overlay dialogue";
     const phase = this.snapshot[npc].phase;
-    const board = residentBoard(npc, this.snapshot[npc].placements, translations(this.state.lang).residents[npc], commands => this.sendChain(commands, () => this.snapshot?.[npc].phase === phase ? this.residentsBoard(npc) : this.world()), () => this.world());
+    const board = residentBoard(npc, this.snapshot[npc].placements, translations(this.state.lang).residents[npc], commands => this.sendChain(commands, () => this.snapshot?.[npc].phase === phase ? this.residentsBoard(npc) : this.world()), () => this.world(), this.snapshot.answers);
     this.overlay.append(board); focusMinigame(board);
   }
   private interactMoka(id: string): void {
