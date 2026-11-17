@@ -69,6 +69,24 @@
     "linkHint": "Connect the marked joint.",
     "linkAuto": "Connect automatically"
   },
+  "game": {
+    "watch": "Watch closely...",
+    "yourTurn": "Tap them in the same order.",
+    "retry": "Not quite. Here it is again.",
+    "action": "",
+    "early": "",
+    "late": "",
+    "marks": [
+      "Pink ribbon",
+      "Yellow ribbon",
+      "Mint ribbon",
+      "Lilac ribbon"
+    ],
+    "title": "Weave the garland",
+    "howto": "Remember the order the ribbons light up, then tap them back.",
+    "cleared": "One garland done!",
+    "round": "{n}/{total}"
+  },
   "status": {
     "saving": "Saving your choice.",
     "retry": "You can continue when you're connected.",

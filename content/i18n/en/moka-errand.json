@@ -42,6 +42,19 @@
     "close": "Close for now",
     "wrong": "Shall we take another look at the shapes?"
   },
+  "game": {
+    "watch": "",
+    "yourTurn": "",
+    "retry": "",
+    "action": "Take it out",
+    "early": "A bit early. Try again!",
+    "late": "A little late. Try again!",
+    "marks": [],
+    "title": "Bake the bread",
+    "howto": "Take it out when the needle is in the gold band.",
+    "cleared": "Golden brown!",
+    "round": "{n}/{total}"
+  },
   "status": {
     "saving": "Saving your choice.",
     "retry": "You can continue when you're connected.",

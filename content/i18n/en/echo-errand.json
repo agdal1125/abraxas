@@ -70,6 +70,25 @@
     "linkHint": "Connect the marked joint.",
     "linkAuto": "Connect automatically"
   },
+  "game": {
+    "watch": "",
+    "yourTurn": "",
+    "retry": "",
+    "action": "",
+    "early": "",
+    "late": "",
+    "marks": [
+      "I",
+      "II",
+      "III",
+      "IV",
+      "V"
+    ],
+    "title": "Sort the shelf",
+    "howto": "Tap two books to swap them until the marks run in order.",
+    "cleared": "The shelf is neat again!",
+    "round": "{n}/{total}"
+  },
   "status": {
     "saving": "Saving your choice.",
     "retry": "You can continue when you're connected.",
