@@ -10,6 +10,8 @@
 .ribbon { width: 64px; height: 64px; border-radius: 0; opacity: .72; transition: opacity 120ms, transform 120ms; }
 .ribbon.lit { opacity: 1; transform: translateY(-4px) scale(1.06); }
 .ribbon-pink { background: #f4a7b9; } .ribbon-yellow { background: #f6d77a; } .ribbon-mint { background: #9fd8c3; } .ribbon-lilac { background: #c7b2e8; }
+/* Field theme (lumi_04 = b): pinecone and leaves in the same four slots. */
+[data-look="field"] .ribbon-pink { background: #8a5a3a; } [data-look="field"] .ribbon-yellow { background: #e8c94a; } [data-look="field"] .ribbon-mint { background: #5fa65a; } [data-look="field"] .ribbon-lilac { background: #c4483a; }
 .ribbon:disabled { opacity: .55; }
 
 /* Moka: an oven gauge with a golden band. */

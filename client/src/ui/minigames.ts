@@ -5,8 +5,9 @@ import { aligned, gauge, inZone, scrambled, seeded, sequence, shelfHint, shuffle
 // and renders the next round. The element the player should tap next carries data-solve, so the
 // manual E2E scenario can play it the way a person would.
 export type MinigameKind = "ribbons" | "oven" | "shelf" | "gears";
-export type MinigameCopy = { title: string; howto: string; watch: string; yourTurn: string; retry: string; cleared: string; action: string; early: string; late: string; marks: string[]; round: string };
-export type Round = { kind: MinigameKind; index: number; rounds: number; label?: string };
+export type MinigameCopy = { title: string; howto: string; watch: string; yourTurn: string; retry: string; cleared: string; action: string; early: string; late: string; marks: string[]; marksField?: string[]; round: string };
+// `field` swaps the ribbon theme for pinecone and leaves; the order, length and tones stay the same.
+export type Round = { kind: MinigameKind; index: number; rounds: number; label?: string; field?: boolean };
 export type Controls = { auto: string; close: string; onAuto: () => void; onClose: () => void };
 
 export const MINIGAME_ROUNDS = 3;
@@ -27,7 +28,7 @@ export function minigameBoard(round: Round, copy: MinigameCopy, controls: Contro
   const close = document.createElement("button"); close.textContent = controls.close; close.onclick = () => { if (!done) { done = true; stop(); controls.onClose(); } };
   footer.append(auto, close);
   board.append(heading, status, stage, footer);
-  const stop = { ribbons, oven, shelf, gears }[round.kind](stage, status, copy, round.index, win);
+  const stop = { ribbons, oven, shelf, gears }[round.kind](stage, status, copy, round.index, win, round.field);
   return board;
 }
 
@@ -38,12 +39,14 @@ export function focusMinigame(board: HTMLElement): void {
   board.tabIndex = -1; board.focus();
 }
 
-type Game = (stage: HTMLElement, status: HTMLElement, copy: MinigameCopy, index: number, win: () => void) => () => void;
+type Game = (stage: HTMLElement, status: HTMLElement, copy: MinigameCopy, index: number, win: () => void, field?: boolean) => () => void;
 
 // Lumi: watch the ribbons light up, then tap them back in the same order.
-const ribbons: Game = (stage, status, copy, index, win) => {
+const ribbons: Game = (stage, status, copy, index, win, field) => {
+  const marks = field ? copy.marksField ?? copy.marks : copy.marks;
+  if (field) stage.dataset.look = "field";
   const order = sequence(RIBBONS, 3 + index, seeded(101 + index));
-  const buttons = RIBBONS.map((color, i) => { const b = document.createElement("button"); b.className = `ribbon ribbon-${color}`; b.dataset.ribbon = color; b.setAttribute("aria-label", copy.marks[i] ?? color); stage.append(b); return b; });
+  const buttons = RIBBONS.map((color, i) => { const b = document.createElement("button"); b.className = `ribbon ribbon-${color}`; b.dataset.ribbon = color; b.setAttribute("aria-label", marks[i] ?? color); stage.append(b); return b; });
   let step = 0, timers: ReturnType<typeof setTimeout>[] = [];
   const mark = () => { for (const b of buttons) delete b.dataset.solve; if (step < order.length) buttons[RIBBONS.indexOf(order[step]!)]!.dataset.solve = "1"; };
   const show = () => {
