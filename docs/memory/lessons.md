@@ -83,3 +83,5 @@
 - 렌더 · 창을 키운 뒤 그림자가 주인공 둘레 네모 안에서만 보임 → `Village.resize`가 `updateCamera`로 새 화면 높이를 재기 전에 그림자 범위를 계산함 → 화면 높이를 잰 뒤 그림자를 맞춘다. 범위는 보이는 땅만이 아니라 인물 키까지의 높이를 그림자 카메라 축으로 재서 정한다. 땅에만 맞추면 폰 화면 아래쪽 인물과 벽이 그림자 밖으로 나간다 (2026-11-14)
 - git · ADMIN 계정인데 HTTPS 푸시가 403 → `gh`는 SSH를 쓰고 HTTPS 푸시는 키체인 자격 증명을 씀 → `gh auth status`만 믿지 말고 `git push --dry-run`으로 확인, `origin`을 SSH로 변경 (2026-11-07)
 - git · 중첩 저장소를 `git add`하면 파일 없이 gitlink만 커밋되고, 안쪽 `.git`이 깨지면 바깥 `git status`도 실패 → 작업 폴더를 커밋하기 전에 안쪽 `.git` 유무 확인 (2026-11-07)
+- E2E · 다른 브랜치의 E2E가 통과로 나왔는데 실제로는 엉뚱한 브랜치에서 돌았음 → 대상 브랜치가 다른 worktree에 잡혀 있어 `git checkout`이 실패했고 스크립트가 계속 진행함 → 체크아웃이 실패하면 멈추고, 돌리기 전에 HEAD와 그 브랜치에만 있는 파일을 출력해 확인한다. 브랜치가 잡혀 있으면 `git checkout --detach origin/<브랜치>`를 쓴다 (2026-11-17)
+- 협업 · 쌓인 PR을 아래부터 squash로 넣기 → 아래 PR을 넣은 뒤 `git diff --quiet origin/main <아래 브랜치 끝>`으로 트리가 같은지 확인하고, 위 브랜치에서 `git merge -s ours origin/main`으로 main을 기록한 다음 base를 main으로 바꿔 CI를 다시 돌린다. 트리가 다르면 멈추고 손으로 푼다 (2026-11-17)
