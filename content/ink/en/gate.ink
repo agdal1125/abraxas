@@ -1,7 +1,7 @@
 -> gate_intro
 
 === gate_intro ===
-You stand before the ancient Gate of Memory.
+At the village edge, the Gate of Memory stands open, as the mail carrier said.
 The memory shards glow faintly against the door.
 The dog stops before the gate and watches you quietly.
 You: Wait for me just a moment.
