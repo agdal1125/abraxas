@@ -16,7 +16,7 @@ import { transitionEcho } from "../core/echo-errand";
 import { transitionOr } from "../core/or-errand";
 
 const pending = { key: "3dbd7b9c-9c94-4acb-9e3b-7b37c3d6df81", expectedRevision: 0, command: { kind: "choice" as const, itemId: "moka_01", pick: "a" as const } };
-const snapshot = { playId: "play", contentVersion: "hash", revision: 1, segment: "ep_moka", completedEpisodes: [], answers: [{ id: "moka_01", pick: "a" }], moka: { phase: "pick_up", basket: "source", placements: {}, completedAt: null }, lumi: initialLumi(), echo: initialEcho(), or: initialOr() };
+const snapshot = { playId: "play", contentVersion: "hash", revision: 1, segment: "ep_moka", completedEpisodes: [], answers: [{ id: "moka_01", pick: "a" }], moka: { phase: "deliver", basket: "player", placements: {}, completedAt: null }, lumi: initialLumi(), echo: initialEcho(), or: initialOr() };
 const receipt = { key: pending.key, appliedRevision: 1, reaction: "empathy" };
 const response = (value: unknown, status = 200) => new Response(JSON.stringify(value), { status });
 
@@ -209,11 +209,11 @@ test("recovery loads the server state before resending the saved command", async
 });
 
 test("concurrent recovery clears the same pending command for both responses", async () => {
-  const retry = { ...pending, expectedRevision: 10, command: { kind: "pickup" as const, targetId: "lumi-horn" } };
+  const retry = { ...pending, expectedRevision: 10, command: { kind: "talk" as const, targetId: "lumi-neighbor-1" } };
   let state = structuredClone(lumiFixture.initial) as PlaySnapshot;
   for (const command of lumiFixture.success[0]!.commands) {
     state = transitionLumi(state, command as Command, lumiFixture.completedAt);
-    if (command.kind === "pickup" && "targetId" in command && command.targetId === "lumi-horn") break;
+    if (command.kind === "talk" && "targetId" in command && command.targetId === "lumi-neighbor-1") break;
   }
   const current = { ...state, playId: "play", revision: 11 };
   expect(current.lumi.objects.notice).toBe("player");

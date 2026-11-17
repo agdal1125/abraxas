@@ -67,10 +67,6 @@
           "pick": "a"
         },
         {
-          "kind": "pickup",
-          "targetId": "or-bucket"
-        },
-        {
           "kind": "act",
           "targetId": "or-map"
         },
@@ -133,10 +129,6 @@
           "targetId": "or-hook-branches"
         },
         {
-          "kind": "talk",
-          "targetId": "D"
-        },
-        {
           "kind": "choice",
           "itemId": "or_06",
           "pick": "a"
@@ -187,16 +179,8 @@
           "pick": "b"
         },
         {
-          "kind": "pickup",
-          "targetId": "or-bucket"
-        },
-        {
           "kind": "talk",
           "targetId": "or-fisher"
-        },
-        {
-          "kind": "talk",
-          "targetId": "or-merchant"
         },
         {
           "kind": "act",
@@ -243,10 +227,6 @@
         {
           "kind": "act",
           "targetId": "or-hook-reinforce"
-        },
-        {
-          "kind": "talk",
-          "targetId": "D"
         },
         {
           "kind": "choice",
@@ -303,14 +283,14 @@
     },
     {
       "name": "finish cannot skip",
-      "after": 21,
+      "after": 19,
       "command": {
         "kind": "finish_segment"
       }
     },
     {
       "name": "final action required",
-      "after": 21,
+      "after": 19,
       "command": {
         "kind": "complete",
         "targetId": "D"
@@ -318,7 +298,7 @@
     },
     {
       "name": "unknown puzzle IDs",
-      "after": 8,
+      "after": 7,
       "command": {
         "kind": "place_piece",
         "pieceId": "toString",

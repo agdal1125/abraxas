@@ -2,7 +2,6 @@
   "objective": {
     "locked": "Talk to Moka",
     "choose_route": "Talk to Moka",
-    "pick_up": "Pick up the walnut bread basket",
     "deliver": "Deliver the bread to the workshop stand",
     "pick_up_rest": "Pick up the basket again",
     "reservation": "Meet the customer outside the bakery",
@@ -13,7 +12,6 @@
     "share_action": "Put the tasting bread where you chose",
     "order": "Prepare dough for the festival",
     "order_action": "Prepare the amount of dough you chose",
-    "return": "Return to Moka",
     "feedback": "Talk with Moka about the cookies",
     "report": "Finish talking about the errand",
     "completed": "You finished Moka's errand"
@@ -41,6 +39,19 @@
     "auto": "Arrange automatically",
     "close": "Close for now",
     "wrong": "Shall we take another look at the shapes?"
+  },
+  "game": {
+    "watch": "",
+    "yourTurn": "",
+    "retry": "",
+    "action": "Take it out",
+    "early": "A bit early. Try again!",
+    "late": "A little late. Try again!",
+    "marks": [],
+    "title": "Bake the bread",
+    "howto": "Take it out when the needle is in the gold band.",
+    "cleared": "Golden brown!",
+    "round": "{n}/{total}"
   },
   "status": {
     "saving": "Saving your choice.",

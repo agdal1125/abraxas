@@ -1,6 +1,8 @@
 -> or_choose_01
 
 === or_choose_01 ===
+A blast of heat rolls out of the forge.
+Or: You came. Extra hands are welcome.
 Or: Making the festival bell.
 Or: Time to heat it up.
 Or: How strong should the fire be?
@@ -54,11 +56,7 @@ The map marks where fine sand can be found by the stream.
 -> END
 
 === or_find_sand_b ===
-Angler: You'll find fine sand downstream. The merchant knows the way.
--> END
-
-=== or_merchant ===
-Merchant: Follow the water for good sand. Safe travels.
+Angler: You'll find fine sand downstream. Follow the water.
 -> END
 
 === or_assistant ===
@@ -90,6 +88,6 @@ Or: Done. The bell is up in the square.
 -> END
 
 === or_completed ===
-Or: Thanks for the helping hand.
-Or: See you at the festival.
+Or: Listen for the bell.
+Or: You'll hear it when the lights go up.
 -> END

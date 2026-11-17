@@ -1,23 +1,19 @@
 -> demi_follow
 
 === demi_follow ===
-You: Where am I?
-You: I can't even remember my name.
-The little dog licks your cheek, then trots ahead.
-You: Are you asking me to follow?
-You: Alright. Lead the way.
+You: ...Where am I?
+You: I can't remember my name, or how I got here.
+A little dog wags its tail and trots ahead.
+You: You want me to follow? Alright, let's go.
 -> END
 
 === postman_intro ===
-The little dog pauses at the edge of the village.
-A mail carrier with a satchel approaches.
-Mail Carrier: A face I haven't seen before.
-Mail Carrier: I'm the village mail carrier. Ahead of the letters, eh?
-Mail Carrier: Where did you come from?
-You: I'm not sure. I can't remember.
-Mail Carrier: Did you fall from the sky?
-You: Maybe I did.
-Mail Carrier: I was joking, but you're serious?
+At the edge of the village, you meet a mail carrier with a satchel.
+Mail Carrier: Oh, a face I haven't seen. Where did you come from?
+You: I... can't remember.
+Mail Carrier: Visitors like you turn up in Dori Village now and then.
+Mail Carrier: Tonight, when the festival lights go up, the Gate of Memory opens.
+Mail Carrier: Lost visitors have found their memories there.
 Mail Carrier: No address is just fine. Take your time looking around.
 -> END
 
@@ -27,8 +23,9 @@ Mail Carrier: What name should I call you by?
 -> END
 
 === postman_named ===
-Mail Carrier: That's a good name. Take this memory shard.
-Mail Carrier: Go take a gentle stroll toward the village.
+Mail Carrier: Here, take this memory shard.
+Mail Carrier: The whole village is getting ready for the festival.
+Mail Carrier: Until the lights go up, spend the day however you like.
 -> END
 
 === prologue_01 ===
@@ -59,7 +56,6 @@ You: What should I take a look at first?
 -> END
 
 === prologue_outro ===
-Beyond the board, the lively square stretches ahead.
-Memories are hazy, but you decide to begin your day.
-You: Maybe I'll spend my day here.
+Past the board, the square is busy with festival preparations.
+You: Until the lights go up, I'll stay here.
 -> END

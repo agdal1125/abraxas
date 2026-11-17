@@ -3,12 +3,7 @@
 === festival_intro ===
 Garlands, fresh bread, records, and the bell are all here.
 The four villagers gather before the remaining budget.
-Lumi: Everyone is here!
-Moka: The bread is ready too.
-Echo: The records are right here.
-Or: The bell is hung.
-Lumi: The garlands look like they're dancing!
-Moka: The smell of bread reaches every corner of the plaza.
+Lumi: Everyone came! The garlands look like they're dancing!
 Echo: A night truly worth writing down.
 Or: How should we spend what's left?
 -> END
@@ -96,5 +91,6 @@ You stroll around the plaza with Or.
 
 === festival_outro ===
 You: I wish this day could last a little longer.
+A low creak of a door sounds from the village edge.
 The little dog gazes toward the Gate of Memory.
 -> END
