@@ -1,5 +1,5 @@
-.dialogue .panel.resident-board { display: grid; gap: .5rem; max-height: 80vh; overflow: auto; }
+.dialogue .panel.resident-board { display: grid; gap: .5rem; max-width: 640px; max-height: 80vh; overflow: auto; }
 .resident-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .35rem; }
-.resident-board button { min-height: 48px; word-break: keep-all; overflow-wrap: break-word; }
-.resident-board button[aria-pressed="true"] { outline: 3px solid currentColor; }
+.resident-board button { min-height: 48px; padding: 4px 8px; word-break: keep-all; overflow-wrap: break-word; }
+.resident-board button[aria-pressed="true"] { outline: 3px solid var(--marker); outline-offset: -6px; }
 @media (max-width: 500px) { .resident-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
