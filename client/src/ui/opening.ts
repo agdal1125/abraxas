@@ -5,6 +5,8 @@ export function validName(value: string): string | null {
 }
 
 type OpeningActions = {
+  intent: () => Promise<void>;
+  howToChoose: () => Promise<void>;
   prelude: () => Promise<void>;
   scene: (scene: "entrance") => void;
   mode: (mode: "lead" | "follow" | "sit") => void;
@@ -16,12 +18,14 @@ type OpeningActions = {
 
 export async function openingSequence(actions: OpeningActions, fresh: boolean): Promise<void> {
   if (fresh) {
+    await actions.intent();
     await actions.prelude();
     actions.scene("entrance");
     actions.mode("lead");
     await actions.knot("demi_follow");
     actions.mode("follow");
     await actions.knot("postman_intro");
+    await actions.howToChoose();
     actions.mode("sit");
     await actions.question("prologue_01");
     actions.mode("follow");

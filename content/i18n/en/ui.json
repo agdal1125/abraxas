@@ -5,6 +5,17 @@
     "start": "Start",
     "language": "한국어"
   },
+  "intent": {
+    "text": "Even without memories, your steps lead somewhere.\nIn this village, there is no one to impress.\nStay a while, and go where your heart leads.",
+    "prompt": "Tap the screen to continue"
+  },
+  "howTo": {
+    "moveTouch": "Drag in the lower left to walk",
+    "moveKeys": "Use the arrow keys or WASD to walk",
+    "examine": "Tap people and things to look closer",
+    "visit": "Visit the villagers and hear their requests",
+    "choose": "Pick whichever feels right to you.\nYou can't take a choice back, but there are no right answers."
+  },
   "installGuide": {
     "button": "Play full screen",
     "close": "Close",
@@ -122,7 +133,7 @@
   "hud": {
     "goal": { "hub": "Find someone to visit in the village", "character": "Find the person waiting for you", "quest": "Find the villager who needs help", "return": "Go back and meet them again", "interlude": "Take a quiet moment by the lake", "festival": "Head to the plaza", "gate": "Head to the Gate of Memory" },
     "settings": "Settings", "close": "Close", "language": "Language", "largeText": "Large text", "fullscreen": "Full screen", "autoAdvance": "Auto-advance", "on": "On", "off": "Off", "restart": "Start over", "confirm": "Erase your progress and start over?", "cancel": "Cancel", "share": "Share",
-    "credits": "Credits", "creditsMusic": "Music: The Day We Smiled (60s Edit) — HoneyTune, Internet Archive", "creditsSounds": "Sound effects use CC0 materials.", "creditsList": "Full sound effects list", "back": "Back",
+    "howTo": "How to play", "credits": "Credits", "creditsMusic": "Music: The Day We Smiled (60s Edit) — HoneyTune, Internet Archive", "creditsSounds": "Sound effects use CC0 materials.", "creditsList": "Full sound effects list", "back": "Back",
     "fragments": "Memory fragments {n}/{max}", "fragmentFound": "Found a memory fragment ({n}/{max})", "fragmentsGate": "Memory fragments gathered so far", "fragmentsContinue": "Tap to continue"
   }
 }
