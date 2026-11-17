@@ -25,7 +25,7 @@ Mail Carrier: What name should I call you by?
 === postman_named ===
 Mail Carrier: Here, take this memory shard.
 Mail Carrier: The whole village is getting ready for the festival.
-Mail Carrier: By the time the lights go up, this place won't feel strange.
+Mail Carrier: Until the lights go up, spend the day however you like.
 -> END
 
 === prologue_01 ===
