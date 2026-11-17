@@ -13,6 +13,7 @@
     "moveTouch": "Drag in the lower left to walk",
     "moveKeys": "Use the arrow keys or WASD to walk",
     "examine": "Tap people and things to look closer",
+    "dog": "Tap the dog to pet it or call it over",
     "visit": "Visit the villagers and hear their requests",
     "choose": "Pick whichever feels right to you.\nYou can't take a choice back, but there are no right answers."
   },

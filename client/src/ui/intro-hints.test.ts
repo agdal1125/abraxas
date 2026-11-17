@@ -15,6 +15,6 @@ test("movement hint follows the pointer type", () => {
 });
 
 test.each([ko, en])("pre-prologue choose advice does not send the player to villagers", ui => {
-  expect(Object.keys(ui.howTo).sort()).toEqual(["choose", "examine", "moveKeys", "moveTouch", "visit"]);
+  expect(Object.keys(ui.howTo).sort()).toEqual(["choose", "dog", "examine", "moveKeys", "moveTouch", "visit"]);
   expect(ui.howTo.choose).not.toContain(ui.howTo.visit);
 });
