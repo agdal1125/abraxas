@@ -7,7 +7,7 @@ toolchain go1.27.4
 require (
 	cloud.google.com/go/firestore v1.29.2
 	firebase.google.com/go/v4 v4.22.0
-	google.golang.org/api v0.312.0
+	google.golang.org/api v0.316.0
 	google.golang.org/grpc v1.85.0
 	google.golang.org/protobuf v1.36.12
 )
